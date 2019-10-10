@@ -1,0 +1,5 @@
+curl -X POST --data-binary "@solve.groovy" http://localhost:1337/solution
+curl  http://localhost:1337/get
+curl -d "up" -X POST http://localhost:1337/move
+curl -X POST http://localhost:1337/reset
+
