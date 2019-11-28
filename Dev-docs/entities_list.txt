@@ -1,0 +1,27 @@
+Server(Cloud):
+  User manager:
+    Auth
+    Lobby list
+      Lobby
+      Level description
+      Player info
+    Account info
+    Solutions
+  Simalator:
+    Level:
+      Robot(s)
+      Goal
+
+
+Client:
+
+
+
+
+
+
+
+
+
+DB:
+USER ID, USERNAME, FULL NAME, PASSWORD HASH, 
