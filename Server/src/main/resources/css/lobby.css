@@ -1,0 +1,103 @@
+﻿.lobby-content, .solution-content {
+	box-sizing: border-box;
+	float: left;
+	width: 50%;
+}
+
+.lobby-content {
+	padding-right: 25px;
+}
+
+.solution-content {
+	padding-left: 25px;
+}
+
+.lobby-common-shell {
+	width: 100%;
+	height: 64px;
+	margin: 0 0 20px 30px;
+	text-align: left;
+}
+
+.lobby-common-icon {
+	float: left;
+	width: 64px;
+	height: 64px;
+	margin-right: 15px;
+}
+
+.vacuum-cleaner-icon {
+	background: center no-repeat url("../images/vacuum-cleaner-icon.png");
+	background-size: contain;
+}
+
+.lobby-common-info {
+	display: block;
+	float: none;
+	padding-top: 12px;
+}
+
+.level-difficulty, .level-type {
+	margin-right: 10px;
+	font-size: 10px;
+}
+
+.players-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.players-table td {
+	width: 50%;
+	padding: 20px;
+	border: 1px solid black;
+}
+
+.players-table td:first-of-type {
+	text-align: left;
+}
+
+.players-table-icon {
+	display: inline-block;
+	vertical-align: middle;
+	width: 32px;
+	height: 32px;
+	margin-right: 5px;
+}
+
+.avatar-icon {
+	background: center no-repeat url("../images/person-icon.png");
+}
+
+.players-table tr:not(:first-of-type) .host {
+	display: none;
+}
+
+.level-details {
+	margin-bottom: 20px;
+	text-align: left;
+	text-align: justify;
+	text-justify: inter-word;
+	font-size: 12px;
+}
+
+.level-details > p {
+	margin-bottom: 5px;
+}
+
+.leader {
+	font-weight: bold;
+}
+
+.lobby-buttons {
+	margin: 40px auto;
+	width: 200px;
+}
+
+.login-form-button {
+	box-sizing: border-box;
+	width: 100%;
+	height: 44px;
+	margin-bottom: 10px;
+	font: 18px Trebuchet MS, sans-serif;
+}
