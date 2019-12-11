@@ -1,15 +1,22 @@
 package simulator
 
-class simple_plane_lvl implements level {
-    class Robot implements Comparable<Robot> {
-        public int x, y, goalX, goalY, finishTime;
+import groovy.transform.CompileStatic
 
-        Robot(int _x, _y, gx, gy) {
+@CompileStatic
+class simple_plane_lvl implements Level {
+    class Robot implements Comparable<Robot> {
+        public int x, y, goalX, goalY;
+        public double finishTime;
+        public String currentAction
+        boolean broken
+
+        Robot(int _x, int _y, int gx, int gy) {
             x = _x
             y = _y
             goalX = gx
             goalY = gy
             finishTime = 0
+            broken = false
         }
 
         boolean checkRobot() {
@@ -23,17 +30,30 @@ class simple_plane_lvl implements level {
     }
     ArrayList<Robot> robots
     int playerCount
+    double virtualTime
+    double timeout
 
     simple_plane_lvl(int _playerCount) {
         playerCount = _playerCount
         robots = new ArrayList<>();
         Random rnd = new Random()
-        for (int i = 0; i < playerCount; i++) {
-            robots.add(new Robot(rnd.nextInt(101) - 50,
-                    rnd.nextInt(101) - 50,
-                    rnd.nextInt(101) - 50,
-                    rnd.nextInt(101) - 50))
+        int len = 100;
+        int goal_x = rnd.nextInt(101)
+        int goal_y = len - goal_x
+        if (rnd.nextBoolean()) {
+            goal_x = -goal_x
         }
+        if (rnd.nextBoolean()) {
+            goal_x = -goal_x
+        }
+        for (int i = 0; i < playerCount; i++) {
+            robots.add(new Robot(0,
+                    0,
+                    goal_x,
+                    goal_y))
+        }
+        virtualTime = 0
+        timeout = 120
     }
 
     @Override
@@ -42,24 +62,10 @@ class simple_plane_lvl implements level {
     }
 
     @Override
-    int performAction(int robotId, String action) {
+    int setAction(int robotId, String action, double time) {
         Robot rb = robots.get(robotId)
-        switch (action) {
-            case "up":
-                rb.y++
-                break
-            case "down":
-                rb.y--
-                break
-            case "left":
-                rb.x--
-                break
-            case "right":
-                rb.x++
-                break
-            default:
-                return 1
-        }
+        rb.currentAction = action
+        rb.finishTime += time
         return 0
     }
 
@@ -67,14 +73,13 @@ class simple_plane_lvl implements level {
     String getSensorReadings(int robotId, String sensor) {
         Robot rb = robots.get(robotId)
         String result
-        switch (action) {
+        switch (sensor) {
             case "x":
-                result = rb.y.toString()
+                result = rb.x.toString()
                 break
             case "y":
                 result = rb.y.toString()
                 break
-
             default:
                 return null
         }
@@ -94,14 +99,51 @@ class simple_plane_lvl implements level {
 
     @Override
     int getNextRobotId() {
-        int next = 0
-        int ft = robots.get(0).finishTime
-        for (int i = 1; i < playerCount; i++) {
-            if (robots.get(i).finishTime < ft) {
-                ft = robots.get(i).finishTime
+        int next = -1
+
+        double ft = timeout*10
+        for (int i = 0; i < playerCount; i++) {
+            Robot rb = robots.get(i)
+            if (!rb.broken && rb.finishTime < ft) {
+                ft = rb.finishTime
                 next = i
             }
         }
         return next
+    }
+
+    @Override
+    boolean simulateUntilRFT(int robotId) {
+        Robot rb = robots.get(robotId)
+        double ft = rb.finishTime
+        if (ft >= timeout) {
+            return false
+        }
+
+        while (virtualTime < ft) {
+            for (def r : robots) {
+                switch (r.currentAction) {
+                    case "up":
+                        r.y+=(int)(ft-virtualTime)
+                        break
+                    case "down":
+                        r.y-=(int)(ft-virtualTime)
+                        break
+                    case "left":
+                        r.x-=(int)(ft-virtualTime)
+                        break
+                    case "right":
+                        r.x+=(int)(ft-virtualTime)
+                        break
+                }
+            }
+            virtualTime =ft
+        }
+        return true
+    }
+
+    @Override
+    double getVirtualTime() {
+        return virtualTime
     }
 }
