@@ -1,0 +1,4 @@
+package lobbymanager
+
+class Level {
+}

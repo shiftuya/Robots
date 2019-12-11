@@ -4,11 +4,41 @@
 package lobbymanager
 
 class Lobby {
-    Lobby() {
+    int maxPlayersCount
+    int playersCount
 
+    List<Player> players
+
+    Level level
+
+    Lobby(int maxPlayersCount, Level level) {
+        this.maxPlayersCount = maxPlayersCount
+        this.level = level
+
+        playersCount = 0
+        players = new ArrayList<>()
     }
 
-    void addPlayer() {
+    void addPlayer(Player player) {
+        if (playersCount >= maxPlayersCount) {
+            throw new Exception("No more room for players")
+        }
+        if (!players.contains(player)) {
+            playersCount++
+            players.add(player)
+        }
+    }
 
+    void removePlayer(Player player) {
+        if (players.contains(player)) {
+            players.remove(player)
+            playersCount--
+        }
+    }
+
+    SimulationResult simulate() {
+        // call simulator
+        // How do we store solutions?
+        return null
     }
 }

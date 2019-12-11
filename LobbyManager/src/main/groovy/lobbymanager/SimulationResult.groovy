@@ -1,0 +1,5 @@
+package lobbymanager
+
+class SimulationResult {
+
+}
