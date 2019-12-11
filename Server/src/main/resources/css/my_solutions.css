@@ -1,0 +1,112 @@
+.solutions-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.solutions-table tr:not(.solution-details-row) {
+	cursor: pointer;
+}
+
+.solutions-table td {
+	height: 60px;
+	vertical-align: middle;
+	padding: 10px 20px;
+	border: 1px solid black;
+}
+
+.level-common-col {
+	width: 25%;
+}
+
+.solution-status-col {
+	width: 12.5%;
+}
+
+.level-common-col, .solution-attempts-col {
+	text-align: left;
+}
+
+.level-common-shell {
+	width: 100%;
+	height: 42px;
+}
+
+.solutions-table-icon {
+	float: left;
+	width: 32px;
+	height: 32px;
+	margin: 5px 15px 0 0;
+}
+
+.labyrinth-icon {
+	background: center no-repeat url("../images/labyrinth-icon.png");
+}
+
+.vacuum-cleaner-icon {
+	background: center no-repeat url("../images/vacuum-cleaner-icon.png");
+}
+
+.robot-wars-icon {
+	background: center no-repeat url("../images/robot-wars-icon.png");
+}
+
+.level-name {
+	display: block;
+	float: none;
+}
+
+.level-difficulty, .level-type {
+	margin-right: 10px;
+	font-size: 10px;
+}
+
+.solution-status-icon {
+	display: inline-block;
+	vertical-align: middle;
+	width: 32px;
+	height: 32px;
+}
+
+.successed-icon {
+	background: center no-repeat url("../images/successed-icon.png");
+	background-size: contain;
+}
+
+.failed-icon {
+	background: center no-repeat url("../images/failed-icon.png");
+	background-size: contain;
+}
+
+.no-attempts-icon {
+	background: center no-repeat url("../images/no-attempts-icon.png");
+	background-size: contain;
+}
+
+.solution-details-row td {
+	padding: 20px 10%;
+	border-top: 2px dashed black;
+	font-size: 12px;
+}
+
+.level-details {
+	margin-bottom: 20px;
+	text-align: left;
+	text-align: justify;
+	text-justify: inter-word;
+}
+
+.level-details > p {
+	margin-bottom: 5px;
+}
+
+.leader {
+	font-weight: bold;
+}
+
+.list-of-attempts {
+	margin-top: 10px;
+}
+
+.list-of-attempts > li {
+	margin-bottom: 5px;
+}

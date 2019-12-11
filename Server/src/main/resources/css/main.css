@@ -1,0 +1,33 @@
+body {
+    position: relative;
+    min-width: 1040px;
+    font: 18px Trebuchet MS, sans-serif;
+	background: #d9c39c;
+}
+
+a {
+	color: black;
+}
+
+a.inactive-link {
+	color: gray;
+}
+
+h1 {
+	font-size: 32px;
+}
+
+.shell {
+    position: relative;
+    overflow: hidden;
+    width: 1024px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.circle-icon {
+	border: 2px solid black;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+}
