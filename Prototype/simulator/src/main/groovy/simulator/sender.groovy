@@ -5,12 +5,12 @@ import groovy.json.JsonOutput
 String fileContents = new File('solution_spl.groovy').text
 
 def start = System.currentTimeMillis()
-int count = 100
+int count = 10
 for (int i = 0; i < count; i++) {
     def post = new URL("http://localhost:1337/simulate").openConnection();
     def jsonSol = JsonOutput.toJson(fileContents)
     String message = "{\"level\":\"simple_plane\", \"solutions\":[" + jsonSol + "," + jsonSol + "]}"
-    //println(message)
+    println(message)
 
     post.setRequestMethod("POST")
     post.setDoOutput(true)
@@ -21,6 +21,7 @@ for (int i = 0; i < count; i++) {
     if (postRC.equals(200)) {
         println(post.getInputStream().getText());
     }
+    println(i)
 }
 def end = System.currentTimeMillis()
 println("Count: "+count)

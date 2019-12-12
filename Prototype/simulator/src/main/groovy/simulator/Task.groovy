@@ -35,14 +35,14 @@ class Task {
         def binding = new Binding()
         binding.setVariable("level", lvl)
         binding.setVariable("action", new String())
-        println("Robot count:" + solutions.size())
+//        println("Robot count:" + solutions.size())
         for (int i = 0; i < solutions.size(); i++) {
             def script = new GroovyShell(binding)
             script.setVariable("robotId", i) // TODO: Change to runtime id selection
             scripts.add(script.parse(solutions.get(i)))
 
         }
-        println("Parsed solutions")
+//        println("Parsed solutions")
         long start
         long end
         while (!finished) {
@@ -100,9 +100,9 @@ class Task {
 
 
         }
-        println("Task time: "+(System.currentTimeMillis()-startRunTime))
-        println("Level time:" + lvlTime)
-        println("Script time:" + timeForScripts)
+//        println("Task time: "+(System.currentTimeMillis()-startRunTime))
+//        println("Level time:" + lvlTime)
+//        println("Script time:" + timeForScripts)
         return result
     }
 }
