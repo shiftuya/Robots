@@ -1,5 +1,0 @@
-package lobbymanager
-
-interface LevelPlayback {
-
-}
