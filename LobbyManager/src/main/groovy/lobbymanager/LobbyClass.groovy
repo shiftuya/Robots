@@ -3,15 +3,17 @@
  */
 package lobbymanager
 
-class LobbyClass {
-    int maxPlayersCount
-    int playersCount
+class LobbyClass implements Lobby {
+    private int minPlayersCount
+    private int maxPlayersCount
+    private int playersCount
 
-    List<PlayerClass> players
+    List<Player> players
 
-    LevelClass level
+    Level level
 
-    LobbyClass(int maxPlayersCount, LevelClass level) {
+    LobbyClass(int minPlayersCount, int maxPlayersCount, Level level) {
+        this.minPlayersCount = minPlayersCount
         this.maxPlayersCount = maxPlayersCount
         this.level = level
 
@@ -19,7 +21,8 @@ class LobbyClass {
         players = new ArrayList<>()
     }
 
-    void addPlayer(PlayerClass player) {
+    @Override
+    void addPlayer(Player player) {
         if (playersCount >= maxPlayersCount) {
             throw new Exception("No more room for players")
         }
@@ -29,16 +32,37 @@ class LobbyClass {
         }
     }
 
-    void removePlayer(PlayerClass player) {
+    @Override
+    void removePlayer(Player player) {
         if (players.contains(player)) {
             players.remove(player)
             playersCount--
         }
     }
 
+    @Override
     SimulationResult simulate() {
-        // call simulator
-        // How do we store solutions?
+        if (playersCount < minPlayersCount) {
+            throw new IllegalStateException("Not enough players")
+        }
+        if (playersCount > maxPlayersCount) {
+            throw new IllegalStateException("Too many players")
+        }
         return null
+    }
+
+    @Override
+    int getMinPlayersCount() {
+        return minPlayersCount
+    }
+
+    @Override
+    int getMaxPlayersCount() {
+        return maxPlayersCount
+    }
+
+    @Override
+    int getPlayersCount() {
+        return 0
     }
 }

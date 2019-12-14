@@ -1,26 +1,35 @@
 package lobbymanager
 
-class LobbyManagerClass {
-    List<LobbyClass> lobbies
-
-    Map<PlayerClass, LobbyClass> playerLobbyMap // Do I need it?
+class LobbyManagerClass implements LobbyManager {
+    List<Lobby> lobbies
 
     LobbyManagerClass() {
         lobbies = new ArrayList<>()
-        playerLobbyMap = new HashMap<>()
     }
 
-    LobbyClass createLobby(LevelClass level, int maxPlayersCount) {
-        LobbyClass lobby = new LobbyClass(maxPlayersCount, level)
+    @Override
+    void createLobby(Level level, int minPlayersCount, int maxPlayersCount, Player initPlayer) {
+        Lobby lobby = new LobbyClass(minPlayersCount, maxPlayersCount, level)
+        lobby.addPlayer(initPlayer)
         lobbies.add(lobby)
-        return lobby
     }
 
-    void addPlayerToLobby(PlayerClass player, LobbyClass lobby) {
-        lobby.addPlayer()
+    @Override
+    void addPlayerToLobby(Player player, Lobby lobby) {
+        lobby.addPlayer(player)
     }
 
-    void removeLobby(LobbyClass lobby) {
-        lobbies.remove(lobby)
+    @Override
+    void removePlayerFromLobby(Player player) {
+        if (player.getCurrentLobby() == null) {
+            throw new IllegalStateException("The player is not in a lobby")
+        }
+        player.getCurrentLobby().removePlayer(player)
+        player.setCurrentLobby(null)
+    }
+
+    @Override
+    void simulateLobby(Lobby lobby) {
+        lobby.simulate()
     }
 }
