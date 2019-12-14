@@ -1,5 +1,7 @@
 package lobbymanager
 
-class SimulationResult {
+interface SimulationResult {
+    Date getDate()
+    boolean isSuccessful()
 
 }

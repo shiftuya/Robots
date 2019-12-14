@@ -1,5 +1,8 @@
 package lobbymanager
 
-class Player {
+interface Player {
+    int getId()
+    String getName()
+
 
 }

@@ -1,4 +1,6 @@
 package lobbymanager
 
-class Level {
+interface Level {
+    String getName()
+    LevelDescription getDescription()
 }
