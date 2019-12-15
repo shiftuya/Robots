@@ -3,8 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/reset.css">
-		<link rel="stylesheet" href="css/main.css">
-		<link rel="stylesheet" href="css/header.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/header.css">
+        <link rel="stylesheet" href="css/login.css">
 		<link rel="stylesheet" href="css/list_of_lobbies.css">
 		<link rel="stylesheet" href="css/choose_level.css">
 		<link rel="stylesheet" href="css/my_solutions.css">
@@ -17,25 +18,56 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="js/main.js"></script>
 		<script>
-			$(document).ready(function() {
+            $(document).ready(function() {
+                $("#debug").on("click", function() {
+                    $.get("/debug", function(data, status) {
+                        alert(1);
+                    });
+                });
+                
                 var contextManager = new ContextManager([
+                    ["login",           { title: "Login",           headerId: undefined,     contentId: "login-content"           }],
                     ["list_of_lobbies", { title: "List of Lobbies", headerId: "header-main", contentId: "list-of-lobbies-content" }],
                     ["my_solutions",    { title: "My Solutions",    headerId: "header-main", contentId: "my-solutions-content"    }],
                     ["options",         { title: "Options",         headerId: "header-main", contentId: "options-content"         }],
                     ["choose_level",    { title: "Choose a Level",  headerId: "header-main", contentId: "choose-level-content"    }],
                     ["lobby",           { title: "Lobby",           headerId: "header-main", contentId: "lobby-content"           }]
                 ]);
+                activateLoginListeners(contextManager);
                 contextManager.changeContext("list_of_lobbies");
                 
                 var contextListeners = new ContextListeners(contextManager);
                 contextListeners.activateAll();
-                
-                activateSolutionListeners();
 			});
 		</script>
 	</head>
-	<body>
+    <body>
+        <div id="debug">Click</div>
 		<div class="shell">
+            <section id="login-content" class="content">
+                <img class="logo" src="images/logo.png" alt="Robotics Game Server Logotype">
+                <form class="login-form" action="">
+                    <section class="login-form-section">
+                        <p class="login-form-label">Server:</p>
+                        <select class="login-form-input">
+                            <option>NSU Robotics Club</option>
+                            <option>Robotics Game Center</option>
+                        </select>
+                    </section>
+                    <section class="login-form-section">
+                        <p class="login-form-label">Login:</p>
+                        <input class="login-form-input" type="text">
+                    </section>
+                    <section class="login-form-section">
+                        <p class="login-form-label">Password:</p>
+                        <input class="login-form-input" type="password">
+                    </section>
+                    <section class="login-form-section">
+                        <span id="login-submit" class="a">Log In</span>
+<!--                        <button id="login-submit" class="login-form-input login-form-button" type="submit">Log In</button>-->
+                    </section>
+                </form>
+            </section>
             <header id="header-main" class="header-main">
 				<nav class="nav-bar">
 					<span class="nav-bar-left">

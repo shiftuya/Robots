@@ -109,7 +109,7 @@ public class SimonsCoreClass implements SiteAPI {
         return new JSONObject().put("response", levels).toString();
     }
 
-    public String getSolutions() {
+    public String getSolutions(String userName) {
         JSONObject solution_1_attempt_1 = new JSONObject();
         solution_1_attempt_1
                 .put("attempt_id", ThreadLocalRandom.current().nextInt(1, 1000))
@@ -198,7 +198,7 @@ public class SimonsCoreClass implements SiteAPI {
         return new JSONObject().put("response", solutions).toString();
     }
 
-    public String getLobby(int lobbyID) {
+    public String joinLobby(String userName, int lobbyID) {
         JSONObject player_1 = new JSONObject();
         player_1
                 .put("avatar", "/images/person-icon.png")
@@ -214,7 +214,7 @@ public class SimonsCoreClass implements SiteAPI {
         JSONObject player_3 = new JSONObject();
         player_3
                 .put("avatar", "/images/person-icon.png")
-                .put("user_name", "Oleg")
+                .put("user_name", userName)
                 .put("submitted", false);
 
         JSONArray players = new JSONArray();
@@ -248,10 +248,10 @@ public class SimonsCoreClass implements SiteAPI {
         return new JSONObject().put("response", lobby).toString();
     }
 
-    public String createLobby(int levelID) {
+    public String createLobby(String userName, int levelID) {
         // create new lobby using "levelID", then get its id
         int lobbyID = 99999;
 
-        return getLobby(lobbyID);
+        return joinLobby(userName, lobbyID);
     }
 }

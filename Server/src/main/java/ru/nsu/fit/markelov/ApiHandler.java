@@ -1,31 +1,59 @@
 package ru.nsu.fit.markelov;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
+import java.net.HttpCookie;
 import java.net.URLDecoder;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 public class ApiHandler implements HttpHandler {
 
-    private static final String RESOURCES_FOLDER = "src/main/resources";
+    private static final String COOKIE_NAME = "ROBOTICS_USER";
 
     private SimonsCoreClass simonsCoreClass;
+    private Set<String> userNames;
 
     public ApiHandler(SimonsCoreClass simonsCoreClass) {
         this.simonsCoreClass = simonsCoreClass;
+        userNames = new TreeSet<>();
+    }
+
+    private String getUserName(HttpExchange exchange) {
+        Headers requestHeaders = exchange.getRequestHeaders();
+        List<String> cookies = requestHeaders.get("Cookie");
+
+        for (String cookie : cookies) {
+            List<HttpCookie> httpCookies = HttpCookie.parse(cookie);
+            for (HttpCookie httpCookie : httpCookies) {
+                if (httpCookie.getName().endsWith(COOKIE_NAME)) {
+                    if (httpCookie.getValue().equals("NULL")) {
+                        return null;
+                    }
+
+                    return httpCookie.getValue();
+                }
+            }
+        }
+
+        return null;
     }
 
     @Override
     public void handle(HttpExchange exchange) {
         try (OutputStream oStream = exchange.getResponseBody()) {
+
+            String cookieUserName = "Oleg";//getUserName(exchange);
+            /*if (cookieUserName != null) {
+                System.out.println("cookieUserName: " + cookieUserName);
+            } else {
+                System.out.println("cookieUserName: null");
+            }*/
+
             String uri = exchange.getRequestURI().toString();
             /*System.out.println(uri);
 
@@ -37,22 +65,69 @@ public class ApiHandler implements HttpHandler {
                 // bad
             }*/
 
-//            System.out.println(uri);
+            System.out.println(uri);
             String jsonStr;
-            if (uri.startsWith("/api/method/lobbies.get")) {
+            /*if (uri.startsWith("/api/method/sign.login")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("username");
+                    if (idParams.size() == 1) {
+                        jsonStr = null;
+
+                        String userName = idParams.get(0);
+                        if (userNames.contains(userName)) {
+                            exchange.sendResponseHeaders(403, -1);
+                            System.out.println(userName + " already exists");
+                        } else {
+                            List<String> values = new ArrayList<>();
+                            values.add(COOKIE_NAME + "=" + userName + ";");
+                            exchange.getResponseHeaders().put("Set-Cookie", values);
+
+                            exchange.sendResponseHeaders(200, -1);
+                            userNames.add(userName);
+                            System.out.println(userName + " added");
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
+            } else if (uri.startsWith("/api/method/sign.logout")) {
+                jsonStr = null;
+
+                List<String> values = new ArrayList<>();
+                values.add("ROBOTICS_USER=NULL;");
+                exchange.getResponseHeaders().put("Set-Cookie", values);
+
+                exchange.sendResponseHeaders(200, -1);
+                if (cookieUserName != null) {
+                    System.out.println(cookieUserName + " removed");
+                    userNames.remove(cookieUserName);
+                }
+            } else */if (uri.startsWith("/api/method/lobbies.get")) {
                 jsonStr = simonsCoreClass.getListOfLobbies();
             } else if (uri.startsWith("/api/method/levels.get")) {
                 jsonStr = simonsCoreClass.getLevels();
             } else if (uri.startsWith("/api/method/solutions.get")) {
-                jsonStr = simonsCoreClass.getSolutions();
-            } else if (uri.startsWith("/api/method/lobby.get")) {
+                if (cookieUserName != null) {
+                    jsonStr = simonsCoreClass.getSolutions(cookieUserName);
+                } else {
+                    jsonStr = null;
+                }
+            } else if (uri.startsWith("/api/method/lobby.join")) {
                 String[] parts = uri.split("\\?");
                 if (parts.length == 2) {
                     Map<String, List<String>> params = splitQuery(parts[1]);
                     List<String> idParams = params.get("id");
                     if (idParams.size() == 1) {
                         try {
-                            jsonStr = simonsCoreClass.getLobby(Integer.parseInt(idParams.get(0)));
+                            if (cookieUserName != null) {
+                                jsonStr = simonsCoreClass.joinLobby(cookieUserName, Integer.parseInt(idParams.get(0)));
+                            } else {
+                                jsonStr = null;
+                            }
                         } catch (NumberFormatException e) {
                             System.out.println(e.getMessage());
                             jsonStr = null;
@@ -70,7 +145,11 @@ public class ApiHandler implements HttpHandler {
                     List<String> idParams = params.get("id");
                     if (idParams.size() == 1) {
                         try {
-                            jsonStr = simonsCoreClass.createLobby(Integer.parseInt(idParams.get(0)));
+                            if (cookieUserName != null) {
+                                jsonStr = simonsCoreClass.createLobby(cookieUserName, Integer.parseInt(idParams.get(0)));
+                            } else {
+                                jsonStr = null;
+                            }
                         } catch (NumberFormatException e) {
                             System.out.println(e.getMessage());
                             jsonStr = null;
@@ -90,8 +169,10 @@ public class ApiHandler implements HttpHandler {
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {
-                exchange.sendResponseHeaders(204, 0);
+                exchange.sendResponseHeaders(204, -1);
             }
+
+            exchange.close();
         } catch (IOException e) {
             System.out.println(e.toString());
         }

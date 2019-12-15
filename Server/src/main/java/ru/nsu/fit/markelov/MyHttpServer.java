@@ -12,6 +12,7 @@ public class MyHttpServer {
         server.bind(new InetSocketAddress(1337), 0);
 
         server.createContext("/", new CommonHttpHandler());
+        server.createContext("/debug", new DebugHttpHandler());
         server.createContext("/api/method", new ApiHandler(simonsCoreClass));
 
         server.setExecutor(null);

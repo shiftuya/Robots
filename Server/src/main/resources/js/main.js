@@ -79,7 +79,7 @@ class ContextManager {
 
                                 tr.on("click", function() {
 //                                    alert("lobby_id is " + item.lobby_id);
-                                    contextManager.changeContext("lobby", "/api/method/lobby.get?id=" + item.lobby_id);
+                                    contextManager.changeContext("lobby", "/api/method/lobby.join?id=" + item.lobby_id);
                                 });
                             });
                         }
@@ -220,7 +220,7 @@ class ContextManager {
                 }
             });
         }
-        
+
         if (contextName == "lobby") {
             $.get(getQuery, function(data, status) {
                 if (status == "success" && data) {
@@ -232,10 +232,10 @@ class ContextManager {
                         } else {
                             var skeleton = lobbyContentSection.find("section.skeleton");
                             var item = obj.response;
-                            
+
                             var section = $(skeleton).clone();
                             section.removeClass("skeleton");
-                            
+
                             section.find(".lobby-common-icon").css("background-image", "url(\".." + item.level_icon + "\")");
                             section.find(".lobby-level-name").text(item.level_name);
                             section.find(".lobby-players").text(item.players + "/" + item.players_at_most);
@@ -244,23 +244,23 @@ class ContextManager {
                             section.find(".level-details-description").find(".level-details-text").text(item.description);
                             section.find(".level-details-rules").find(".level-details-text").text(item.rules);
                             section.find(".level-details-goal").find(".level-details-text").text(item.goal);
-                            
+
                             var trSkeleton = lobbyContentSection.find("tr.skeleton");
                             item.players_list.forEach(function(playerItem) {
                                 var tr = $(trSkeleton).clone();
                                 tr.removeClass("skeleton");
-                                
+
                                 tr.find(".players-table-icon").css("background-image", "url(\".." + playerItem.avatar + "\")");
                                 tr.find(".username").text(playerItem.user_name);
                                 tr.find(".solution-submitted").text(playerItem.submitted ? "Submitted" : "Not submitted");
-                                
+
                                 section.find(".players-table").append(tr);
                             });
-                            
+
                             for (var i = item.players_list.length; i < item.players_at_most; i++) {
                                 section.find(".players-table").append($("<tr><td colspan=\"100%\" class=\"waiting-player\">Waiting for the player</td></tr>"));
                             }
-                            
+
                             lobbyContentSection.append(section);
                         }
                     } catch(e) {
@@ -297,6 +297,13 @@ class ContextManager {
                 $(this).remove();
             });
         }
+
+        if (this.currentContextName == "login") {
+            $("#login-content").removeClass("active");
+            $("#login-content").find("input.login-form-input").each(function() {
+                $(this).val("");
+            });
+        }
     }
 }
 
@@ -315,6 +322,29 @@ class ContextListeners {
     }
 }
 
+function activateLoginListeners(contextManager) {
+    $("#login-submit").on("click", function() {
+        var username = $("#login-content").find("input.login-form-input[type='text']").val();
+        alert(username);
+        $.get("/api/method/sign.login?username=" + username, function(data, status) {
+            if (status == "success") { /////////////////////////////////////////////////////////////////////
+                contextManager.changeContext("list_of_lobbies");
+            } else {
+                alert("Bad request!");
+            }
+        });
+    });
+
+    $("#logout").on("click", function() {
+        $.get("/api/method/sign.logout", function(data, status) {
+            if (status == "success") { /////////////////////////////////////////////////////////////////////
+                contextManager.changeContext("login");
+            } else {
+                alert("Bad request!");
+            }
+        });
+    });
+}
 
 
 
