@@ -5,15 +5,15 @@
 package simulator
 
 import com.sun.net.httpserver.HttpServer
-import groovy.json.JsonSlurper
-
+import groovy.transform.CompileStatic
 
 class App {
+
     static int PORT = 1337
-
-
+    @CompileStatic
     static void main(String[] args) {
-        HttpServer.create(new InetSocketAddress(PORT), /*max backlog*/ 0).with {
+        println("pid: "+ProcessHandle.current().pid())
+        HttpServer.create(new InetSocketAddress(PORT),0).with {
             println "Server is listening on ${PORT}, hit Ctrl+C to exit."
             createContext("/simulate") { http ->
                 try {
@@ -26,21 +26,33 @@ class App {
                     }
                     http.sendResponseHeaders(200, 0)
 
-                    task = new Task("${http.requestBody}")
+                    Task task = new Task("${http.requestBody}")
                     String result = task.run()
+                    //println(result)
+                    http.responseBody.withWriter { out ->
+                        out << result + "\n"
+                    }
                     http.close()
                 } catch (Exception e) {
                     println "Exception when processing solution"
                     println(e)
                     http.sendResponseHeaders(500, 0)
                     http.responseBody.withWriter { out ->
-                        out << "error"
+                        out << "error: " + e
                     }
-                    http.close
+                    http.close()
 
                 }
             }
             start()
         }
     }
+    /*
+
+    static void main(String[] args) {
+        def req = '''{"level":"simple_plane", "solutions":["package simulator\\n// level and robotId are defined in binding\\nString goalStr = level.getGoal(robotId)\\ndef goals=goalStr.split()\\nint gx = goals[0].toInteger()\\nint gy = goals[1].toInteger()\\nString xStr=level.getSensorReadings(robotId, \\"x\\")\\nString yStr=level.getSensorReadings(robotId, \\"y\\")\\ndef y=yStr.toInteger()\\ndef x=xStr.toInteger()\\nif(x<gx)\\n    return \\"right\\"\\nif(x>gx)\\n    return \\"left\\"\\nif(y<gy)\\n    return \\"up\\"\\nif(y>gy)\\n    return \\"down\\"\\nreturn \\"stay\\"\\n","package simulator\\n// level and robotId are defined in binding\\nString goalStr = level.getGoal(robotId)\\ndef goals=goalStr.split()\\nint gx = goals[0].toInteger()\\nint gy = goals[1].toInteger()\\nString xStr=level.getSensorReadings(robotId, \\"x\\")\\nString yStr=level.getSensorReadings(robotId, \\"y\\")\\ndef y=yStr.toInteger()\\ndef x=xStr.toInteger()\\nif(x<gx)\\n    return \\"right\\"\\nif(x>gx)\\n    return \\"left\\"\\nif(y<gy)\\n    return \\"up\\"\\nif(y>gy)\\n    return \\"down\\"\\nreturn \\"stay\\"\\n"]}'''
+        Task task = new Task(req)
+        String result = task.run()
+        println(result)
+    }*/
 }

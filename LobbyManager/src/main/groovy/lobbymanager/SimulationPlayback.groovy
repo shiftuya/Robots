@@ -1,0 +1,5 @@
+package lobbymanager
+
+interface SimulationPlayback {
+
+}

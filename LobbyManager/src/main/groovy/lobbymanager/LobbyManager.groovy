@@ -1,10 +1,14 @@
 package lobbymanager
 
-class LobbyManager {
-    List<Lobby> lobbies
+interface LobbyManager {
+    void createLobby(Level level, int minPlayersCount, int maxPlayersCount, Player initPlayer)
 
-    LobbyManager() {
-        lobbies = new ArrayList<>()
+    void removePlayerFromLobby(Player player)
 
-    }
+    void simulateLobby(Lobby lobby)
+
+    void addPlayerToLobby(Player player, Lobby lobby)
+
+
+
 }
