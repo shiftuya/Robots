@@ -6,10 +6,13 @@ import java.net.InetSocketAddress;
 
 public class MyHttpServer {
     public static void main(String[] args) throws Exception {
+        SimonsCoreClass simonsCoreClass = new SimonsCoreClass();
+
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(1337), 0);
 
         server.createContext("/", new CommonHttpHandler());
+        server.createContext("/api/method", new ApiHandler(simonsCoreClass));
 
         server.setExecutor(null);
         server.start();

@@ -1,12 +1,13 @@
-.top-panel {
+.header-code-editor {
 	box-sizing: border-box;
 	position: fixed;
+	top: 0;
 	width: 1024px;
 	padding: 10px;
 	border-bottom: 2px dashed black;
 }
 
-.top-panel a {
+.header-code-editor a {
 	display: block;
 	float: left;
 	width: 24px;

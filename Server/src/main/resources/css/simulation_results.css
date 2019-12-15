@@ -1,8 +1,4 @@
-﻿.simulation-results {
-	margin-bottom: 30px;
-}
-
-.playback-content, .log-content {
+﻿.playback-content, .log-content {
 	box-sizing: border-box;
 	float: left;
 	width: 50%;

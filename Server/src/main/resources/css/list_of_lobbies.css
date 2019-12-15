@@ -1,7 +1,9 @@
 .new-lobby {
+    display: inline-block;
 	height: 70px;
 	line-height: 70px;
 	margin-bottom: 30px;
+    cursor: pointer;
 }
 
 .new-lobby-icon {
@@ -19,7 +21,8 @@
 }
 
 .lobbies-table {
-	width: 100%;
+    width: 100%;
+    margin-bottom: 30px;
 	border-collapse: collapse;
 }
 
@@ -36,6 +39,10 @@
 	width: 25%;
 }
 
+.lobby-row {
+    cursor: pointer;
+}
+
 .lobbies-table-icon {
 	display: inline-block;
 	vertical-align: middle;
@@ -45,11 +52,13 @@
 }
 
 .avatar-icon {
-	background: center no-repeat url("../images/person-icon.png");
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .level-icon {
-	background: center no-repeat url("../images/logo.png");
+    background-position: center;
+    background-repeat: no-repeat;
 	background-size: 32px 32px;
 }
 

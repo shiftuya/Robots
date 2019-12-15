@@ -1,3 +1,11 @@
+header, .content {
+	display: none;
+}
+
+.active {
+    display: block;
+}
+
 body {
     position: relative;
     min-width: 1040px;
@@ -5,12 +13,25 @@ body {
 	background: #d9c39c;
 }
 
-a {
-	color: black;
+.a {
+    color: black;
+    text-decoration: underline;
 }
 
-a.inactive-link {
+.a:hover {
+    cursor: pointer;
+}
+
+.a.inactive-link {
 	color: gray;
+}
+
+tr.highlited-on-hover:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.a.highlited-on-hover:hover:not(.inactive-link) {
+    color: darkgreen;
 }
 
 h1 {
@@ -23,6 +44,19 @@ h1 {
     width: 1024px;
     margin: 0 auto;
     text-align: center;
+}
+
+.content {
+    margin-bottom: 30px;
+	padding-top: 30px;
+}
+
+.content-header {
+	margin-bottom: 30px;
+}
+
+.skeleton {
+    display: none;
 }
 
 .circle-icon {

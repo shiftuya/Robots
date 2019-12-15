@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/header.css">
+		<link rel="stylesheet" href="css/list_of_lobbies.css">
+		<link rel="stylesheet" href="css/choose_level.css">
+		<link rel="stylesheet" href="css/my_solutions.css">
+		<link rel="stylesheet" href="css/lobby.css">
+		<link rel="stylesheet" href="css/simulation_results.css">
+		<link rel="stylesheet" href="css/code_editor.css">
+		<link rel="shortcut icon" href="images/logo.png" type="image/png">
+		<title>Robotics Game Server</title>
+        <!--<script src="js/libs/jquery/3.4.1/jquery.min.js"></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="js/main.js"></script>
+		<script>
+			$(document).ready(function() {
+                var contextManager = new ContextManager([
+                    ["list_of_lobbies", { title: "List of Lobbies", headerId: "header-main", contentId: "list-of-lobbies-content" }],
+                    ["my_solutions",    { title: "My Solutions",    headerId: "header-main", contentId: "my-solutions-content"    }],
+                    ["options",         { title: "Options",         headerId: "header-main", contentId: "options-content"         }],
+                    ["choose_level",    { title: "Choose a Level",  headerId: "header-main", contentId: "choose-level-content"    }]
+                ]);
+                contextManager.changeContext("list_of_lobbies");
+                
+                var contextListeners = new ContextListeners(contextManager);
+                contextListeners.activateAll();
+                
+                activateSolutionListeners();
+			});
+		</script>
+	</head>
+	<body>
+		<div class="shell">
+            <header id="header-main" class="header-main">
+				<nav class="nav-bar">
+					<span class="nav-bar-left">
+                        <span id="list_of_lobbies" class="a highlited-on-hover" data-href="list_of_lobbies.html">List of Lobbies</span>
+                        <span id="my_solutions" class="a highlited-on-hover" data-href="my_solutions.html">My Solutions</span>
+					</span>
+					<span class="nav-bar-right">
+                        <span id="options" class="a highlited-on-hover" data-href="options.html">Options</span>
+                        <span id="logout" class="a highlited-on-hover" data-href="login.html">Log out (Oleg)</span>
+					</span>
+				</nav>
+			</header>
+            <header id="header-code-editor" class="header-code-editor">
+				<span class="a back back-icon" href=""></span>
+				<span class="a open open-icon" href=""></span>
+				<span class="a save save-icon" href=""></span>
+				<span class="a play play-icon" href=""></span>
+				<div class="version-shell">
+					<span>Version:</span>
+					<select class="version">
+						<option>current</option>
+						<option>06.11.2019 (failed)</option>
+						<option>05.11.2019 (failed)</option>
+						<option>03.11.2019 (failed)</option>
+					</select>
+				</div>
+			</header>
+            <section id="list-of-lobbies-content" class="content">
+                <div id="choose_level" class="new-lobby">
+					<div class="new-lobby-icon circle-icon"></div>
+                    <span class="a" data-href="choose_level.html">Create New Lobby</span>
+				</div>
+                <table id="lobbies-table" class="lobbies-table">
+					<tr>
+						<th>Host</th>
+						<th>Level</th>
+						<th>Players</th>
+                    </tr>
+                    <tr class="lobby-row highlited-on-hover skeleton">
+                        <td>
+                            <div class="lobbies-table-icon avatar-icon"></div>
+                            <span class="username"></span>
+                        </td>
+                        <td>
+                            <div class="lobbies-table-icon level-icon"></div>
+                            <span class="level"><span class="levelname"></span> (<span class="difficulty"></span>)</span>
+                        </td>
+                        <td>
+                            <span class="players-amount"></span>
+                        </td>
+                    </tr>
+				</table>
+			</section>
+            <section id="choose-level-content" class="content">
+				<h1 class="content-header">Choose a level</h1>
+                <table id="levels-table" class="levels-table">
+                    <tr class="skeleton">
+                        <td class="level-common-col">
+                            <div class="level-common-shell">
+                                <div class="levels-table-icon"></div>
+                                <span class="level-name"></span>
+                                <span class="level-difficulty"></span>
+                                <span class="level-type"></span>
+                            </div>
+                        </td>
+                        <td class="level-details-col">
+                            <p class="level-details-description"><span class="leader">Description: </span><span class="level-details-text"></span></p>
+                            <p class="level-details-rules"><span class="leader">Rules: </span><span class="level-details-text"></span></p>
+                            <p class="level-details-goal"><span class="leader">Goal: </span><span class="level-details-text"></span></p>
+                        </td>
+                        <td class="level-players-number-col">
+                            <input class="level-players-number" type="number">
+                        </td>
+                        <td class="level-start-col">
+                            <span class="a" data-href="lobby.html"><div class="start-level-icon"></div></span>
+                        </td>
+                    </tr>
+				</table>
+			</section>
+            <section id="my-solutions-content" class="content">
+                <table id="solutions-table" class="solutions-table">
+                    <tbody class="solution-rows-shell skeleton">
+                        <tr class="solution-row highlited-on-hover">
+                            <td class="level-common-col">
+                                <div class="level-common-shell">
+                                    <div class="levels-table-icon"></div>
+                                    <span class="level-name"></span>
+                                    <span class="level-difficulty"></span>
+                                    <span class="level-type"></span>
+                                </div>
+                            </td>
+                            <td class="solution-attempts-col">
+                                <span class="attempts-number"></span> <span class="attempts-number-details"></span>
+                            </td>
+                            <td class="solution-status-col">
+                                <div class="solution-status-icon"></div>
+                            </td>
+                        </tr>
+                        <tr class="solution-details-row">
+                            <td colspan="100%">
+                                <div class="level-details">
+                                    <p class="level-details-description"><span class="leader">Description: </span><span class="level-details-text"></span></p>
+                                    <p class="level-details-rules"><span class="leader">Rules: </span><span class="level-details-text"></span></p>
+                                    <p class="level-details-goal"><span class="leader">Goal: </span><span class="level-details-text"></span></p>
+                                </div>
+                                <div class="list-of-attempts-shell">
+                                    <h6>List of Attempts:</h6>
+                                    <ol class="list-of-attempts">
+                                        <li class="skeleton"><span class="a" data-href=""><span class="attempt-date"></span> (<span class="attempt-result"></span>)</span></li>
+                                    </ol>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+				</table>
+			</section>
+            <section id="lobby-content" class="content">
+				<section class="lobby-content">
+					<div class="lobby-common-shell">
+						<div class="lobby-common-icon vacuum-cleaner-icon"></div>
+						<span class="lobby-common-info"><span class="lobby-level-name">Vacuum Cleaner</span> Lobby <span class="lobby-players">(4/4)</span></span>
+						<span class="level-difficulty">Medium</span>
+						<span class="level-type">Multiplayer</span>
+					</div>
+					<table class="players-table">
+						<tr>
+							<td>
+								<div class="players-table-icon avatar-icon"></div>
+								<span class="username">Vasily</span><span class="host"> (Host)</span>
+							</td>
+							<td>Submitted</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="players-table-icon avatar-icon"></div>
+								<span class="username">Simon</span><span class="host"> (Host)</span>
+							</td>
+							<td>Submitted</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="players-table-icon avatar-icon"></div>
+								<span class="username">Ivan</span><span class="host"> (Host)</span>
+							</td>
+							<td>Not Submitted</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="players-table-icon avatar-icon"></div>
+								<span class="username">Oleg</span><span class="host"> (Host)</span>
+							</td>
+							<td>Not Submitted</td>
+						</tr>
+					</table>
+				</section>
+				<section class="solution-content">
+					<div class="level-details">
+						<p><span class="leader">Description:</span> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of...</p>
+						<p><span class="leader">Rules:</span> Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+						<p><span class="leader">Goal:</span> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+					</div>
+					<div class="lobby-buttons">
+						<button class="login-form-button" type="submit">Edit Solution</button>
+						<button class="login-form-button" type="submit">Submit Solution</button>
+						<button class="login-form-button" type="submit">Exit Lobby</button>
+					</div>
+				</section>
+			</section>
+            <section id="simulation-results-content" class="content">
+				<h1 class="content-header">Simulation Results <span class="simulation-results-status">(Failed)</span></h1>
+				<section class="playback-content">
+					<h3>Playback</h3>
+					<div class="playback"></div>
+				</section>
+				<section class="log-content">
+					<h3>Log (<span class="a" data-href="">Download</span>)</h3>
+					<textarea name="log" wrap="off"></textarea>
+				</section>
+			</section>
+            <section id="code-editor-content" class="content">
+				<section>
+					<textarea name="code-editor" wrap="off"></textarea>
+				</section>
+            </section>
+            <section id="options-content" class="content">
+                <h1 class="content-header">Do we still need it?</h1>
+            </section>
+            <section id="404-content" class="content">
+                <h1 class="content-header">404 Not Found</h1>
+            </section>
+		</div>
+	</body>
+</html>
