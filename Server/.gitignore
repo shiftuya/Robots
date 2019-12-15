@@ -3,7 +3,7 @@
 .idea/
 build/
 out/
-src/main/resources/js/libs
+src/main/resources/js/libs/
 
 *.kotlin_module
 
