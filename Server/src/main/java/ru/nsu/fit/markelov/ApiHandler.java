@@ -37,6 +37,7 @@ public class ApiHandler implements HttpHandler {
                 // bad
             }*/
 
+//            System.out.println(uri);
             String jsonStr;
             if (uri.startsWith("/api/method/lobbies.get")) {
                 jsonStr = simonsCoreClass.getListOfLobbies();
@@ -44,6 +45,42 @@ public class ApiHandler implements HttpHandler {
                 jsonStr = simonsCoreClass.getLevels();
             } else if (uri.startsWith("/api/method/solutions.get")) {
                 jsonStr = simonsCoreClass.getSolutions();
+            } else if (uri.startsWith("/api/method/lobby.get")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("id");
+                    if (idParams.size() == 1) {
+                        try {
+                            jsonStr = simonsCoreClass.getLobby(Integer.parseInt(idParams.get(0)));
+                        } catch (NumberFormatException e) {
+                            System.out.println(e.getMessage());
+                            jsonStr = null;
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
+            } else if (uri.startsWith("/api/method/lobby.create")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("id");
+                    if (idParams.size() == 1) {
+                        try {
+                            jsonStr = simonsCoreClass.createLobby(Integer.parseInt(idParams.get(0)));
+                        } catch (NumberFormatException e) {
+                            System.out.println(e.getMessage());
+                            jsonStr = null;
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
             } else {
                 jsonStr = null;
             }

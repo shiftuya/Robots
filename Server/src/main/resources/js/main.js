@@ -11,7 +11,7 @@ class ContextManager {
         return this.contextMap.keys();
     }
 
-    changeContext(contextName) {
+    changeContext(contextName, getQuery) {
         var dependencies = this.contextMap.get(contextName);
         var title = dependencies.title;
         var header = $("#" + dependencies.headerId);
@@ -46,13 +46,13 @@ class ContextManager {
             content.addClass("active"); // alert("content added");
         }
         
-        this.getData(contextName);
+        this.getData(contextName, this, getQuery);
         this.removeCurrentData();
 
         this.currentContextName = contextName;
     }
 
-    getData(contextName) {
+    getData(contextName, contextManager, getQuery) {
         if (contextName == "list_of_lobbies") {
             $.get("/api/method/lobbies.get", function(data, status) {
                 if (status == "success" && data) {
@@ -73,11 +73,13 @@ class ContextManager {
                                 tr.find(".levelname").text(item.level_name);
                                 tr.find(".difficulty").text(item.level_difficulty);
                                 tr.find(".players-amount").text(item.players + "/" + item.players_at_most);
+                                tr.attr("data-lobby-id", item.lobby_id);
 
                                 table.append(tr);
 
                                 tr.on("click", function() {
-                                    alert("lobby_id is " + item.lobby_id);
+//                                    alert("lobby_id is " + item.lobby_id);
+                                    contextManager.changeContext("lobby", "/api/method/lobby.get?id=" + item.lobby_id);
                                 });
                             });
                         }
@@ -114,11 +116,13 @@ class ContextManager {
                                 tr.find(".level-players-number").attr("value", item.min_players);
                                 tr.find(".level-players-number").attr("min", item.min_players);
                                 tr.find(".level-players-number").attr("max", item.max_players);
+                                tr.attr("data-level-id", item.level_id);
 
                                 table.append(tr);
 
                                 tr.find(".start-level-icon").on("click", function() {
-                                    alert("level_id is " + item.level_id);
+//                                    alert("level_id is " + item.level_id);
+                                    contextManager.changeContext("lobby", "/api/method/lobby.create?id=" + item.level_id);
                                 });
                             });
                         }
@@ -161,9 +165,9 @@ class ContextManager {
                                     var successed = 0;
                                     var failed = 0;
                                     var liSkeleton = tbody.find("li.skeleton");
-                                    item.attempts.forEach(function(aItem) {
+                                    item.attempts.forEach(function(attemptItem) {
                                         var result;
-                                        if (aItem.attempt_result) {
+                                        if (attemptItem.attempt_result) {
                                             result = "successed";
                                             successed++;
                                         } else {
@@ -174,11 +178,12 @@ class ContextManager {
                                         var li = $(liSkeleton).clone();
                                         li.removeClass("skeleton");
 
-                                        li.find(".attempt-date").text(aItem.attempt_date);
+                                        li.find(".attempt-date").text(attemptItem.attempt_date);
                                         li.find(".attempt-result").text(result);
+                                        li.attr("data-attempt-id", attemptItem.attempt_id);
                                         
                                         li.on("click", function() {
-                                            alert("attempt_id is " + aItem.attempt_id);
+//                                            alert("attempt_id is " + attemptItem.attempt_id);
                                         });
 
                                         tbody.find(".list-of-attempts").append(li);
@@ -215,6 +220,57 @@ class ContextManager {
                 }
             });
         }
+        
+        if (contextName == "lobby") {
+            $.get(getQuery, function(data, status) {
+                if (status == "success" && data) {
+                    try {
+                        var obj = JSON.parse(data);
+                        var lobbyContentSection = $("#lobby-content");
+                        if (obj.response.length == 0) {
+                            $("<section class=\"lobby-shell\"><h1>Lobby was not created.</h1></section>").appendTo(lobbyContentSection);
+                        } else {
+                            var skeleton = lobbyContentSection.find("section.skeleton");
+                            var item = obj.response;
+                            
+                            var section = $(skeleton).clone();
+                            section.removeClass("skeleton");
+                            
+                            section.find(".lobby-common-icon").css("background-image", "url(\".." + item.level_icon + "\")");
+                            section.find(".lobby-level-name").text(item.level_name);
+                            section.find(".lobby-players").text(item.players + "/" + item.players_at_most);
+                            section.find(".level-difficulty").text(item.level_difficulty);
+                            section.find(".level-type").text(item.level_type);
+                            section.find(".level-details-description").find(".level-details-text").text(item.description);
+                            section.find(".level-details-rules").find(".level-details-text").text(item.rules);
+                            section.find(".level-details-goal").find(".level-details-text").text(item.goal);
+                            
+                            var trSkeleton = lobbyContentSection.find("tr.skeleton");
+                            item.players_list.forEach(function(playerItem) {
+                                var tr = $(trSkeleton).clone();
+                                tr.removeClass("skeleton");
+                                
+                                tr.find(".players-table-icon").css("background-image", "url(\".." + playerItem.avatar + "\")");
+                                tr.find(".username").text(playerItem.user_name);
+                                tr.find(".solution-submitted").text(playerItem.submitted ? "Submitted" : "Not submitted");
+                                
+                                section.find(".players-table").append(tr);
+                            });
+                            
+                            for (var i = item.players_list.length; i < item.players_at_most; i++) {
+                                section.find(".players-table").append($("<tr><td colspan=\"100%\" class=\"waiting-player\">Waiting for the player</td></tr>"));
+                            }
+                            
+                            lobbyContentSection.append(section);
+                        }
+                    } catch(e) {
+                        alert(e);
+                    }
+                } else {
+                    alert("Bad request!");
+                }
+            });
+        }
     }
     
     removeCurrentData() {
@@ -232,6 +288,12 @@ class ContextManager {
 
         if (this.currentContextName == "my_solutions") {
             $("#solutions-table").find("tbody:not('.skeleton')").each(function() {
+                $(this).remove();
+            });
+        }
+
+        if (this.currentContextName == "lobby") {
+            $("#lobby-content").find(".lobby-shell:not('.skeleton')").each(function() {
                 $(this).remove();
             });
         }

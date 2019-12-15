@@ -22,7 +22,8 @@
                     ["list_of_lobbies", { title: "List of Lobbies", headerId: "header-main", contentId: "list-of-lobbies-content" }],
                     ["my_solutions",    { title: "My Solutions",    headerId: "header-main", contentId: "my-solutions-content"    }],
                     ["options",         { title: "Options",         headerId: "header-main", contentId: "options-content"         }],
-                    ["choose_level",    { title: "Choose a Level",  headerId: "header-main", contentId: "choose-level-content"    }]
+                    ["choose_level",    { title: "Choose a Level",  headerId: "header-main", contentId: "choose-level-content"    }],
+                    ["lobby",           { title: "Lobby",           headerId: "header-main", contentId: "lobby-content"           }]
                 ]);
                 contextManager.changeContext("list_of_lobbies");
                 
@@ -152,57 +153,43 @@
 				</table>
 			</section>
             <section id="lobby-content" class="content">
-				<section class="lobby-content">
-					<div class="lobby-common-shell">
-						<div class="lobby-common-icon vacuum-cleaner-icon"></div>
-						<span class="lobby-common-info"><span class="lobby-level-name">Vacuum Cleaner</span> Lobby <span class="lobby-players">(4/4)</span></span>
-						<span class="level-difficulty">Medium</span>
-						<span class="level-type">Multiplayer</span>
-					</div>
-					<table class="players-table">
-						<tr>
-							<td>
-								<div class="players-table-icon avatar-icon"></div>
-								<span class="username">Vasily</span><span class="host"> (Host)</span>
-							</td>
-							<td>Submitted</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="players-table-icon avatar-icon"></div>
-								<span class="username">Simon</span><span class="host"> (Host)</span>
-							</td>
-							<td>Submitted</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="players-table-icon avatar-icon"></div>
-								<span class="username">Ivan</span><span class="host"> (Host)</span>
-							</td>
-							<td>Not Submitted</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="players-table-icon avatar-icon"></div>
-								<span class="username">Oleg</span><span class="host"> (Host)</span>
-							</td>
-							<td>Not Submitted</td>
-						</tr>
-					</table>
-				</section>
-				<section class="solution-content">
-					<div class="level-details">
-						<p><span class="leader">Description:</span> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of...</p>
-						<p><span class="leader">Rules:</span> Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-						<p><span class="leader">Goal:</span> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-					</div>
-					<div class="lobby-buttons">
-						<button class="login-form-button" type="submit">Edit Solution</button>
-						<button class="login-form-button" type="submit">Submit Solution</button>
-						<button class="login-form-button" type="submit">Exit Lobby</button>
-					</div>
-				</section>
-			</section>
+                <section class="lobby-shell skeleton">
+                    <section class="lobby-content">
+                        <div class="lobby-common-shell">
+                            <div class="lobby-common-icon"></div>
+                            <span class="lobby-common-info"><span class="lobby-level-name"></span> Lobby <span class="lobby-players"></span></span>
+                            <span class="level-difficulty"></span>
+                            <span class="level-type"></span>
+                        </div>
+                        <table class="players-table">
+                            <tr class="skeleton">
+                                <td>
+                                    <div class="players-table-icon"></div>
+                                    <span class="username"></span><span class="host"> (Host)</span>
+                                </td>
+                                <td><span class="solution-submitted"></span></td>
+                            </tr>
+                        </table>
+                    </section>
+                    <section class="solution-content">
+                        <div class="level-details">
+                            <p class="level-details-description"><span class="leader">Description: </span><span class="level-details-text"></span></p>
+                            <p class="level-details-rules"><span class="leader">Rules: </span><span class="level-details-text"></span></p>
+                            <p class="level-details-goal"><span class="leader">Goal: </span><span class="level-details-text"></span></p>
+                        </div>
+                        <div class="lobby-buttons">
+                            <button class="login-form-button" type="submit">Edit Solution</button>
+                            <button class="login-form-button" type="submit">Submit Solution</button>
+                            <button class="login-form-button" type="submit">Exit Lobby</button>
+                        </div>
+                    </section>
+                </section>
+            </section>
+            <section id="code-editor-content" class="content">
+                <section>
+                    <textarea name="code-editor" wrap="off"></textarea>
+                </section>
+            </section>
             <section id="simulation-results-content" class="content">
 				<h1 class="content-header">Simulation Results <span class="simulation-results-status">(Failed)</span></h1>
 				<section class="playback-content">
@@ -214,11 +201,6 @@
 					<textarea name="log" wrap="off"></textarea>
 				</section>
 			</section>
-            <section id="code-editor-content" class="content">
-				<section>
-					<textarea name="code-editor" wrap="off"></textarea>
-				</section>
-            </section>
             <section id="options-content" class="content">
                 <h1 class="content-header">Do we still need it?</h1>
             </section>

@@ -24,11 +24,9 @@
 	width: 64px;
 	height: 64px;
 	margin-right: 15px;
-}
-
-.vacuum-cleaner-icon {
-	background: center no-repeat url("../images/vacuum-cleaner-icon.png");
-	background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 .lobby-common-info {
@@ -62,15 +60,17 @@
 	vertical-align: middle;
 	width: 32px;
 	height: 32px;
-	margin-right: 5px;
+    margin-right: 5px;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.avatar-icon {
-	background: center no-repeat url("../images/person-icon.png");
-}
-
-.players-table tr:not(:first-of-type) .host {
+.players-table tr:not(:nth-of-type(2)) .host {
 	display: none;
+}
+
+.waiting-player {
+    text-align: center !important;
 }
 
 .level-details {

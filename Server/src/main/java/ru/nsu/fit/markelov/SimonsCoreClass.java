@@ -197,4 +197,61 @@ public class SimonsCoreClass implements SiteAPI {
 
         return new JSONObject().put("response", solutions).toString();
     }
+
+    public String getLobby(int lobbyID) {
+        JSONObject player_1 = new JSONObject();
+        player_1
+                .put("avatar", "/images/person-icon.png")
+                .put("user_name", "Vasily")
+                .put("submitted", true);
+
+        JSONObject player_2 = new JSONObject();
+        player_2
+                .put("avatar", "/images/person-icon.png")
+                .put("user_name", "Simon")
+                .put("submitted", true);
+
+        JSONObject player_3 = new JSONObject();
+        player_3
+                .put("avatar", "/images/person-icon.png")
+                .put("user_name", "Oleg")
+                .put("submitted", false);
+
+        JSONArray players = new JSONArray();
+
+        if (lobbyID == 99999) {
+            players.put(player_3);
+        } else {
+            players.put(player_1);
+            players.put(player_2);
+            players.put(player_3);
+        }
+
+        // -----------------------------------------------------------------------------------------
+
+        JSONObject lobby = new JSONObject();
+        lobby
+                .put("lobby_id", lobbyID)
+                .put("level_icon", "/images/vacuum-cleaner-icon.png")
+                .put("level_name", "Vacuum Cleaner")
+                .put("players", 3)
+                .put("players_at_most", 4)
+                .put("level_difficulty", "Hard")
+                .put("level_type", "Mulriplayer")
+                .put("description", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of...")
+                .put("rules", "Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
+                .put("goal", "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.")
+                .put("players_list", players);
+
+        // -----------------------------------------------------------------------------------------
+
+        return new JSONObject().put("response", lobby).toString();
+    }
+
+    public String createLobby(int levelID) {
+        // create new lobby using "levelID", then get its id
+        int lobbyID = 99999;
+
+        return getLobby(lobbyID);
+    }
 }
