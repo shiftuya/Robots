@@ -19,12 +19,6 @@
 		<script src="js/main.js"></script>
 		<script>
             $(document).ready(function() {
-                $("#debug").on("click", function() {
-                    $.get("/debug", function(data, status) {
-                        alert(1);
-                    });
-                });
-                
                 var contextManager = new ContextManager([
                     ["login",           { title: "Login",           headerId: undefined,     contentId: "login-content"           }],
                     ["list_of_lobbies", { title: "List of Lobbies", headerId: "header-main", contentId: "list-of-lobbies-content" }],
@@ -34,7 +28,7 @@
                     ["lobby",           { title: "Lobby",           headerId: "header-main", contentId: "lobby-content"           }]
                 ]);
                 activateLoginListeners(contextManager);
-                contextManager.changeContext("list_of_lobbies");
+                contextManager.changeContext("login");
                 
                 var contextListeners = new ContextListeners(contextManager);
                 contextListeners.activateAll();
@@ -42,7 +36,6 @@
 		</script>
 	</head>
     <body>
-        <div id="debug">Click</div>
 		<div class="shell">
             <section id="login-content" class="content">
                 <img class="logo" src="images/logo.png" alt="Robotics Game Server Logotype">

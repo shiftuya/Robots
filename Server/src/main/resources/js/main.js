@@ -325,7 +325,7 @@ class ContextListeners {
 function activateLoginListeners(contextManager) {
     $("#login-submit").on("click", function() {
         var username = $("#login-content").find("input.login-form-input[type='text']").val();
-        alert(username);
+        
         $.get("/api/method/sign.login?username=" + username, function(data, status) {
             if (status == "success") { /////////////////////////////////////////////////////////////////////
                 contextManager.changeContext("list_of_lobbies");

@@ -27,6 +27,10 @@ public class ApiHandler implements HttpHandler {
         Headers requestHeaders = exchange.getRequestHeaders();
         List<String> cookies = requestHeaders.get("Cookie");
 
+        if (cookies == null) {
+            return null;
+        }
+
         for (String cookie : cookies) {
             List<HttpCookie> httpCookies = HttpCookie.parse(cookie);
             for (HttpCookie httpCookie : httpCookies) {
@@ -47,27 +51,18 @@ public class ApiHandler implements HttpHandler {
     public void handle(HttpExchange exchange) {
         try (OutputStream oStream = exchange.getResponseBody()) {
 
-            String cookieUserName = "Oleg";//getUserName(exchange);
-            /*if (cookieUserName != null) {
+            String uri = exchange.getRequestURI().toString();
+            System.out.println(uri);
+
+            String cookieUserName = getUserName(exchange);
+            if (cookieUserName != null) {
                 System.out.println("cookieUserName: " + cookieUserName);
             } else {
                 System.out.println("cookieUserName: null");
-            }*/
+            }
 
-            String uri = exchange.getRequestURI().toString();
-            /*System.out.println(uri);
-
-            String[] uriParts = uri.split("\\?");
-            if (uriParts.length == 2) {
-                // OK
-                Map<String, List<String>> query_pairs = splitQuery(uriParts[1]);
-            } else {
-                // bad
-            }*/
-
-            System.out.println(uri);
             String jsonStr;
-            /*if (uri.startsWith("/api/method/sign.login")) {
+            if (uri.startsWith("/api/method/sign.login")) {
                 String[] parts = uri.split("\\?");
                 if (parts.length == 2) {
                     Map<String, List<String>> params = splitQuery(parts[1]);
@@ -106,7 +101,7 @@ public class ApiHandler implements HttpHandler {
                     System.out.println(cookieUserName + " removed");
                     userNames.remove(cookieUserName);
                 }
-            } else */if (uri.startsWith("/api/method/lobbies.get")) {
+            } else if (uri.startsWith("/api/method/lobbies.get")) {
                 jsonStr = simonsCoreClass.getListOfLobbies();
             } else if (uri.startsWith("/api/method/levels.get")) {
                 jsonStr = simonsCoreClass.getLevels();
