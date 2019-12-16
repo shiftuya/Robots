@@ -7,15 +7,34 @@ class LobbyClass implements Lobby {
     private int minPlayersCount
     private int maxPlayersCount
     private int playersCount
+    private int id
 
-    List<Player> players
+    private List<Player> players
 
-    Level level
+    Player host
 
-    LobbyClass(int minPlayersCount, int maxPlayersCount, Level level) {
+    private Level level
+
+    @Override
+    Player getHost() {
+        return host
+    }
+
+    @Override
+    int getId() {
+        return id
+    }
+
+    @Override
+    Level getLevel() {
+        return level
+    }
+
+    LobbyClass(int minPlayersCount, int maxPlayersCount, Level level, int id) {
         this.minPlayersCount = minPlayersCount
         this.maxPlayersCount = maxPlayersCount
         this.level = level
+        this.id = id
 
         playersCount = 0
         players = new ArrayList<>()
@@ -38,6 +57,14 @@ class LobbyClass implements Lobby {
             players.remove(player)
             playersCount--
         }
+
+        if (host == player) {
+            if (!players.isEmpty()) {
+                host = players.get(0)
+            } else {
+                host = null
+            }
+        }
     }
 
     @Override
@@ -47,6 +74,11 @@ class LobbyClass implements Lobby {
         }
         if (playersCount > maxPlayersCount) {
             throw new IllegalStateException("Too many players")
+        }
+        for (Player player : players) {
+            if (!player.isReady()) {
+                throw new IllegalStateException("A player is not ready")
+            }
         }
         return null
     }

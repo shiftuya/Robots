@@ -1,6 +1,11 @@
 package lobbymanager
 
 interface Lobby {
+
+    int getId()
+
+    Player getHost()
+
     int getMinPlayersCount()
     int getMaxPlayersCount()
     int getPlayersCount()
