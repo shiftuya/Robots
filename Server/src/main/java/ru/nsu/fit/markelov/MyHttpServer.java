@@ -1,18 +1,22 @@
 package ru.nsu.fit.markelov;
 
 import com.sun.net.httpserver.HttpServer;
+import ru.nsu.fit.markelov.http_handlers.ApiHandler;
+import ru.nsu.fit.markelov.http_handlers.CommonHttpHandler;
+import ru.nsu.fit.markelov.managers.MainManager;
+import ru.nsu.fit.markelov.managers.MainManagerClass;
 
 import java.net.InetSocketAddress;
 
 public class MyHttpServer {
     public static void main(String[] args) throws Exception {
-        SimonsCoreClass simonsCoreClass = new SimonsCoreClass();
+        MainManager mainManager = new MainManagerClass();
 
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(1337), 0);
 
         server.createContext("/", new CommonHttpHandler());
-        server.createContext("/api/method", new ApiHandler(simonsCoreClass));
+        server.createContext("/api/method", new ApiHandler(mainManager));
 
         server.setExecutor(null);
         server.start();

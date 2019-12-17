@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov;
+package ru.nsu.fit.markelov.http_handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

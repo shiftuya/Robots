@@ -1,8 +1,12 @@
-package ru.nsu.fit.markelov;
+package ru.nsu.fit.markelov.http_handlers;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import ru.nsu.fit.markelov.managers.MainManager;
+import ru.nsu.fit.markelov.util.JsonPacker;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,16 +14,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpCookie;
 import java.net.URLDecoder;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ApiHandler implements HttpHandler {
 
     private static final String COOKIE_NAME = "ROBOTICS_USER";
 
-    private SimonsCoreClass simonsCoreClass;
+    private MainManager mainManager;
     private Set<String> userNames;
 
-    public ApiHandler(SimonsCoreClass simonsCoreClass) {
-        this.simonsCoreClass = simonsCoreClass;
+    public ApiHandler(MainManager mainManager) {
+        this.mainManager = mainManager;
         userNames = new TreeSet<>();
     }
 
@@ -102,12 +107,12 @@ public class ApiHandler implements HttpHandler {
                     userNames.remove(cookieUserName);
                 }
             } else if (uri.startsWith("/api/method/lobbies.get")) {
-                jsonStr = simonsCoreClass.getListOfLobbies();
+                jsonStr = JsonPacker.packLobbies(mainManager.getLobbies());
             } else if (uri.startsWith("/api/method/levels.get")) {
-                jsonStr = simonsCoreClass.getLevels();
+                jsonStr = JsonPacker.packLevels(mainManager.getLevels());
             } else if (uri.startsWith("/api/method/solutions.get")) {
                 if (cookieUserName != null) {
-                    jsonStr = simonsCoreClass.getSolutions(cookieUserName);
+                    jsonStr = JsonPacker.packSolutions(mainManager.getSolutions(cookieUserName));
                 } else {
                     jsonStr = null;
                 }
@@ -119,7 +124,7 @@ public class ApiHandler implements HttpHandler {
                     if (idParams.size() == 1) {
                         try {
                             if (cookieUserName != null) {
-                                jsonStr = simonsCoreClass.joinLobby(cookieUserName, Integer.parseInt(idParams.get(0)));
+                                jsonStr = JsonPacker.packLobby(mainManager.joinLobby(cookieUserName, Integer.parseInt(idParams.get(0))));
                             } else {
                                 jsonStr = null;
                             }
@@ -140,8 +145,8 @@ public class ApiHandler implements HttpHandler {
                     List<String> idParams = params.get("id");
                     if (idParams.size() == 1) {
                         try {
-                            if (cookieUserName != null) {
-                                jsonStr = simonsCoreClass.createLobby(cookieUserName, Integer.parseInt(idParams.get(0)));
+                            if (cookieUserName != null) { /////////////////////////////////////////// get amount !!!!!!!!!!
+                                jsonStr = JsonPacker.packLobby(mainManager.createLobby(cookieUserName, Integer.parseInt(idParams.get(0)), 5));
                             } else {
                                 jsonStr = null;
                             }
