@@ -6,7 +6,7 @@ class Server {
     static final int PORT = 5150
 
     static void main(String[] args) {
-        LobbyManager lobbyManager = new LobbyManager()
+        LobbyManager lobbyManager = new LobbyManagerClass()
 
         HttpServer.create(new InetSocketAddress(PORT), 0).with {
             println "Server is listening on port $PORT"

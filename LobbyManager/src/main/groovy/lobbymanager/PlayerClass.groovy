@@ -28,7 +28,7 @@ class PlayerClass implements Player {
         return results
     }
 
-    @Override
+   /* @Override
     Lobby getCurrentLobby() {
         return currentLobby
     }
@@ -36,7 +36,7 @@ class PlayerClass implements Player {
     @Override
     void setCurrentLobby(Lobby lobby) {
         currentLobby = lobby
-    }
+    }*/
 
     @Override
     boolean isReady() {

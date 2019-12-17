@@ -6,10 +6,9 @@ interface Player {
 
     List<SimulationResult> getResults()
 
-    Lobby getCurrentLobby()
-    void setCurrentLobby(Lobby lobby)
+   // Lobby getCurrentLobby() // Null if player is not in a lobby
+    //void setCurrentLobby(Lobby lobby)
 
     boolean isReady()
     void setReady(boolean ready)
-
 }
