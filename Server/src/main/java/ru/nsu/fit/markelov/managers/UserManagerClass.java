@@ -1,12 +1,11 @@
 package ru.nsu.fit.markelov.managers;
 
-import ru.nsu.fit.markelov.objects.Lobby;
-import ru.nsu.fit.markelov.objects.Solution;
+import ru.nsu.fit.markelov.interfaces.Solution;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserManagerClass implements UserManager {
+public class UserManagerClass {
 
     private List<Solution> solutions;
 
@@ -14,12 +13,10 @@ public class UserManagerClass implements UserManager {
         solutions = new ArrayList<>();
     }
 
-    @Override
-    public void addSolutionHARDCODED(Solution solution) {
+    public void addSolution(Solution solution) {
         solutions.add(solution);
     }
 
-    @Override
     public List<Solution> getSolutions(String userName) {
         return solutions;
     }

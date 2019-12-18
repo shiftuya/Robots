@@ -1,5 +1,13 @@
 package ru.nsu.fit.markelov.managers;
 
+import ru.nsu.fit.markelov.interfaces.Attempt;
+import ru.nsu.fit.markelov.interfaces.CompileResult;
+import ru.nsu.fit.markelov.interfaces.Level;
+import ru.nsu.fit.markelov.interfaces.Lobby;
+import ru.nsu.fit.markelov.interfaces.MainManager;
+import ru.nsu.fit.markelov.interfaces.Player;
+import ru.nsu.fit.markelov.interfaces.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.Solution;
 import ru.nsu.fit.markelov.objects.*;
 
 import java.util.ArrayList;
@@ -7,9 +15,9 @@ import java.util.List;
 
 public class MainManagerClass implements MainManager {
 
-    private LobbyManager lobbyManager;
-    private LevelManager levelManager;
-    private UserManager userManager;
+    private LobbyManagerClass lobbyManager;
+    private LevelManagerClass levelManager;
+    private UserManagerClass userManager;
 
     public MainManagerClass() {
         lobbyManager = new LobbyManagerClass();
@@ -51,7 +59,7 @@ public class MainManagerClass implements MainManager {
         level_1.setGoal("Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.");
         level_1.setMinPlayers(1);
         level_1.setMaxPlayers(1);
-        levelManager.addLevelHARDCODED(level_1);
+        levelManager.addLevel(level_1);
 
         LevelClass level_2 = new LevelClass();
         level_2.setId(2);
@@ -64,7 +72,7 @@ public class MainManagerClass implements MainManager {
         level_2.setGoal("Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.");
         level_2.setMinPlayers(2);
         level_2.setMaxPlayers(4);
-        levelManager.addLevelHARDCODED(level_2);
+        levelManager.addLevel(level_2);
 
         LevelClass level_3 = new LevelClass();
         level_3.setId(3);
@@ -77,7 +85,7 @@ public class MainManagerClass implements MainManager {
         level_3.setGoal("Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.");
         level_3.setMinPlayers(2);
         level_3.setMaxPlayers(2);
-        levelManager.addLevelHARDCODED(level_3);
+        levelManager.addLevel(level_3);
 
         // ----- lobbies -----
 
@@ -91,7 +99,7 @@ public class MainManagerClass implements MainManager {
         lobby_1.setCurrentPlayersAmount(1);
         lobby_1.setAcceptablePlayersAmount(2);
         lobby_1.setPlayers(players_for_lobby_1);
-        lobbyManager.addLobbyHARDCODED(lobby_1);
+        lobbyManager.addLobby(lobby_1);
 
         List<Player> players_for_lobby_2 = new ArrayList<>();
         players_for_lobby_2.add(player_1);
@@ -105,7 +113,7 @@ public class MainManagerClass implements MainManager {
         lobby_2.setCurrentPlayersAmount(3);
         lobby_2.setAcceptablePlayersAmount(4);
         lobby_2.setPlayers(players_for_lobby_2);
-        lobbyManager.addLobbyHARDCODED(lobby_2);
+        lobbyManager.addLobby(lobby_2);
 
         List<Player> players_for_lobby_3 = new ArrayList<>();
         players_for_lobby_3.add(player_4);
@@ -117,7 +125,7 @@ public class MainManagerClass implements MainManager {
         lobby_3.setCurrentPlayersAmount(1);
         lobby_3.setAcceptablePlayersAmount(2);
         lobby_3.setPlayers(players_for_lobby_3);
-        lobbyManager.addLobbyHARDCODED(lobby_3);
+        lobbyManager.addLobby(lobby_3);
 
         // ----- Solutions -----
 
@@ -158,16 +166,16 @@ public class MainManagerClass implements MainManager {
         SolutionClass solution_1 = new SolutionClass();
         solution_1.setLevel(level_1);
         solution_1.setAttempts(attempts_for_solution_1);
-        userManager.addSolutionHARDCODED(solution_1);
+        userManager.addSolution(solution_1);
 
         SolutionClass solution_2 = new SolutionClass();
         solution_2.setLevel(level_2);
         solution_2.setAttempts(attempts_for_solution_2);
-        userManager.addSolutionHARDCODED(solution_2);
+        userManager.addSolution(solution_2);
 
         SolutionClass solution_3 = new SolutionClass();
         solution_3.setLevel(level_3);
-        userManager.addSolutionHARDCODED(solution_3);
+        userManager.addSolution(solution_3);
     }
 
     @Override
@@ -198,5 +206,89 @@ public class MainManagerClass implements MainManager {
     @Override
     public List<Lobby> leaveLobby(String userName, int lobbyID) {
         return lobbyManager.leaveLobby(userName, lobbyID);
+    }
+
+    @Override
+    public boolean login(String username) {
+        return true;
+    }
+
+    @Override
+    public boolean logout(String username) {
+        return true;
+    }
+
+    @Override
+    public CompileResult submit(String username, String code, int lobbyId) {
+        return new CompileResult() {
+            @Override
+            public boolean isCompiled() {
+                return true;
+            }
+
+            @Override
+            public String getMessage() {
+                return "Compiled!";
+            }
+        };
+    }
+
+    @Override
+    public boolean cancelSubmission(String username, int lobbyId) {
+        return true;
+    }
+
+    @Override
+    public SimulationResult getSimulationResult(String username, int lobbyId) {
+        return new SimulationResult() {
+            @Override
+            public boolean isSuccessful(String username) {
+                return false;
+            }
+
+            @Override
+            public String getLog(String username) {
+                return "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997\n" +
+                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+                        "INFO: Msg997";
+            }
+        };
     }
 }

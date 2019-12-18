@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.objects;
 
+import ru.nsu.fit.markelov.interfaces.Attempt;
+
 public class AttemptClass implements Attempt {
 
     private int id;
@@ -25,7 +27,7 @@ public class AttemptClass implements Attempt {
     }
 
     @Override
-    public boolean isSuccessed() {
+    public boolean isSuccessful() {
         return successed;
     }
 

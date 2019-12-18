@@ -260,6 +260,12 @@ class ContextManager {
                             for (var i = item.players_list.length; i < item.players_at_most; i++) {
                                 section.find(".players-table").append($("<tr><td colspan=\"100%\" class=\"waiting-player\">Waiting for the player</td></tr>"));
                             }
+                            
+                            section.find("#leave-lobby").on("click", function() {
+                                contextManager.changeContext("lobby", "/api/method/lobby.join?id=" + item.lobby_id);
+                                
+                                return false;
+                            });
 
                             lobbyContentSection.append(section);
                         }
@@ -346,9 +352,7 @@ function activateLoginListeners(contextManager) {
     });
 }
 
-/*
-{"response":[{"level_name":"Labyrinth","goal":"Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.","level_difficulty":"Easy","level_icon":"/images/labyrinth-icon.png","description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of...","rules":"Lorem Ipsum is simply dummy text of the printing and typesetting industry.","level_type":"Single","attempts":[{"attempt_result":false,"attempt_id":1,"attempt_date":"03.11.2019"},{"attempt_result":true,"attempt_id":2,"attempt_date":"05.11.2019"}]},{"level_name":"Vacuum Cleaner","goal":"Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.","level_difficulty":"Medium","level_icon":"/images/vacuum-cleaner-icon.png","description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of...","rules":"Lorem Ipsum is simply dummy text of the printing and typesetting industry.","level_type":"Multiplayer (2-4)","attempts":[{"attempt_result":false,"attempt_id":1,"attempt_date":"03.11.2019"},{"attempt_result":false,"attempt_id":2,"attempt_date":"05.11.2019"},{"attempt_result":false,"attempt_id":3,"attempt_date":"06.11.2019"}]},{"level_name":"Robot Wars","goal":"Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.","level_difficulty":"Hard","level_icon":"/images/robot-wars-icon.png","description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of...","rules":"Lorem Ipsum is simply dummy text of the printing and typesetting industry.","level_type":"Multiplayer (2)","attempts":[]}]}
-*/
+
 
 
 

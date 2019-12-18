@@ -2,10 +2,13 @@ package ru.nsu.fit.markelov.util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import ru.nsu.fit.markelov.objects.*;
+import ru.nsu.fit.markelov.interfaces.Attempt;
+import ru.nsu.fit.markelov.interfaces.Level;
+import ru.nsu.fit.markelov.interfaces.Lobby;
+import ru.nsu.fit.markelov.interfaces.Player;
+import ru.nsu.fit.markelov.interfaces.Solution;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class JsonPacker {
 
@@ -98,7 +101,7 @@ public class JsonPacker {
                 jsonAttempt
                         .put("attempt_id", attempt.getId())
                         .put("attempt_date", attempt.getDate())
-                        .put("attempt_result", attempt.isSuccessed());
+                        .put("attempt_result", attempt.isSuccessful());
 
                 jsonAttempts.put(jsonAttempt);
             }

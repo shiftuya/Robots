@@ -1,5 +1,9 @@
 package ru.nsu.fit.markelov.objects;
 
+import ru.nsu.fit.markelov.interfaces.Level;
+import ru.nsu.fit.markelov.interfaces.Lobby;
+import ru.nsu.fit.markelov.interfaces.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
