@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.interfaces;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.List;
 
 public interface Solution {
@@ -8,6 +10,7 @@ public interface Solution {
      *
      * @return the level.
      */
+    @NotNull
     Level getLevel();
 
     /**
@@ -15,5 +18,6 @@ public interface Solution {
      *
      * @return the list of simulation attempts.
      */
+    @NotNull
     List<Attempt> getAttempts();
 }
