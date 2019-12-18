@@ -236,6 +236,7 @@ class ContextManager {
                             var section = $(skeleton).clone();
                             section.removeClass("skeleton");
 
+                            section.attr("data-lobby-id", item.lobby_id);
                             section.find(".lobby-common-icon").css("background-image", "url(\".." + item.level_icon + "\")");
                             section.find(".lobby-level-name").text(item.level_name);
                             section.find(".lobby-players").text(item.players + "/" + item.players_at_most);
@@ -260,16 +261,25 @@ class ContextManager {
                             for (var i = item.players_list.length; i < item.players_at_most; i++) {
                                 section.find(".players-table").append($("<tr><td colspan=\"100%\" class=\"waiting-player\">Waiting for the player</td></tr>"));
                             }
-                            
+
+                            section.find("#edit-solution").on("click", function() {
+                                $("#header-code-editor").find(".back, .play").attr("data-lobby-id", item.lobby_id);
+                                contextManager.changeContext("code_editor", "/api/method/code.edit?id=" + item.lobby_id);
+                            });
+
                             section.find("#leave-lobby").on("click", function() {
-                                $.get(getQuery, function(data, status) {
+                                $.get("/api/method/lobby.leave?id=" + item.lobby_id, function(data, status) {
                                     if (status == "success" && data) {
                                         try {
                                             var obj = JSON.parse(data);
                                             if (obj.response.length == 0) {
                                                 alert("Bad response!");
                                             } else {
-                                                
+                                                if (obj.response.successful) {
+                                                    contextManager.changeContext("list_of_lobbies");
+                                                } else {
+                                                    alert("Sorry, we could not remove you from the lobby. Try again later.");
+                                                }
                                             }
                                         } catch(e) {
                                             alert(e);
@@ -278,10 +288,29 @@ class ContextManager {
                                         alert("Bad request!");
                                     }
                                 });
-                            }
-//                                contextManager.changeContext("lobby", "/api/method/lobby.join?id=" + item.lobby_id);
-                                
-                                return false;
+                            });
+
+                            section.find("#get-simulation_result").on("click", function() {
+                                $.get("/api/method/lobby.leave?id=" + item.lobby_id, function(data, status) {
+                                    if (status == "success" && data) {
+                                        try {
+                                            var obj = JSON.parse(data);
+                                            if (obj.response.length == 0) {
+                                                alert("Bad response!");
+                                            } else {
+                                                if (obj.response.successful) {
+                                                    contextManager.changeContext("list_of_lobbies");
+                                                } else {
+                                                    alert("Sorry, we could not remove you from the lobby. Try again later.");
+                                                }
+                                            }
+                                        } catch(e) {
+                                            alert(e);
+                                        }
+                                    } else {
+                                        alert("Bad request!");
+                                    }
+                                });
                             });
 
                             lobbyContentSection.append(section);
@@ -294,9 +323,41 @@ class ContextManager {
                 }
             });
         }
+
+        if (contextName == "code_editor") {
+            $.get(getQuery, function(data, status) {
+                if (status == "success" && data) {
+                    try {
+                        var obj = JSON.parse(data);
+                        var skeleton = $("#code-editor-content").find("section.skeleton");
+                        if (obj.response.length == 0) {
+                            alert("Bad response!");
+                        } else {
+                            var section = $(skeleton).clone();
+                            section.removeClass("skeleton");
+                            var code = obj.response.code;
+                            section.find("textarea").val(code);
+
+                            $("#code-editor-content").append(section);
+                        }
+                    } catch(e) {
+                        alert(e);
+                    }
+                } else {
+                    alert("Bad request!");
+                }
+            });
+        }
     }
     
     removeCurrentData() {
+        if (this.currentContextName == "login") {
+            $("#login-content").removeClass("active");
+            $("#login-content").find("input.login-form-input").each(function() {
+                $(this).val("");
+            });
+        }
+        
         if (this.currentContextName == "list_of_lobbies") {
             $("#lobbies-table").find("tr:not(':first-of-type'):not('.skeleton')").each(function() {
                 $(this).remove();
@@ -321,10 +382,9 @@ class ContextManager {
             });
         }
 
-        if (this.currentContextName == "login") {
-            $("#login-content").removeClass("active");
-            $("#login-content").find("input.login-form-input").each(function() {
-                $(this).val("");
+        if (this.currentContextName == "code_editor") {
+            $("#code-editor-content").find(".code-editor-shell:not('.skeleton')").each(function() {
+                $(this).remove();
             });
         }
     }
@@ -350,7 +410,7 @@ function activateLoginListeners(contextManager) {
         var username = $("#login-content").find("input.login-form-input[type='text']").val();
         
         $.get("/api/method/sign.login?username=" + username, function(data, status) {
-            if (status == "success") { /////////////////////////////////////////////////////////////////////
+            if (status == "success") { // try-catch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 contextManager.changeContext("list_of_lobbies");
             } else {
                 alert("Bad request!");
@@ -360,8 +420,38 @@ function activateLoginListeners(contextManager) {
 
     $("#logout").on("click", function() {
         $.get("/api/method/sign.logout", function(data, status) {
-            if (status == "success") { /////////////////////////////////////////////////////////////////////
+            if (status == "success") { // try-catch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 contextManager.changeContext("login");
+            } else {
+                alert("Bad request!");
+            }
+        });
+    });
+
+    $("#header-code-editor").find(".back").on("click", function() {
+        contextManager.changeContext("lobby", "/api/method/lobby.return?id=" + $(this).attr("data-lobby-id"));
+    });
+
+    // переделать на post !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    $("#header-code-editor").find(".play").on("click", function() {
+        var id = $(this).attr("data-lobby-id");
+        var code = $("#code-editor-content").find(".code-editor-shell:not('.skeleton') > textarea").val();
+        
+        $.get("/api/method/lobby.submit?id=" + id + "&code=" + code, function(data, status) {
+            if (status == "success" && data) {
+                try {
+                    var obj = JSON.parse(data);
+                    if (obj.response.length == 0) {
+                        alert("Bad response!");
+                    } else {
+                        alert(obj.response.message);
+                        if (obj.response.compiled) {
+                            contextManager.changeContext("lobby", "/api/method/lobby.return?id=" + id);
+                        }
+                    }
+                } catch(e) {
+                    alert(e);
+                }
             } else {
                 alert("Bad request!");
             }

@@ -7,6 +7,22 @@ import java.util.List;
 public interface MainManager {
 
     /**
+     * Logs a user in the system if his username exists in the database.
+     *
+     * @param username user's unique name.
+     * @return         whether the user is found in the database and successfully logged in.
+     */
+    boolean login(@NotNull String username/*, @NotNull String password*/);
+
+    /**
+     * Logs a user out of the system if his username exists in the database.
+     *
+     * @param username user's unique name.
+     * @return         whether the user is found in the database and successfully logged out.
+     */
+    boolean logout(@NotNull String username);
+
+    /**
      * Returns list of available lobbies.
      *
      * The list of lobbies must be sorted by date of creation (the newest one - in the head).
@@ -68,20 +84,14 @@ public interface MainManager {
     boolean leaveLobby(@NotNull String userName, int lobbyID);
 
     /**
-     * Logs a user in the system if his username exists in the database.
+     * Returns the lobby gotten by specified 'lobbyID'.
      *
-     * @param username user's unique name.
-     * @return         whether the user is found in the database and successfully logged in.
+     * @param userName user's unique name.
+     * @param lobbyID  lobby's unique id.
+     * @return         the lobby.
      */
-    boolean login(@NotNull String username/*, @NotNull String password*/);
-
-    /**
-     * Logs a user out of the system if his username exists in the database.
-     *
-     * @param username user's unique name.
-     * @return         whether the user is found in the database and successfully logged out.
-     */
-    boolean logout(@NotNull String username);
+    @NotNull
+    Lobby getLobby(@NotNull String userName, int lobbyID);
 
     /**
      * Compiles the specified code and returns compile result.
@@ -99,13 +109,14 @@ public interface MainManager {
     CompileResult submit(@NotNull String username, @NotNull String code, int lobbyId);
 
     /**
-     * Cancels the submission of the lately compiled code and returns true. In case the cancellation
-     * is impossible returns false.
+     * Cancels the submission of the lately compiled code and returns the code itself. In case the
+     * the user hasn't submitted any code yet, returns null.
      *
      * @param username user's unique name.
      * @param lobbyId  whether the submission was successfully cancelled.
+     * @return         the earlier submitted code.
      */
-    boolean cancelSubmission(@NotNull String username, int lobbyId);
+    String editSubmittedCode(@NotNull String username, int lobbyId);
 
     /**
      * Returns the simulation result or null in case it hasn't been processed yet.
@@ -116,19 +127,3 @@ public interface MainManager {
      */
     SimulationResult getSimulationResult(@NotNull String username, int lobbyId);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

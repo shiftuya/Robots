@@ -1,3 +1,7 @@
+#get-simulation_result {
+    margin-top: 60px;
+} /* HARDCODED - delete */
+
 header, .content {
 	display: none;
 }

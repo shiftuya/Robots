@@ -32,4 +32,8 @@ public class LobbyManagerClass {
     public boolean leaveLobby(String userName, int lobbyID) {
         return true;
     }
+
+    public Lobby refreshLobby(String userName, int lobbyID) {
+        return lobbies.get(1);
+    }
 }

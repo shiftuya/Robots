@@ -7,7 +7,7 @@
 	border-bottom: 2px dashed black;
 }
 
-.header-code-editor a {
+.header-code-editor .a {
 	display: block;
 	float: left;
 	width: 24px;
@@ -47,7 +47,7 @@
 
 textarea[name = code-editor] {
 	width: 1004px;
-	height: 640px;
+	height: 560px;
 	margin-top: 57px;
 	resize: none;
 }

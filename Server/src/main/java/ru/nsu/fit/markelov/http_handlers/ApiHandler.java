@@ -157,6 +157,96 @@ public class ApiHandler implements HttpHandler {
                 } else {
                     jsonStr = null;
                 }
+            } else if (uri.startsWith("/api/method/lobby.leave")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("id");
+                    if (idParams.size() == 1) {
+                        try {
+                            if (cookieUserName != null) {
+                                jsonStr = JsonPacker.packLeavingLobby(mainManager.leaveLobby(cookieUserName, 455434));
+                                System.out.println(jsonStr);
+                            } else {
+                                jsonStr = null;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(e.getMessage());
+                            jsonStr = null;
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
+            } else if (uri.startsWith("/api/method/lobby.return")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("id");
+                    if (idParams.size() == 1) {
+                        try {
+                            if (cookieUserName != null) {
+                                jsonStr = JsonPacker.packLobby(mainManager.getLobby(cookieUserName, Integer.parseInt(idParams.get(0))));
+                            } else {
+                                jsonStr = null;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(e.getMessage());
+                            jsonStr = null;
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
+            } else if (uri.startsWith("/api/method/lobby.submit")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("id");
+                    List<String> codeParams = params.get("code");
+                    if (idParams.size() == 1 && codeParams.size() == 1) {
+                        try {
+                            if (cookieUserName != null) {
+                                jsonStr = JsonPacker.packCompileResult(mainManager.submit(cookieUserName, codeParams.get(0), Integer.parseInt(idParams.get(0))));
+                            } else {
+                                jsonStr = null;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(e.getMessage());
+                            jsonStr = null;
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
+            } else if (uri.startsWith("/api/method/code.edit")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("id");
+                    if (idParams.size() == 1) {
+                        try {
+                            if (cookieUserName != null) {
+                                jsonStr = JsonPacker.packCode(mainManager.editSubmittedCode(cookieUserName, Integer.parseInt(idParams.get(0))));
+                            } else {
+                                jsonStr = null;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(e.getMessage());
+                            jsonStr = null;
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
             } else {
                 jsonStr = null;
             }

@@ -20,12 +20,13 @@
 		<script>
             $(document).ready(function() {
                 var contextManager = new ContextManager([
-                    ["login",           { title: "Login",           headerId: undefined,     contentId: "login-content"           }],
-                    ["list_of_lobbies", { title: "List of Lobbies", headerId: "header-main", contentId: "list-of-lobbies-content" }],
-                    ["my_solutions",    { title: "My Solutions",    headerId: "header-main", contentId: "my-solutions-content"    }],
-                    ["options",         { title: "Options",         headerId: "header-main", contentId: "options-content"         }],
-                    ["choose_level",    { title: "Choose a Level",  headerId: "header-main", contentId: "choose-level-content"    }],
-                    ["lobby",           { title: "Lobby",           headerId: "header-main", contentId: "lobby-content"           }]
+                    ["login",           { title: "Login",           headerId: undefined,            contentId: "login-content"           }],
+                    ["list_of_lobbies", { title: "List of Lobbies", headerId: "header-main",        contentId: "list-of-lobbies-content" }],
+                    ["my_solutions",    { title: "My Solutions",    headerId: "header-main",        contentId: "my-solutions-content"    }],
+                    ["options",         { title: "Options",         headerId: "header-main",        contentId: "options-content"         }],
+                    ["choose_level",    { title: "Choose a Level",  headerId: "header-main",        contentId: "choose-level-content"    }],
+                    ["lobby",           { title: "Lobby",           headerId: "header-main",        contentId: "lobby-content"           }],
+                    ["code_editor",     { title: "Code Editor",     headerId: "header-code-editor", contentId: "code-editor-content"     }]
                 ]);
                 activateLoginListeners(contextManager);
                 contextManager.changeContext("list_of_lobbies");
@@ -74,10 +75,10 @@
 				</nav>
 			</header>
             <header id="header-code-editor" class="header-code-editor">
-				<span class="a back back-icon" href=""></span>
-				<span class="a open open-icon" href=""></span>
-				<span class="a save save-icon" href=""></span>
-				<span class="a play play-icon" href=""></span>
+				<span class="a back back-icon"></span>
+				<span class="a open open-icon"></span>
+				<span class="a save save-icon"></span>
+				<span class="a play play-icon"></span>
 				<div class="version-shell">
 					<span>Version:</span>
 					<select class="version">
@@ -203,15 +204,15 @@
                             <p class="level-details-goal"><span class="leader">Goal: </span><span class="level-details-text"></span></p>
                         </div>
                         <div class="lobby-buttons">
-                            <button class="login-form-button" type="submit">Edit Solution</button>
-                            <button class="login-form-button" type="submit">Submit Solution</button>
+                            <button id="edit-solution" class="login-form-button" type="submit">Edit Solution</button>
                             <button id="leave-lobby" class="login-form-button" type="submit">Leave Lobby</button>
+                            <button id="get-simulation_result" class="login-form-button" type="submit">Get Simulation Result</button>
                         </div>
                     </section>
                 </section>
             </section>
             <section id="code-editor-content" class="content">
-                <section>
+                <section class="code-editor-shell skeleton">
                     <textarea name="code-editor" wrap="off"></textarea>
                 </section>
             </section>

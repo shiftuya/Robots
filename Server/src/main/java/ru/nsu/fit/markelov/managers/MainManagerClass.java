@@ -212,6 +212,11 @@ public class MainManagerClass implements MainManager {
     }
 
     @Override
+    public Lobby getLobby(String userName, int lobbyID) {
+        return lobbyManager.refreshLobby(userName, lobbyID);
+    }
+
+    @Override
     public boolean login(String username) {
         return true;
     }
@@ -237,8 +242,8 @@ public class MainManagerClass implements MainManager {
     }
 
     @Override
-    public boolean cancelSubmission(String username, int lobbyId) {
-        return true;
+    public String editSubmittedCode(String username, int lobbyId) {
+        return "Cooooooooooooooode!";
     }
 
     @Override
