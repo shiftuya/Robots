@@ -262,7 +262,24 @@ class ContextManager {
                             }
                             
                             section.find("#leave-lobby").on("click", function() {
-                                contextManager.changeContext("lobby", "/api/method/lobby.join?id=" + item.lobby_id);
+                                $.get(getQuery, function(data, status) {
+                                    if (status == "success" && data) {
+                                        try {
+                                            var obj = JSON.parse(data);
+                                            if (obj.response.length == 0) {
+                                                alert("Bad response!");
+                                            } else {
+                                                
+                                            }
+                                        } catch(e) {
+                                            alert(e);
+                                        }
+                                    } else {
+                                        alert("Bad request!");
+                                    }
+                                });
+                            }
+//                                contextManager.changeContext("lobby", "/api/method/lobby.join?id=" + item.lobby_id);
                                 
                                 return false;
                             });
@@ -351,6 +368,30 @@ function activateLoginListeners(contextManager) {
         });
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,6 +1,5 @@
 package ru.nsu.fit.markelov.managers;
 
-import ru.nsu.fit.markelov.interfaces.Attempt;
 import ru.nsu.fit.markelov.interfaces.CompileResult;
 import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.Lobby;
@@ -8,7 +7,11 @@ import ru.nsu.fit.markelov.interfaces.MainManager;
 import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.Solution;
-import ru.nsu.fit.markelov.objects.*;
+import ru.nsu.fit.markelov.objects.LevelClass;
+import ru.nsu.fit.markelov.objects.LobbyClass;
+import ru.nsu.fit.markelov.objects.PlayerClass;
+import ru.nsu.fit.markelov.objects.SimulationResultClass;
+import ru.nsu.fit.markelov.objects.SolutionClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +142,7 @@ public class MainManagerClass implements MainManager {
         attempt_2_for_solution_1.setDate("05.11.2019");
         attempt_2_for_solution_1.setSuccessful(true);
 
-        List<Attempt> attempts_for_solution_1 = new ArrayList<>();
+        List<SimulationResult> attempts_for_solution_1 = new ArrayList<>();
         attempts_for_solution_1.add(attempt_1_for_solution_1);
         attempts_for_solution_1.add(attempt_2_for_solution_1);
         // -----------------------------------------------------------------------------------------
@@ -158,7 +161,7 @@ public class MainManagerClass implements MainManager {
         attempt_3_for_solution_2.setDate("06.11.2019");
         attempt_3_for_solution_2.setSuccessful(false);
 
-        List<Attempt> attempts_for_solution_2 = new ArrayList<>();
+        List<SimulationResult> attempts_for_solution_2 = new ArrayList<>();
         attempts_for_solution_2.add(attempt_1_for_solution_2);
         attempts_for_solution_2.add(attempt_2_for_solution_2);
         attempts_for_solution_2.add(attempt_3_for_solution_2);
@@ -204,7 +207,7 @@ public class MainManagerClass implements MainManager {
     }
 
     @Override
-    public List<Lobby> leaveLobby(String userName, int lobbyID) {
+    public boolean leaveLobby(String userName, int lobbyID) {
         return lobbyManager.leaveLobby(userName, lobbyID);
     }
 
@@ -241,9 +244,20 @@ public class MainManagerClass implements MainManager {
     @Override
     public SimulationResult getSimulationResult(String username, int lobbyId) {
         return new SimulationResult() {
+
+            @Override
+            public int getId() {
+                return 55;
+            }
+
+            @Override
+            public String getDate() {
+                return "18.12.2019";
+            }
+
             @Override
             public boolean isSuccessful(String username) {
-                return false;
+                return true;
             }
 
             @Override

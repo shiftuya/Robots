@@ -19,5 +19,5 @@ public interface Solution {
      * @return the list of simulation results.
      */
     @NotNull
-    List<SimulationResult> getAttempts();
+    List<SimulationResult> getSimulationResults();
 }

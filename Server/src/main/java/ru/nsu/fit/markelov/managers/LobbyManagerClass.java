@@ -29,7 +29,7 @@ public class LobbyManagerClass {
         return lobbies.get(1);
     }
 
-    public List<Lobby> leaveLobby(String userName, int lobbyID) {
-        return null;
+    public boolean leaveLobby(String userName, int lobbyID) {
+        return true;
     }
 }

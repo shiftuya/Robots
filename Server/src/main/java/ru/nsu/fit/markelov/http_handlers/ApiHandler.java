@@ -109,7 +109,7 @@ public class ApiHandler implements HttpHandler {
                 jsonStr = JsonPacker.packLevels(mainManager.getLevels());
             } else if (uri.startsWith("/api/method/solutions.get")) {
                 if (cookieUserName != null) {
-                    jsonStr = JsonPacker.packSolutions(mainManager.getSolutions(cookieUserName));
+                    jsonStr = JsonPacker.packSolutions(cookieUserName, mainManager.getSolutions(cookieUserName));
                 } else {
                     jsonStr = null;
                 }
