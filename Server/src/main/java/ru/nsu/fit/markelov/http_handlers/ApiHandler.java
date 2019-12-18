@@ -3,9 +3,7 @@ package ru.nsu.fit.markelov.http_handlers;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import ru.nsu.fit.markelov.managers.MainManager;
+import ru.nsu.fit.markelov.interfaces.MainManager;
 import ru.nsu.fit.markelov.util.JsonPacker;
 
 import java.io.IOException;
@@ -14,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpCookie;
 import java.net.URLDecoder;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ApiHandler implements HttpHandler {
 
@@ -112,7 +109,7 @@ public class ApiHandler implements HttpHandler {
                 jsonStr = JsonPacker.packLevels(mainManager.getLevels());
             } else if (uri.startsWith("/api/method/solutions.get")) {
                 if (cookieUserName != null) {
-                    jsonStr = JsonPacker.packSolutions(mainManager.getSolutions(cookieUserName));
+                    jsonStr = JsonPacker.packSolutions(cookieUserName, mainManager.getSolutions(cookieUserName));
                 } else {
                     jsonStr = null;
                 }

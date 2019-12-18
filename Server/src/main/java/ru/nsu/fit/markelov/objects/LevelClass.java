@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.objects;
 
+import ru.nsu.fit.markelov.interfaces.Level;
+
 public class LevelClass implements Level {
 
     private int id;
