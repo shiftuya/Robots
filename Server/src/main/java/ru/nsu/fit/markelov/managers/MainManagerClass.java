@@ -129,34 +129,34 @@ public class MainManagerClass implements MainManager {
 
         // ----- Solutions -----
 
-        AttemptClass attempt_1_for_solution_1 = new AttemptClass();
+        SimulationResultClass attempt_1_for_solution_1 = new SimulationResultClass();
         attempt_1_for_solution_1.setId(1);
         attempt_1_for_solution_1.setDate("03.11.2019");
-        attempt_1_for_solution_1.setSuccessed(false);
+        attempt_1_for_solution_1.setSuccessful(false);
 
-        AttemptClass attempt_2_for_solution_1 = new AttemptClass();
+        SimulationResultClass attempt_2_for_solution_1 = new SimulationResultClass();
         attempt_2_for_solution_1.setId(2);
         attempt_2_for_solution_1.setDate("05.11.2019");
-        attempt_2_for_solution_1.setSuccessed(true);
+        attempt_2_for_solution_1.setSuccessful(true);
 
         List<Attempt> attempts_for_solution_1 = new ArrayList<>();
         attempts_for_solution_1.add(attempt_1_for_solution_1);
         attempts_for_solution_1.add(attempt_2_for_solution_1);
         // -----------------------------------------------------------------------------------------
-        AttemptClass attempt_1_for_solution_2 = new AttemptClass();
+        SimulationResultClass attempt_1_for_solution_2 = new SimulationResultClass();
         attempt_1_for_solution_2.setId(1);
         attempt_1_for_solution_2.setDate("03.11.2019");
-        attempt_1_for_solution_2.setSuccessed(false);
+        attempt_1_for_solution_2.setSuccessful(false);
 
-        AttemptClass attempt_2_for_solution_2 = new AttemptClass();
+        SimulationResultClass attempt_2_for_solution_2 = new SimulationResultClass();
         attempt_2_for_solution_2.setId(2);
         attempt_2_for_solution_2.setDate("05.11.2019");
-        attempt_2_for_solution_2.setSuccessed(false);
+        attempt_2_for_solution_2.setSuccessful(false);
 
-        AttemptClass attempt_3_for_solution_2 = new AttemptClass();
+        SimulationResultClass attempt_3_for_solution_2 = new SimulationResultClass();
         attempt_3_for_solution_2.setId(3);
         attempt_3_for_solution_2.setDate("06.11.2019");
-        attempt_3_for_solution_2.setSuccessed(false);
+        attempt_3_for_solution_2.setSuccessful(false);
 
         List<Attempt> attempts_for_solution_2 = new ArrayList<>();
         attempts_for_solution_2.add(attempt_1_for_solution_2);

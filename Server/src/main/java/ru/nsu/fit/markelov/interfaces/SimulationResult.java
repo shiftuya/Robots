@@ -4,19 +4,19 @@ import com.sun.istack.internal.NotNull;
 
 public interface SimulationResult {
     /**
+     * Returns the unique id of simulation result.
+     *
+     * @return the unique id of simulation result.
+     */
+    int getId();
+
+    /**
      * Returns whether the user's robot has reached the goal.
      *
      * @param username user's unique name.
      * @return         whether the user's robot has reached the goal.
      */
     boolean isSuccessful(@NotNull String username);
-
-    /**
-     * Returns the unique id of simulation result.
-     *
-     * @return the unique id of simulation result.
-     */
-    int getId();
 
     /**
      * Returns the date of simulation result.

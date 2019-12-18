@@ -36,7 +36,7 @@ public interface Lobby {
     int getCurrentPlayersAmount();
 
     /**
-     *
+     * Returns the maximal amount of players for this lobby.
      *
      * @return the maximal amount of players for this lobby.
      */
