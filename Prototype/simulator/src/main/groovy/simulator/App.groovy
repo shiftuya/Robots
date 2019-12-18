@@ -26,7 +26,7 @@ class App {
                     }
                     http.sendResponseHeaders(200, 0)
 
-                    Task task = new Task("${http.requestBody}")
+                    Task task = new UnsecureTask("${http.requestBody}")
                     String result = task.run()
                     //println(result)
                     http.responseBody.withWriter { out ->
