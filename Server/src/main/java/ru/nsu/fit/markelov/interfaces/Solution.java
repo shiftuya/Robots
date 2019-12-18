@@ -14,10 +14,10 @@ public interface Solution {
     Level getLevel();
 
     /**
-     * Returns the list of simulation attempts.
+     * Returns the list of simulation results.
      *
-     * @return the list of simulation attempts.
+     * @return the list of simulation results.
      */
     @NotNull
-    List<Attempt> getAttempts();
+    List<SimulationResult> getAttempts();
 }
