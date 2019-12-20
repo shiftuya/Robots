@@ -1,7 +1,9 @@
 package ru.nsu.fit.markelov.mainmanager;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.Lobby;
 import ru.nsu.fit.markelov.interfaces.Player;
@@ -11,7 +13,18 @@ class Lobby1 implements Lobby {
   private List<Player> players;
   private Level level;
 
+
+  private Map<Player, String> solutions;
+
   private int acceptablePlayersAmount;
+
+  private Player getHost() {
+    return players.get(0);
+  }
+
+  boolean isReady() {
+    return solutions.size() == players.size();
+  }
 
   boolean addPlayer(Player player) {
     if (getCurrentPlayersAmount() >= getAcceptablePlayersAmount() || players.contains(player)) {
@@ -23,12 +36,30 @@ class Lobby1 implements Lobby {
     return true;
   }
 
+  boolean addSolution(Player player, String solution) {
+    if (!players.contains(player)) {
+      return false;
+    }
+    solutions.put(player, solution);
+    return true;
+  }
+
+  String getSolution(Player player) {
+    return solutions.get(player);
+  }
+
+  void removeSolution(Player player) {
+    solutions.remove(player);
+  }
+
   boolean removePlayer(Player player) {
+    solutions.remove(player);
     return players.remove(player);
   }
 
   Lobby1(int id, Level level, int acceptablePlayersAmount) {
     players = new LinkedList<>();
+    solutions = new HashMap<>();
     this.id = id;
     this.level = level;
     this.acceptablePlayersAmount = acceptablePlayersAmount;
@@ -41,12 +72,12 @@ class Lobby1 implements Lobby {
 
   @Override
   public String getHostAvatarAddress() {
-    return null;
+    return getHost().getAvatarAddress();
   }
 
   @Override
   public String getHostName() {
-    return null;
+    return getHost().getName();
   }
 
   @Override

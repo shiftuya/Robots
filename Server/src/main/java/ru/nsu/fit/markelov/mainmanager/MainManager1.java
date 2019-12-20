@@ -11,11 +11,14 @@ import ru.nsu.fit.markelov.interfaces.Lobby;
 import ru.nsu.fit.markelov.interfaces.MainManager;
 import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.SimulatorManager;
 import ru.nsu.fit.markelov.interfaces.Solution;
 
 public class MainManager1 implements MainManager {
   private List<Player> players;
   private List<Lobby> lobbies;
+
+  private SimulatorManager simulatorManager;
 
   private int maxLobbyId, maxLevelId;
 
@@ -77,7 +80,10 @@ public class MainManager1 implements MainManager {
 
   @Override
   public Lobby joinLobby(String userName, int lobbyID) {
-    return null;
+    Lobby1 lobby = getLobbyById(lobbyID);
+    Player player = getPlayerByName(userName);
+    lobby.addPlayer(player);
+    return lobby;
   }
 
   @Override
@@ -115,12 +121,22 @@ public class MainManager1 implements MainManager {
 
   @Override
   public CompileResult submit(String username, String code, int lobbyId) {
-    return null;
+    // TODO try to compile
+
+    Lobby1 lobby = getLobbyById(lobbyId);
+    Player player = getPlayerByName(username);
+    lobby.addSolution(player, code);
+
+    return new CompileResult1("Compiled", true);
   }
 
   @Override
   public String editSubmittedCode(String username, int lobbyId) {
-    return null;
+    Player player = getPlayerByName(username);
+    Lobby1 lobby = getLobbyById(lobbyId);
+    String code = lobby.getSolution(player);
+    lobby.removeSolution(player);
+    return code;
   }
 
   @Override
