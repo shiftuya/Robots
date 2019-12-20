@@ -7,6 +7,10 @@ class Player1 implements Player {
   private String name;
   private String solutionCode;
 
+  void setSolutionCode(String code) {
+    solutionCode = code;
+  }
+
   public Player1(String avatarAddress, String name) {
     this.avatarAddress = avatarAddress;
     this.name = name;

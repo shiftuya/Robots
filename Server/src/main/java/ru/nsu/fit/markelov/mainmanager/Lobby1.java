@@ -7,6 +7,7 @@ import java.util.Map;
 import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.Lobby;
 import ru.nsu.fit.markelov.interfaces.Player;
+import ru.nsu.fit.markelov.interfaces.SimulationResult;
 
 class Lobby1 implements Lobby {
   private int id;
@@ -17,6 +18,12 @@ class Lobby1 implements Lobby {
   private Map<Player, String> solutions;
 
   private int acceptablePlayersAmount;
+
+  Map<Player, String> getSolutions() {
+    return solutions;
+  }
+
+
 
   private Player getHost() {
     return players.get(0);
@@ -36,11 +43,12 @@ class Lobby1 implements Lobby {
     return true;
   }
 
-  boolean addSolution(Player player, String solution) {
+  boolean addSolution(Player1 player, String solution) {
     if (!players.contains(player)) {
       return false;
     }
     solutions.put(player, solution);
+    player.setSolutionCode(solution);
     return true;
   }
 

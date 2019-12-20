@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import ru.nsu.fit.markelov.interfaces.CompileResult;
 import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.Lobby;
@@ -24,14 +25,16 @@ public class MainManager1 implements MainManager {
 
   private Map<Player, List<Solution>> playerSolutionsMap;
 
-  private Map<String, Player> playerMap;
+  private Map<String, Player1> playerMap;
 
   private Map<Integer, Level> idLevelMap;
   private Map<Integer, Lobby1> idLobbyMap;
 
+  private Map<Integer, Map<Player, SimulationResult>> simResultMap;
+
   private List<Level> levels;
 
-  private Player getPlayerByName(String name) {
+  private Player1 getPlayerByName(String name) {
     return playerMap.get(name);
   }
 
@@ -43,6 +46,10 @@ public class MainManager1 implements MainManager {
     return idLobbyMap.get(id);
   }
 
+  private Map<Player, SimulationResult> getSimulationMapByLobbyId(int id) {
+    return simResultMap.get(id);
+  }
+
   public MainManager1() {
     players = new ArrayList<>();
     lobbies = new ArrayList<>();
@@ -50,6 +57,9 @@ public class MainManager1 implements MainManager {
     playerSolutionsMap = new HashMap<>();
     playerMap = new HashMap<>();
     maxLevelId = maxLobbyId = 0;
+    simResultMap = new HashMap<>();
+    idLobbyMap = new HashMap<>();
+    idLevelMap = new HashMap<>();
     // Hard Code
   }
 
@@ -124,7 +134,7 @@ public class MainManager1 implements MainManager {
     // TODO try to compile
 
     Lobby1 lobby = getLobbyById(lobbyId);
-    Player player = getPlayerByName(username);
+    Player1 player = getPlayerByName(username);
     lobby.addSolution(player, code);
 
     return new CompileResult1("Compiled", true);
@@ -141,6 +151,15 @@ public class MainManager1 implements MainManager {
 
   @Override
   public SimulationResult getSimulationResult(String username, int lobbyId) {
-    return null;
+    return getSimulationMapByLobbyId(lobbyId).get(getPlayerByName(username));
+  }
+
+  private void simulateLobby(Lobby1 lobby) {
+    Map<Player, SimulationResult> results = simulatorManager
+        .runSimulation(Integer.toString(lobby.getLevel().getId()), lobby.getSolutions());
+
+    simResultMap.put(lobby.getId(), results);
+    lobbies.remove(lobby);
+    idLobbyMap.remove(lobby.getId());
   }
 }
