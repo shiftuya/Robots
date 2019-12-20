@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.interfaces;
 
-import com.sun.istack.internal.NotNull;
+//import com.sun.istack.internal.NotNull;
 
 public interface Level {
     /**
@@ -15,7 +15,7 @@ public interface Level {
      *
      * @return the address of the level's icon.
      */
-    @NotNull
+   // @NotNull
     String getIconAddress();
 
     /**
@@ -23,7 +23,7 @@ public interface Level {
      *
      * @return the level's name.
      */
-    @NotNull
+  //  @NotNull
     String getName();
 
     /**
@@ -31,7 +31,7 @@ public interface Level {
      *
      * @return the level's difficulty.
      */
-    @NotNull
+ //   @NotNull
     String getDifficulty();
 
     /**
@@ -39,7 +39,7 @@ public interface Level {
      *
      * @return the level's type.
      */
-    @NotNull
+   // @NotNull
     String getType();
 
     /**
@@ -47,7 +47,7 @@ public interface Level {
      *
      * @return the level's description.
      */
-    @NotNull
+ //   @NotNull
     String getDescription();
 
     /**
@@ -55,7 +55,7 @@ public interface Level {
      *
      * @return the level's rules.
      */
-    @NotNull
+  //  @NotNull
     String getRules();
 
     /**
@@ -63,7 +63,7 @@ public interface Level {
      *
      * @return the level's goal.
      */
-    @NotNull
+  //  @NotNull
     String getGoal();
 
     /**

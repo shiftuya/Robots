@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.interfaces;
 
-import com.sun.istack.internal.NotNull;
+//import com.sun.istack.internal.NotNull;
 
 public interface Player {
     /**
@@ -8,7 +8,7 @@ public interface Player {
      *
      * @return the address of player's avatar icon.
      */
-    @NotNull
+    /*@NotNull*/
     String getAvatarAddress();
 
     /**
@@ -16,7 +16,7 @@ public interface Player {
      *
      * @return the player's unique name.
      */
-    @NotNull
+    /*@NotNull*/
     String getName();
 
     /**

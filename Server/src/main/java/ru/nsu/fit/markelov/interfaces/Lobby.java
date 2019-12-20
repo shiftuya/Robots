@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.interfaces;
 
-import com.sun.istack.internal.NotNull;
+//import com.sun.istack.internal.NotNull;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface Lobby {
      *
      * @return the address of host's avatar icon.
      */
-    @NotNull
+  //  @NotNull
     String getHostAvatarAddress();
 
     /**
@@ -25,7 +25,7 @@ public interface Lobby {
      *
      * @return the host's name.
      */
-    @NotNull
+ //   @NotNull
     String getHostName();
 
     /**
@@ -47,7 +47,7 @@ public interface Lobby {
      *
      * @return the list of players.
      */
-    @NotNull
+  //  @NotNull
     List<Player> getPlayers();
 
     /**
@@ -55,6 +55,6 @@ public interface Lobby {
      *
      * @return the level.
      */
-    @NotNull
+  //  @NotNull
     Level getLevel();
 }

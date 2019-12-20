@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.interfaces;
 
-import com.sun.istack.internal.NotNull;
+//import com.sun.istack.internal.NotNull;
 
 public interface SimulationResult {
     /**
@@ -16,14 +16,14 @@ public interface SimulationResult {
      * @param username user's unique name.
      * @return         whether the user's robot has reached the goal.
      */
-    boolean isSuccessful(@NotNull String username);
+    boolean isSuccessful(/*@NotNull*/ String username);
 
     /**
      * Returns the date of simulation result.
      *
      * @return the date of simulation result.
      */
-    @NotNull
+    /*@NotNull*/
     String getDate();
 
     /**
@@ -32,6 +32,6 @@ public interface SimulationResult {
      * @param username user's unique name.
      * @return         user's simulation log.
      */
-    @NotNull
-    String getLog(@NotNull String username);
+    /*@NotNull*/
+    String getLog(/*@NotNull*/ String username);
 }
