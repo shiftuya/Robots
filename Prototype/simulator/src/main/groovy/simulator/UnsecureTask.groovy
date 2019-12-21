@@ -36,14 +36,14 @@ class UnsecureTask implements Task {
         def binding = new Binding()
         binding.setVariable("level", lvl)
         binding.setVariable("action", new String())
-//        println("Robot count:" + solutions.size())
+        println("Robot count:" + solutions.size())
         for (int i = 0; i < solutions.size(); i++) {
             def script = new GroovyShell(binding)
             script.setVariable("robotId", i) // TODO: Change to runtime id selection
             scripts.add(script.parse(solutions.get(i)))
 
         }
-//        println("Parsed solutions")
+        println("Parsed solutions")
         long start
         long end
         while (!finished) {
@@ -51,7 +51,7 @@ class UnsecureTask implements Task {
             int robotId = lvl.getNextRobotId()
             end = System.currentTimeMillis()
             lvlTime += end - start
-//            println("Id:" + robotId)
+            println("Id:" + robotId)
             if (robotId < 0) {
                 return JsonOutput.toJson([timeout: false, broken: true])
             }
@@ -61,11 +61,11 @@ class UnsecureTask implements Task {
             }
             end = System.currentTimeMillis()
             lvlTime += end - start
-//            println("Set id")
-//            println("VT: " + lvl.getVirtualTime())
-//            println("Goal: " + lvl.getGoal(robotId))
-//            println("x: " + lvl.getSensorReadings(robotId, "x"))
-//            println("y: " + lvl.getSensorReadings(robotId, "y"))
+            println("Set id")
+            println("VT: " + lvl.getVirtualTime())
+            println("Goal: " + lvl.getGoal(robotId))
+            println("x: " + lvl.getSensorReadings(robotId, "x"))
+            println("y: " + lvl.getSensorReadings(robotId, "y"))
             String action
             double duration
             try {
@@ -81,13 +81,13 @@ class UnsecureTask implements Task {
                 println(e)
 
             }
-//                println("Run script")
-//                println("Action: " + action + "\tDuration: " + duration)
+                println("Run script")
+                println("Action: " + action + "\tDuration: " + duration)
             start = System.currentTimeMillis()
             lvl.setAction(robotId, action, duration)
             end = System.currentTimeMillis()
             lvlTime += end - start
-//            println(action)
+            println(action)
 
             if (lvl.checkGoal(robotId)) {
                 ArrayList<Boolean> passed = new ArrayList<>()
@@ -100,9 +100,9 @@ class UnsecureTask implements Task {
 
 
         }
-//        println("Task time: "+(System.currentTimeMillis()-startRunTime))
-//        println("Level time:" + lvlTime)
-//        println("Script time:" + timeForScripts)
+        println("Task time: "+(System.currentTimeMillis()-startRunTime))
+        println("Level time:" + lvlTime)
+        println("Script time:" + timeForScripts)
         return result
     }
 }

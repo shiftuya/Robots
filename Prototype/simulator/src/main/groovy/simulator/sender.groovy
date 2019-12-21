@@ -16,14 +16,10 @@ for (int i = 0; i < count; i++) {
     post.setDoOutput(true)
     post.setRequestProperty("Content-Type", "application/json")
     post.getOutputStream().write(message.getBytes("UTF-8"));
-    def postRC = post.getResponseCode();
-    println(postRC);
-    if (postRC.equals(200)) {
-        println(post.getInputStream().getText());
-    }
+    println(post.getInputStream().getText());
     println(i)
 }
 def end = System.currentTimeMillis()
-println("Count: "+count)
-println("Total time: " + (end-start).toDouble()/1000)
-println("Average time: " + (end-start).toDouble()/(1000*count))
+println("Count: " + count)
+println("Total time: " + (end - start).toDouble() / 1000)
+println("Average time: " + (end - start).toDouble() / (1000 * count))

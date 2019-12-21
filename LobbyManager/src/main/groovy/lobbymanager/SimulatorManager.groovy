@@ -1,4 +1,4 @@
-package simulator
+package lobbymanager
 
 import lobbymanager.Player
 import lobbymanager.SimulationResult
