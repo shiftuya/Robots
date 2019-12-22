@@ -84,7 +84,6 @@ public class HardcodedSimulatorManager implements SimulatorManager {
       sol.add(entry.getValue());
     }
     String request = formJSON(levelId, sol);
-    System.out.println(request);
     try {
       URL url = new URL(urls.get(0));
       URLConnection con = url.openConnection();
@@ -99,7 +98,6 @@ public class HardcodedSimulatorManager implements SimulatorManager {
       try (OutputStream os = http.getOutputStream()) {
         os.write(out);
       }
-      System.out.println("Response:");
       StringBuilder json_response = new StringBuilder();
       InputStreamReader in = new InputStreamReader(http.getInputStream());
       BufferedReader br = new BufferedReader(in);
@@ -107,15 +105,12 @@ public class HardcodedSimulatorManager implements SimulatorManager {
       while ((text = br.readLine()) != null) {
         json_response.append(text);
       }
-      System.out.println(json_response.toString());
-      ;
       ArrayList<Boolean> respRes = parseResponse(json_response.toString(), entryList.size());
       HashMap<String, Boolean> results = new HashMap<>();
       for (int i = 0; i < respRes.size(); i++) {
         results.put(entryList.get(i).getKey().getName(), respRes.get(i));
       }
-      SimulationResult sr = new SimulationResult1(lobbyId, results, new Date());
-      return sr;
+      return new SimulationResult1(lobbyId, results, new Date());
     } catch (Exception e) {
       System.err.println(e.getMessage());
       return new SimulationResult1(-1, null, null);
