@@ -2,6 +2,8 @@ package ru.nsu.fit.markelov.mainmanager;
 
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
 
+import java.util.Date;
+
 public class SimulationResult1 implements SimulationResult {
   private int id;
 
@@ -17,7 +19,7 @@ public class SimulationResult1 implements SimulationResult {
   }
 
   @Override
-  public String getDate() {
+  public Date getDate() {
     return null;
   }
 

@@ -14,6 +14,7 @@ import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SolutionHardcoded;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainManagerHardcoded implements MainManager {
@@ -134,12 +135,12 @@ public class MainManagerHardcoded implements MainManager {
 
         SimulationResultHardcoded attempt_1_for_solution_1 = new SimulationResultHardcoded();
         attempt_1_for_solution_1.setId(1);
-        attempt_1_for_solution_1.setDate("03.11.2019");
+//        attempt_1_for_solution_1.setDate("03.11.2019");
         attempt_1_for_solution_1.setSuccessful(false);
 
         SimulationResultHardcoded attempt_2_for_solution_1 = new SimulationResultHardcoded();
         attempt_2_for_solution_1.setId(2);
-        attempt_2_for_solution_1.setDate("05.11.2019");
+//        attempt_2_for_solution_1.setDate("05.11.2019");
         attempt_2_for_solution_1.setSuccessful(true);
 
         List<SimulationResult> attempts_for_solution_1 = new ArrayList<>();
@@ -148,17 +149,17 @@ public class MainManagerHardcoded implements MainManager {
         // -----------------------------------------------------------------------------------------
         SimulationResultHardcoded attempt_1_for_solution_2 = new SimulationResultHardcoded();
         attempt_1_for_solution_2.setId(1);
-        attempt_1_for_solution_2.setDate("03.11.2019");
+//        attempt_1_for_solution_2.setDate("03.11.2019");
         attempt_1_for_solution_2.setSuccessful(false);
 
         SimulationResultHardcoded attempt_2_for_solution_2 = new SimulationResultHardcoded();
         attempt_2_for_solution_2.setId(2);
-        attempt_2_for_solution_2.setDate("05.11.2019");
+//        attempt_2_for_solution_2.setDate("05.11.2019");
         attempt_2_for_solution_2.setSuccessful(false);
 
         SimulationResultHardcoded attempt_3_for_solution_2 = new SimulationResultHardcoded();
         attempt_3_for_solution_2.setId(3);
-        attempt_3_for_solution_2.setDate("06.11.2019");
+//        attempt_3_for_solution_2.setDate("06.11.2019");
         attempt_3_for_solution_2.setSuccessful(false);
 
         List<SimulationResult> attempts_for_solution_2 = new ArrayList<>();
@@ -256,8 +257,8 @@ public class MainManagerHardcoded implements MainManager {
             }
 
             @Override
-            public String getDate() {
-                return "18.12.2019";
+            public Date getDate() {
+                return new Date();
             }
 
             @Override
