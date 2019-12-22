@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.objects;
+package ru.nsu.fit.markelov.objects_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.Lobby;
@@ -7,7 +7,7 @@ import ru.nsu.fit.markelov.interfaces.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LobbyClass implements Lobby {
+public class LobbyHardcoded implements Lobby {
 
     private int id;
     private String hostAvatarAddress;
@@ -18,7 +18,7 @@ public class LobbyClass implements Lobby {
     private List<Player> players;
     private Level level;
 
-    public LobbyClass() {
+    public LobbyHardcoded() {
         players = new ArrayList<>();
     }
 

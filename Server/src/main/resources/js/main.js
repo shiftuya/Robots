@@ -290,8 +290,8 @@ class ContextManager {
                                 });
                             });
 
-                            section.find("#get-simulation_result").on("click", function() {
-                                $.get("/api/method/lobby.leave?id=" + item.lobby_id, function(data, status) {
+                            section.find("#get-simulation-result").on("click", function() {
+                                $.get("/api/method/simulation-result.get?id=" + item.lobby_id, function(data, status) {
                                     if (status == "success" && data) {
                                         try {
                                             var obj = JSON.parse(data);

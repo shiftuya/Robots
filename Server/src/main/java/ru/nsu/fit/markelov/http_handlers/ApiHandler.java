@@ -247,6 +247,28 @@ public class ApiHandler implements HttpHandler {
                 } else {
                     jsonStr = null;
                 }
+            } else if (uri.startsWith("/api/method/simulation-result.get")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("id");
+                    if (idParams.size() == 1) {
+                        try {
+                            if (cookieUserName != null) {
+                                jsonStr = JsonPacker.packSimulationResult(mainManager.getSimulationResult(cookieUserName, Integer.parseInt(idParams.get(0))));
+                            } else {
+                                jsonStr = null;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(e.getMessage());
+                            jsonStr = null;
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
             } else {
                 jsonStr = null;
             }

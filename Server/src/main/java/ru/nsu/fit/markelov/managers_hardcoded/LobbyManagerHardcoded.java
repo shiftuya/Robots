@@ -1,15 +1,15 @@
-package ru.nsu.fit.markelov.managers;
+package ru.nsu.fit.markelov.managers_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.Lobby;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LobbyManagerClass {
+public class LobbyManagerHardcoded {
 
     private List<Lobby> lobbies;
 
-    public LobbyManagerClass() {
+    public LobbyManagerHardcoded() {
         lobbies = new ArrayList<>();
     }
 

@@ -1,8 +1,8 @@
-package ru.nsu.fit.markelov.objects;
+package ru.nsu.fit.markelov.objects_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.Level;
 
-public class LevelClass implements Level {
+public class LevelHardcoded implements Level {
 
     private int id;
     private String iconAddress;

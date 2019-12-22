@@ -1,8 +1,8 @@
-package ru.nsu.fit.markelov.objects;
+package ru.nsu.fit.markelov.objects_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.CompileResult;
 
-public class CompileResultClass implements CompileResult {
+public class CompileResultHardcoded implements CompileResult {
 
     private boolean compiled;
     private String message;

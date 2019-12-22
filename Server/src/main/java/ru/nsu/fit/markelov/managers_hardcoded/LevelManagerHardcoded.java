@@ -1,15 +1,15 @@
-package ru.nsu.fit.markelov.managers;
+package ru.nsu.fit.markelov.managers_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.Level;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LevelManagerClass {
+public class LevelManagerHardcoded {
 
     private List<Level> levels;
 
-    public LevelManagerClass() {
+    public LevelManagerHardcoded() {
         levels = new ArrayList<>();
     }
 

@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.objects;
+package ru.nsu.fit.markelov.objects_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
@@ -7,12 +7,12 @@ import ru.nsu.fit.markelov.interfaces.Solution;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SolutionClass implements Solution {
+public class SolutionHardcoded implements Solution {
 
     private Level level;
     private List<SimulationResult> attempts;
 
-    public SolutionClass() {
+    public SolutionHardcoded() {
         attempts = new ArrayList<>();
     }
 
