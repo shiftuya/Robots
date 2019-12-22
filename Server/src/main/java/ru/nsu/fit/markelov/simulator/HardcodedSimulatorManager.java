@@ -1,6 +1,5 @@
 package ru.nsu.fit.markelov.simulator;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import ru.nsu.fit.markelov.interfaces.Player;
@@ -9,15 +8,11 @@ import ru.nsu.fit.markelov.interfaces.SimulatorManager;
 import ru.nsu.fit.markelov.mainmanager.SimulationResult1;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
