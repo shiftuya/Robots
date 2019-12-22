@@ -5,7 +5,7 @@ import com.sun.org.slf4j.internal.LoggerFactory;
 import org.junit.Test;
 import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
-import ru.nsu.fit.markelov.objects.PlayerClass;
+import ru.nsu.fit.markelov.objects_hardcoded.PlayerHardcoded;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 import java.util.HashMap;
@@ -13,12 +13,11 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 
 public class SimulatorIntegralTest {
-  final Logger logger = LoggerFactory.getLogger(SimulatorIntegralTest.class);
 
   @Test
   public void testCorrectSolutions() {
-    Player p1 = new PlayerClass();
-    Player p2 = new PlayerClass();
+    Player p1 = new PlayerHardcoded();
+    Player p2 = new PlayerHardcoded();
     String correctSolution =
         String.join(
             "\n",

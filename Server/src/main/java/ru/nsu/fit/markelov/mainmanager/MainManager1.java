@@ -155,10 +155,12 @@ public class MainManager1 implements MainManager {
   }
 
   private void simulateLobby(Lobby1 lobby) {
-    Map<Player, SimulationResult> results = simulatorManager
-        .runSimulation(Integer.toString(lobby.getLevel().getId()), lobby.getSolutions());
+    // TODO replace with new function signature
+    // Sorry for my changes here ;-)
+    //Map<Player, SimulationResult> results = simulatorManager
+    //        .runSimulation(Integer.toString(lobby.getLevel().getId()), lobby.getSolutions());
+    //simResultMap.put(lobby.getId(), results);
 
-    simResultMap.put(lobby.getId(), results);
     lobbies.remove(lobby);
     idLobbyMap.remove(lobby.getId());
   }
