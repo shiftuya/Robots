@@ -46,8 +46,7 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   }
 
   @Override
-  public SimulationResult runSimulation(
-      String levelId, int lobbyId, Map<Player, String> solutions) {
+  public SimulationResult runSimulation( String levelId, int lobbyId, Map<Player, String> solutions) {
     ArrayList<Map.Entry<Player, String>> entryList = new ArrayList<>(solutions.entrySet());
     ArrayList<String> sol = new ArrayList<>();
     for (Map.Entry<Player, String> entry : entryList) {
