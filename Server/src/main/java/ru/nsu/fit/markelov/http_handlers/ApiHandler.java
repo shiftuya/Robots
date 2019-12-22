@@ -255,7 +255,7 @@ public class ApiHandler implements HttpHandler {
                     if (idParams.size() == 1) {
                         try {
                             if (cookieUserName != null) {
-                                jsonStr = JsonPacker.packSimulationResult(mainManager.getSimulationResult(cookieUserName, Integer.parseInt(idParams.get(0))));
+                                jsonStr = JsonPacker.packSimulationResult(mainManager.getSimulationResult(cookieUserName, Integer.parseInt(idParams.get(0))), cookieUserName);
                             } else {
                                 jsonStr = null;
                             }

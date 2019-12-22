@@ -6,6 +6,7 @@ import ru.nsu.fit.markelov.interfaces.SimulationResult;
 import java.util.Date;
 import java.util.HashMap;
 
+
 public class SimulationResult1 implements SimulationResult {
   // Id of simulation equal to id of the lobby.
   private int id;

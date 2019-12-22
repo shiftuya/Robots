@@ -9,9 +9,13 @@ import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.Solution;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class JsonPacker {
+
+    private static final String DATE_FORMAT = "yyyy-mm-dd hh:mm:ss";
 
     public static String packLevels(List<Level> levels) {
         JSONArray jsonLevels = new JSONArray();
@@ -149,7 +153,7 @@ public class JsonPacker {
         JSONObject jsonSimulationResult = new JSONObject();
         jsonSimulationResult
                 .put("simulation_result_id", simulationResult.getId())
-                .put("simulation_result_date", simulationResult.getDate())
+                .put("simulation_result_date", new SimpleDateFormat(DATE_FORMAT).format(simulationResult.getDate()))
                 .put("simulation_result_status", simulationResult.isSuccessful(username))
                 .put("simulation_result_log", simulationResult.getLog(username));
 

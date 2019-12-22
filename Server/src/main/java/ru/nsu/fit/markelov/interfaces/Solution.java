@@ -16,6 +16,8 @@ public interface Solution {
     /**
      * Returns the list of simulation results.
      *
+     * All the simulation results must be sorted by date (the newest one - in the head).
+     *
      * @return the list of simulation results.
      */
     /*@NotNull*/

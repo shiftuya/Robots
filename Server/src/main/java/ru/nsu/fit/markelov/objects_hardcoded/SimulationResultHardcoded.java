@@ -2,10 +2,12 @@ package ru.nsu.fit.markelov.objects_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
 
+import java.util.Date;
+
 public class SimulationResultHardcoded implements SimulationResult {
 
     private int id;
-    private String date;
+    private Date date;
     private boolean successful;
 
     @Override
@@ -18,11 +20,11 @@ public class SimulationResultHardcoded implements SimulationResult {
     }
 
     @Override
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
