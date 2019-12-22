@@ -14,55 +14,20 @@ public class Level1 implements Level {
   private int minPlayers;
   private int maxPlayers;
 
-  Level1 setId(int id) {
+  public Level1(int id, String iconAddress, String name, String difficulty, String type,
+      String description, String rules, String goal, int minPlayers, int maxPlayers) {
     this.id = id;
-    return this;
-  }
-
-  Level1 setIconAddress(String iconAddress) {
     this.iconAddress = iconAddress;
-    return this;
-  }
-
-  Level1 setName(String name) {
     this.name = name;
-    return this;
-  }
-
-  Level1 setDifficulty(String difficulty) {
     this.difficulty = difficulty;
-    return this;
-  }
-
-  Level1 setType(String type) {
     this.type = type;
-    return this;
-  }
-
-  Level1 setDescription(String description) {
     this.description = description;
-    return this;
-  }
-
-  Level1 setRules(String rules) {
     this.rules = rules;
-    return this;
-  }
-
-  Level1 setGoal(String goal) {
     this.goal = goal;
-    return this;
-  }
-
-  Level1 setMinPlayers(int minPlayers) {
     this.minPlayers = minPlayers;
-    return this;
+    this.maxPlayers = maxPlayers;
   }
 
-  Level1 setMaxPlayers(int maxPlayers) {
-    this.maxPlayers = maxPlayers;
-    return this;
-  }
 
   @Override
   public int getId() {

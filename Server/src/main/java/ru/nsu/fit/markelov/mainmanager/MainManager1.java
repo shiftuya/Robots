@@ -2,10 +2,8 @@ package ru.nsu.fit.markelov.mainmanager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import ru.nsu.fit.markelov.interfaces.CompileResult;
 import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.Lobby;
@@ -25,12 +23,14 @@ public class MainManager1 implements MainManager {
 
   private Map<Player, List<Solution>> playerSolutionsMap;
 
+  private Map<Integer, String> levelIdToFile;
+
   private Map<String, Player1> playerMap;
 
   private Map<Integer, Level> idLevelMap;
   private Map<Integer, Lobby1> idLobbyMap;
 
-  private Map<Integer, Map<Player, SimulationResult>> simResultMap;
+  private Map<Integer, SimulationResult> simResultMap;
 
   private List<Level> levels;
 
@@ -46,7 +46,7 @@ public class MainManager1 implements MainManager {
     return idLobbyMap.get(id);
   }
 
-  private Map<Player, SimulationResult> getSimulationMapByLobbyId(int id) {
+  private SimulationResult getSimulationResultByLobbyId(int id) {
     return simResultMap.get(id);
   }
 
@@ -60,6 +60,7 @@ public class MainManager1 implements MainManager {
     simResultMap = new HashMap<>();
     idLobbyMap = new HashMap<>();
     idLevelMap = new HashMap<>();
+    levelIdToFile = new HashMap<>();
     // Hard Code
   }
 
@@ -137,6 +138,11 @@ public class MainManager1 implements MainManager {
     Player1 player = getPlayerByName(username);
     lobby.addSolution(player, code);
 
+    if (lobby.getCurrentPlayersAmount() == lobby.getAcceptablePlayersAmount()
+        && lobby.getCurrentPlayersAmount() == lobby.getSolutions().size()) {
+      simulateLobby(lobby);
+    }
+
     return new CompileResult1("Compiled", true);
   }
 
@@ -151,16 +157,17 @@ public class MainManager1 implements MainManager {
 
   @Override
   public SimulationResult getSimulationResult(String username, int lobbyId) {
-    return getSimulationMapByLobbyId(lobbyId).get(getPlayerByName(username));
+    return getSimulationResultByLobbyId(lobbyId);
+    // LobbyId is not yet needed
   }
 
   private void simulateLobby(Lobby1 lobby) {
-    // TODO replace with new function signature
-    // Sorry for my changes here ;-)
-    //Map<Player, SimulationResult> results = simulatorManager
-    //        .runSimulation(Integer.toString(lobby.getLevel().getId()), lobby.getSolutions());
-    //simResultMap.put(lobby.getId(), results);
 
+    SimulationResult result =
+        simulatorManager.runSimulation(
+            levelIdToFile.get(lobby.getLevel().getId()), lobby.getId(), lobby.getSolutions());
+    // TODO replace with new structure
+    // simResultMap.put(lobby.getId(), results);
     lobbies.remove(lobby);
     idLobbyMap.remove(lobby.getId());
   }

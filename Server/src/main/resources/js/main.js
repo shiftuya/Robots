@@ -291,26 +291,7 @@ class ContextManager {
                             });
 
                             section.find("#get-simulation-result").on("click", function() {
-                                $.get("/api/method/simulation-result.get?id=" + item.lobby_id, function(data, status) {
-                                    if (status == "success" && data) {
-                                        try {
-                                            var obj = JSON.parse(data);
-                                            if (obj.response.length == 0) {
-                                                alert("Bad response!");
-                                            } else {
-                                                if (obj.response.successful) {
-                                                    contextManager.changeContext("list_of_lobbies");
-                                                } else {
-                                                    alert("Sorry, we could not remove you from the lobby. Try again later.");
-                                                }
-                                            }
-                                        } catch(e) {
-                                            alert(e);
-                                        }
-                                    } else {
-                                        alert("Bad request!");
-                                    }
-                                });
+                                contextManager.changeContext("simulation_result", "/api/method/simulation-result.get?id=" + item.lobby_id);
                             });
 
                             lobbyContentSection.append(section);
@@ -335,10 +316,37 @@ class ContextManager {
                         } else {
                             var section = $(skeleton).clone();
                             section.removeClass("skeleton");
-                            var code = obj.response.code;
+                            var code = obj.response.code; // new variable is needed to get exactly a string, but not an object (strange, but still)
                             section.find("textarea").val(code);
 
                             $("#code-editor-content").append(section);
+                        }
+                    } catch(e) {
+                        alert(e);
+                    }
+                } else {
+                    alert("Bad request!");
+                }
+            });
+        }
+
+        if (contextName == "simulation_result") {
+            $.get(getQuery, function(data, status) {
+                if (status == "success" && data) {
+                    try {
+                        var obj = JSON.parse(data);
+                        var skeleton = $("#simulation-result-content").find("section.skeleton");
+                        if (obj.response.length == 0) {
+                            alert("Bad response!");
+                        } else {
+                            var section = $(skeleton).clone();
+                            section.removeClass("skeleton");
+
+                            var log = obj.response.simulation_result_log; // new variable is needed to get exactly a string, but not an object (strange, but still)
+                            section.find(".simulation-results-status").text(obj.response.simulation_result_status ? "Successful" : "Failed");
+                            section.find(".log-content > textarea").val(log);
+
+                            $("#simulation-result-content").append(section);
                         }
                     } catch(e) {
                         alert(e);
@@ -384,6 +392,18 @@ class ContextManager {
 
         if (this.currentContextName == "code_editor") {
             $("#code-editor-content").find(".code-editor-shell:not('.skeleton')").each(function() {
+                $(this).remove();
+            });
+        }
+
+        if (this.currentContextName == "code_editor") {
+            $("#code-editor-content").find(".code-editor-shell:not('.skeleton')").each(function() {
+                $(this).remove();
+            });
+        }
+
+        if (this.currentContextName == "simulation_result") {
+            $("#simulation-result-content").find(".simulation-result-shell:not('.skeleton')").each(function() {
                 $(this).remove();
             });
         }

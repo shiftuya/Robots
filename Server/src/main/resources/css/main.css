@@ -1,7 +1,20 @@
-#get-simulation_result {
+/* HARDCODED - delete */
+
+#get-simulation-result {
     margin-top: 60px;
     background-color: darkred;
-} /* HARDCODED - delete */
+}
+
+.playback-content {
+    display: none;
+}
+
+.log-content {
+    width: 100% !important;
+    padding-left: 0 !important;
+}
+
+/* HARDCODED - delete */
 
 header, .content {
 	display: none;
