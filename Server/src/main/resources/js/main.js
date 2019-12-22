@@ -456,8 +456,9 @@ function activateLoginListeners(contextManager) {
     $("#header-code-editor").find(".play").on("click", function() {
         var id = $(this).attr("data-lobby-id");
         var code = $("#code-editor-content").find(".code-editor-shell:not('.skeleton') > textarea").val();
-        
-        $.get("/api/method/lobby.submit?id=" + id + "&code=" + code, function(data, status) {
+
+        alert(code);
+        $.post("/api/method/lobby.submit?id=" + id, {code: code}, function(data, status) {
             if (status == "success" && data) {
                 try {
                     var obj = JSON.parse(data);
@@ -476,6 +477,26 @@ function activateLoginListeners(contextManager) {
                 alert("Bad request!");
             }
         });
+
+        /*$.get("/api/method/lobby.submit?id=" + id + "&code=" + code, function(data, status) {
+            if (status == "success" && data) {
+                try {
+                    var obj = JSON.parse(data);
+                    if (obj.response.length == 0) {
+                        alert("Bad response!");
+                    } else {
+                        alert(obj.response.message);
+                        if (obj.response.compiled) {
+                            contextManager.changeContext("lobby", "/api/method/lobby.return?id=" + id);
+                        }
+                    }
+                } catch(e) {
+                    alert(e);
+                }
+            } else {
+                alert("Bad request!");
+            }
+        });*/
     });
 }
 
