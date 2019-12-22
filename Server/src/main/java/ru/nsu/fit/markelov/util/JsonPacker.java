@@ -15,7 +15,7 @@ import java.util.List;
 
 public class JsonPacker {
 
-    private static final String DATE_FORMAT = "yyyy-mm-dd hh:mm:ss";
+    public static final String DATE_FORMAT = "dd.MM.yyyy";
 
     public static String packLevels(List<Level> levels) {
         JSONArray jsonLevels = new JSONArray();
@@ -51,7 +51,7 @@ public class JsonPacker {
 
                 jsonAttempt
                         .put("attempt_id", attempt.getId())
-                        .put("attempt_date", attempt.getDate())
+                        .put("attempt_date", new SimpleDateFormat(DATE_FORMAT).format(attempt.getDate()))
                         .put("attempt_result", attempt.isSuccessful(username));
 
                 jsonAttempts.put(jsonAttempt);

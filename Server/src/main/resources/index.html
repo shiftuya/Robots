@@ -20,16 +20,17 @@
 		<script>
             $(document).ready(function() {
                 var contextManager = new ContextManager([
-                    ["login",           { title: "Login",           headerId: undefined,            contentId: "login-content"           }],
-                    ["list_of_lobbies", { title: "List of Lobbies", headerId: "header-main",        contentId: "list-of-lobbies-content" }],
-                    ["my_solutions",    { title: "My Solutions",    headerId: "header-main",        contentId: "my-solutions-content"    }],
-                    ["options",         { title: "Options",         headerId: "header-main",        contentId: "options-content"         }],
-                    ["choose_level",    { title: "Choose a Level",  headerId: "header-main",        contentId: "choose-level-content"    }],
-                    ["lobby",           { title: "Lobby",           headerId: "header-main",        contentId: "lobby-content"           }],
-                    ["code_editor",     { title: "Code Editor",     headerId: "header-code-editor", contentId: "code-editor-content"     }]
+                    ["login",             { title: "Login",             headerId: undefined,            contentId: "login-content"             }],
+                    ["list_of_lobbies",   { title: "List of Lobbies",   headerId: "header-main",        contentId: "list-of-lobbies-content"   }],
+                    ["my_solutions",      { title: "My Solutions",      headerId: "header-main",        contentId: "my-solutions-content"      }],
+                    ["options",           { title: "Options",           headerId: "header-main",        contentId: "options-content"           }],
+                    ["choose_level",      { title: "Choose a Level",    headerId: "header-main",        contentId: "choose-level-content"      }],
+                    ["lobby",             { title: "Lobby",             headerId: "header-main",        contentId: "lobby-content"             }],
+                    ["code_editor",       { title: "Code Editor",       headerId: "header-code-editor", contentId: "code-editor-content"       }],
+                    ["simulation_result", { title: "Simulation Result", headerId: "header-main",        contentId: "simulation-result-content" }]
                 ]);
                 activateLoginListeners(contextManager);
-                contextManager.changeContext("list_of_lobbies");
+                contextManager.changeContext("login");
                 
                 var contextListeners = new ContextListeners(contextManager);
                 contextListeners.activateAll();
@@ -216,10 +217,10 @@
                     <textarea name="code-editor" wrap="off"></textarea>
                 </section>
             </section>
-            <section id="simulation-results-content" class="content">
-                <section class="skeleton">
+            <section id="simulation-result-content" class="content">
+                <section class="simulation-result-shell skeleton">
                     <h1 class="content-header">Simulation Results (<span class="simulation-results-status">Failed</span>)</h1>
-                    <section style="display: none" class="playback-content">
+                    <section class="playback-content">
                         <h3>Playback</h3>
                         <div class="playback"></div>
                     </section>
