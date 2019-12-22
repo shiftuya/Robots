@@ -13,9 +13,10 @@ public class Level1 implements Level {
   private String goal;
   private int minPlayers;
   private int maxPlayers;
+  private String filename;
 
-  public Level1(int id, String iconAddress, String name, String difficulty, String type,
-      String description, String rules, String goal, int minPlayers, int maxPlayers) {
+  Level1(int id, String iconAddress, String name, String difficulty, String type,
+      String description, String rules, String goal, int minPlayers, int maxPlayers, String filename) {
     this.id = id;
     this.iconAddress = iconAddress;
     this.name = name;
@@ -26,8 +27,13 @@ public class Level1 implements Level {
     this.goal = goal;
     this.minPlayers = minPlayers;
     this.maxPlayers = maxPlayers;
+    this.filename = filename;
   }
 
+
+  String getFilename() {
+    return filename;
+  }
 
   @Override
   public int getId() {

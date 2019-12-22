@@ -30,7 +30,7 @@ class Lobby1 implements Lobby {
   }
 
   boolean isReady() {
-    return solutions.size() == players.size();
+    return solutions.size() == players.size() && players.size() == acceptablePlayersAmount;
   }
 
   boolean addPlayer(Player player) {

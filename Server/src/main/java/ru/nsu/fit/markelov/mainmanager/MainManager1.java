@@ -2,6 +2,7 @@ package ru.nsu.fit.markelov.mainmanager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import ru.nsu.fit.markelov.interfaces.CompileResult;
@@ -12,9 +13,9 @@ import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.SimulatorManager;
 import ru.nsu.fit.markelov.interfaces.Solution;
+import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 public class MainManager1 implements MainManager {
-  private List<Player> players;
   private List<Lobby> lobbies;
 
   private SimulatorManager simulatorManager;
@@ -23,17 +24,18 @@ public class MainManager1 implements MainManager {
 
   private Map<Player, List<Solution>> playerSolutionsMap;
 
-  private Map<Integer, String> levelIdToFile;
+ // private Map<Integer, String> levelIdToFile;
 
   private Map<String, Player1> playerMap;
 
-  private Map<Integer, Level> idLevelMap;
+  private Map<Integer, Level1> idLevelMap;
   private Map<Integer, Lobby1> idLobbyMap;
 
   private Map<Integer, SimulationResult> simResultMap;
 
   private List<Level> levels;
 
+  // for my convenience - likely to go to another class
   private Player1 getPlayerByName(String name) {
     return playerMap.get(name);
   }
@@ -51,7 +53,6 @@ public class MainManager1 implements MainManager {
   }
 
   public MainManager1() {
-    players = new ArrayList<>();
     lobbies = new ArrayList<>();
     levels = new ArrayList<>();
     playerSolutionsMap = new HashMap<>();
@@ -60,8 +61,28 @@ public class MainManager1 implements MainManager {
     simResultMap = new HashMap<>();
     idLobbyMap = new HashMap<>();
     idLevelMap = new HashMap<>();
-    levelIdToFile = new HashMap<>();
+  //  levelIdToFile = new HashMap<>();
     // Hard Code
+
+    simulatorManager = new HardcodedSimulatorManager();
+  }
+
+  // For hardcoding purposes
+  void addNewPlayer(String name, String avatarAddress) {
+    Player1 player = new Player1(avatarAddress, name);
+    playerSolutionsMap.put(player, new LinkedList<>());
+    playerMap.put(name, player);
+  }
+
+  // For hardcoding purposes
+  void addNewLevel(int id, String iconAddress, String name, String difficulty, String type,
+      String description, String rules, String goal, int minPlayers, int maxPlayers, String filename) {
+
+    Level1 level = new Level1(id, iconAddress, name, difficulty, type,
+        description, rules, goal, minPlayers, maxPlayers, filename);
+
+    idLevelMap.put(++maxLevelId, level);
+   // levelIdToFile.put(maxLevelId, filename);
   }
 
   @Override
@@ -138,8 +159,7 @@ public class MainManager1 implements MainManager {
     Player1 player = getPlayerByName(username);
     lobby.addSolution(player, code);
 
-    if (lobby.getCurrentPlayersAmount() == lobby.getAcceptablePlayersAmount()
-        && lobby.getCurrentPlayersAmount() == lobby.getSolutions().size()) {
+    if (lobby.isReady()) {
       simulateLobby(lobby);
     }
 
@@ -163,9 +183,29 @@ public class MainManager1 implements MainManager {
 
   private void simulateLobby(Lobby1 lobby) {
     SimulationResult result = simulatorManager
-        .runSimulation(levelIdToFile.get(lobby.getLevel().getId()), lobby.getId(), lobby.getSolutions());
+        .runSimulation(idLevelMap.get(lobby.getLevel().getId()).getFilename(),
+            lobby.getId(), lobby.getSolutions());
 
-   // simResultMap.put(lobby.getId(), results);
+    simResultMap.put(lobby.getId(), result);
+
+    // Filling the Solutions Lists for each player
+    for(Player player : lobby.getPlayers()) {
+      List<Solution> solutionList = playerSolutionsMap.get(player);
+
+      boolean isSolutionFound = false;
+
+      for (Solution solution : solutionList) {
+        if (solution.getLevel() == lobby.getLevel()) {
+          ((Solution1) solution).simulationResults.add(0, result);
+          isSolutionFound = true;
+        }
+      }
+
+      if (!isSolutionFound) {
+        solutionList.add(new Solution1(lobby.getLevel(), result));
+      }
+    }
+
     lobbies.remove(lobby);
     idLobbyMap.remove(lobby.getId());
   }

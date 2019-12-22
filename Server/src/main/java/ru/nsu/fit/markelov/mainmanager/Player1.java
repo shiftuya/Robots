@@ -11,7 +11,7 @@ class Player1 implements Player {
     solutionCode = code;
   }
 
-  public Player1(String avatarAddress, String name) {
+  Player1(String avatarAddress, String name) {
     this.avatarAddress = avatarAddress;
     this.name = name;
   }
