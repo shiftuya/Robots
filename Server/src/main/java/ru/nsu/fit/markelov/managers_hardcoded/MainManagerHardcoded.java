@@ -12,7 +12,10 @@ import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.PlayerHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SolutionHardcoded;
+import ru.nsu.fit.markelov.util.JsonPacker;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -133,53 +136,57 @@ public class MainManagerHardcoded implements MainManager {
 
         // ----- Solutions -----
 
-        SimulationResultHardcoded attempt_1_for_solution_1 = new SimulationResultHardcoded();
-        attempt_1_for_solution_1.setId(1);
-//        attempt_1_for_solution_1.setDate("03.11.2019");
-        attempt_1_for_solution_1.setSuccessful(false);
+        try {
+            SimulationResultHardcoded attempt_1_for_solution_1 = new SimulationResultHardcoded();
+            attempt_1_for_solution_1.setId(1);
+            attempt_1_for_solution_1.setDate(new SimpleDateFormat(JsonPacker.DATE_FORMAT).parse("3.9.2019"));
+            attempt_1_for_solution_1.setSuccessful(false);
 
-        SimulationResultHardcoded attempt_2_for_solution_1 = new SimulationResultHardcoded();
-        attempt_2_for_solution_1.setId(2);
-//        attempt_2_for_solution_1.setDate("05.11.2019");
-        attempt_2_for_solution_1.setSuccessful(true);
+            SimulationResultHardcoded attempt_2_for_solution_1 = new SimulationResultHardcoded();
+            attempt_2_for_solution_1.setId(2);
+            attempt_2_for_solution_1.setDate(new SimpleDateFormat(JsonPacker.DATE_FORMAT).parse("5.9.2019"));
+            attempt_2_for_solution_1.setSuccessful(true);
 
-        List<SimulationResult> attempts_for_solution_1 = new ArrayList<>();
-        attempts_for_solution_1.add(attempt_1_for_solution_1);
-        attempts_for_solution_1.add(attempt_2_for_solution_1);
-        // -----------------------------------------------------------------------------------------
-        SimulationResultHardcoded attempt_1_for_solution_2 = new SimulationResultHardcoded();
-        attempt_1_for_solution_2.setId(1);
-//        attempt_1_for_solution_2.setDate("03.11.2019");
-        attempt_1_for_solution_2.setSuccessful(false);
+            List<SimulationResult> attempts_for_solution_1 = new ArrayList<>();
+            attempts_for_solution_1.add(attempt_1_for_solution_1);
+            attempts_for_solution_1.add(attempt_2_for_solution_1);
+            // -----------------------------------------------------------------------------------------
+            SimulationResultHardcoded attempt_1_for_solution_2 = new SimulationResultHardcoded();
+            attempt_1_for_solution_2.setId(1);
+            attempt_1_for_solution_2.setDate(new SimpleDateFormat(JsonPacker.DATE_FORMAT).parse("3.11.2019"));
+            attempt_1_for_solution_2.setSuccessful(false);
 
-        SimulationResultHardcoded attempt_2_for_solution_2 = new SimulationResultHardcoded();
-        attempt_2_for_solution_2.setId(2);
-//        attempt_2_for_solution_2.setDate("05.11.2019");
-        attempt_2_for_solution_2.setSuccessful(false);
+            SimulationResultHardcoded attempt_2_for_solution_2 = new SimulationResultHardcoded();
+            attempt_2_for_solution_2.setId(2);
+            attempt_2_for_solution_2.setDate(new SimpleDateFormat(JsonPacker.DATE_FORMAT).parse("5.11.2019"));
+            attempt_2_for_solution_2.setSuccessful(false);
 
-        SimulationResultHardcoded attempt_3_for_solution_2 = new SimulationResultHardcoded();
-        attempt_3_for_solution_2.setId(3);
-//        attempt_3_for_solution_2.setDate("06.11.2019");
-        attempt_3_for_solution_2.setSuccessful(false);
+            SimulationResultHardcoded attempt_3_for_solution_2 = new SimulationResultHardcoded();
+            attempt_3_for_solution_2.setId(3);
+            attempt_3_for_solution_2.setDate(new SimpleDateFormat(JsonPacker.DATE_FORMAT).parse("6.11.2019"));
+            attempt_3_for_solution_2.setSuccessful(false);
 
-        List<SimulationResult> attempts_for_solution_2 = new ArrayList<>();
-        attempts_for_solution_2.add(attempt_1_for_solution_2);
-        attempts_for_solution_2.add(attempt_2_for_solution_2);
-        attempts_for_solution_2.add(attempt_3_for_solution_2);
-        // -----------------------------------------------------------------------------------------
-        SolutionHardcoded solution_1 = new SolutionHardcoded();
-        solution_1.setLevel(level_1);
-        solution_1.setAttempts(attempts_for_solution_1);
-        userManager.addSolution(solution_1);
+            List<SimulationResult> attempts_for_solution_2 = new ArrayList<>();
+            attempts_for_solution_2.add(attempt_1_for_solution_2);
+            attempts_for_solution_2.add(attempt_2_for_solution_2);
+            attempts_for_solution_2.add(attempt_3_for_solution_2);
+            // -----------------------------------------------------------------------------------------
+            SolutionHardcoded solution_1 = new SolutionHardcoded();
+            solution_1.setLevel(level_1);
+            solution_1.setAttempts(attempts_for_solution_1);
+            userManager.addSolution(solution_1);
 
-        SolutionHardcoded solution_2 = new SolutionHardcoded();
-        solution_2.setLevel(level_2);
-        solution_2.setAttempts(attempts_for_solution_2);
-        userManager.addSolution(solution_2);
+            SolutionHardcoded solution_2 = new SolutionHardcoded();
+            solution_2.setLevel(level_2);
+            solution_2.setAttempts(attempts_for_solution_2);
+            userManager.addSolution(solution_2);
 
-        SolutionHardcoded solution_3 = new SolutionHardcoded();
-        solution_3.setLevel(level_3);
-        userManager.addSolution(solution_3);
+            SolutionHardcoded solution_3 = new SolutionHardcoded();
+            solution_3.setLevel(level_3);
+            userManager.addSolution(solution_3);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override

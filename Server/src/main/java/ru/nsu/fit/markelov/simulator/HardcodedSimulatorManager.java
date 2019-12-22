@@ -1,15 +1,23 @@
 package ru.nsu.fit.markelov.simulator;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.SimulatorManager;
 import ru.nsu.fit.markelov.mainmanager.SimulationResult1;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +28,7 @@ public class HardcodedSimulatorManager implements SimulatorManager {
 
   public HardcodedSimulatorManager() {
     urls = new ArrayList<>();
-    urls.add("http://localhost:1337");
+    urls.add("http://localhost:1337/simulate");
   }
 
   @Override
@@ -45,15 +53,37 @@ public class HardcodedSimulatorManager implements SimulatorManager {
     return jsObj.toString();
   }
 
+  private ArrayList<Boolean> parseResponse(String jsonStr, int playerCount) {
+    JSONObject jsObj = new JSONObject(jsonStr);
+    ArrayList<Boolean> results = new ArrayList<>();
+    try {
+      if ((Boolean) jsObj.get("timeout") || (Boolean) jsObj.get("broken")) {
+        for (int i = 0; i < playerCount; i++) {
+          results.add(false);
+        }
+      } else {
+        JSONArray arr = jsObj.getJSONArray("results");
+        for (int i = 0; i < arr.length(); i++) {
+          results.add(arr.getBoolean(i));
+        }
+      }
+    } catch (Exception e) {
+      for (int i = 0; i < playerCount; i++) {
+        results.add(false);
+      }
+    }
+    return results;
+  }
+
   @Override
-  public SimulationResult runSimulation( String levelId, int lobbyId, Map<Player, String> solutions) {
+  public SimulationResult runSimulation(
+      String levelId, int lobbyId, Map<Player, String> solutions) {
     ArrayList<Map.Entry<Player, String>> entryList = new ArrayList<>(solutions.entrySet());
     ArrayList<String> sol = new ArrayList<>();
     for (Map.Entry<Player, String> entry : entryList) {
       sol.add(entry.getValue());
     }
     String request = formJSON(levelId, sol);
-    System.out.println(request);
     try {
       URL url = new URL(urls.get(0));
       URLConnection con = url.openConnection();
@@ -68,34 +98,22 @@ public class HardcodedSimulatorManager implements SimulatorManager {
       try (OutputStream os = http.getOutputStream()) {
         os.write(out);
       }
-      System.out.println(http.getResponseMessage());
-      Map<String, Boolean> results = new HashMap<>();
+      StringBuilder json_response = new StringBuilder();
+      InputStreamReader in = new InputStreamReader(http.getInputStream());
+      BufferedReader br = new BufferedReader(in);
+      String text = "";
+      while ((text = br.readLine()) != null) {
+        json_response.append(text);
+      }
+      ArrayList<Boolean> respRes = parseResponse(json_response.toString(), entryList.size());
+      HashMap<String, Boolean> results = new HashMap<>();
+      for (int i = 0; i < respRes.size(); i++) {
+        results.put(entryList.get(i).getKey().getName(), respRes.get(i));
+      }
+      return new SimulationResult1(lobbyId, results, new Date());
     } catch (Exception e) {
-
+      System.err.println(e.getMessage());
+      return new SimulationResult1(-1, null, null);
     }
-    /*def post = new URL("http://localhost:1337/simulate").openConnection();
-    post.setRequestMethod("POST")
-    post.setDoOutput(true)
-    post.setRequestProperty("Content-Type", "application/json")
-    post.getOutputStream().write(request.getBytes("UTF-8"));
-    def postRC = post.getResponseCode();
-    String response = post.getInputStream().getText();
-    println(response)
-    def jsonSlurper = new JsonSlurper()
-    def respObj = jsonSlurper.parseText(response)
-
-    Map<Player, SimulationResult> results = new HashMap<>()
-    Date now = new Date()
-    if (respObj.timeout || respObj.broken) {
-        for (def entry : entryList) {
-            results.put(entry.key, new SimResultPlaceholder(now, false))
-        }
-    } else {
-        def passed = respObj.results
-        for (int i = 0; i < entryList.size(); i++) {
-            results.put(entryList.get(i).key, new SimResultPlaceholder(now, passed.get(i)))
-        }
-    }*/
-    return new SimulationResult1(0, null, null);
   }
 }
