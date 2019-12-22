@@ -2,6 +2,8 @@ package ru.nsu.fit.markelov.interfaces;
 
 //import com.sun.istack.internal.NotNull;
 
+import java.util.Date;
+
 public interface SimulationResult {
     /**
      * Returns the unique id of simulation result.
@@ -24,7 +26,7 @@ public interface SimulationResult {
      * @return the date of simulation result.
      */
     /*@NotNull*/
-    String getDate();
+    Date getDate();
 
     /**
      * Returns user's simulation log.

@@ -1,15 +1,15 @@
-package ru.nsu.fit.markelov.managers;
+package ru.nsu.fit.markelov.managers_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.Solution;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserManagerClass {
+public class UserManagerHardcoded {
 
     private List<Solution> solutions;
 
-    public UserManagerClass() {
+    public UserManagerHardcoded() {
         solutions = new ArrayList<>();
     }
 

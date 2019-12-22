@@ -1,8 +1,8 @@
-package ru.nsu.fit.markelov.objects;
+package ru.nsu.fit.markelov.objects_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
 
-public class SimulationResultClass implements SimulationResult {
+public class SimulationResultHardcoded implements SimulationResult {
 
     private int id;
     private String date;

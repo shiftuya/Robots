@@ -1,8 +1,8 @@
-package ru.nsu.fit.markelov.objects;
+package ru.nsu.fit.markelov.objects_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.Player;
 
-public class PlayerClass implements Player {
+public class PlayerHardcoded implements Player {
 
     private String avatarAddress;
     private String name;

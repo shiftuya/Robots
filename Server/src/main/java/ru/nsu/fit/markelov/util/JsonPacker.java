@@ -144,4 +144,15 @@ public class JsonPacker {
 
         return new JSONObject().put("response", jsonCode).toString();
     }
+
+    public static String packSimulationResult(SimulationResult simulationResult, String username) {
+        JSONObject jsonSimulationResult = new JSONObject();
+        jsonSimulationResult
+                .put("simulation_result_id", simulationResult.getId())
+                .put("simulation_result_date", simulationResult.getDate())
+                .put("simulation_result_status", simulationResult.isSuccessful(username))
+                .put("simulation_result_log", simulationResult.getLog(username));
+
+        return new JSONObject().put("response", jsonSimulationResult).toString();
+    }
 }

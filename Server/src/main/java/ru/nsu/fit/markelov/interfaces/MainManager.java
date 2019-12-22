@@ -110,7 +110,7 @@ public interface MainManager {
 
     /**
      * Cancels the submission of the lately compiled code and returns the code itself. In case the
-     * the user hasn't submitted any code yet, returns null.
+     * user hasn't submitted any code yet, returns null.
      *
      * @param username user's unique name.
      * @param lobbyId  whether the submission was successfully cancelled.
