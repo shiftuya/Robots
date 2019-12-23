@@ -152,6 +152,8 @@ public class MainManager1 implements MainManager {
     idLobbyMap.put(lobbyId, lobby);
     lobbies.add(lobby);
 
+    System.out.println("Create: "+lobbies.size());
+
     return lobby;
   }
 
@@ -164,7 +166,13 @@ public class MainManager1 implements MainManager {
       return false;
     }
 
-    return lobby.removePlayer(player);
+    boolean successfulLeave = lobby.removePlayer(player);
+    if (lobby.getCurrentPlayersAmount() == 0) {
+      lobbies.remove(lobby);
+      idLobbyMap.remove(lobbyID);
+    }
+
+    return successfulLeave;
   }
 
   @Override
@@ -198,6 +206,9 @@ public class MainManager1 implements MainManager {
 
   @Override
   public SimulationResult getSimulationResult(String username, int lobbyId) {
+    if (getSimulationResultByLobbyId(lobbyId) == null) {
+      System.out.println("NULL!");
+    }
     return getSimulationResultByLobbyId(lobbyId);
     // LobbyId is not yet needed
   }
