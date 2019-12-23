@@ -79,6 +79,8 @@ public class MainManager1 implements MainManager {
         "simple_plane");
 
     addNewPlayer("Heh", "/images/person-icon.png");
+    addNewPlayer("Lol", "/images/person-icon.png");
+
 
   }
 
@@ -132,6 +134,12 @@ public class MainManager1 implements MainManager {
   public Lobby joinLobby(String userName, int lobbyID) {
     Lobby1 lobby = getLobbyById(lobbyID);
     Player player = getPlayerByName(userName);
+    if (lobby.getPlayers().contains(player)) {
+      return lobby;
+    }
+    if(lobby.getCurrentPlayersAmount() == lobby.getAcceptablePlayersAmount()) {
+      return null;
+    }
     lobby.addPlayer(player);
     return lobby;
   }
