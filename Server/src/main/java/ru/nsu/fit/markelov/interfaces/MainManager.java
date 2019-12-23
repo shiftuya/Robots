@@ -126,4 +126,6 @@ public interface MainManager {
      * @return         simulation result or null in case it hasn't been processed yet.
      */
     SimulationResult getSimulationResult(/*@NotNull*/ String username, int lobbyId);
+
+    boolean isSimulationFinished(int lobbyId);
 }
