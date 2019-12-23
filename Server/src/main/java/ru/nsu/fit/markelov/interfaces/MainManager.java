@@ -119,10 +119,10 @@ public interface MainManager {
     String editSubmittedCode(/*@NotNull*/ String username, int lobbyId);
 
     /**
-     * Returns whether the simulation has already finished.
+     * Returns whether the simulation has already been finished.
      *
      * @param lobbyId lobby's unique id.
-     * @return        whether the simulation has already finished.
+     * @return        whether the simulation has already been finished.
      */
     boolean isSimulationFinished(int lobbyId);
 
