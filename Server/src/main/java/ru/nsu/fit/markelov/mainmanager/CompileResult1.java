@@ -6,7 +6,7 @@ public class CompileResult1 implements CompileResult {
   private String message;
   private boolean compiled;
 
-  public CompileResult1(String message, boolean compiled) {
+  CompileResult1(String message, boolean compiled) {
     this.message = message;
     this.compiled = compiled;
   }

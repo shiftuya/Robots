@@ -3,14 +3,18 @@ package ru.nsu.fit.markelov.http_handlers;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.json.JSONException;
+import org.json.JSONObject;
 import ru.nsu.fit.markelov.interfaces.MainManager;
 import ru.nsu.fit.markelov.util.JsonPacker;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpCookie;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ApiHandler implements HttpHandler {
@@ -207,7 +211,43 @@ public class ApiHandler implements HttpHandler {
                 if (parts.length == 2) {
                     Map<String, List<String>> params = splitQuery(parts[1]);
                     List<String> idParams = params.get("id");
+
+                    StringBuilder sb = new StringBuilder();
+                    InputStream ios = exchange.getRequestBody();
+                    int i;
+                    while ((i = ios.read()) != -1) {
+                        sb.append((char) i);
+                    }
+                    String encodedData = sb.toString().substring(5);
+                    System.out.println(encodedData);
+
+                    String code = java.net.URLDecoder.decode(encodedData, StandardCharsets.UTF_8.name());
+                    System.out.println(code);
+
+                    if (idParams.size() == 1) {
+                        try {
+                            if (cookieUserName != null) {
+                                jsonStr = JsonPacker.packCompileResult(mainManager.submit(cookieUserName, code, Integer.parseInt(idParams.get(0))));
+                            } else {
+                                jsonStr = null;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(e.getMessage());
+                            jsonStr = null;
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
+            }/* else if (uri.startsWith("/api/method/lobby.submit")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("id");
                     List<String> codeParams = params.get("code");
+                    System.out.println(codeParams.get(0));
                     if (idParams.size() == 1 && codeParams.size() == 1) {
                         try {
                             if (cookieUserName != null) {
@@ -225,7 +265,7 @@ public class ApiHandler implements HttpHandler {
                 } else {
                     jsonStr = null;
                 }
-            } else if (uri.startsWith("/api/method/code.edit")) {
+            }*/ else if (uri.startsWith("/api/method/code.edit")) {
                 String[] parts = uri.split("\\?");
                 if (parts.length == 2) {
                     Map<String, List<String>> params = splitQuery(parts[1]);
