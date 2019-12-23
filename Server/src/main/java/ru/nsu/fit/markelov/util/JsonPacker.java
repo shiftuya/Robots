@@ -149,6 +149,14 @@ public class JsonPacker {
         return new JSONObject().put("response", jsonCode).toString();
     }
 
+    public static String packSimulationResultReadiness(boolean isSimulationFinished) {
+        JSONObject jsonSimulationResultReadiness = new JSONObject();
+        jsonSimulationResultReadiness
+                .put("simulation_finished", isSimulationFinished);
+
+        return new JSONObject().put("response", jsonSimulationResultReadiness).toString();
+    }
+
     public static String packSimulationResult(SimulationResult simulationResult, String username) {
         JSONObject jsonSimulationResult = new JSONObject();
         jsonSimulationResult

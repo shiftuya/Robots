@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
+import ru.nsu.fit.markelov.interfaces.Lobby;
 import ru.nsu.fit.markelov.interfaces.MainManager;
 import ru.nsu.fit.markelov.util.JsonPacker;
 
@@ -125,7 +126,13 @@ public class ApiHandler implements HttpHandler {
                     if (idParams.size() == 1) {
                         try {
                             if (cookieUserName != null) {
-                                jsonStr = JsonPacker.packLobby(mainManager.joinLobby(cookieUserName, Integer.parseInt(idParams.get(0))));
+                                Lobby lobby = mainManager.joinLobby(cookieUserName, Integer.parseInt(idParams.get(0)));
+
+                                if (lobby == null) {
+                                    jsonStr = new JSONObject().put("response", JSONObject.NULL).toString();
+                                } else {
+                                    jsonStr = JsonPacker.packLobby(lobby);
+                                }
                             } else {
                                 jsonStr = null;
                             }
@@ -144,10 +151,11 @@ public class ApiHandler implements HttpHandler {
                 if (parts.length == 2) {
                     Map<String, List<String>> params = splitQuery(parts[1]);
                     List<String> idParams = params.get("id");
-                    if (idParams.size() == 1) {
+                    List<String> playersAmountParams = params.get("players_amount");
+                    if (idParams.size() == 1 && playersAmountParams.size() == 1) {
                         try {
-                            if (cookieUserName != null) { /////////////////////////////////////////// get amount !!!!!!!!!!
-                                jsonStr = JsonPacker.packLobby(mainManager.createLobby(cookieUserName, Integer.parseInt(idParams.get(0)), 5));
+                            if (cookieUserName != null) {
+                                jsonStr = JsonPacker.packLobby(mainManager.createLobby(cookieUserName, Integer.parseInt(idParams.get(0)), Integer.parseInt(playersAmountParams.get(0))));
                             } else {
                                 jsonStr = null;
                             }
@@ -169,7 +177,7 @@ public class ApiHandler implements HttpHandler {
                     if (idParams.size() == 1) {
                         try {
                             if (cookieUserName != null) {
-                                jsonStr = JsonPacker.packLeavingLobby(mainManager.leaveLobby(cookieUserName, 455434));
+                                jsonStr = JsonPacker.packLeavingLobby(mainManager.leaveLobby(cookieUserName, Integer.parseInt(idParams.get(0))));
                                 System.out.println(jsonStr);
                             } else {
                                 jsonStr = null;
@@ -287,7 +295,29 @@ public class ApiHandler implements HttpHandler {
                 } else {
                     jsonStr = null;
                 }
-            } else if (uri.startsWith("/api/method/simulation-result.get")) {
+            } else if (uri.startsWith("/api/method/simulation_result.is_ready")) {
+                String[] parts = uri.split("\\?");
+                if (parts.length == 2) {
+                    Map<String, List<String>> params = splitQuery(parts[1]);
+                    List<String> idParams = params.get("id");
+                    if (idParams.size() == 1) {
+                        try {
+                            if (cookieUserName != null) {
+                                jsonStr = JsonPacker.packSimulationResultReadiness(mainManager.isSimulationFinished(Integer.parseInt(idParams.get(0))));
+                            } else {
+                                jsonStr = null;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(e.getMessage());
+                            jsonStr = null;
+                        }
+                    } else {
+                        jsonStr = null;
+                    }
+                } else {
+                    jsonStr = null;
+                }
+            } else if (uri.startsWith("/api/method/simulation_result.get")) {
                 String[] parts = uri.split("\\?");
                 if (parts.length == 2) {
                     Map<String, List<String>> params = splitQuery(parts[1]);

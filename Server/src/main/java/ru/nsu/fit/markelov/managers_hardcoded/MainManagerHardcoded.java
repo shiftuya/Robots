@@ -206,6 +206,7 @@ public class MainManagerHardcoded implements MainManager {
 
     @Override
     public Lobby joinLobby(String userName, int lobbyID) {
+//        return null;
         return lobbyManager.joinLobby(userName, lobbyID);
     }
 
@@ -252,6 +253,11 @@ public class MainManagerHardcoded implements MainManager {
     @Override
     public String editSubmittedCode(String username, int lobbyId) {
         return "Cooooooooooooooode!";
+    }
+
+    @Override
+    public boolean isSimulationFinished(int lobbyId) {
+        return true;
     }
 
     @Override

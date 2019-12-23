@@ -118,6 +118,8 @@ public interface MainManager {
      */
     String editSubmittedCode(/*@NotNull*/ String username, int lobbyId);
 
+    boolean isSimulationFinished(int lobbyId);
+
     /**
      * Returns the simulation result or null in case it hasn't been processed yet.
      *
