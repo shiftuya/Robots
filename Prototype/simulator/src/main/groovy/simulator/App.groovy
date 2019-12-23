@@ -28,7 +28,7 @@ class App {
 
                     Task task = new UnsecureTask("${http.requestBody}")
                     String result = task.run()
-                    //println(result)
+                    println(result)
                     http.responseBody.withWriter { out ->
                         out << result + "\n"
                     }

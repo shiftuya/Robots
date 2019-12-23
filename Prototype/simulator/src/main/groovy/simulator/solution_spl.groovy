@@ -16,4 +16,4 @@ if (y < gy)
     return "up " + (gy - y)
 if (y > gy)
     return "down " + (y - gy)
-return "stay 100"
+return "stay 1"

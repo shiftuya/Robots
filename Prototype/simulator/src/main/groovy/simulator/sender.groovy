@@ -2,14 +2,16 @@ package simulator
 
 import groovy.json.JsonOutput
 
-String fileContents = new File('solution_spl.groovy').text
+String fileContentsCorrect = new File('solution_spl.groovy').text
+String fileContentsWrong = new File('wrong_solution_spl.groovy').text
 
 def start = System.currentTimeMillis()
 int count = 1
 for (int i = 0; i < count; i++) {
     def post = new URL("http://localhost:1337/simulate").openConnection();
-    def jsonSol = JsonOutput.toJson(fileContents)
-    String message = "{\"level\":\"simple_plane\", \"solutions\":[" + jsonSol + "," + jsonSol + "]}"
+    def jsonSol = JsonOutput.toJson(fileContentsCorrect)
+    def jsonWrong = JsonOutput.toJson(fileContentsWrong)
+    String message = "{\"level\":\"simple_plane\", \"solutions\":[" + jsonSol + "," + jsonWrong + "]}"
     println(message)
 
     post.setRequestMethod("POST")

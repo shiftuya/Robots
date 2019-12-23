@@ -94,7 +94,7 @@ class UnsecureTask implements Task {
                 for (int i = 0; i < solutions.size(); i++) {
                     passed.add(lvl.checkGoal(i))
                 }
-                result = JsonOutput.toJson([timeout: false, broken: false, results: passed])
+                result = JsonOutput.toJson([timeout: false, broken: false, results: passed]);
                 break
             }
 
