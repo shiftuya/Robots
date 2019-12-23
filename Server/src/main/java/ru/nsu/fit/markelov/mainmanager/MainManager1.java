@@ -65,13 +65,29 @@ public class MainManager1 implements MainManager {
     // Hard Code
 
     simulatorManager = new HardcodedSimulatorManager();
+
+
+    addNewLevel(++maxLevelId,
+        "/images/labyrinth-icon.png",
+        "Simple Plane",
+        "Easy",
+        "Multiplayer",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim",
+        "Suspendisse sed nisi lacus sed viverra tellus in hac habitasse",
+        "Uscipit adipiscing bibendum est ultricies integer quis auctor elit sed",
+        1, 10,
+        "simple_plane");
+
+    addNewPlayer("Heh", "/images/person-icon.png");
+
   }
 
   // For hardcoding purposes
-  void addNewPlayer(String name, String avatarAddress) {
+  Player addNewPlayer(String name, String avatarAddress) {
     Player1 player = new Player1(avatarAddress, name);
     playerSolutionsMap.put(player, new LinkedList<>());
     playerMap.put(name, player);
+    return player;
   }
 
   // For hardcoding purposes
@@ -81,7 +97,9 @@ public class MainManager1 implements MainManager {
     Level1 level = new Level1(id, iconAddress, name, difficulty, type,
         description, rules, goal, minPlayers, maxPlayers, filename);
 
-    idLevelMap.put(++maxLevelId, level);
+    idLevelMap.put(id, level);
+
+    levels.add(level);
    // levelIdToFile.put(maxLevelId, filename);
   }
 
@@ -130,6 +148,9 @@ public class MainManager1 implements MainManager {
     int lobbyId = ++maxLobbyId;
     Lobby1 lobby = new Lobby1(lobbyId, level, playersAmount);
     lobby.addPlayer(host);
+
+    idLobbyMap.put(lobbyId, lobby);
+    lobbies.add(lobby);
 
     return lobby;
   }

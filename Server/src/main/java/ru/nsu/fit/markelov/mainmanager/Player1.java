@@ -7,13 +7,20 @@ class Player1 implements Player {
   private String name;
   private String solutionCode;
 
+  private boolean submitted;
+
   void setSolutionCode(String code) {
     solutionCode = code;
+  }
+
+  void setSubmitted(boolean submitted) {
+    this.submitted = submitted;
   }
 
   Player1(String avatarAddress, String name) {
     this.avatarAddress = avatarAddress;
     this.name = name;
+    submitted = false;
   }
 
   @Override
@@ -28,6 +35,6 @@ class Player1 implements Player {
 
   @Override
   public boolean isSubmitted() {
-    return solutionCode != null;
+    return submitted;
   }
 }

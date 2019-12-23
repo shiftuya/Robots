@@ -4,13 +4,14 @@ import com.sun.net.httpserver.HttpServer;
 import ru.nsu.fit.markelov.http_handlers.ApiHandler;
 import ru.nsu.fit.markelov.http_handlers.CommonHttpHandler;
 import ru.nsu.fit.markelov.interfaces.MainManager;
+import ru.nsu.fit.markelov.mainmanager.MainManager1;
 import ru.nsu.fit.markelov.managers_hardcoded.MainManagerHardcoded;
 
 import java.net.InetSocketAddress;
 
 public class MainServer {
     public static void main(String[] args) throws Exception {
-        MainManager mainManager = new MainManagerHardcoded();
+        MainManager mainManager = new MainManager1();
 
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(1337), 0);

@@ -49,6 +49,7 @@ class Lobby1 implements Lobby {
     }
     solutions.put(player, solution);
     player.setSolutionCode(solution);
+    player.setSubmitted(true);
     return true;
   }
 
