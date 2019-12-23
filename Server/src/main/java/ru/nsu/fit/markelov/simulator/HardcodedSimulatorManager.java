@@ -87,7 +87,7 @@ public class HardcodedSimulatorManager implements SimulatorManager {
     for (Map.Entry<Player, String> entry : entryList) {
       sol.add(entry.getValue());
     }
-    Collections.reverse(sol);
+    //Collections.reverse(sol);
     String request = formJSON(levelId, sol);
     if(printDebug){
       System.out.println(request);

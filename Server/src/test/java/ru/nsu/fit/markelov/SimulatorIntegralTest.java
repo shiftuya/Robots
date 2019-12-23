@@ -1,11 +1,13 @@
 package ru.nsu.fit.markelov;
 
+import org.junit.Before;
 import org.junit.Test;
 import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
-import ru.nsu.fit.markelov.objects_hardcoded.PlayerHardcoded;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
@@ -36,6 +38,33 @@ public class SimulatorIntegralTest {
     }
   }
 
+  String correctSolution;
+  String wrongSolution;
+  boolean inited;
+
+  private String readFile(String filePath) {
+    StringBuilder contentBuilder = new StringBuilder();
+    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+
+      String sCurrentLine;
+      while ((sCurrentLine = br.readLine()) != null) {
+        contentBuilder.append(sCurrentLine).append("\n");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return contentBuilder.toString();
+  }
+
+  @Before
+  public void init() {
+    if (!inited) {
+      correctSolution = readFile("src/test/resources/solution_spl.groovy");
+      wrongSolution = readFile("src/test/resources/wrong_solution_spl.groovy");
+      inited = true;
+    }
+  }
+
   private static boolean hostAvailabilityCheck() {
     try (Socket s = new Socket("localhost", 1337)) {
       return true;
@@ -50,27 +79,6 @@ public class SimulatorIntegralTest {
     if (hostAvailabilityCheck()) {
       Player p1 = new PlayerTest("Nice Guy");
       Player p2 = new PlayerTest("Good Guy");
-      String correctSolution =
-          String.join(
-              "\n",
-              "package simulator",
-              "String goalStr = level.getGoal(robotId)",
-              "def goals = goalStr.split()",
-              "int gx = goals[0].toInteger()",
-              "int gy = goals[1].toInteger()",
-              "String xStr = level.getSensorReadings(robotId, \"x\")",
-              "String yStr = level.getSensorReadings(robotId, \"y\")",
-              "def y = yStr.toInteger()",
-              "def x = xStr.toInteger()",
-              "if (x < gx)",
-              "    return \"right \" + (gx - x)",
-              "if (x > gx)",
-              "    return \"left \" + (x - gx)",
-              "if (y < gy)",
-              "    return \"up \" + (gy - y)",
-              "if (y > gy)",
-              "    return \"down \" + (y - gy)",
-              "return \"stay 1\"");
       HashMap<Player, String> argMap = new HashMap<>();
       argMap.put(p1, correctSolution);
       argMap.put(p2, correctSolution);
@@ -89,58 +97,17 @@ public class SimulatorIntegralTest {
     if (hostAvailabilityCheck()) {
       Player p1 = new PlayerTest("Good Guy");
       Player p2 = new PlayerTest("Bad Guy");
-      String correctSolution =
-          String.join(
-              "\n",
-              "package simulator",
-              "// CORRECT",
-              "String goalStr = level.getGoal(robotId)",
-              "def goals = goalStr.split()",
-              "int gx = goals[0].toInteger()",
-              "int gy = goals[1].toInteger()",
-              "String xStr = level.getSensorReadings(robotId, \"x\")",
-              "String yStr = level.getSensorReadings(robotId, \"y\")",
-              "def y = yStr.toInteger()",
-              "def x = xStr.toInteger()",
-              "if (x < gx)",
-              "    return \"right \" + (gx - x)",
-              "if (x > gx)",
-              "    return \"left \" + (x - gx)",
-              "if (y < gy)",
-              "    return \"up \" + (gy - y)",
-              "if (y > gy)",
-              "    return \"down \" + (y - gy)",
-              "return \"stay 1\"");
-      String wrongSolution =
-          String.join(
-              "\n",
-              "package simulator",
-              "//WRONG",
-              "String goalStr = level.getGoal(robotId)",
-              "def goals = goalStr.split()",
-              "int gx = goals[0].toInteger()",
-              "int gy = goals[1].toInteger()",
-              "String xStr = level.getSensorReadings(robotId, \"x\")",
-              "String yStr = level.getSensorReadings(robotId, \"y\")",
-              "def y = yStr.toInteger()",
-              "def x = xStr.toInteger()",
-              "if (x < gx)",
-              "    return \"left 150\"",
-              "if (x > gx)",
-              "    return \"right 150\"",
-              "if (y < gy)",
-              "    return \"down 150\"",
-              "if (y > gy)",
-              "    return \"up 150\"",
-              "return \"stay 1\"");
+
       HashMap<Player, String> argMap = new HashMap<>();
       argMap.put(p1, correctSolution);
       argMap.put(p2, wrongSolution);
       HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
       SimulationResult result = hsm.runSimulation("simple_plane", 0, argMap);
+      System.out.println(p1.getName()+": "+result.isSuccessful(p1.getName()));
+      System.out.println(p2.getName()+": "+result.isSuccessful(p2.getName()));
       assertEquals(0, result.getId());
-      assertEquals(true, result.isSuccessful(p1.getName()));
-      assertEquals(false, result.isSuccessful(p2.getName()));
+      assertEquals(p1.getName()+" was wrong!",true, result.isSuccessful(p1.getName()));
+      assertEquals(p2.getName()+" was correct!",false, result.isSuccessful(p2.getName()));
     } else {
       System.err.println("SimulatorUnit on localhost:1337 wasn't available. Skipping test.");
     }
