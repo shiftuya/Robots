@@ -1,6 +1,5 @@
 package ru.nsu.fit.markelov.simulator;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import ru.nsu.fit.markelov.interfaces.Player;
@@ -9,26 +8,26 @@ import ru.nsu.fit.markelov.interfaces.SimulatorManager;
 import ru.nsu.fit.markelov.mainmanager.SimulationResult1;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class HardcodedSimulatorManager implements SimulatorManager {
   private ArrayList<String> urls;
+  private boolean printDebug;
 
   public HardcodedSimulatorManager() {
     urls = new ArrayList<>();
     urls.add("http://localhost:1337/simulate");
+  }
+
+  public HardcodedSimulatorManager(boolean printLog) {
+    urls = new ArrayList<>();
+    urls.add("http://localhost:1337/simulate");
+    printDebug = printLog;
   }
 
   @Override
@@ -57,7 +56,7 @@ public class HardcodedSimulatorManager implements SimulatorManager {
     JSONObject jsObj = new JSONObject(jsonStr);
     ArrayList<Boolean> results = new ArrayList<>();
     try {
-      if ((Boolean) jsObj.get("timeout") || (Boolean) jsObj.get("broken")) {
+      if (jsObj.getBoolean("timeout") || jsObj.getBoolean("broken")) {
         for (int i = 0; i < playerCount; i++) {
           results.add(false);
         }
@@ -79,11 +78,20 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   public SimulationResult runSimulation(
       String levelId, int lobbyId, Map<Player, String> solutions) {
     ArrayList<Map.Entry<Player, String>> entryList = new ArrayList<>(solutions.entrySet());
+    if(printDebug){
+      for (Map.Entry<Player, String>entry : entryList) {
+        System.out.println("\n\n"+entry.getKey().getName()+"\t"+entry.getValue()+"\n\n");
+      }
+    }
     ArrayList<String> sol = new ArrayList<>();
     for (Map.Entry<Player, String> entry : entryList) {
       sol.add(entry.getValue());
     }
+    Collections.reverse(sol);
     String request = formJSON(levelId, sol);
+    if(printDebug){
+      System.out.println(request);
+    }
     try {
       URL url = new URL(urls.get(0));
       URLConnection con = url.openConnection();
@@ -101,9 +109,12 @@ public class HardcodedSimulatorManager implements SimulatorManager {
       StringBuilder json_response = new StringBuilder();
       InputStreamReader in = new InputStreamReader(http.getInputStream());
       BufferedReader br = new BufferedReader(in);
-      String text = "";
+      String text;
       while ((text = br.readLine()) != null) {
         json_response.append(text);
+      }
+      if(printDebug){
+        System.out.println(json_response.toString());
       }
       ArrayList<Boolean> respRes = parseResponse(json_response.toString(), entryList.size());
       HashMap<String, Boolean> results = new HashMap<>();
