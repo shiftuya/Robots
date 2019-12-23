@@ -155,7 +155,13 @@ public class ApiHandler implements HttpHandler {
                     if (idParams.size() == 1 && playersAmountParams.size() == 1) {
                         try {
                             if (cookieUserName != null) {
-                                jsonStr = JsonPacker.packLobby(mainManager.createLobby(cookieUserName, Integer.parseInt(idParams.get(0)), Integer.parseInt(playersAmountParams.get(0))));
+                                System.out.println(Integer.parseInt(idParams.get(0)) + " - " + Integer.parseInt(playersAmountParams.get(0)));
+                                Lobby lobby = mainManager.createLobby(cookieUserName, Integer.parseInt(idParams.get(0)), Integer.parseInt(playersAmountParams.get(0)));
+                                if (lobby == null) {
+                                    System.out.println("\n\nLOBBY IS NULL\n\n");
+                                }
+                                jsonStr = JsonPacker.packLobby(lobby);
+                                System.out.println(jsonStr);
                             } else {
                                 jsonStr = null;
                             }

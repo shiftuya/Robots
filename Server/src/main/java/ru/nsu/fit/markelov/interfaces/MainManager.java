@@ -86,6 +86,8 @@ public interface MainManager {
     /**
      * Returns the lobby gotten by specified 'lobbyID'.
      *
+     * A host-user must be in the head of the list.
+     *
      * @param userName user's unique name.
      * @param lobbyID  lobby's unique id.
      * @return         the lobby.

@@ -11,7 +11,7 @@ import java.net.InetSocketAddress;
 
 public class MainServer {
     public static void main(String[] args) throws Exception {
-        MainManager mainManager = new MainManagerHardcoded();
+        MainManager mainManager = new MainManager1();
 
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(80), 0);
