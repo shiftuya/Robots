@@ -1,8 +1,19 @@
 package ru.nsu.fit.markelov;
 
 import com.sun.net.httpserver.HttpServer;
-import ru.nsu.fit.markelov.http_handlers.ApiHandler;
-import ru.nsu.fit.markelov.http_handlers.CommonHttpHandler;
+import ru.nsu.fit.markelov.httphandlers.CodeEditHandler;
+import ru.nsu.fit.markelov.httphandlers.CommonHttpHandler;
+import ru.nsu.fit.markelov.httphandlers.LevelsGetHandler;
+import ru.nsu.fit.markelov.httphandlers.LobbiesGetHandler;
+import ru.nsu.fit.markelov.httphandlers.LobbyCreateHandler;
+import ru.nsu.fit.markelov.httphandlers.LobbyJoinHandler;
+import ru.nsu.fit.markelov.httphandlers.LobbyLeaveHandler;
+import ru.nsu.fit.markelov.httphandlers.LobbyReturnHandler;
+import ru.nsu.fit.markelov.httphandlers.LobbySubmitHandler;
+import ru.nsu.fit.markelov.httphandlers.SignHandlerHARDCODED;
+import ru.nsu.fit.markelov.httphandlers.SimulationResultGetHandler;
+import ru.nsu.fit.markelov.httphandlers.SimulationResultIsReadyHandler;
+import ru.nsu.fit.markelov.httphandlers.SolutionsGetHandler;
 import ru.nsu.fit.markelov.interfaces.MainManager;
 import ru.nsu.fit.markelov.mainmanager.MainManager1;
 import ru.nsu.fit.markelov.managers_hardcoded.MainManagerHardcoded;
@@ -17,56 +28,21 @@ public class MainServer {
         server.bind(new InetSocketAddress(80), 0);
 
         server.createContext("/", new CommonHttpHandler());
-        server.createContext("/api/method", new ApiHandler(mainManager));
+        server.createContext("/api/method/sign", new SignHandlerHARDCODED(mainManager));
+
+        server.createContext("/api/method/lobbies.get", new LobbiesGetHandler(mainManager));
+        server.createContext("/api/method/levels.get", new LevelsGetHandler(mainManager));
+        server.createContext("/api/method/solutions.get", new SolutionsGetHandler(mainManager));
+        server.createContext("/api/method/lobby.join", new LobbyJoinHandler(mainManager));
+        server.createContext("/api/method/lobby.create", new LobbyCreateHandler(mainManager));
+        server.createContext("/api/method/lobby.leave", new LobbyLeaveHandler(mainManager));
+        server.createContext("/api/method/lobby.return", new LobbyReturnHandler(mainManager));
+        server.createContext("/api/method/lobby.submit", new LobbySubmitHandler(mainManager));
+        server.createContext("/api/method/code.edit", new CodeEditHandler(mainManager));
+        server.createContext("/api/method/simulation_result.get", new SimulationResultGetHandler(mainManager));
+        server.createContext("/api/method/simulation_result.is_ready", new SimulationResultIsReadyHandler(mainManager));
 
         server.setExecutor(null);
         server.start();
     }
-
-    // ----- for DEBUG only -----
-
-    /*public static void main(String[] args) throws Exception {
-        HttpServer server = HttpServer.create();
-        server.bind(new InetSocketAddress(1337), 0);
-
-        HttpContext context = server.createContext("/", new EchoHandler());
-        context.setAuthenticator(new Auth());
-
-        server.setExecutor(null);
-        server.start();
-    }
-
-    static class EchoHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) {
-            try (OutputStream oStream = exchange.getResponseBody()) {
-                StringBuilder builder = new StringBuilder();
-
-                builder.append("<h1>URI: ").append(exchange.getRequestURI()).append("</h1>");
-
-                Headers headers = exchange.getRequestHeaders();
-                for (String header : headers.keySet()) {
-                    builder.append("<p>").append(header).append("=")
-                            .append(headers.getFirst(header)).append("</p>");
-                }
-
-                byte[] bytes = builder.toString().getBytes();
-                exchange.sendResponseHeaders(200, bytes.length);
-
-                oStream.write(bytes);
-            } catch (IOException e) {
-                System.out.println(e.toString());
-            }
-        }
-    }
-
-    static class Auth extends Authenticator {
-        @Override
-        public Result authenticate(HttpExchange httpExchange) {
-            if ("/forbidden".equals(httpExchange.getRequestURI().toString()))
-                return new Failure(403);
-            else
-                return new Success(new HttpPrincipal("c0nst", "realm"));
-        }
-    }*/
 }

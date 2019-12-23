@@ -186,7 +186,7 @@ class ContextManager {
                                         li.attr("data-attempt-id", attemptItem.attempt_id);
                                         
                                         li.on("click", function() {
-//                                            alert("attempt_id is " + attemptItem.attempt_id);
+                                            alert("attempt_id is " + attemptItem.attempt_id);
                                         });
 
                                         tbody.find(".list-of-attempts").append(li);
