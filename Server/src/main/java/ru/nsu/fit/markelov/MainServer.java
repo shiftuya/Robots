@@ -11,10 +11,10 @@ import java.net.InetSocketAddress;
 
 public class MainServer {
     public static void main(String[] args) throws Exception {
-        MainManager mainManager = new MainManager1();
+        MainManager mainManager = new MainManagerHardcoded();
 
         HttpServer server = HttpServer.create();
-        server.bind(new InetSocketAddress(1337), 0);
+        server.bind(new InetSocketAddress(80), 0);
 
         server.createContext("/", new CommonHttpHandler());
         server.createContext("/api/method", new ApiHandler(mainManager));
