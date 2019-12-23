@@ -324,4 +324,9 @@ public class MainManagerHardcoded implements MainManager {
             }
         };
     }
+
+    @Override
+    public boolean isSimulationFinished(int lobbyId) {
+        return false;
+    }
 }

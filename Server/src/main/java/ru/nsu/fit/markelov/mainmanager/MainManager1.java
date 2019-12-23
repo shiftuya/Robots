@@ -33,6 +33,8 @@ public class MainManager1 implements MainManager {
 
   private Map<Integer, SimulationResult> simResultMap;
 
+
+
   private List<Level> levels;
 
   // for my convenience - likely to go to another class
@@ -79,6 +81,8 @@ public class MainManager1 implements MainManager {
         "simple_plane");
 
     addNewPlayer("Heh", "/images/person-icon.png");
+    addNewPlayer("Lol", "/images/person-icon.png");
+
 
   }
 
@@ -101,6 +105,11 @@ public class MainManager1 implements MainManager {
 
     levels.add(level);
    // levelIdToFile.put(maxLevelId, filename);
+  }
+
+  @Override
+  public boolean isSimulationFinished(int lobbyId) {
+    return simResultMap.containsKey(lobbyId);
   }
 
   @Override
@@ -132,6 +141,12 @@ public class MainManager1 implements MainManager {
   public Lobby joinLobby(String userName, int lobbyID) {
     Lobby1 lobby = getLobbyById(lobbyID);
     Player player = getPlayerByName(userName);
+    if (lobby.getPlayers().contains(player)) {
+      return lobby;
+    }
+    if(lobby.getCurrentPlayersAmount() == lobby.getAcceptablePlayersAmount()) {
+      return null;
+    }
     lobby.addPlayer(player);
     return lobby;
   }
