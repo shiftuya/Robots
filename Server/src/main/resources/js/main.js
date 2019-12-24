@@ -493,7 +493,9 @@ function activateLoginListeners(contextManager) {
                         alert("Bad response!");
                     } else {
                         alert(obj.response.message);
-                        if (obj.response.compiled) {
+                        if (obj.response.simulated) {
+                            contextManager.changeContext("simulation_result", "/api/method/simulation_result.get?id=" + id);
+                        } else if (obj.response.compiled) {
                             contextManager.changeContext("lobby", "/api/method/lobby.return?id=" + id);
                         }
                     }

@@ -136,6 +136,7 @@ public class JsonPacker {
     public static String packCompileResult(CompileResult compileResult) {
         JSONObject jsonCompileResult = new JSONObject();
         jsonCompileResult
+                .put("simulated", compileResult.isSimulated())
                 .put("compiled", compileResult.isCompiled())
                 .put("message", compileResult.getMessage());
 

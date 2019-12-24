@@ -239,6 +239,11 @@ public class MainManagerHardcoded implements MainManager {
     public CompileResult submit(String username, String code, int lobbyId) {
         return new CompileResult() {
             @Override
+            public boolean isSimulated() {
+                return true;
+            }
+
+            @Override
             public boolean isCompiled() {
                 return true;
             }
