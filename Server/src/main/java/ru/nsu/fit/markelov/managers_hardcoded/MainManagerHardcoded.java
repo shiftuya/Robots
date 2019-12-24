@@ -221,7 +221,7 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public Lobby getLobby(String userName, int lobbyID) {
+    public Lobby returnToLobby(String userName, int lobbyID) {
         return lobbyManager.refreshLobby(userName, lobbyID);
     }
 

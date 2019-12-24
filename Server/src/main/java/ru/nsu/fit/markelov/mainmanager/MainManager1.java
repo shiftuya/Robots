@@ -189,7 +189,7 @@ public class MainManager1 implements MainManager {
   }
 
   @Override
-  public Lobby getLobby(String userName, int lobbyID) {
+  public Lobby returnToLobby(String userName, int lobbyID) {
     Lobby1 lobby = getLobbyById(lobbyID);
     Player1 player = getPlayerByName(userName);
     if (!player.isSubmitted() && lobby.getSolutions().get(player) != null) {

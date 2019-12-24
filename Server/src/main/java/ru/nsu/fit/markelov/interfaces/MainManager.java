@@ -93,7 +93,7 @@ public interface MainManager {
      * @return         the lobby.
      */
     /*@NotNull*/
-    Lobby getLobby(/*@NotNull*/ String userName, int lobbyID);
+    Lobby returnToLobby(/*@NotNull*/ String userName, int lobbyID);
 
     /**
      * Compiles the specified code and returns compile result.

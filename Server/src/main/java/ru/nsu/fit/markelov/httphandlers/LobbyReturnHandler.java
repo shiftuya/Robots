@@ -29,7 +29,7 @@ public class LobbyReturnHandler implements HttpHandler {
 
         try (OutputStream oStream = exchange.getResponseBody()) {
             if (cookieUserName != null && id != null) {
-                byte[] bytes = JsonPacker.packLobby(mainManager.getLobby(cookieUserName, id)).getBytes();
+                byte[] bytes = JsonPacker.packLobby(mainManager.returnToLobby(cookieUserName, id)).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {
