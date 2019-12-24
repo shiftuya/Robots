@@ -240,6 +240,8 @@ public class MainManager1 implements MainManager {
 
     // Filling the Solutions Lists for each player
     for(Player player : lobby.getPlayers()) {
+      ((Player1)player).setSubmitted(false);
+
       List<Solution> solutionList = playerSolutionsMap.get(player);
 
       boolean isSolutionFound = false;
