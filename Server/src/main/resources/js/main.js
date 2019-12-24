@@ -485,7 +485,6 @@ function activateLoginListeners(contextManager) {
         var id = $(this).attr("data-lobby-id");
         var code = $("#code-editor-content").find(".code-editor-shell:not('.skeleton') > textarea").val();
 
-        alert(code);
         $.post("/api/method/lobby.submit?id=" + id, {code: code}, function(data, status) {
             if (status == "success" && data) {
                 try {
@@ -505,27 +504,6 @@ function activateLoginListeners(contextManager) {
                 alert("Bad request!");
             }
         });
-
-        /*// переделать на post !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        $.get("/api/method/lobby.submit?id=" + id + "&code=" + code, function(data, status) {
-            if (status == "success" && data) {
-                try {
-                    var obj = JSON.parse(data);
-                    if (obj.response.length == 0) {
-                        alert("Bad response!");
-                    } else {
-                        alert(obj.response.message);
-                        if (obj.response.compiled) {
-                            contextManager.changeContext("lobby", "/api/method/lobby.return?id=" + id);
-                        }
-                    }
-                } catch(e) {
-                    alert(e);
-                }
-            } else {
-                alert("Bad request!");
-            }
-        });*/
     });
 }
 
