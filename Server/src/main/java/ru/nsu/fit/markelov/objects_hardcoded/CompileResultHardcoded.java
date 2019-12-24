@@ -24,4 +24,10 @@ public class CompileResultHardcoded implements CompileResult {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    // Dummy
+    @Override
+    public boolean isSimulated() {
+        return false;
+    }
 }

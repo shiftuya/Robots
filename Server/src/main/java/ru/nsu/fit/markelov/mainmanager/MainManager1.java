@@ -206,11 +206,13 @@ public class MainManager1 implements MainManager {
     Player1 player = getPlayerByName(username);
     lobby.addSolution(player, code);
 
+    boolean isSimulated = lobby.isReady();
+
     if (lobby.isReady()) {
       simulateLobby(lobby);
     }
 
-    return new CompileResult1("Compiled", true);
+    return new CompileResult1("Compiled", true, isSimulated);
   }
 
   @Override
