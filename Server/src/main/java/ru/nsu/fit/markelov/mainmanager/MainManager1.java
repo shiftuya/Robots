@@ -190,7 +190,12 @@ public class MainManager1 implements MainManager {
 
   @Override
   public Lobby getLobby(String userName, int lobbyID) {
-    return getLobbyById(lobbyID);
+    Lobby1 lobby = getLobbyById(lobbyID);
+    Player1 player = getPlayerByName(userName);
+    if (!player.isSubmitted() && lobby.getSolutions().get(player) != null) {
+      player.setSubmitted(true);
+    }
+    return lobby;
   }
 
   @Override
@@ -210,10 +215,13 @@ public class MainManager1 implements MainManager {
 
   @Override
   public String editSubmittedCode(String username, int lobbyId) {
-    Player player = getPlayerByName(username);
+    Player1 player = getPlayerByName(username);
     Lobby1 lobby = getLobbyById(lobbyId);
     String code = lobby.getSolution(player);
-    lobby.removeSolution(player);
+
+    player.setSubmitted(false);
+
+   // lobby.removeSolution(player);
     return code;
   }
 
