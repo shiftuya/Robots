@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import ru.nsu.fit.markelov.interfaces.CompileResult;
 import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.Lobby;
@@ -16,6 +19,36 @@ import ru.nsu.fit.markelov.interfaces.Solution;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 public class MainManager1 implements MainManager {
+
+  private Set<String> userNames = new TreeSet<>();
+
+  @Override
+  public boolean login(String userName) {
+    if (userNames.contains(userName)) {
+      System.out.println(userName + " has already logged in!");
+
+      return false;
+    } else {
+      userNames.add(userName);
+      System.out.println(userName + " logged in.");
+
+      return true;
+    }
+  }
+
+  @Override
+  public boolean logout(String userName) {
+    if (userNames.contains(userName)) {
+      userNames.remove(userName);
+      System.out.println(userName + " logged out.");
+
+      return true;
+    } else {
+      System.out.println(userName + " hasn't logged in yet!");
+
+      return false;
+    }
+  }
   private List<Lobby> lobbies;
 
   private SimulatorManager simulatorManager;
@@ -110,16 +143,6 @@ public class MainManager1 implements MainManager {
   @Override
   public boolean isSimulationFinished(int lobbyId) {
     return simResultMap.containsKey(lobbyId);
-  }
-
-  @Override
-  public boolean login(String username) {
-    return false;
-  }
-
-  @Override
-  public boolean logout(String username) {
-    return false;
   }
 
   @Override

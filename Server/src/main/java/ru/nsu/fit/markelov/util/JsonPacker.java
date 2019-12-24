@@ -168,4 +168,22 @@ public class JsonPacker {
 
         return new JSONObject().put("response", jsonSimulationResult).toString();
     }
+
+    public static String packLoggingIn(boolean loggedIn) {
+        JSONObject jsonLoggingIn = new JSONObject();
+        jsonLoggingIn
+                .put("logged_in", loggedIn)
+                .put("message", loggedIn ? "You are successfully logged in." : "Error: You logged in earlier.");
+
+        return new JSONObject().put("response", jsonLoggingIn).toString();
+    }
+
+    public static String packLoggingOut(boolean loggedOut) {
+        JSONObject jsonLoggingOut = new JSONObject();
+        jsonLoggingOut
+                .put("logged_out", loggedOut)
+                .put("message", loggedOut ? "You are successfully logged out." : "Error: You haven't logged in yet.");
+
+        return new JSONObject().put("response", jsonLoggingOut).toString();
+    }
 }

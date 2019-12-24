@@ -19,8 +19,40 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MainManagerHardcoded implements MainManager {
+
+    private Set<String> userNames = new TreeSet<>();
+
+    @Override
+    public boolean login(String userName) {
+        if (userNames.contains(userName)) {
+            System.out.println(userName + " has already logged in!");
+
+            return false;
+        } else {
+            userNames.add(userName);
+            System.out.println(userName + " logged in.");
+
+            return true;
+        }
+    }
+
+    @Override
+    public boolean logout(String userName) {
+        if (userNames.contains(userName)) {
+            userNames.remove(userName);
+            System.out.println(userName + " logged out.");
+
+            return true;
+        } else {
+            System.out.println(userName + " hasn't logged in yet!");
+
+            return false;
+        }
+    }
 
     private LobbyManagerHardcoded lobbyManager;
     private LevelManagerHardcoded levelManager;
@@ -223,16 +255,6 @@ public class MainManagerHardcoded implements MainManager {
     @Override
     public Lobby returnToLobby(String userName, int lobbyID) {
         return lobbyManager.refreshLobby(userName, lobbyID);
-    }
-
-    @Override
-    public boolean login(String username) {
-        return true;
-    }
-
-    @Override
-    public boolean logout(String username) {
-        return true;
     }
 
     @Override

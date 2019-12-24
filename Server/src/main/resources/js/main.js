@@ -454,13 +454,24 @@ class ContextListeners {
     }
 }
 
-function activateLoginListeners(contextManager) {
+function activateListeners(contextManager) {
     $("#login-submit").on("click", function() {
         var username = $("#login-content").find("input.login-form-input[type='text']").val();
         
         $.get("/api/method/sign.login?username=" + username, function(data, status) {
-            if (status == "success") { // try-catch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                contextManager.changeContext("list_of_lobbies");
+            if (status == "success") {
+                try {
+                    var obj = JSON.parse(data);
+                    if (obj.response.length == 0) {
+                        alert("Bad response!");
+                    } else if (obj.response.logged_in) {
+                        contextManager.changeContext("list_of_lobbies");
+                    } else {
+                        alert(obj.response.message);
+                    }
+                } catch(e) {
+                    alert("Exception: " + e);
+                }
             } else {
                 alert("Bad request!");
             }
@@ -469,8 +480,19 @@ function activateLoginListeners(contextManager) {
 
     $("#logout").on("click", function() {
         $.get("/api/method/sign.logout", function(data, status) {
-            if (status == "success") { // try-catch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                contextManager.changeContext("login");
+            if (status == "success") {
+                try {
+                    var obj = JSON.parse(data);
+                    if (obj.response.length == 0) {
+                        alert("Bad response!");
+                    } else if (obj.response.logged_out) {
+                        contextManager.changeContext("login");
+                    } else {
+                        alert(obj.response.message);
+                    }
+                } catch(e) {
+                    alert("Exception: " + e);
+                }
             } else {
                 alert("Bad request!");
             }
@@ -497,6 +519,8 @@ function activateLoginListeners(contextManager) {
                             contextManager.changeContext("simulation_result", "/api/method/simulation_result.get?id=" + id);
                         } else if (obj.response.compiled) {
                             contextManager.changeContext("lobby", "/api/method/lobby.return?id=" + id);
+                        } else {
+                            alert("Debug: not compiled and not simulated!");
                         }
                     }
                 } catch(e) {

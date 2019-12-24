@@ -29,7 +29,7 @@
                     ["code_editor",       { title: "Code Editor",       headerId: "header-code-editor", contentId: "code-editor-content"       }],
                     ["simulation_result", { title: "Simulation Result", headerId: "header-main",        contentId: "simulation-result-content" }]
                 ]);
-                activateLoginListeners(contextManager);
+                activateListeners(contextManager);
                 contextManager.changeContext("login");
                 
                 var contextListeners = new ContextListeners(contextManager);

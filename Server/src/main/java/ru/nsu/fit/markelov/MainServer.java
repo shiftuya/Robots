@@ -10,7 +10,8 @@ import ru.nsu.fit.markelov.httphandlers.LobbyJoinHandler;
 import ru.nsu.fit.markelov.httphandlers.LobbyLeaveHandler;
 import ru.nsu.fit.markelov.httphandlers.LobbyReturnHandler;
 import ru.nsu.fit.markelov.httphandlers.LobbySubmitHandler;
-import ru.nsu.fit.markelov.httphandlers.SignHandlerHARDCODED;
+import ru.nsu.fit.markelov.httphandlers.LogInHandler;
+import ru.nsu.fit.markelov.httphandlers.LogOutHandler;
 import ru.nsu.fit.markelov.httphandlers.SimulationResultGetHandler;
 import ru.nsu.fit.markelov.httphandlers.SimulationResultIsReadyHandler;
 import ru.nsu.fit.markelov.httphandlers.SolutionsGetHandler;
@@ -28,19 +29,24 @@ public class MainServer {
         server.bind(new InetSocketAddress(80), 0);
 
         server.createContext("/", new CommonHttpHandler());
-        server.createContext("/api/method/sign", new SignHandlerHARDCODED(mainManager));
+
+        server.createContext("/api/method/sign.login", new LogInHandler(mainManager));
+        server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));
 
         server.createContext("/api/method/lobbies.get", new LobbiesGetHandler(mainManager));
         server.createContext("/api/method/levels.get", new LevelsGetHandler(mainManager));
         server.createContext("/api/method/solutions.get", new SolutionsGetHandler(mainManager));
+
         server.createContext("/api/method/lobby.join", new LobbyJoinHandler(mainManager));
         server.createContext("/api/method/lobby.create", new LobbyCreateHandler(mainManager));
         server.createContext("/api/method/lobby.leave", new LobbyLeaveHandler(mainManager));
         server.createContext("/api/method/lobby.return", new LobbyReturnHandler(mainManager));
         server.createContext("/api/method/lobby.submit", new LobbySubmitHandler(mainManager));
+
         server.createContext("/api/method/code.edit", new CodeEditHandler(mainManager));
-        server.createContext("/api/method/simulation_result.get", new SimulationResultGetHandler(mainManager));
+
         server.createContext("/api/method/simulation_result.is_ready", new SimulationResultIsReadyHandler(mainManager));
+        server.createContext("/api/method/simulation_result.get", new SimulationResultGetHandler(mainManager));
 
         server.setExecutor(null);
         server.start();

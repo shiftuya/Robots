@@ -97,9 +97,9 @@ public interface MainManager {
 
     /**
      * Compiles the specified code and returns compile result.
-     * <p>
+     *
      * If the compilation is successful, the code is being saved for the future simulation.
-     * <p>
+     *
      * (A simulation itself starts automatically when all the users successfully submitted the code.
      *
      * @param lobbyId  lobby's unique id.

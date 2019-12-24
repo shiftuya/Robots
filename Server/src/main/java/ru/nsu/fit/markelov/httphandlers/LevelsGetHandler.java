@@ -22,10 +22,10 @@ public class LevelsGetHandler implements HttpHandler {
             byte[] bytes = JsonPacker.packLevels(mainManager.getLevels()).getBytes();
             exchange.sendResponseHeaders(200, bytes.length);
             oStream.write(bytes);
-
-            exchange.close();
         } catch (IOException e) {
             System.out.println(e.toString());
+        } finally {
+            exchange.close();
         }
     }
 }
