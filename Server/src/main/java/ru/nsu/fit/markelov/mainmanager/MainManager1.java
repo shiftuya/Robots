@@ -19,35 +19,31 @@ import ru.nsu.fit.markelov.interfaces.Solution;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 public class MainManager1 implements MainManager {
-
-  private Set<String> userNames = new TreeSet<>();
-
   @Override
   public boolean login(String userName) {
-    if (userNames.contains(userName)) {
+
+    if (getPlayerByName(userName) != null) {
       System.out.println(userName + " has already logged in!");
-
       return false;
-    } else {
-      userNames.add(userName);
-      System.out.println(userName + " logged in.");
-
-      return true;
     }
+
+    addNewPlayer(userName, "/images/person-icon.png");
+    System.out.println(userName + " logged in.");
+    return true;
   }
 
   @Override
   public boolean logout(String userName) {
-    if (userNames.contains(userName)) {
-      userNames.remove(userName);
-      System.out.println(userName + " logged out.");
-
-      return true;
-    } else {
+    Player1 player = getPlayerByName(userName);
+    if (player == null) {
       System.out.println(userName + " hasn't logged in yet!");
 
       return false;
     }
+
+    removePlayer(userName);
+    System.out.println(userName + " logged out.");
+    return true;
   }
   private List<Lobby> lobbies;
 
@@ -96,12 +92,9 @@ public class MainManager1 implements MainManager {
     simResultMap = new HashMap<>();
     idLobbyMap = new HashMap<>();
     idLevelMap = new HashMap<>();
-  //  levelIdToFile = new HashMap<>();
-    // Hard Code
-
     simulatorManager = new HardcodedSimulatorManager();
 
-
+    // Hard Code
     addNewLevel(++maxLevelId,
         "/images/labyrinth-icon.png",
         "Simple Plane",
@@ -112,11 +105,6 @@ public class MainManager1 implements MainManager {
         "Uscipit adipiscing bibendum est ultricies integer quis auctor elit sed",
         1, 10,
         "simple_plane");
-
-    addNewPlayer("Heh", "/images/person-icon.png");
-    addNewPlayer("Lol", "/images/person-icon.png");
-
-
   }
 
   // For hardcoding purposes
@@ -125,6 +113,10 @@ public class MainManager1 implements MainManager {
     playerSolutionsMap.put(player, new LinkedList<>());
     playerMap.put(name, player);
     return player;
+  }
+
+  void removePlayer(String name) {
+    playerMap.remove(name);
   }
 
   // For hardcoding purposes
