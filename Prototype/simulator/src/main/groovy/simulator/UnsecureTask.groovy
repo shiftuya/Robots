@@ -79,7 +79,7 @@ class UnsecureTask implements Task {
             } catch (Exception e) {
                 println("Broken script")
                 println(e)
-
+                lvl.breakRobot(robotId)
             }
                 println("Run script")
                 println("Action: " + action + "\tDuration: " + duration)

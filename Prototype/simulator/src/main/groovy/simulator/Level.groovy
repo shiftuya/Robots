@@ -16,4 +16,6 @@ interface Level extends SensorReadable {
     boolean simulateUntilRFT(int robotId)
 
     double getVirtualTime()
+
+    void breakRobot(int robotId)
 }

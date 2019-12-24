@@ -101,7 +101,7 @@ class simple_plane_lvl implements Level {
     int getNextRobotId() {
         int next = -1
 
-        double ft = timeout*10
+        double ft = timeout * 10
         for (int i = 0; i < playerCount; i++) {
             Robot rb = robots.get(i)
             if (!rb.broken && rb.finishTime < ft) {
@@ -124,20 +124,22 @@ class simple_plane_lvl implements Level {
             for (def r : robots) {
                 switch (r.currentAction) {
                     case "up":
-                        r.y+=(int)(ft-virtualTime)
+                        r.y += (int) (ft - virtualTime)
                         break
                     case "down":
-                        r.y-=(int)(ft-virtualTime)
+                        r.y -= (int) (ft - virtualTime)
                         break
                     case "left":
-                        r.x-=(int)(ft-virtualTime)
+                        r.x -= (int) (ft - virtualTime)
                         break
                     case "right":
-                        r.x+=(int)(ft-virtualTime)
+                        r.x += (int) (ft - virtualTime)
                         break
+                    default:
+                        r.setBroken(true)
                 }
             }
-            virtualTime =ft
+            virtualTime = ft
         }
         return true
     }
@@ -145,5 +147,10 @@ class simple_plane_lvl implements Level {
     @Override
     double getVirtualTime() {
         return virtualTime
+    }
+
+    @Override
+    void breakRobot(int robotId) {
+        robots.get(robotId).broken = true
     }
 }
