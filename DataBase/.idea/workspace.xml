@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a226616a-1cfb-489e-873e-b8b65d07a59d" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="users: schema" type="76f4a085:MysqlImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="users: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="login: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DataBase" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DataBase" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DataBase" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1V6jsdP3bRILrf1gfrUtKY0BO5r" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="extract.method.default.visibility" value="private" />
+    <property name="last_opened_file_path" value="C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.18.jar!/" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="show.unlinked.gradle.project.popup" value="true" />
+  </component>
+  <component name="RunManager" selected="Application.useDB">
+    <configuration name="updateDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="i.shatalov.teamproject.database.updateDB" />
+      <module name="DataBase.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="i.shatalov.teamproject.database.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="useDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="i.shatalov.teamproject.database.useDB" />
+      <module name="DataBase.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="i.shatalov.teamproject.database.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DataBase [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.useDB" />
+        <item itemvalue="Gradle.DataBase [build]" />
+        <item itemvalue="Application.updateDB" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:MySQL" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:MySQL" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="com.intellij.database.console.session.MessageBusSession@93a1a4d" type="9fbbdea:ServiceModel$ServiceNode" />
+              </path>
+            </expand>
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a226616a-1cfb-489e-873e-b8b65d07a59d" name="Default Changelist" comment="" />
+      <created>1576580646870</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1576580646870</updated>
+      <workItem from="1576580648473" duration="6581000" />
+      <workItem from="1576589100951" duration="1720000" />
+      <workItem from="1576591283553" duration="11131000" />
+      <workItem from="1577279526147" duration="4143000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1286" y="311" key="#Custom_Plugin_Repositories" timestamp="1576586216142">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="1286" y="311" key="#Custom_Plugin_Repositories/0.0.2560.1410@0.0.2560.1410" timestamp="1576586216142" />
+    <state x="1452" y="390" width="816" height="733" key="#Intentions" timestamp="1576586992826">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="1452" y="390" width="816" height="733" key="#Intentions/0.0.2560.1410@0.0.2560.1410" timestamp="1576586992826" />
+    <state x="1452" y="390" key="#Notifications" timestamp="1576586335960">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="1452" y="390" key="#Notifications/0.0.2560.1410@0.0.2560.1410" timestamp="1576586335960" />
+    <state x="1452" y="390" key="#SQL_Dialects" timestamp="1576585678076">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="1452" y="390" key="#SQL_Dialects/0.0.2560.1410@0.0.2560.1410" timestamp="1576585678076" />
+    <state x="1303" y="467" width="816" height="683" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1577293661259">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="1303" y="467" width="816" height="683" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1410@0.0.2560.1410" timestamp="1577293661259" />
+    <state x="732" y="251" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1576583612041">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="732" y="251" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.2560.1410@0.0.2560.1410" timestamp="1576583612041" />
+    <state x="1421" y="462" key="FileChooserDialogImpl" timestamp="1576588893480">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="1421" y="462" key="FileChooserDialogImpl/0.0.2560.1410@0.0.2560.1410" timestamp="1576588893480" />
+    <state width="1022" height="274" key="GridCell.Tab.0.bottom" timestamp="1577294291420">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="1022" height="274" key="GridCell.Tab.0.bottom/0.0.2560.1410@0.0.2560.1410" timestamp="1577294291420" />
+    <state width="1022" height="274" key="GridCell.Tab.0.center" timestamp="1577294291419">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="1022" height="274" key="GridCell.Tab.0.center/0.0.2560.1410@0.0.2560.1410" timestamp="1577294291419" />
+    <state width="1022" height="274" key="GridCell.Tab.0.left" timestamp="1577294291419">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="1022" height="274" key="GridCell.Tab.0.left/0.0.2560.1410@0.0.2560.1410" timestamp="1577294291419" />
+    <state width="1022" height="274" key="GridCell.Tab.0.right" timestamp="1577294291420">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="1022" height="274" key="GridCell.Tab.0.right/0.0.2560.1410@0.0.2560.1410" timestamp="1577294291420" />
+    <state width="1350" height="409" key="GridCell.Tab.1.bottom" timestamp="1576590823681">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="1350" height="409" key="GridCell.Tab.1.bottom/0.0.2560.1410@0.0.2560.1410" timestamp="1576590823681" />
+    <state width="1350" height="409" key="GridCell.Tab.1.center" timestamp="1576590823681">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="1350" height="409" key="GridCell.Tab.1.center/0.0.2560.1410@0.0.2560.1410" timestamp="1576590823681" />
+    <state width="1350" height="409" key="GridCell.Tab.1.left" timestamp="1576590823681">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="1350" height="409" key="GridCell.Tab.1.left/0.0.2560.1410@0.0.2560.1410" timestamp="1576590823681" />
+    <state width="1350" height="409" key="GridCell.Tab.1.right" timestamp="1576590823681">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="1350" height="409" key="GridCell.Tab.1.right/0.0.2560.1410@0.0.2560.1410" timestamp="1576590823681" />
+    <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1576590456096">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="196" height="457" key="HiddenNamespacesPopup/0.0.2560.1410@0.0.2560.1410" timestamp="1576590456096" />
+    <state x="1228" y="203" key="SettingsEditor" timestamp="1576590545980">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="1228" y="203" key="SettingsEditor/0.0.2560.1410@0.0.2560.1410" timestamp="1576590545980" />
+    <state width="200" height="441" key="SqlResolveConfigurable" timestamp="1576586757981">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state width="200" height="441" key="SqlResolveConfigurable/0.0.2560.1410@0.0.2560.1410" timestamp="1576586757981" />
+    <state x="1535" y="457" key="extract.method.dialog" timestamp="1576597336512">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="1535" y="457" key="extract.method.dialog/0.0.2560.1410@0.0.2560.1410" timestamp="1576597336512" />
+    <state x="1371" y="343" key="run.anything.popup" timestamp="1576584441153">
+      <screen x="0" y="0" width="2560" height="1410" />
+    </state>
+    <state x="1371" y="343" key="run.anything.popup/0.0.2560.1410@0.0.2560.1410" timestamp="1576584441153" />
+  </component>
+</project>
