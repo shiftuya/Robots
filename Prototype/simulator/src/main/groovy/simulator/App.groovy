@@ -12,7 +12,6 @@ class App {
     static int PORT = 1337
     @CompileStatic
     static void main(String[] args) {
-        println("pid: "+ProcessHandle.current().pid())
         HttpServer.create(new InetSocketAddress(PORT),0).with {
             println "Server is listening on ${PORT}, hit Ctrl+C to exit."
             createContext("/simulate") { http ->
@@ -26,9 +25,9 @@ class App {
                     }
                     http.sendResponseHeaders(200, 0)
 
-                    Task task = new Task("${http.requestBody}")
+                    Task task = new UnsecureTask("${http.requestBody}")
                     String result = task.run()
-                    //println(result)
+                    println(result)
                     http.responseBody.withWriter { out ->
                         out << result + "\n"
                     }

@@ -1,4 +1,5 @@
 package simulator
+// CORRECT
 // level and robotId are defined in binding
 String goalStr = level.getGoal(robotId)
 def goals = goalStr.split()

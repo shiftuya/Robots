@@ -9,11 +9,11 @@ String yStr = level.getSensorReadings(robotId, "y")
 def y = yStr.toInteger()
 def x = xStr.toInteger()
 if (x < gx)
-    return "right " + (gx - x)
+    return "right 150"
 if (x > gx)
-    return "left " + (x - gx)
+    return "left 150"
 if (y < gy)
-    return "up " + (gy - y)
+    return "up 150"
 if (y > gy)
-    return "down " + (y - gy)
-return "stay 1"
+    return "down 150"
+return "stay 100"
