@@ -465,6 +465,7 @@ function activateListeners(contextManager) {
                     if (obj.response.length == 0) {
                         alert("Bad response!");
                     } else if (obj.response.logged_in) {
+                        $("#logout").text("Log Out (" + username + ")");
                         contextManager.changeContext("list_of_lobbies");
                     } else {
                         alert(obj.response.message);
