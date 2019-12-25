@@ -13,6 +13,6 @@ public class useDB {
         System.out.println(changeDB.takeRecord(102, "LoginName"));
         System.out.println(changeDB.takeRecord(102, "Password"));
         System.out.println(changeDB.takeRecord(102, "AccountType"));
-        changeDB.deleteUser(102);
+        //changeDB.deleteUser(102);
     }
 }
