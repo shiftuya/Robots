@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.simulator;
 
+import com.sun.javafx.geom.transform.GeneralTransform3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import ru.nsu.fit.markelov.interfaces.Player;
@@ -52,44 +53,52 @@ public class HardcodedSimulatorManager implements SimulatorManager {
     return jsObj.toString();
   }
 
-  private ArrayList<Boolean> parseResponse(String jsonStr, int playerCount) {
+  private SimulationResult1 parseResponse(
+      int id, String jsonStr, ArrayList<Map.Entry<Player, String>> entryList) {
     JSONObject jsObj = new JSONObject(jsonStr);
-    ArrayList<Boolean> results = new ArrayList<>();
+    HashMap<String, Boolean> passed = new HashMap<>();
+    HashMap<String, String> logs = new HashMap<>();
     try {
       if (jsObj.getBoolean("timeout") || jsObj.getBoolean("broken")) {
-        for (int i = 0; i < playerCount; i++) {
-          results.add(false);
+        for (int i = 0; i < entryList.size(); i++) {
+          for (Map.Entry<Player, String> entry : entryList) {
+            passed.put(entry.getKey().getName(), false);
+          }
         }
       } else {
         JSONArray arr = jsObj.getJSONArray("results");
         for (int i = 0; i < arr.length(); i++) {
-          results.add(arr.getBoolean(i));
+          passed.put(entryList.get(i).getKey().getName(), arr.getBoolean(i));
         }
       }
+      JSONArray logsJson = jsObj.getJSONArray("logs");
+      for (int i = 0; i < logsJson.length(); i++) {
+        logs.put(entryList.get(i).getKey().getName(), logsJson.getString(i));
+      }
     } catch (Exception e) {
-      for (int i = 0; i < playerCount; i++) {
-        results.add(false);
+      for (int i = 0; i < entryList.size(); i++) {
+        passed.put(entryList.get(i).getKey().getName(), false);
       }
     }
-    return results;
+    return new SimulationResult1(id, passed, logs, new Date());
   }
 
   @Override
   public SimulationResult runSimulation(
       String levelId, int lobbyId, Map<Player, String> solutions) {
     ArrayList<Map.Entry<Player, String>> entryList = new ArrayList<>(solutions.entrySet());
-    if(printDebug){
-      for (Map.Entry<Player, String>entry : entryList) {
-        System.out.println("\n\n"+entry.getKey().getName()+"\t"+entry.getValue()+"\n\n");
+    if (printDebug) {
+      for (Map.Entry<Player, String> entry : entryList) {
+        System.out.println("\n\n" + entry.getKey().getName() + "\t" + entry.getValue() + "\n\n");
       }
     }
     ArrayList<String> sol = new ArrayList<>();
     for (Map.Entry<Player, String> entry : entryList) {
       sol.add(entry.getValue());
     }
-    //Collections.reverse(sol);
+    // Collections.reverse(sol);
     String request = formJSON(levelId, sol);
-    if(printDebug){
+    if (printDebug) {
       System.out.println(request);
     }
     try {
@@ -113,18 +122,13 @@ public class HardcodedSimulatorManager implements SimulatorManager {
       while ((text = br.readLine()) != null) {
         json_response.append(text);
       }
-      if(printDebug){
+      if (printDebug) {
         System.out.println(json_response.toString());
       }
-      ArrayList<Boolean> respRes = parseResponse(json_response.toString(), entryList.size());
-      HashMap<String, Boolean> results = new HashMap<>();
-      for (int i = 0; i < respRes.size(); i++) {
-        results.put(entryList.get(i).getKey().getName(), respRes.get(i));
-      }
-      return new SimulationResult1(lobbyId, results, new Date());
+      return parseResponse(lobbyId, json_response.toString(), entryList);
     } catch (Exception e) {
       System.err.println(e.getMessage());
-      return new SimulationResult1(-1, null, null);
+      return new SimulationResult1(-1, null, null, null);
     }
   }
 }
