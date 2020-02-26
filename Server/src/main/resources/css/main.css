@@ -24,6 +24,10 @@ header, .content {
     display: block;
 }
 
+.active.header-code-editor {
+    display: flow-root;
+}
+
 body {
     position: relative;
     min-width: 1040px;
