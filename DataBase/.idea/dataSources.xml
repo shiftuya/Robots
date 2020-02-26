@@ -5,10 +5,16 @@
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/users</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/robots</jdbc-url>
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
       </driver-properties>
+    </data-source>
+    <data-source source="LOCAL" name="@localhost" uuid="48f0b4ad-6a48-4936-b81b-53043f52b86a">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
     </data-source>
   </component>
 </project>

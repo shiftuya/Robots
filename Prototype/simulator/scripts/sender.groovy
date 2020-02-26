@@ -6,7 +6,7 @@ String fileContentsCorrect = new File('solution_spl.groovy').text
 String fileContentsWrong = new File('wrong_solution_spl.groovy').text
 
 def start = System.currentTimeMillis()
-int count = 1
+int count = 100
 for (int i = 0; i < count; i++) {
     def post = new URL("http://localhost:1337/simulate").openConnection();
     def jsonSol = JsonOutput.toJson(fileContentsCorrect)
