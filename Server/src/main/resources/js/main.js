@@ -1,5 +1,7 @@
 var codeMirror;
 
+class IDEBugAvoiding{}
+
 class ContextManager {
     currentContextName;
     
@@ -344,7 +346,6 @@ class ContextManager {
                             var section = $(skeleton).clone();
                             section.removeClass("skeleton");
                             var code = obj.response.code; // new variable is needed to get exactly a string instead of object (strange, but still)
-//                            section.find("textarea").val(code);
 
                             $("#code-editor-content").append(section);
 
@@ -514,7 +515,6 @@ function activateListeners(contextManager) {
 
     $("#header-code-editor").find(".play").on("click", function() {
         var id = $(this).attr("data-lobby-id");
-//        var code = $("#code-editor-content").find(".code-editor-shell:not('.skeleton') > textarea").val();
         var code = codeMirror.getValue();
 
         $.post("/api/method/lobby.submit?id=" + id, {code: code}, function(data, status) {

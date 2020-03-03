@@ -1,7 +1,5 @@
 package ru.nsu.fit.markelov.interfaces;
 
-//import com.sun.istack.internal.NotNull;
-
 public interface CompileResult {
     /**
      * Returns whether the compilation has been successful.
@@ -21,6 +19,5 @@ public interface CompileResult {
      *
      * @return the compile message.
      */
-    //@NotNull
     String getMessage();
 }

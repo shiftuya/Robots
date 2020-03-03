@@ -1,7 +1,5 @@
 package ru.nsu.fit.markelov.interfaces;
 
-//import com.sun.istack.internal.NotNull;
-
 import java.util.Date;
 
 public interface SimulationResult {
@@ -13,27 +11,25 @@ public interface SimulationResult {
     int getId();
 
     /**
-     * Returns whether the user's robot has reached the goal.
+     * Returns whether the user robot has reached the goal.
      *
-     * @param username user's unique name.
-     * @return         whether the user's robot has reached the goal.
+     * @param username user unique name.
+     * @return         whether the user robot has reached the goal.
      */
-    boolean isSuccessful(/*@NotNull*/ String username);
+    boolean isSuccessful(String username);
 
     /**
      * Returns the date of simulation result.
      *
      * @return the date of simulation result.
      */
-    /*@NotNull*/
     Date getDate();
 
     /**
-     * Returns user's simulation log.
+     * Returns user simulation log.
      *
-     * @param username user's unique name.
-     * @return         user's simulation log.
+     * @param username user unique name.
+     * @return         user simulation log.
      */
-    /*@NotNull*/
-    String getLog(/*@NotNull*/ String username);
+    String getLog(String username);
 }
