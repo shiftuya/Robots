@@ -3,8 +3,8 @@ package simulator
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
+import groovy.lang.Binding
 
-import java.awt.Robot
 
 class UnsecureTask implements Task {
 
@@ -49,13 +49,15 @@ class UnsecureTask implements Task {
         String result = ""
         assert lvl != null
         boolean finished = false;
-        def binding = new Binding()
-        binding.setVariable("level", lvl)
-        binding.setVariable("action", new String())
+
         println("===========================\nRobot count:" + solutions.size())
         for (int i = 0; i < solutions.size(); i++) {
+            Binding binding = new Binding()
+            binding.setVariable("level", lvl)
+            binding.setVariable("action", new String())
+            binding.setVariable("robotId",i)
             def script = new GroovyShell(binding)
-            script.setVariable("robotId", i) // TODO: Change to runtime id selection
+            //script.setVariable("robotId", i) // TODO: Change to runtime id selection
             scripts.add(script.parse(solutions.get(i)))
             loggers.add(new StringBuilder())
         }
@@ -82,13 +84,13 @@ class UnsecureTask implements Task {
             lvlTime += end - start
             writeLog(robotId, "Virtual time: " + lvl.getVirtualTime() + "\n")
             writeLog(robotId, "\tGoal: (" + lvl.getGoal(robotId) + ")\n")
-            writeLog(robotId, "\tCoordinates: (" + lvl.getSensorReadings(robotId, "x") + ";" + lvl.getSensorReadings(robotId, "y") + ")\n")
-
             String action
             double duration
             try {
                 start = System.currentTimeMillis()
+                writeLog(robotId, "\tCoordinates: (" + lvl.getSensorReadings(robotId, "x") + ";" + lvl.getSensorReadings(robotId, "y") + ")\n")
                 String cmd = scripts.get(robotId).evaluate(solutions.get(robotId))
+                //writeLog(robotId, "\tCoordinates: (" + lvl.getSensorReadings(robotId, "x") + ";" + lvl.getSensorReadings(robotId, "y") + ")\n")
                 end = System.currentTimeMillis()
                 timeForScripts += end - start
                 def cmds = cmd.split()
@@ -102,6 +104,8 @@ class UnsecureTask implements Task {
                 continue
             }
             println("Run script")
+            writeLog(robotId," x: "+ lvl.getSensorReadings(robotId,"x"));
+            writeLog(robotId," y: "+ lvl.getSensorReadings(robotId,"y"));
             writeLog(robotId, "\tAction: " + action + "\n\tDuration: " + duration+"\n")
             start = System.currentTimeMillis()
             lvl.setAction(robotId, action, duration)

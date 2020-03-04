@@ -27,6 +27,10 @@ class simple_plane_lvl implements Level {
         int compareTo(Robot robot) {
             return finishTime - robot.finishTime
         }
+
+        String debugString() {
+            return "g:" + goalX + ":" + goalY + "\tcoord:" + x + ":" + y;
+        }
     }
     ArrayList<Robot> robots
     int playerCount
@@ -72,13 +76,14 @@ class simple_plane_lvl implements Level {
     @Override
     String getSensorReadings(int robotId, String sensor) {
         Robot rb = robots.get(robotId)
+        //System.out.println(rb.debugString())
         String result
         switch (sensor) {
             case "x":
-                result = rb.x.toString()
+                result = String.valueOf(rb.x)
                 break
             case "y":
-                result = rb.y.toString()
+                result = String.valueOf(rb.y)
                 break
             default:
                 return null
@@ -121,6 +126,7 @@ class simple_plane_lvl implements Level {
         }
 
         while (virtualTime < ft) {
+           // System.out.println("ft:" + ft + " vt:" + virtualTime)
             for (def r : robots) {
                 switch (r.currentAction) {
                     case "up":

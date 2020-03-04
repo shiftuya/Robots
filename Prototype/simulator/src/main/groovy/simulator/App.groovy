@@ -6,16 +6,30 @@ package simulator
 
 import com.sun.net.httpserver.HttpServer
 import groovy.transform.CompileStatic
+import groovy.transform.Synchronized
+
+import java.util.concurrent.Executors
 
 class App {
 
     static int PORT = 1337
+    static long sim_count = 0
+
+    @Synchronized
+    static long modify(long dif){
+        sim_count+=dif
+        return sim_count
+    }
+
     @CompileStatic
     static void main(String[] args) {
-        HttpServer.create(new InetSocketAddress(PORT),0).with {
+        long id_next = 0
+        HttpServer.create(new InetSocketAddress(PORT), 0).with {
             println "Server is listening on ${PORT}, hit Ctrl+C to exit."
             createContext("/simulate") { http ->
+                modify(+1)
                 try {
+
                     http.responseHeaders.add("Content-type", "text/plain")
                     if (http.requestMethod != "POST") {
                         println "Wrong method"
@@ -42,16 +56,17 @@ class App {
                     http.close()
 
                 }
+                modify(-1)
             }
+            createContext("/test") { http ->
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.withWriter { out ->
+                    out << "{\"status\":\"online\", \"sim_count\": "+modify(0)+"}"
+                }
+                http.close()
+            }
+            setExecutor(Executors.newCachedThreadPool())
             start()
         }
     }
-    /*
-
-    static void main(String[] args) {
-        def req = '''{"level":"simple_plane", "solutions":["package simulator\\n// level and robotId are defined in binding\\nString goalStr = level.getGoal(robotId)\\ndef goals=goalStr.split()\\nint gx = goals[0].toInteger()\\nint gy = goals[1].toInteger()\\nString xStr=level.getSensorReadings(robotId, \\"x\\")\\nString yStr=level.getSensorReadings(robotId, \\"y\\")\\ndef y=yStr.toInteger()\\ndef x=xStr.toInteger()\\nif(x<gx)\\n    return \\"right\\"\\nif(x>gx)\\n    return \\"left\\"\\nif(y<gy)\\n    return \\"up\\"\\nif(y>gy)\\n    return \\"down\\"\\nreturn \\"stay\\"\\n","package simulator\\n// level and robotId are defined in binding\\nString goalStr = level.getGoal(robotId)\\ndef goals=goalStr.split()\\nint gx = goals[0].toInteger()\\nint gy = goals[1].toInteger()\\nString xStr=level.getSensorReadings(robotId, \\"x\\")\\nString yStr=level.getSensorReadings(robotId, \\"y\\")\\ndef y=yStr.toInteger()\\ndef x=xStr.toInteger()\\nif(x<gx)\\n    return \\"right\\"\\nif(x>gx)\\n    return \\"left\\"\\nif(y<gy)\\n    return \\"up\\"\\nif(y>gy)\\n    return \\"down\\"\\nreturn \\"stay\\"\\n"]}'''
-        Task task = new Task(req)
-        String result = task.run()
-        println(result)
-    }*/
 }
