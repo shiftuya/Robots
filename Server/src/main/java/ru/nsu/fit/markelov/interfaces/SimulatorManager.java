@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.interfaces;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /** Simulator manager is used to control available simulator units and run tasks on them. */
@@ -26,7 +26,7 @@ public interface SimulatorManager {
    *
    * @return list of simulator units.
    */
-  ArrayList<String> getSimulatorsList();
+  List<String> getSimulatorsList();
 
   /**
    * Run simulation on available simulation unit.
@@ -35,6 +35,8 @@ public interface SimulatorManager {
    * @param lobbyId id of lobby, used to define id of simulation.
    * @param solutions map of players and their solutions.
    * @return result of the simulation.
+   * @throws ru.nsu.fit.markelov.simulator.MissingSimulationUnits if there are no active Simulation
+   *     Units.
    */
   SimulationResult runSimulation(String levelId, int lobbyId, Map<Player, String> solutions);
 }

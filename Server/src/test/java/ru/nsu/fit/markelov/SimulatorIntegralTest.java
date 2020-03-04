@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.SimulatorManager;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 import java.io.BufferedReader;
@@ -11,6 +12,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -35,6 +40,38 @@ public class SimulatorIntegralTest {
     @Override
     public boolean isSubmitted() {
       return false;
+    }
+  }
+
+  private class CorrectSim implements Runnable {
+
+    SimulatorManager sm;
+
+    CorrectSim(SimulatorManager sm) {
+      this.sm = sm;
+    }
+
+    @Override
+    public void run() {
+      try {
+        Player p1 = new PlayerTest("Good Guy");
+        Player p2 = new PlayerTest("Bad Guy");
+        HashMap<Player, String> argMap = new HashMap<>();
+        argMap.put(p1, correctSolution);
+        argMap.put(p2, wrongSolution);
+        SimulationResult result = sm.runSimulation("simple_plane", 0, argMap);
+        System.out.println(p1.getName() + ": " + result.isSuccessful(p1.getName()));
+        System.out.println(p2.getName() + ": " + result.isSuccessful(p2.getName()));
+        assertEquals(0, result.getId());
+        if(!result.isSuccessful(p1.getName())){
+          System.err.println(result.getLog(p1.getName()));
+        }
+        assertTrue(p1.getName() + " was wrong!", result.isSuccessful(p1.getName()));
+        assertFalse(p2.getName() + " was correct!", result.isSuccessful(p2.getName()));
+      } catch (Exception e) {
+        System.err.println(e.toString());
+        fail();
+      }
     }
   }
 
@@ -83,10 +120,12 @@ public class SimulatorIntegralTest {
       argMap.put(p1, correctSolution);
       argMap.put(p2, correctSolution);
       HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
+      hsm.addSimulator("http://localhost:1337");
       SimulationResult result = hsm.runSimulation("simple_plane", 0, argMap);
       assertEquals(0, result.getId());
       assertTrue(result.isSuccessful(p1.getName()));
       assertTrue(result.isSuccessful(p2.getName()));
+      System.out.println("Simulated");
     } else {
       System.err.println("SimulatorUnit on localhost:1337 wasn't available. Skipping test.");
     }
@@ -102,14 +141,44 @@ public class SimulatorIntegralTest {
       argMap.put(p1, correctSolution);
       argMap.put(p2, wrongSolution);
       HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
+      hsm.addSimulator("http://localhost:1337");
       SimulationResult result = hsm.runSimulation("simple_plane", 0, argMap);
-      System.out.println(p1.getName()+": "+result.isSuccessful(p1.getName()));
-      System.out.println(p2.getName()+": "+result.isSuccessful(p2.getName()));
+      System.out.println(p1.getName() + ": " + result.isSuccessful(p1.getName()));
+      System.out.println(p2.getName() + ": " + result.isSuccessful(p2.getName()));
       assertEquals(0, result.getId());
-      assertEquals(p1.getName()+" was wrong!",true, result.isSuccessful(p1.getName()));
-      assertEquals(p2.getName()+" was correct!",false, result.isSuccessful(p2.getName()));
+      assertEquals(p1.getName() + " was wrong!", true, result.isSuccessful(p1.getName()));
+      assertEquals(p2.getName() + " was correct!", false, result.isSuccessful(p2.getName()));
     } else {
       System.err.println("SimulatorUnit on localhost:1337 wasn't available. Skipping test.");
+    }
+  }
+
+  @Test
+  public void loadTest() {
+    if (hostAvailabilityCheck()) {
+      Player p1 = new PlayerTest("Good Guy");
+      Player p2 = new PlayerTest("Bad Guy");
+
+      HashMap<Player, String> argMap = new HashMap<>();
+      argMap.put(p1, correctSolution);
+      argMap.put(p2, wrongSolution);
+      HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
+      hsm.addSimulator("http://localhost:1337");
+      hsm.addSimulator("http://192.168.0.104:1337");
+      ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
+      for (int i = 0; i < 50; i++) {
+        executor.execute(new CorrectSim(hsm));
+      }
+      executor.shutdown();
+      try {
+        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+      } catch (InterruptedException e) {
+        System.err.println(e.toString());
+        fail();
+      }
+    } else {
+      System.err.println("SimulatorUnit on localhost:1337 wasn't available. Skipping test.");
+      System.out.println("SimulatorUnit on localhost:1337 wasn't available. Skipping test.");
     }
   }
 }
