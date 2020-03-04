@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 /*public class readAndPutTest {
     @Test public void testAppHasAGreeting() {
-        updateDB classUnderTest = new updateDB();
+        updateUser classUnderTest = new updateUser();
         assertNotNull("app should have a greeting", classUnderTest.getGreeting());
     }
 }*/

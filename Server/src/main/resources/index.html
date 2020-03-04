@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
+        <meta charset="utf-8">
+        <title>Robotics Game Server</title>
+        <link rel="shortcut icon" href="images/logo.png" type="image/png">
 		<link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/header.css">
@@ -11,9 +13,14 @@
 		<link rel="stylesheet" href="css/my_solutions.css">
 		<link rel="stylesheet" href="css/lobby.css">
 		<link rel="stylesheet" href="css/simulation_results.css">
-		<link rel="stylesheet" href="css/code_editor.css">
-		<link rel="shortcut icon" href="images/logo.png" type="image/png">
-		<title>Robotics Game Server</title>
+        <link rel="stylesheet" href="css/code_editor.css">
+        <!--<link rel="stylesheet" href="js/libs/codemirror-5.51.0/lib/codemirror.css">-->
+        <!--<script src="js/libs/codemirror-5.51.0/lib/codemirror.js"></script>-->
+        <!--<script src="js/libs/codemirror-5.51.0/mode/groovy/groovy.js"></script>-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/codemirror.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/theme/darcula.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/codemirror.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/groovy/groovy.min.js"></script>
         <!--<script src="js/libs/jquery/3.4.1/jquery.min.js"></script>-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="js/main.js"></script>
@@ -212,9 +219,9 @@
                     </section>
                 </section>
             </section>
-            <section id="code-editor-content" class="content">
+            <section id="code-editor-content" class="content code-editor-content">
                 <section class="code-editor-shell skeleton">
-                    <textarea name="code-editor" wrap="off"></textarea>
+<!--                    <textarea name="code-editor" wrap="off"></textarea>-->
                 </section>
             </section>
             <section id="simulation-result-content" class="content">

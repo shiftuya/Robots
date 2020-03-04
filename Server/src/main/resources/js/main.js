@@ -1,4 +1,6 @@
-class Nothing{}
+var codeMirror;
+
+class IDEBugAvoiding{}
 
 class ContextManager {
     currentContextName;
@@ -343,10 +345,17 @@ class ContextManager {
                         } else {
                             var section = $(skeleton).clone();
                             section.removeClass("skeleton");
-                            var code = obj.response.code; // new variable is needed to get exactly a string, but not an object (strange, but still)
-                            section.find("textarea").val(code);
+                            var code = obj.response.code; // new variable is needed to get exactly a string instead of object (strange, but still)
 
                             $("#code-editor-content").append(section);
+
+                            // creating after section appending for CodeMirror's bugs avoiding
+                            codeMirror = CodeMirror(section[0], {
+                                mode: "groovy",
+                                value: code,
+                                theme: "darcula",
+                                lineNumbers: true
+                            });
                         }
                     } catch(e) {
                         alert(e);
@@ -369,7 +378,7 @@ class ContextManager {
                             var section = $(skeleton).clone();
                             section.removeClass("skeleton");
 
-                            var log = obj.response.simulation_result_log; // new variable is needed to get exactly a string, but not an object (strange, but still)
+                            var log = obj.response.simulation_result_log; // new variable is needed to get exactly a string instead of object (strange, but still)
                             section.find(".simulation-results-status").text(obj.response.simulation_result_status ? "Successful" : "Failed");
                             section.find(".log-content > textarea").val(log);
 
@@ -415,12 +424,6 @@ class ContextManager {
 
         if (this.currentContextName == "lobby") {
             $("#lobby-content").find(".lobby-shell:not('.skeleton')").each(function() {
-                $(this).remove();
-            });
-        }
-
-        if (this.currentContextName == "code_editor") {
-            $("#code-editor-content").find(".code-editor-shell:not('.skeleton')").each(function() {
                 $(this).remove();
             });
         }
@@ -500,13 +503,19 @@ function activateListeners(contextManager) {
         });
     });
 
+    $("#header-code-editor").find(".open").on("click", loadFile);
+
+    $("#header-code-editor").find(".save").on("click", function() {
+        downloadFile(codeMirror.getValue(), "robotics.groovy", "application/groovy");
+    });
+
     $("#header-code-editor").find(".back").on("click", function() {
         contextManager.changeContext("lobby", "/api/method/lobby.return?id=" + $(this).attr("data-lobby-id"));
     });
 
     $("#header-code-editor").find(".play").on("click", function() {
         var id = $(this).attr("data-lobby-id");
-        var code = $("#code-editor-content").find(".code-editor-shell:not('.skeleton') > textarea").val();
+        var code = codeMirror.getValue();
 
         $.post("/api/method/lobby.submit?id=" + id, {code: code}, function(data, status) {
             if (status == "success" && data) {
@@ -534,8 +543,46 @@ function activateListeners(contextManager) {
     });
 }
 
+function downloadFile(data, filename, type) {
+    var file = new Blob([data], {type: type});
+    
+    if (window.navigator.msSaveOrOpenBlob) { // IE10+
+        window.navigator.msSaveOrOpenBlob(file, filename);
+    } else { // Others
+        var a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+        
+        a.href = url;
+        a.download = filename;
+//        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+//            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    }
+}
 
-
+function loadFile() {
+    var input = document.createElement("input");
+    
+    input.type = "file";
+    input.onchange = function(e) {
+        var file = e.target.files[0];
+        if (!file) {
+            alert("Sorry, we could not open the file.");
+            return;
+        }
+        
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            codeMirror.setValue(e.target.result);
+        };
+        reader.readAsText(file);
+    };
+    
+    input.click();
+}
 
 
 

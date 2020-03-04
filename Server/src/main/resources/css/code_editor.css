@@ -1,10 +1,7 @@
 .header-code-editor {
 	box-sizing: border-box;
-	position: fixed;
-	top: 0;
 	width: 1024px;
 	padding: 10px;
-	border-bottom: 2px dashed black;
 }
 
 .header-code-editor .a {
@@ -45,9 +42,16 @@
 	font-size: 16px;
 }
 
-textarea[name = code-editor] {
-	width: 1004px;
-	height: 560px;
-	margin-top: 57px;
-	resize: none;
+.code-editor-content {
+    margin: 0;
+    padding: 0;
+}
+
+.code-editor-shell {
+    padding: 0 10px;
+    text-align: left;
+}
+
+.CodeMirror {
+    height: 660px !important;
 }
