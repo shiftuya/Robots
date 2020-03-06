@@ -1,6 +1,6 @@
 package simulator
 
-interface Level extends SensorReadable {
+interface Level{
     int getPlayerCount()
 
     int setAction(int robotId, String action, double time)
@@ -18,4 +18,8 @@ interface Level extends SensorReadable {
     double getVirtualTime()
 
     void breakRobot(int robotId)
+
+    void writeLog(int robotId, String str)
+
+    String getLog(int robotId)
 }

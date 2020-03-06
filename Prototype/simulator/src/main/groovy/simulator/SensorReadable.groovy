@@ -1,7 +1,11 @@
 package simulator
 
 interface SensorReadable {
-    String getSensorReadings(int robotId, String sensor)
+    String getSensorReadings(String sensor)
 
-    String getGoal(int robotId)
+    double getVirtualTime()
+
+    void writeLog(String str)
+
+    String getGoal()
 }

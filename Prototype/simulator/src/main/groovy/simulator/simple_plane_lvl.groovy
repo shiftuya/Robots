@@ -32,6 +32,7 @@ class simple_plane_lvl implements Level {
             return "g:" + goalX + ":" + goalY + "\tcoord:" + x + ":" + y;
         }
     }
+    Logger logger
     ArrayList<Robot> robots
     int playerCount
     double virtualTime
@@ -58,6 +59,7 @@ class simple_plane_lvl implements Level {
         }
         virtualTime = 0
         timeout = 120
+        logger = new Logger(playerCount)
     }
 
     @Override
@@ -126,7 +128,7 @@ class simple_plane_lvl implements Level {
         }
 
         while (virtualTime < ft) {
-           // System.out.println("ft:" + ft + " vt:" + virtualTime)
+            // System.out.println("ft:" + ft + " vt:" + virtualTime)
             for (def r : robots) {
                 switch (r.currentAction) {
                     case "up":
@@ -158,5 +160,15 @@ class simple_plane_lvl implements Level {
     @Override
     void breakRobot(int robotId) {
         robots.get(robotId).broken = true
+    }
+
+    @Override
+    void writeLog(int robotId, String str) {
+        logger.writeLog(robotId, str)
+    }
+
+    @Override
+    String getLog(int robotId) {
+        return logger.getLog(robotId)
     }
 }
