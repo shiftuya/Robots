@@ -1,9 +1,9 @@
 package i.shatalov.teamproject.database;
 
 public interface DataBaseHandler {
-  Player getPlayerName(String name);
+  PlayerClass getPlayerByName(String name);
 
-  void savePlayer(Player player);
+  void savePlayer(PlayerClass playerClass);
 
-  void saveLevel(Level level);
+  void saveLevel(LevelClass levelClass);
 }
