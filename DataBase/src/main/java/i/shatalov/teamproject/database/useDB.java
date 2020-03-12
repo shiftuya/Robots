@@ -3,9 +3,13 @@
  */
 package i.shatalov.teamproject.database;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.*;
 
-public class updateUser {
+public class useDB implements DataBaseHandler {
   //JDBC driver name and database URL
   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
   static final String DB_URL = "jdbc:mysql://localhost:3306/robots";
@@ -14,7 +18,7 @@ public class updateUser {
   static final String USER = "root";
   static final String PASS = "Pai4Piqwerty";
 
-  public void savePlayer(Player player) {
+  public void savePlayer(PlayerClass playerClass) {
     Connection conn = null;
     Statement stmt;
     try {
@@ -34,7 +38,7 @@ public class updateUser {
       String ifCheck;
       while (resultSet.next()) {
         ifCheck = resultSet.getString("LogName");
-        if (ifCheck == player.LogName) {
+        if (ifCheck.equals(playerClass.getName())) {
           System.out.println("Record with given id already exist");
           return;
         }
@@ -44,15 +48,14 @@ public class updateUser {
       System.out.println("Inserting given records in the table...");
       stmt = conn.createStatement();
       sql = "INSERT INTO users " +
-          "VALUES (\'" + player.LogName +
-          "', \'" + player.Password + "', \'" + player.AccType + "' )";
+          "VALUES ('" + playerClass.getName() +
+          "', '" + playerClass.getPass() + "', '" + playerClass.getAcc() + "' )";
       stmt.executeUpdate(sql);
       System.out.println("Records inserted.");
     } catch (Exception se) {
       //Handle errors for JDBC
       se.printStackTrace();
-    }
-    finally {
+    } finally {
       //finally block used to close resources
       try {
         if (conn != null)
@@ -64,10 +67,10 @@ public class updateUser {
     System.out.println("--END--");
   }
 
-  public Player getPlayer(String name){
+  public PlayerClass getPlayerByName(String name) {
     Connection conn = null;
     Statement stmt;
-    Player player = null;
+    PlayerClass playerClass = null;
     try {
 
       System.out.println("Connecting to a selected database...");
@@ -77,21 +80,25 @@ public class updateUser {
       stmt = conn.createStatement();
       String sql = "SELECT Password FROM users WHERE LogName = " + name;
       ResultSet resultSet = stmt.executeQuery(sql);
+
+      String Ppass = null;
+      String Pacc = null;
+      String Pname;
       while (resultSet.next()) {
-        player.Password = resultSet.getString("Password");
+        Ppass = resultSet.getString("Password");
       }
       stmt = conn.createStatement();
       sql = "SELECT AccType FROM users WHERE LogName = " + name;
       resultSet = stmt.executeQuery(sql);
       while (resultSet.next()) {
-        player.AccType = resultSet.getString("Password");
+        Pacc = resultSet.getString("Password");
       }
-      player.LogName = name;
+      Pname = name;
+      playerClass = new PlayerClass(Pname, Ppass, Pacc);
 
     } catch (SQLException e) {
       e.printStackTrace();
-    }
-    finally {
+    } finally {
       try {
         if (conn != null) {
           conn.close();
@@ -101,6 +108,41 @@ public class updateUser {
       }
     }
     System.out.println("--END--");
-    return player;
+    return playerClass;
+  }
+
+  //-- Interact with levels.
+
+  public void saveLevel(LevelClass levelClass) {
+    Connection conn = null;
+    try {
+      //Register JDBC driver
+      Class.forName(JDBC_DRIVER);
+      //Open a connection
+      System.out.println("Connecting to a selected database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      System.out.println("Connected database successfully.");
+
+      InputStream inputStream = new FileInputStream(new File(levelClass.path));
+      String sql = "INSERT INTO levels " +
+          "(file, description, difficulty, playersMax) values (?, ?, ?, ?)";
+      PreparedStatement statement = conn.prepareStatement(sql);
+      statement.setBlob(1, inputStream);
+      statement.setString(2, levelClass.description);
+      statement.setString(3, levelClass.description);
+      statement.setInt(4, levelClass.playersMax);
+      statement.executeUpdate();
+
+    } catch (ClassNotFoundException | FileNotFoundException | SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
   }
 }
