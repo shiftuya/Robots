@@ -29,7 +29,7 @@ class simple_plane_lvl implements Level {
         }
 
         String debugString() {
-            return "g:" + goalX + ":" + goalY + "\tcoord:" + x + ":" + y;
+            return "g:" + goalX + ":" + goalY + "\tcoords:" + x + ":" + y;
         }
     }
     Logger logger
@@ -72,13 +72,14 @@ class simple_plane_lvl implements Level {
         Robot rb = robots.get(robotId)
         rb.currentAction = action
         rb.finishTime += time
+        logger.writeLog(robotId, "\tAction: " + action + "\n\tDuration: " + time + "\n")
         return 0
     }
 
     @Override
     String getSensorReadings(int robotId, String sensor) {
         Robot rb = robots.get(robotId)
-        //System.out.println(rb.debugString())
+        logger.writeLog(robotId, "Sensor \"" + sensor + "\":")
         String result
         switch (sensor) {
             case "x":
@@ -88,8 +89,10 @@ class simple_plane_lvl implements Level {
                 result = String.valueOf(rb.y)
                 break
             default:
+                logger.writeLog(robotId, "null")
                 return null
         }
+        logger.writeLog(robotId, result);
         return result
     }
 
