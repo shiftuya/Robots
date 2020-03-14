@@ -5,9 +5,9 @@ interface Level{
 
     int setAction(int robotId, String action, double time)
 
-    String getSensorReadings(int robotId, String sensor)
+    Object getSensorReadings(int robotId, String sensor)
 
-    String getGoal(int robotId)
+    Object getGoal(int robotId)
 
     boolean checkGoal(int robotId)
 

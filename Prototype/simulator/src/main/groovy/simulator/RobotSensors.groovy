@@ -10,7 +10,7 @@ class RobotSensors implements SensorReadable {
     }
 
     @Override
-    String getSensorReadings(String sensor) {
+    Object getSensorReadings(String sensor) {
         return lvl.getSensorReadings(robotId, sensor)
     }
 

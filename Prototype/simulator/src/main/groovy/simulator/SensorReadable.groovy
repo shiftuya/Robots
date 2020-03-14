@@ -1,7 +1,7 @@
 package simulator
 
 interface SensorReadable {
-    String getSensorReadings(String sensor)
+    Object getSensorReadings(String sensor)
 
     double getVirtualTime()
 

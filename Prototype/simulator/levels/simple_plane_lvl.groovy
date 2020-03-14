@@ -77,7 +77,7 @@ class simple_plane_lvl implements Level {
     }
 
     @Override
-    String getSensorReadings(int robotId, String sensor) {
+    Object getSensorReadings(int robotId, String sensor) {
         Robot rb = robots.get(robotId)
         logger.writeLog(robotId, "Sensor \"" + sensor + "\":")
         String result
