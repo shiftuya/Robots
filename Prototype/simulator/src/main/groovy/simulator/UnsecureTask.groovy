@@ -3,8 +3,6 @@ package simulator
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
-import groovy.lang.Binding
-
 
 class UnsecureTask implements Task {
 
@@ -31,7 +29,7 @@ class UnsecureTask implements Task {
         solutions = jsonObject.solutions
         String lvlName = jsonObject.level
         def gcl = new GroovyClassLoader()
-        def levelClass = gcl.parseClass(new File("src/main/groovy/simulator/" + lvlName + "_lvl.groovy"))
+        def levelClass = gcl.parseClass(new File("levels/" + lvlName + "_lvl.groovy"))
         lvl = (Level) levelClass.newInstance(solutions.size())
         scripts = new ArrayList<>()
         loggers = new ArrayList<>()
@@ -50,6 +48,7 @@ class UnsecureTask implements Task {
             Binding binding = new Binding()
             SensorReadable sens = new RobotSensors(lvl, i)
             binding.setVariable("level", sens)
+            binding.setVariable("memory", new Object())
             def script = new GroovyShell(binding)
             scripts.add(script.parse(solutions.get(i)))
         }
