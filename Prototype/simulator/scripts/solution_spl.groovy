@@ -1,4 +1,3 @@
-package simulator
 // CORRECT
 // level is defined in binding
 String goalStr = level.getGoal()
@@ -18,3 +17,4 @@ if (y < gy)
 if (y > gy)
     return "down " + (y - gy)
 return "stay 1"
+a
