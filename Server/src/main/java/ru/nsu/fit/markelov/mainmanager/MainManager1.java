@@ -105,6 +105,8 @@ public class MainManager1 implements MainManager {
         "Uscipit adipiscing bibendum est ultricies integer quis auctor elit sed",
         1, 10,
         "simple_plane");
+
+    simulatorManager.addSimulator("http://localhost:1337");
   }
 
   // For hardcoding purposes
