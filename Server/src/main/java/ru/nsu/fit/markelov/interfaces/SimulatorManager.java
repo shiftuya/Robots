@@ -39,4 +39,40 @@ public interface SimulatorManager {
    *     Units.
    */
   SimulationResult runSimulation(String levelId, int lobbyId, Map<Player, String> solutions);
+
+  /**
+   * Get a list of all active levels.
+   *
+   * @return active levels.
+   */
+  List<Level> getLevels();
+
+  /**
+   * Add a new level. If a level with same name and language exists then does nothing.
+   *
+   * @param name name of level to be referred.
+   * @param source code of te level.
+   * @param language language of the level.
+   * @return true if added, false if a level with the same name and language exists.
+   */
+  boolean addLevel(String name, String source, String language);
+
+  /**
+   * Remove a level.
+   *
+   * @param name name of the level to remove.
+   * @param language language of the level.
+   * @return true if the level was removed, false if no such level exist.
+   */
+  boolean removeLevel(String name, String language);
+
+  /**
+   * Update existing level source code.
+   *
+   * @param name name of the level.
+   * @param source new source code of the level.
+   * @param language language of the level.
+   * @return true if level was updated successfully.
+   */
+  boolean updateLevel(String name, String source, String language);
 }

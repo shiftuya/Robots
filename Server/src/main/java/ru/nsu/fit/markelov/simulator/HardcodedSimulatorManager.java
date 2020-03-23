@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.simulator;
 
+import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.SimulatorManager;
@@ -101,5 +102,25 @@ public class HardcodedSimulatorManager implements SimulatorManager {
     } catch (Exception e) {
       throw new MissingSimulationUnits("No Simulation Units available");
     }
+  }
+
+  @Override
+  public List<Level> getLevels() {
+    return null;
+  }
+
+  @Override
+  public boolean addLevel(String name, String source, String language) {
+    return false;
+  }
+
+  @Override
+  public boolean removeLevel(String name, String language) {
+    return false;
+  }
+
+  @Override
+  public boolean updateLevel(String name, String source, String language) {
+    return false;
   }
 }
