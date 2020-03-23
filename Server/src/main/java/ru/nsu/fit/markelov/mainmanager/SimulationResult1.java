@@ -2,6 +2,7 @@ package ru.nsu.fit.markelov.mainmanager;
 
 import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.playback.Playback;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -61,5 +62,10 @@ public class SimulationResult1 implements SimulationResult {
     } catch (Exception e) {
       return "Error occurred while obtaining log";
     }
+  }
+
+  @Override
+  public Playback getPlayback(String username) {
+    return null;
   }
 }

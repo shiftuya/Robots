@@ -19,14 +19,12 @@ public class HardcodedSimulatorManager implements SimulatorManager {
 
   public HardcodedSimulatorManager() {
     urls = Collections.synchronizedList(new ArrayList<>());
-    // urls.add("http://localhost:1337");
     monitor = new SUMonitor();
     monitor.start();
   }
 
   public HardcodedSimulatorManager(boolean printLog) {
     urls = Collections.synchronizedList(new ArrayList<>());
-    // urls.add("http://localhost:1337");
     printDebug = printLog;
     monitor = new SUMonitor();
     monitor.start();
@@ -69,7 +67,6 @@ public class HardcodedSimulatorManager implements SimulatorManager {
     for (Map.Entry<Player, String> entry : entryList) {
       sol.add(entry.getValue());
     }
-    // Collections.reverse(sol);
     String request = JsonUtil.formJSON(levelId, sol);
     try {
       URL url = monitor.chooseSim();
