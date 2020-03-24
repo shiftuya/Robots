@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.simulator;
 
+import ru.nsu.fit.markelov.interfaces.Level;
 import ru.nsu.fit.markelov.interfaces.Player;
 import ru.nsu.fit.markelov.interfaces.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.SimulatorManager;
@@ -19,14 +20,12 @@ public class HardcodedSimulatorManager implements SimulatorManager {
 
   public HardcodedSimulatorManager() {
     urls = Collections.synchronizedList(new ArrayList<>());
-    // urls.add("http://localhost:1337");
     monitor = new SUMonitor();
     monitor.start();
   }
 
   public HardcodedSimulatorManager(boolean printLog) {
     urls = Collections.synchronizedList(new ArrayList<>());
-    // urls.add("http://localhost:1337");
     printDebug = printLog;
     monitor = new SUMonitor();
     monitor.start();
@@ -69,7 +68,6 @@ public class HardcodedSimulatorManager implements SimulatorManager {
     for (Map.Entry<Player, String> entry : entryList) {
       sol.add(entry.getValue());
     }
-    // Collections.reverse(sol);
     String request = JsonUtil.formJSON(levelId, sol);
     try {
       URL url = monitor.chooseSim();
@@ -104,5 +102,25 @@ public class HardcodedSimulatorManager implements SimulatorManager {
     } catch (Exception e) {
       throw new MissingSimulationUnits("No Simulation Units available");
     }
+  }
+
+  @Override
+  public List<Level> getLevels() {
+    return null;
+  }
+
+  @Override
+  public boolean addLevel(String name, String source, String language) {
+    return false;
+  }
+
+  @Override
+  public boolean removeLevel(String name, String language) {
+    return false;
+  }
+
+  @Override
+  public boolean updateLevel(String name, String source, String language) {
+    return false;
   }
 }
