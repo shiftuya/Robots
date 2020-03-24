@@ -11,29 +11,24 @@ import java.sql.*;
 
 public class useDB implements DataBaseHandler {
   //JDBC driver name and database URL
-  static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-  static final String DB_URL = "jdbc:mysql://localhost:3306/robots";
+  static final String JDBC_DRIVER = "org.sqlite.JDBC";
+  static final String DB_URL = "jdbc:sqlite:sqlite/db/robots";
+  static Connection conn = null;
 
-  //Database credentials
-  static final String USER = "root";
-  static final String PASS = "Pai4Piqwerty";
-
-  public void savePlayer(PlayerClass playerClass) {
-    Connection conn = null;
-    Statement stmt;
+  public static void connect() throws ClassNotFoundException {
+    Class.forName(JDBC_DRIVER);
     try {
+      conn = DriverManager.getConnection(DB_URL);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 
-      //Register JDBC driver
-      Class.forName(JDBC_DRIVER);
-
-      //Open a connection
-      System.out.println("Connecting to a selected database...");
-      conn = DriverManager.getConnection(DB_URL, USER, PASS);
-      System.out.println("Connected database successfully.");
-
-      //Checking is there already user with
-      stmt = conn.createStatement();
-      String sql = "SELECT LogName FROM users";
+  public void savePlayer(PlayerClass playerClass) throws ClassNotFoundException {
+    connect();
+    try {
+      Statement stmt = conn.createStatement();
+      String sql = "SELECT login FROM users";
       ResultSet resultSet = stmt.executeQuery(sql);
       String ifCheck;
       while (resultSet.next()) {
@@ -68,30 +63,25 @@ public class useDB implements DataBaseHandler {
   }
 
   public PlayerClass getPlayerByName(String name) {
-    Connection conn = null;
     Statement stmt;
     PlayerClass playerClass = null;
     try {
 
-      System.out.println("Connecting to a selected database...");
-      conn = DriverManager.getConnection(DB_URL, USER, PASS);
-      System.out.println("Connected database successfully.");
-
       stmt = conn.createStatement();
-      String sql = "SELECT Password FROM users WHERE LogName = " + name;
+      String sql = "SELECT password FROM users WHERE login = " + name;
       ResultSet resultSet = stmt.executeQuery(sql);
 
       String Ppass = null;
       String Pacc = null;
       String Pname;
       while (resultSet.next()) {
-        Ppass = resultSet.getString("Password");
+        Ppass = resultSet.getString("password");
       }
       stmt = conn.createStatement();
-      sql = "SELECT AccType FROM users WHERE LogName = " + name;
+      sql = "SELECT type FROM users WHERE login = " + name;
       resultSet = stmt.executeQuery(sql);
       while (resultSet.next()) {
-        Pacc = resultSet.getString("Password");
+        Pacc = resultSet.getString("password");
       }
       Pname = name;
       playerClass = new PlayerClass(Pname, Ppass, Pacc);
@@ -120,7 +110,7 @@ public class useDB implements DataBaseHandler {
       Class.forName(JDBC_DRIVER);
       //Open a connection
       System.out.println("Connecting to a selected database...");
-      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      conn = DriverManager.getConnection(DB_URL);
       System.out.println("Connected database successfully.");
 
       InputStream inputStream = new FileInputStream(new File(levelClass.path));
