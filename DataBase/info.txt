@@ -1,0 +1,4 @@
+SQLite Driver located in sqlite/connect/ folder.
+DataBase located in sqlite/db/ folder.
+
+You have to configure IDEA's DB location and driver location in settings.
