@@ -62,13 +62,14 @@ public class useDB implements DataBaseHandler {
     System.out.println("--END--");
   }
 
-  public PlayerClass getPlayerByName(String name) {
+  public PlayerClass getPlayerByName(String name) throws ClassNotFoundException {
+    connect();
     Statement stmt;
     PlayerClass playerClass = null;
     try {
 
       stmt = conn.createStatement();
-      String sql = "SELECT password FROM users WHERE login = " + name;
+      String sql = "SELECT password FROM users WHERE login = '" + name + "'";
       ResultSet resultSet = stmt.executeQuery(sql);
 
       String Ppass = null;
@@ -78,10 +79,10 @@ public class useDB implements DataBaseHandler {
         Ppass = resultSet.getString("password");
       }
       stmt = conn.createStatement();
-      sql = "SELECT type FROM users WHERE login = " + name;
+      sql = "SELECT type FROM users WHERE login = '" + name + "'";
       resultSet = stmt.executeQuery(sql);
       while (resultSet.next()) {
-        Pacc = resultSet.getString("password");
+        Pacc = resultSet.getString("type");
       }
       Pname = name;
       playerClass = new PlayerClass(Pname, Ppass, Pacc);
@@ -103,8 +104,8 @@ public class useDB implements DataBaseHandler {
 
   //-- Interact with levels.
 
-  public void saveLevel(LevelClass levelClass) {
-    Connection conn = null;
+  public void saveLevel(LevelClass levelClass) throws ClassNotFoundException {
+    connect();
     try {
       //Register JDBC driver
       Class.forName(JDBC_DRIVER);

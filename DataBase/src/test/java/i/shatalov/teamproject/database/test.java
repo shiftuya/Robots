@@ -9,11 +9,14 @@ import static org.junit.Assert.*;
 public class test {
     @Test public void test() throws ClassNotFoundException {
         useDB db = new useDB();
-        db.savePlayer(new PlayerClass("morozz", "123coc321", "student"));
+        PlayerClass player = db.getPlayerByName("morozz");
+        System.out.println(player.getName());
+        System.out.println(player.getPass());
+        System.out.println(player.getAcc());
     }
-    @Test
+   /* @Test
     public void testLvl() {
         useDB db = new useDB();
         db.saveLevel(new LevelClass());
-    }
+    }*/
 }
