@@ -126,4 +126,13 @@ public interface MainManager {
      * @return         simulation result or null in case it hasn't been processed yet.
      */
     SimulationResult getSimulationResult(String username, int lobbyId);
+
+    /**
+     * Returns all the user simulation results on specified level.
+     *
+     * @param username unique user name.
+     * @param levelId  unique level id.
+     * @return         all the user simulation results on specified level.
+     */
+    List<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId);
 }
