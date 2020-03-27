@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.interfaces.playback;
+package ru.nsu.fit.markelov.interfaces.server;
 
 public interface Vector3 {
     /**

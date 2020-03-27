@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import ru.nsu.fit.markelov.interfaces.Level;
-import ru.nsu.fit.markelov.interfaces.Lobby;
-import ru.nsu.fit.markelov.interfaces.Player;
-import ru.nsu.fit.markelov.interfaces.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Lobby;
+import ru.nsu.fit.markelov.interfaces.client.Player;
 
 class Lobby1 implements Lobby {
   private int id;

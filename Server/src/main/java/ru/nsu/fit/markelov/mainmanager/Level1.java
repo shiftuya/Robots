@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.mainmanager;
 
-import ru.nsu.fit.markelov.interfaces.Level;
+import ru.nsu.fit.markelov.interfaces.client.Level;
 
 public class Level1 implements Level {
   private int id;

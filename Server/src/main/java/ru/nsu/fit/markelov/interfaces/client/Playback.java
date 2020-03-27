@@ -1,4 +1,7 @@
-package ru.nsu.fit.markelov.interfaces.playback;
+package ru.nsu.fit.markelov.interfaces.client;
+
+import ru.nsu.fit.markelov.interfaces.server.GameObject;
+import ru.nsu.fit.markelov.interfaces.server.Vector3;
 
 import java.util.List;
 import java.util.Map;

@@ -5,17 +5,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
-import ru.nsu.fit.markelov.interfaces.CompileResult;
-import ru.nsu.fit.markelov.interfaces.Level;
-import ru.nsu.fit.markelov.interfaces.Lobby;
-import ru.nsu.fit.markelov.interfaces.MainManager;
-import ru.nsu.fit.markelov.interfaces.Player;
-import ru.nsu.fit.markelov.interfaces.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.SimulatorManager;
-import ru.nsu.fit.markelov.interfaces.Solution;
+import ru.nsu.fit.markelov.interfaces.client.CompileResult;
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Lobby;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
+import ru.nsu.fit.markelov.interfaces.client.Solution;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 public class MainManager1 implements MainManager {

@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.managers_hardcoded;
 
-import ru.nsu.fit.markelov.interfaces.Lobby;
+import ru.nsu.fit.markelov.interfaces.client.Lobby;
 
 import java.util.ArrayList;
 import java.util.List;

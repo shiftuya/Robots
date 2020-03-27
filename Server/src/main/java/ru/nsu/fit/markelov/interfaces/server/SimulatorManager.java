@@ -1,4 +1,8 @@
-package ru.nsu.fit.markelov.interfaces;
+package ru.nsu.fit.markelov.interfaces.server;
+
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 
 import java.util.List;
 import java.util.Map;

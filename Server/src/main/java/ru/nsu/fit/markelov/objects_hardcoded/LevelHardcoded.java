@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.objects_hardcoded;
 
-import ru.nsu.fit.markelov.interfaces.Level;
+import ru.nsu.fit.markelov.interfaces.client.Level;
 
 public class LevelHardcoded implements Level {
 

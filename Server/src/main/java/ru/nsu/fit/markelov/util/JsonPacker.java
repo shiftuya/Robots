@@ -2,14 +2,13 @@ package ru.nsu.fit.markelov.util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import ru.nsu.fit.markelov.interfaces.CompileResult;
-import ru.nsu.fit.markelov.interfaces.Level;
-import ru.nsu.fit.markelov.interfaces.Lobby;
-import ru.nsu.fit.markelov.interfaces.Player;
-import ru.nsu.fit.markelov.interfaces.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.Solution;
+import ru.nsu.fit.markelov.interfaces.client.CompileResult;
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Lobby;
+import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.client.Solution;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 

@@ -2,9 +2,9 @@ package ru.nsu.fit.markelov.mainmanager;
 
 import java.util.LinkedList;
 import java.util.List;
-import ru.nsu.fit.markelov.interfaces.Level;
-import ru.nsu.fit.markelov.interfaces.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.Solution;
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.client.Solution;
 
 /**
  * Contains all simulation results for a player at a given level

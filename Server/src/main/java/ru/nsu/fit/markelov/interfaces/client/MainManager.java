@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.interfaces;
+package ru.nsu.fit.markelov.interfaces.client;
 
 import java.util.List;
 

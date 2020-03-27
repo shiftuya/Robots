@@ -1,8 +1,8 @@
 package ru.nsu.fit.markelov.objects_hardcoded;
 
-import ru.nsu.fit.markelov.interfaces.Level;
-import ru.nsu.fit.markelov.interfaces.Lobby;
-import ru.nsu.fit.markelov.interfaces.Player;
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Lobby;
+import ru.nsu.fit.markelov.interfaces.client.Player;
 
 import java.util.ArrayList;
 import java.util.List;

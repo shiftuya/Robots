@@ -1,9 +1,9 @@
 package ru.nsu.fit.markelov.simulator;
 
-import ru.nsu.fit.markelov.interfaces.Level;
-import ru.nsu.fit.markelov.interfaces.Player;
-import ru.nsu.fit.markelov.interfaces.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.SimulatorManager;
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

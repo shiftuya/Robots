@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.mainmanager;
 
-import ru.nsu.fit.markelov.interfaces.CompileResult;
+import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 
 public class CompileResult1 implements CompileResult {
   private String message;

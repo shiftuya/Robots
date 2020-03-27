@@ -2,7 +2,7 @@ package ru.nsu.fit.markelov.httphandlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.nsu.fit.markelov.interfaces.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.util.CookieParser;
 import ru.nsu.fit.markelov.util.DebugUtil;
 import ru.nsu.fit.markelov.util.JsonPacker;
