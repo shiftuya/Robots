@@ -7,13 +7,23 @@ class ContextManager {
     
     constructor(entriesArray) {
         this.contextMap = new Map(entriesArray);
+        this.standardQueryMap = new Map([
+            ["list_of_lobbies", "lobbies.get"],
+            ["choose_level", "levels.get"],
+            ["my_solutions", "solutions.get"],
+            ["levels", "levels.get"]
+        ]);
     }
 
     getContextNames() {
         return this.contextMap.keys();
     }
+    
+    getStandardQuery(contextName) {
+        return this.standardQueryMap.get(contextName);
+    }
 
-    changeContext(contextName, getQuery) {
+    changeContext(contextName, ajaxQuery) {
         var dependencies = this.contextMap.get(contextName);
         var title = dependencies.title;
         var header = $("#" + dependencies.headerId);
@@ -48,396 +58,377 @@ class ContextManager {
             content.addClass("active"); // alert("content added");
         }
 
-        this.getData(contextName, this, getQuery);
+        this.getAndInsertData(contextName, this, "/api/method/" + (ajaxQuery || this.getStandardQuery(contextName)));
         this.removeCurrentData();
 
         this.currentContextName = contextName;
     }
 
-    getData(contextName, contextManager, getQuery) {
-        var dataRecieved = true;
+    getAndInsertData(contextName, contextManager, ajaxQuery) {
+        $.get(ajaxQuery, function(data, status) {
+            if (status == "success" && data) {
+                try {
+                    switch (contextName) {
+                        case "list_of_lobbies":
+                            insertListOfLobbiesData(JSON.parse(data));
+                            break;
+                        case "choose_level":
+                            insertChooseLevelData(JSON.parse(data));
+                            break;
+                        case "my_solutions":
+                            insertSolutionsData(JSON.parse(data));
+                            break;
+                        case "levels":
+                            insertLevelsData(JSON.parse(data));
+                            break;
+                        case "lobby":
+                            insertLobbyData(JSON.parse(data));
+                            break;
+                        case "code_editor":
+                            insertCodeEditorData(JSON.parse(data));
+                            break;
+                        case "simulation_result":
+                            insertSimulationResultData(JSON.parse(data));
+                            break;
+                    }
+                } catch(e) {
+                    alert(e);
+                }
+            } else {
+                alert("Bad request!");
+            }
+        });
         
-        if (contextName == "list_of_lobbies") {
-            $.get("/api/method/lobbies.get", function(data, status) {
-                if (status == "success" && data) {
-                    try {
-                        var obj = JSON.parse(data);
-                        var table = $("#lobbies-table");
-                        if (obj.response.length == 0) {
-                            $("<tr><td colspan=\"100%\">No active lobbies.</td></tr>").appendTo(table);
-                        } else {
-                            var skeleton = table.find("tr.skeleton");
-                            obj.response.forEach(function(item) {
-                                var tr = $(skeleton).clone();
-                                tr.removeClass("skeleton");
+        function insertListOfLobbiesData(obj) {
+            var table = $("#lobbies-table");
+            if (obj.response.length == 0) {
+                $("<tr><td colspan=\"100%\">No active lobbies.</td></tr>").appendTo(table);
+            } else {
+                var skeleton = table.find("tr.skeleton");
+                obj.response.forEach(function(item) {
+                    var tr = $(skeleton).clone();
+                    tr.removeClass("skeleton");
 
-                                tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
-                                tr.find(".username").text(item.host_name);
-                                tr.find(".level-icon").css("background-image", "url(\".." + item.level_icon + "\")");
-                                tr.find(".levelname").text(item.level_name);
-                                tr.find(".difficulty").text(item.level_difficulty);
-                                tr.find(".players-amount").text(item.players + "/" + item.players_at_most);
-                                tr.attr("data-lobby-id", item.lobby_id);
+                    tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
+                    tr.find(".username").text(item.host_name);
+                    tr.find(".level-icon").css("background-image", "url(\".." + item.level_icon + "\")");
+                    tr.find(".levelname").text(item.level_name);
+                    tr.find(".difficulty").text(item.level_difficulty);
+                    tr.find(".players-amount").text(item.players + "/" + item.players_at_most);
+                    tr.attr("data-lobby-id", item.lobby_id);
 
-                                table.append(tr);
+                    table.append(tr);
 
-                                tr.on("click", function() {
-//                                    alert("lobby_id is " + item.lobby_id);
-                                    contextManager.changeContext("lobby", "/api/method/lobby.join?id=" + item.lobby_id);
-                                });
-                            });
-                        }
-                    } catch(e) {
-                        alert(e);
-                    }
-                } else {
-                    alert("Bad request!");
-                }
-            });
+                    tr.on("click", function() {
+                        //                        alert("lobby_id is " + item.lobby_id);
+                        contextManager.changeContext("lobby", "lobby.join?id=" + item.lobby_id);
+                    });
+                });
+            }
         }
 
-        if (contextName == "choose_level") {
-            $.get("/api/method/levels.get", function(data, status) {
-                if (status == "success" && data) {
-                    try {
-                        var obj = JSON.parse(data);
-                        var table = $("#levels-table");
-                        if (obj.response.length == 0) {
-                            $("<tr><td colspan=\"100%\">No created levels.</td></tr>").appendTo(table);
-                        } else {
-                            var skeleton = table.find("tr.skeleton");
-                            obj.response.forEach(function(item) {
-                                var tr = $(skeleton).clone();
-                                tr.removeClass("skeleton");
+        function insertChooseLevelData(obj) {
+            var table = $("#levels-table");
+            if (obj.response.length == 0) {
+                $("<tr><td colspan=\"100%\">No created levels.</td></tr>").appendTo(table);
+            } else {
+                var skeleton = table.find("tr.skeleton");
+                obj.response.forEach(function(item) {
+                    var tr = $(skeleton).clone();
+                    tr.removeClass("skeleton");
 
-                                tr.find(".levels-table-icon").css("background-image", "url(\".." + item.level_icon + "\")");
-                                tr.find(".level-name").text(item.level_name);
-                                tr.find(".level-difficulty").text(item.level_difficulty);
-                                tr.find(".level-type").text(item.level_type);
-                                tr.find(".level-details-description").find(".level-details-text").text(item.description);
-                                tr.find(".level-details-rules").find(".level-details-text").text(item.rules);
-                                tr.find(".level-details-goal").find(".level-details-text").text(item.goal);
-                                tr.find(".level-players-number").attr("value", item.min_players);
-                                tr.find(".level-players-number").attr("min", item.min_players);
-                                tr.find(".level-players-number").attr("max", item.max_players);
-                                tr.attr("data-level-id", item.level_id);
+                    tr.find(".levels-table-icon").css("background-image", "url(\".." + item.level_icon + "\")");
+                    tr.find(".level-name").text(item.level_name);
+                    tr.find(".level-difficulty").text(item.level_difficulty);
+                    tr.find(".level-type").text(item.level_type);
+                    tr.find(".level-details-description").find(".level-details-text").text(item.description);
+                    tr.find(".level-details-rules").find(".level-details-text").text(item.rules);
+                    tr.find(".level-details-goal").find(".level-details-text").text(item.goal);
+                    tr.find(".level-players-number").attr("value", item.min_players);
+                    tr.find(".level-players-number").attr("min", item.min_players);
+                    tr.find(".level-players-number").attr("max", item.max_players);
+                    tr.attr("data-level-id", item.level_id);
 
-                                table.append(tr);
+                    table.append(tr);
 
-                                tr.find(".start-level-icon").on("click", function() {
-                                    var id = item.level_id;
-                                    var players_amount = tr.find(".level-players-number").val();
-                                    contextManager.changeContext("lobby", "/api/method/lobby.create?id=" + id + "&players_amount=" + players_amount);
-                                });
-                            });
-                        }
-                    } catch(e) {
-                        alert(e);
-                    }
-                } else {
-                    alert("Bad request!");
-                }
-            });
+                    tr.find(".start-level-icon").on("click", function() {
+                        var id = item.level_id;
+                        var players_amount = tr.find(".level-players-number").val();
+                        contextManager.changeContext("lobby", "lobby.create?id=" + id + "&players_amount=" + players_amount);
+                    });
+                });
+            }
         }
+        
+        function insertSolutionsData(obj) {
+            var table = $("#solutions-table");
+            if (obj.response.length == 0) {
+                $("<tbody><tr><td colspan=\"100%\">No created levels.</td></tr></tbody>").appendTo(table);
+            } else {
+                var skeleton = table.find("tbody.skeleton");
+                obj.response.forEach(function(item) {
+                    var tbody = $(skeleton).clone();
+                    tbody.removeClass("skeleton");
 
-        if (contextName == "my_solutions") {
-            $.get("/api/method/solutions.get", function(data, status) {
-                if (status == "success" && data) {
-                    try {
-                        var obj = JSON.parse(data);
-                        var table = $("#solutions-table");
-                        if (obj.response.length == 0) {
-                            $("<tbody><tr><td colspan=\"100%\">No created levels.</td></tr></tbody>").appendTo(table);
-                        } else {
-                            var skeleton = table.find("tbody.skeleton");
-                            obj.response.forEach(function(item) {
-                                var tbody = $(skeleton).clone();
-                                tbody.removeClass("skeleton");
+                    tbody.find(".levels-table-icon").css("background-image", "url(\".." + item.level_icon + "\")");
+                    tbody.find(".level-name").text(item.level_name);
+                    tbody.find(".level-difficulty").text(item.level_difficulty);
+                    tbody.find(".level-type").text(item.level_type);
+                    tbody.find(".level-details-description").find(".level-details-text").text(item.description);
+                    tbody.find(".level-details-rules").find(".level-details-text").text(item.rules);
+                    tbody.find(".level-details-goal").find(".level-details-text").text(item.goal);
 
-                                tbody.find(".levels-table-icon").css("background-image", "url(\".." + item.level_icon + "\")");
-                                tbody.find(".level-name").text(item.level_name);
-                                tbody.find(".level-difficulty").text(item.level_difficulty);
-                                tbody.find(".level-type").text(item.level_type);
-                                tbody.find(".level-details-description").find(".level-details-text").text(item.description);
-                                tbody.find(".level-details-rules").find(".level-details-text").text(item.rules);
-                                tbody.find(".level-details-goal").find(".level-details-text").text(item.goal);
-                                
-                                if (item.attempts.length == 0) {
-                                    tbody.find(".attempts-number").text("No Attempts");
-                                    tbody.find(".solution-status-icon").addClass("no-attempts-icon");
-                                    tbody.find(".list-of-attempts-shell").remove();
-                                } else {
-                                    var successed = 0;
-                                    var failed = 0;
-                                    var liSkeleton = tbody.find("li.skeleton");
-                                    item.attempts.forEach(function(attemptItem) {
-                                        var result;
-                                        if (attemptItem.attempt_result) {
-                                            result = "successed";
-                                            successed++;
-                                        } else {
-                                            result = "failed";
-                                            failed++;
-                                        }
-                                        
-                                        var li = $(liSkeleton).clone();
-                                        li.removeClass("skeleton");
-
-                                        li.find(".attempt-date").text(attemptItem.attempt_date);
-                                        li.find(".attempt-result").text(result);
-                                        li.attr("data-attempt-id", attemptItem.attempt_id);
-                                        
-                                        li.on("click", function() {
-                                            alert("attempt_id is " + attemptItem.attempt_id);
-                                        });
-
-                                        tbody.find(".list-of-attempts").append(li);
-                                    });
-                                    
-                                    var cnt = successed + failed;
-                                    var attempts_number = cnt + " Attempt";
-                                    if (cnt > 1) attempts_number += "s";
-                                    
-                                    var attempts_number_details = "";
-                                    if (successed && failed) attempts_number_details = "(" + successed + " successed, " + failed + " failed)";
-                                    if (successed && !failed) attempts_number_details = "(" + successed + " successed)";
-                                    if (!successed && failed) attempts_number_details = "(" + failed + " failed)";
-
-                                    tbody.find(".attempts-number").text(attempts_number);
-                                    tbody.find(".attempts-number-details").text(attempts_number_details);
-                                    tbody.find(".solution-status-icon").addClass((successed) ? "successed-icon" : "failed-icon");
-                                }
-                                
-                                var solutionRow = tbody.find(".solution-row");
-                                var solutionDetailsRow = tbody.find(".solution-details-row");
-                                solutionRow.on("click", function() {
-                                    solutionDetailsRow.toggle();
-                                });
-
-                                table.append(tbody);
-                            });
-                        }
-                    } catch(e) {
-                        alert(e);
-                    }
-                } else {
-                    alert("Bad request!");
-                }
-            });
-        }
-
-        if (contextName == "lobby") {
-            $.get(getQuery, function(data, status) {
-                if (status == "success" && data) {
-                    try {
-                        var obj = JSON.parse(data);
-                        var lobbyContentSection = $("#lobby-content");
-                        
-                        if (obj.response == null) {
-                            $("<section class=\"lobby-shell\"><h1>Lobby is full.</h1></section>").appendTo(lobbyContentSection);
-                        } else {
-                            if (obj.response.length == 0) {
-                                $("<section class=\"lobby-shell\"><h1>Lobby was not created.</h1></section>").appendTo(lobbyContentSection);
+                    if (item.attempts.length == 0) {
+                        tbody.find(".attempts-number").text("No Attempts");
+                        tbody.find(".solution-status-icon").addClass("no-attempts-icon");
+                        tbody.find(".list-of-attempts-shell").remove();
+                    } else {
+                        var successed = 0;
+                        var failed = 0;
+                        var liSkeleton = tbody.find("li.skeleton");
+                        item.attempts.forEach(function(attemptItem) {
+                            var result;
+                            if (attemptItem.attempt_result) {
+                                result = "successed";
+                                successed++;
                             } else {
-                                var skeleton = lobbyContentSection.find("section.skeleton");
-                                var item = obj.response;
-
-                                var section = $(skeleton).clone();
-                                section.removeClass("skeleton");
-
-                                section.attr("data-lobby-id", item.lobby_id);
-                                section.find(".lobby-common-icon").css("background-image", "url(\".." + item.level_icon + "\")");
-                                section.find(".lobby-level-name").text(item.level_name);
-                                section.find(".lobby-players").text(item.players + "/" + item.players_at_most);
-                                section.find(".level-difficulty").text(item.level_difficulty);
-                                section.find(".level-type").text(item.level_type);
-                                section.find(".level-details-description").find(".level-details-text").text(item.description);
-                                section.find(".level-details-rules").find(".level-details-text").text(item.rules);
-                                section.find(".level-details-goal").find(".level-details-text").text(item.goal);
-
-                                var trSkeleton = lobbyContentSection.find("tr.skeleton");
-                                item.players_list.forEach(function(playerItem) {
-                                    var tr = $(trSkeleton).clone();
-                                    tr.removeClass("skeleton");
-
-                                    tr.find(".players-table-icon").css("background-image", "url(\".." + playerItem.avatar + "\")");
-                                    tr.find(".username").text(playerItem.user_name);
-                                    tr.find(".solution-submitted").text(playerItem.submitted ? "Submitted" : "Not submitted");
-
-                                    section.find(".players-table").append(tr);
-                                });
-
-                                for (var i = item.players_list.length; i < item.players_at_most; i++) {
-                                    section.find(".players-table").append($("<tr><td colspan=\"100%\" class=\"waiting-player\">Waiting for the player</td></tr>"));
-                                }
-
-                                section.find("#edit-solution").on("click", function() {
-                                    $("#header-code-editor").find(".back, .play").attr("data-lobby-id", item.lobby_id);
-                                    contextManager.changeContext("code_editor", "/api/method/code.edit?id=" + item.lobby_id);
-                                });
-
-                                section.find("#leave-lobby").on("click", function() {
-                                    $.get("/api/method/lobby.leave?id=" + item.lobby_id, function(data, status) {
-                                        if (status == "success" && data) {
-                                            try {
-                                                var obj = JSON.parse(data);
-                                                if (obj.response.length == 0) {
-                                                    alert("Bad response!");
-                                                } else {
-                                                    if (obj.response.successful) {
-                                                        contextManager.changeContext("list_of_lobbies");
-                                                    } else {
-                                                        alert("Sorry, we could not remove you from the lobby. Try again later.");
-                                                    }
-                                                }
-                                            } catch(e) {
-                                                alert(e);
-                                            }
-                                        } else {
-                                            alert("Bad request!");
-                                        }
-                                    });
-                                });
-
-                                section.find("#get-simulation-result").on("click", function() {
-                                    $.get("/api/method/simulation_result.is_ready?id=" + item.lobby_id, function(data, status) {
-                                        if (status == "success" && data) {
-                                            try {
-                                                var obj = JSON.parse(data);
-                                                if (obj.response.length == 0) {
-                                                    alert("Bad response!");
-                                                } else {
-                                                    if (obj.response.simulation_finished) {
-                                                        contextManager.changeContext("simulation_result", "/api/method/simulation_result.get?id=" + item.lobby_id);
-                                                    } else {
-                                                        alert("The simulation hasn't been processed yet. Try again later.");
-                                                    }
-                                                }
-                                            } catch(e) {
-                                                alert("Exception: " + e);
-                                            }
-                                        } else {
-                                            alert("Bad request!");
-                                        }
-                                    });
-                                });
-
-                                lobbyContentSection.append(section);
+                                result = "failed";
+                                failed++;
                             }
-                        }
-                    } catch(e) {
-                        alert(e);
-                    }
-                } else {
-                    alert("Bad request!");
-                }
-            });
-        }
 
-        if (contextName == "code_editor") {
-            $.get(getQuery, function(data, status) {
-                if (status == "success" && data) {
-                    try {
-                        var obj = JSON.parse(data);
-                        var skeleton = $("#code-editor-content").find("section.skeleton");
-                        if (obj.response.length == 0) {
-                            alert("Bad response!");
-                        } else {
-                            var section = $(skeleton).clone();
-                            section.removeClass("skeleton");
-                            var code = obj.response.code; // new variable is needed to get exactly a string instead of object (strange, but still)
+                            var li = $(liSkeleton).clone();
+                            li.removeClass("skeleton");
 
-                            $("#code-editor-content").append(section);
+                            li.find(".attempt-date").text(attemptItem.attempt_date);
+                            li.find(".attempt-result").text(result);
+                            li.attr("data-attempt-id", attemptItem.attempt_id);
 
-                            // creating after section appending for CodeMirror's bugs avoiding
-                            codeMirror = CodeMirror(section[0], {
-                                mode: "groovy",
-                                value: code,
-                                theme: "darcula",
-                                lineNumbers: true
+                            li.on("click", function() {
+                                alert("attempt_id is " + attemptItem.attempt_id);
                             });
-                        }
-                    } catch(e) {
-                        alert(e);
+
+                            tbody.find(".list-of-attempts").append(li);
+                        });
+
+                        var cnt = successed + failed;
+                        var attempts_number = cnt + " Attempt";
+                        if (cnt > 1) attempts_number += "s";
+
+                        var attempts_number_details = "";
+                        if (successed && failed) attempts_number_details = "(" + successed + " successed, " + failed + " failed)";
+                        if (successed && !failed) attempts_number_details = "(" + successed + " successed)";
+                        if (!successed && failed) attempts_number_details = "(" + failed + " failed)";
+
+                        tbody.find(".attempts-number").text(attempts_number);
+                        tbody.find(".attempts-number-details").text(attempts_number_details);
+                        tbody.find(".solution-status-icon").addClass((successed) ? "successed-icon" : "failed-icon");
                     }
-                } else {
-                    alert("Bad request!");
-                }
-            });
+
+                    var solutionRow = tbody.find(".solution-row");
+                    var solutionDetailsRow = tbody.find(".solution-details-row");
+                    solutionRow.on("click", function() {
+                        solutionDetailsRow.toggle();
+                    });
+
+                    table.append(tbody);
+                });
+            }
         }
 
-        if (contextName == "simulation_result") {
-            $.get(getQuery, function(data, status) {
-                if (status == "success" && data) {
-                    try {
-                        var obj = JSON.parse(data);
-                        if (obj.response.length == 0) {
-                            alert("Bad response!");
-                        } else {
-                            var skeleton = $("#simulation-result-content").find("section.skeleton");
-                            var section = $(skeleton).clone();
-                            section.removeClass("skeleton");
+        function insertLevelsData(obj) {
+            var table = $("#teacher-levels-table");
+            if (obj.response.length == 0) {
+                $("<tr><td colspan=\"100%\">No created levels.</td></tr>").appendTo(table);
+            } else {
+                var skeleton = table.find("tr.skeleton");
+                obj.response.forEach(function(item) {
+                    var tr = $(skeleton).clone();
+                    tr.removeClass("skeleton");
 
-                            var log = obj.response.simulation_result_log; // new variable is needed to get exactly a string instead of object (strange, but still)
-                            section.find(".simulation-results-status").text(obj.response.simulation_result_status ? "Successful" : "Failed");
-                            section.find(".log-content > textarea").val(log);
+                    tr.find(".levels-table-icon").css("background-image", "url(\".." + item.level_icon + "\")");
+                    tr.find(".level-name").text(item.level_name);
+                    tr.find(".level-difficulty").text(item.level_difficulty);
+                    tr.find(".level-type").text(item.level_type);
+                    tr.find(".level-details-description").find(".level-details-text").text(item.description);
+                    tr.find(".level-details-rules").find(".level-details-text").text(item.rules);
+                    tr.find(".level-details-goal").find(".level-details-text").text(item.goal);
 
-                            $("#simulation-result-content").append(section);
-                        }
-                    } catch(e) {
-                        alert("Exception: " + e);
-                    }
-                } else {
-                    alert("Bad request!");
-                }
-            });
+                    table.append(tr);
+
+                    tr.find(".level-edit-col").find(".a").on("click", function() {
+                        var id = item.level_id;
+                        alert(id);
+                        //                                    contextManager.changeContext("lobby", "lobby.create?id=" + id + "&players_amount=" + players_amount);
+                    });
+                });
+            }
         }
-        
-        return dataRecieved;
+
+        function insertLobbyData(obj) {
+            var lobbyContentSection = $("#lobby-content");
+            if (obj.response == null) {
+                $("<section class=\"lobby-shell\"><h1>Lobby is full.</h1></section>").appendTo(lobbyContentSection);
+            } else {
+                if (obj.response.length == 0) {
+                    $("<section class=\"lobby-shell\"><h1>Lobby was not created.</h1></section>").appendTo(lobbyContentSection);
+                } else {
+                    var skeleton = lobbyContentSection.find("section.skeleton");
+                    var item = obj.response;
+
+                    var section = $(skeleton).clone();
+                    section.removeClass("skeleton");
+
+                    section.attr("data-lobby-id", item.lobby_id);
+                    section.find(".lobby-common-icon").css("background-image", "url(\".." + item.level_icon + "\")");
+                    section.find(".lobby-level-name").text(item.level_name);
+                    section.find(".lobby-players").text(item.players + "/" + item.players_at_most);
+                    section.find(".level-difficulty").text(item.level_difficulty);
+                    section.find(".level-type").text(item.level_type);
+                    section.find(".level-details-description").find(".level-details-text").text(item.description);
+                    section.find(".level-details-rules").find(".level-details-text").text(item.rules);
+                    section.find(".level-details-goal").find(".level-details-text").text(item.goal);
+
+                    var trSkeleton = lobbyContentSection.find("tr.skeleton");
+                    item.players_list.forEach(function(playerItem) {
+                        var tr = $(trSkeleton).clone();
+                        tr.removeClass("skeleton");
+
+                        tr.find(".players-table-icon").css("background-image", "url(\".." + playerItem.avatar + "\")");
+                        tr.find(".username").text(playerItem.user_name);
+                        tr.find(".solution-submitted").text(playerItem.submitted ? "Submitted" : "Not submitted");
+
+                        section.find(".players-table").append(tr);
+                    });
+
+                    for (var i = item.players_list.length; i < item.players_at_most; i++) {
+                        section.find(".players-table").append($("<tr><td colspan=\"100%\" class=\"waiting-player\">Waiting for the player</td></tr>"));
+                    }
+
+                    section.find("#edit-solution").on("click", function() {
+                        $("#header-code-editor").find(".back, .play").attr("data-lobby-id", item.lobby_id);
+                        contextManager.changeContext("code_editor", "code.edit?id=" + item.lobby_id);
+                    });
+
+                    section.find("#leave-lobby").on("click", function() {
+                        $.get("/api/method/lobby.leave?id=" + item.lobby_id, function(data, status) {
+                            if (status == "success" && data) {
+                                try {
+                                    var obj = JSON.parse(data);
+                                    if (obj.response.length == 0) {
+                                        alert("Bad response!");
+                                    } else {
+                                        if (obj.response.successful) {
+                                            contextManager.changeContext("list_of_lobbies");
+                                        } else {
+                                            alert("Sorry, we could not remove you from the lobby. Try again later.");
+                                        }
+                                    }
+                                } catch(e) {
+                                    alert(e);
+                                }
+                            } else {
+                                alert("Bad request!");
+                            }
+                        });
+                    });
+
+                    section.find("#get-simulation-result").on("click", function() {
+                        $.get("/api/method/simulation_result.is_ready?id=" + item.lobby_id, function(data, status) {
+                            if (status == "success" && data) {
+                                try {
+                                    var obj = JSON.parse(data);
+                                    if (obj.response.length == 0) {
+                                        alert("Bad response!");
+                                    } else {
+                                        if (obj.response.simulation_finished) {
+                                            contextManager.changeContext("simulation_result", "simulation_result.get?id=" + item.lobby_id);
+                                        } else {
+                                            alert("The simulation hasn't been processed yet. Try again later.");
+                                        }
+                                    }
+                                } catch(e) {
+                                    alert("Exception: " + e);
+                                }
+                            } else {
+                                alert("Bad request!");
+                            }
+                        });
+                    });
+
+                    lobbyContentSection.append(section);
+                }
+            }
+        }
+
+        function insertCodeEditorData(obj) {
+            var skeleton = $("#code-editor-content").find("section.skeleton");
+            if (obj.response.length == 0) {
+                alert("Bad response!");
+            } else {
+                var section = $(skeleton).clone();
+                section.removeClass("skeleton");
+                var code = obj.response.code; // new variable is needed to get exactly a string instead of object (strange, but still)
+
+                $("#code-editor-content").append(section);
+
+                // creating after section appending for CodeMirror's bugs avoiding
+                codeMirror = CodeMirror(section[0], {
+                    mode: "groovy",
+                    value: code,
+                    theme: "darcula",
+                    lineNumbers: true
+                });
+            }
+        }
+
+        function insertSimulationResultData(obj) {
+            if (obj.response.length == 0) {
+                alert("Bad response!");
+            } else {
+                var skeleton = $("#simulation-result-content").find("section.skeleton");
+                var section = $(skeleton).clone();
+                section.removeClass("skeleton");
+
+                var log = obj.response.simulation_result_log; // new variable is needed to get exactly a string instead of object (strange, but still)
+                section.find(".simulation-results-status").text(obj.response.simulation_result_status ? "Successful" : "Failed");
+                section.find(".log-content > textarea").val(log);
+
+                $("#simulation-result-content").append(section);
+            }
+        }
     }
     
     removeCurrentData() {
-        if (this.currentContextName == "login") {
-            $("#login-content").removeClass("active");
-            $("#login-content").find("input.login-form-input").each(function() {
-                $(this).val("");
-            });
+        switch (this.currentContextName) {
+            case "login":
+                $("#login-content").removeClass("active");
+                $("#login-content").find("input.login-form-input").val("");
+                break;
+            case "list_of_lobbies":
+                removeNode("lobbies-table", "tr:not(':first-of-type')");
+                break;
+            case "choose_level":
+                removeNode("levels-table", "tr");
+                break;
+            case "my_solutions":
+                removeNode("solutions-table", "tbody");
+                break;
+            case "levels":
+                removeNode("teacher-levels-table", "tr");
+                break;
+            case "lobby":
+                removeNode("lobby-content", ".lobby-shell");
+                break;
+            case "code_editor":
+                removeNode("code-editor-content", ".code-editor-shell");
+                break;
+            case "simulation_result":
+                removeNode("simulation-result-content", ".simulation-result-shell");
+                break;
         }
         
-        if (this.currentContextName == "list_of_lobbies") {
-            $("#lobbies-table").find("tr:not(':first-of-type'):not('.skeleton')").each(function() {
-                $(this).remove();
-            });
-        }
-
-        if (this.currentContextName == "choose_level") {
-            $("#levels-table").find("tr:not('.skeleton')").each(function() {
-                $(this).remove();
-            });
-        }
-
-        if (this.currentContextName == "my_solutions") {
-            $("#solutions-table").find("tbody:not('.skeleton')").each(function() {
-                $(this).remove();
-            });
-        }
-
-        if (this.currentContextName == "lobby") {
-            $("#lobby-content").find(".lobby-shell:not('.skeleton')").each(function() {
-                $(this).remove();
-            });
-        }
-
-        if (this.currentContextName == "code_editor") {
-            $("#code-editor-content").find(".code-editor-shell:not('.skeleton')").each(function() {
-                $(this).remove();
-            });
-        }
-
-        if (this.currentContextName == "simulation_result") {
-            $("#simulation-result-content").find(".simulation-result-shell:not('.skeleton')").each(function() {
-                $(this).remove();
-            });
+        function removeNode(id, contentUnit) {
+            $("#" + id).find(contentUnit + ":not('.skeleton')").remove();
         }
     }
 }
@@ -510,7 +501,7 @@ function activateListeners(contextManager) {
     });
 
     $("#header-code-editor").find(".back").on("click", function() {
-        contextManager.changeContext("lobby", "/api/method/lobby.return?id=" + $(this).attr("data-lobby-id"));
+        contextManager.changeContext("lobby", "lobby.return?id=" + $(this).attr("data-lobby-id"));
     });
 
     $("#header-code-editor").find(".play").on("click", function() {
@@ -526,9 +517,9 @@ function activateListeners(contextManager) {
                     } else {
                         alert(obj.response.message);
                         if (obj.response.simulated) {
-                            contextManager.changeContext("simulation_result", "/api/method/simulation_result.get?id=" + id);
+                            contextManager.changeContext("simulation_result", "simulation_result.get?id=" + id);
                         } else if (obj.response.compiled) {
-                            contextManager.changeContext("lobby", "/api/method/lobby.return?id=" + id);
+                            contextManager.changeContext("lobby", "lobby.return?id=" + id);
                         } else {
                             alert("Debug: not compiled and not simulated!");
                         }

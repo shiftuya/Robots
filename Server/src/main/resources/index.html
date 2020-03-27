@@ -9,8 +9,9 @@
         <link rel="stylesheet" href="css/header.css">
         <link rel="stylesheet" href="css/login.css">
 		<link rel="stylesheet" href="css/list_of_lobbies.css">
-		<link rel="stylesheet" href="css/choose_level.css">
-		<link rel="stylesheet" href="css/my_solutions.css">
+        <link rel="stylesheet" href="css/choose_level.css">
+        <link rel="stylesheet" href="css/my_solutions.css">
+        <link rel="stylesheet" href="css/levels.css">
 		<link rel="stylesheet" href="css/lobby.css">
 		<link rel="stylesheet" href="css/simulation_results.css">
         <link rel="stylesheet" href="css/code_editor.css">
@@ -30,6 +31,7 @@
                     ["login",             { title: "Login",             headerId: undefined,            contentId: "login-content"             }],
                     ["list_of_lobbies",   { title: "List of Lobbies",   headerId: "header-main",        contentId: "list-of-lobbies-content"   }],
                     ["my_solutions",      { title: "My Solutions",      headerId: "header-main",        contentId: "my-solutions-content"      }],
+                    ["levels",            { title: "Levels",            headerId: "header-main",        contentId: "levels-content"            }],
                     ["options",           { title: "Options",           headerId: "header-main",        contentId: "options-content"           }],
                     ["choose_level",      { title: "Choose a Level",    headerId: "header-main",        contentId: "choose-level-content"      }],
                     ["lobby",             { title: "Lobby",             headerId: "header-main",        contentId: "lobby-content"             }],
@@ -37,7 +39,7 @@
                     ["simulation_result", { title: "Simulation Result", headerId: "header-main",        contentId: "simulation-result-content" }]
                 ]);
                 activateListeners(contextManager);
-                contextManager.changeContext("login");
+                contextManager.changeContext("levels");
                 
                 var contextListeners = new ContextListeners(contextManager);
                 contextListeners.activateAll();
@@ -75,6 +77,9 @@
 					<span class="nav-bar-left">
                         <span id="list_of_lobbies" class="a highlited-on-hover" data-href="list_of_lobbies.html">List of Lobbies</span>
                         <span id="my_solutions" class="a highlited-on-hover" data-href="my_solutions.html">My Solutions</span>
+                        <span id="students" class="a highlited-on-hover" data-href="students.html">Students</span>
+                        <span id="levels" class="a highlited-on-hover" data-href="levels.html">Levels</span>
+                        <span id="simulators" class="a highlited-on-hover" data-href="simulators.html">Simulators</span>
 					</span>
 					<span class="nav-bar-right">
                         <span id="options" class="a highlited-on-hover" data-href="options.html">Options</span>
@@ -185,7 +190,33 @@
                         </tr>
                     </tbody>
 				</table>
-			</section>
+            </section>
+            <section id="levels-content" class="content">
+                <div id="create_level" class="new-lobby">
+                    <div class="new-lobby-icon circle-icon"></div>
+                    <span class="a" data-href="create_level.html">Create New Level</span>
+                </div>
+                <table id="teacher-levels-table" class="levels-table">
+                    <tr class="skeleton">
+                        <td class="level-common-col">
+                            <div class="level-common-shell">
+                                <div class="levels-table-icon"></div>
+                                <span class="level-name"></span>
+                                <span class="level-difficulty"></span>
+                                <span class="level-type"></span>
+                            </div>
+                        </td>
+                        <td class="level-details-col">
+                            <p class="level-details-description"><span class="leader">Description: </span><span class="level-details-text"></span></p>
+                            <p class="level-details-rules"><span class="leader">Rules: </span><span class="level-details-text"></span></p>
+                            <p class="level-details-goal"><span class="leader">Goal: </span><span class="level-details-text"></span></p>
+                        </td>
+                        <td class="level-edit-col">
+                            <span class="a highlited-on-hover" data-href="create_level.html">Edit</span>
+                        </td>
+                    </tr>
+                </table>
+            </section>
             <section id="lobby-content" class="content">
                 <section class="lobby-shell skeleton">
                     <section class="lobby-content">
