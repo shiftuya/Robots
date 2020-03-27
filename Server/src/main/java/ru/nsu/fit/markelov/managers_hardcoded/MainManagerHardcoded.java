@@ -1,12 +1,13 @@
 package ru.nsu.fit.markelov.managers_hardcoded;
 
-import ru.nsu.fit.markelov.interfaces.CompileResult;
-import ru.nsu.fit.markelov.interfaces.Level;
-import ru.nsu.fit.markelov.interfaces.Lobby;
-import ru.nsu.fit.markelov.interfaces.MainManager;
-import ru.nsu.fit.markelov.interfaces.Player;
-import ru.nsu.fit.markelov.interfaces.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.Solution;
+import ru.nsu.fit.markelov.interfaces.client.CompileResult;
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Lobby;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.client.Solution;
+import ru.nsu.fit.markelov.interfaces.client.Playback;
 import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.PlayerHardcoded;
@@ -348,6 +349,11 @@ public class MainManagerHardcoded implements MainManager {
                         "INFO: Msg997\n" +
                         "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
                         "INFO: Msg997";
+            }
+
+            @Override
+            public Playback getPlayback(String username) {
+                return null;
             }
         };
     }

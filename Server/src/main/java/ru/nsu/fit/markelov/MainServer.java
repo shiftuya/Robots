@@ -15,7 +15,7 @@ import ru.nsu.fit.markelov.httphandlers.LogOutHandler;
 import ru.nsu.fit.markelov.httphandlers.SimulationResultGetHandler;
 import ru.nsu.fit.markelov.httphandlers.SimulationResultIsReadyHandler;
 import ru.nsu.fit.markelov.httphandlers.SolutionsGetHandler;
-import ru.nsu.fit.markelov.interfaces.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.mainmanager.MainManager1;
 import ru.nsu.fit.markelov.managers_hardcoded.MainManagerHardcoded;
 
