@@ -80,11 +80,19 @@ function activateListeners(contextManager) {
             url: "/api/method/level.submit",
             type: "POST",
             data: formData,
-            processData: false, // not to process the data
-            contentType: false, // not to set contentType
-            success: function(data) {
-                console.log(data);
-                alert(data);
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(result, status, xhr) {
+                var obj = JSON.parse(result);
+                if (obj.response) {
+                    alert(obj.response);
+                } else if (obj.error) {
+                    alert(obj.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(error);
             }
         });
     });
