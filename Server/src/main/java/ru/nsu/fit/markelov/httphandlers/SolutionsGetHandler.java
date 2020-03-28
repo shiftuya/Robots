@@ -5,15 +5,15 @@ import com.sun.net.httpserver.HttpHandler;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.client.Solution;
 import ru.nsu.fit.markelov.util.CookieParser;
 import ru.nsu.fit.markelov.util.DebugUtil;
 import ru.nsu.fit.markelov.util.JsonPacker;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SolutionsGetHandler implements HttpHandler {
 
@@ -30,23 +30,13 @@ public class SolutionsGetHandler implements HttpHandler {
 
         try (OutputStream oStream = exchange.getResponseBody()) {
             if (cookieUserName != null) {
-                List<Solution> solutions = new ArrayList<>();
-                for (Level level : mainManager.getLevels(false)) {
-                    solutions.add(new Solution() {
-                        @Override
-                        public Level getLevel() {
-                            return level;
-                        }
 
-                        @Override
-                        public List<SimulationResult> getSimulationResults() {
-//                            System.out.println(mainManager.getUserSimulationResultsOnLevel(cookieUserName, level.getId()));
-                            return mainManager.getUserSimulationResultsOnLevel(cookieUserName, level.getId());
-                        }
-                    });
+                Map<Level, List<SimulationResult>> solutions = new HashMap<>();
+                for (Level level : mainManager.getLevels(false)) {
+                    solutions.put(level, mainManager.getUserSimulationResultsOnLevel(cookieUserName, level.getId()));
                 }
+
                 byte[] bytes = JsonPacker.packSolutions(cookieUserName, solutions).getBytes();
-//                byte[] bytes = packSolutions(cookieUserName, mainManager.getSolutions(cookieUserName)).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {

@@ -7,10 +7,10 @@ import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.Player;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.client.Solution;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 public class JsonPacker {
 
@@ -40,19 +40,19 @@ public class JsonPacker {
         return new JSONObject().put("response", jsonLevels).toString();
     }
 
-    public static String packSolutions(String username, List<Solution> solutions) {
+    public static String packSolutions(String username, Map<Level, List<SimulationResult>> solutions) {
         JSONArray jsonSolutions = new JSONArray();
 
-        for (Solution solution : solutions) {
+        for (Level level : solutions.keySet()) {
             JSONArray jsonAttempts = new JSONArray();
 
-            for (SimulationResult attempt : solution.getSimulationResults()) {
+            for (SimulationResult attempt : solutions.get(level)) {
                 JSONObject jsonAttempt = new JSONObject();
 
                 jsonAttempt
-                        .put("attempt_id", attempt.getId())
-                        .put("attempt_date", new SimpleDateFormat(DATE_FORMAT).format(attempt.getDate()))
-                        .put("attempt_result", attempt.isSuccessful(username));
+                    .put("attempt_id", attempt.getId())
+                    .put("attempt_date", new SimpleDateFormat(DATE_FORMAT).format(attempt.getDate()))
+                    .put("attempt_result", attempt.isSuccessful(username));
 
                 jsonAttempts.put(jsonAttempt);
             }
@@ -60,14 +60,14 @@ public class JsonPacker {
             JSONObject jsonSolution = new JSONObject();
 
             jsonSolution
-                    .put("level_icon", solution.getLevel().getIconAddress())
-                    .put("level_name", solution.getLevel().getName())
-                    .put("level_difficulty", solution.getLevel().getDifficulty())
-                    .put("level_type", solution.getLevel().getType())
-                    .put("description", solution.getLevel().getDescription())
-                    .put("rules", solution.getLevel().getRules())
-                    .put("goal", solution.getLevel().getGoal())
-                    .put("attempts", jsonAttempts);
+                .put("level_icon", level.getIconAddress())
+                .put("level_name", level.getName())
+                .put("level_difficulty", level.getDifficulty())
+                .put("level_type", level.getType())
+                .put("description", level.getDescription())
+                .put("rules", level.getRules())
+                .put("goal", level.getGoal())
+                .put("attempts", jsonAttempts);
 
             jsonSolutions.put(jsonSolution);
         }
