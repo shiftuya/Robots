@@ -6,31 +6,31 @@ import java.util.Date;
 
 public interface SimulationResult {
   /**
-   * Returns the unique id of simulation result.
+   * Returns the unique simulation result id.
    *
-   * @return the unique id of simulation result.
+   * @return the unique simulation result id.
    */
   int getId();
 
   /**
    * Returns whether the user robot has reached the goal.
    *
-   * @param username user unique name.
+   * @param username unique user name.
    * @return whether the user robot has reached the goal.
    */
   boolean isSuccessful(String username);
 
   /**
-   * Returns the date of simulation result.
+   * Returns the simulation result date.
    *
-   * @return the date of simulation result.
+   * @return the simulation result date.
    */
   Date getDate();
 
   /**
    * Returns user simulation log.
    *
-   * @param username user unique name.
+   * @param username unique user name.
    * @return user simulation log.
    */
   String getLog(String username);
@@ -38,7 +38,7 @@ public interface SimulationResult {
   /**
    * Get playback for specified user.
    *
-   * @param username user unique name.
+   * @param username unique user name.
    * @return playback of simulation.
    */
   Playback getPlayback(String username);

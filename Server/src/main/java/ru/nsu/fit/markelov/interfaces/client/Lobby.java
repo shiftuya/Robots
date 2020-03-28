@@ -4,23 +4,23 @@ import java.util.List;
 
 public interface Lobby {
     /**
-     * Returns the lobby's unique id.
+     * Returns the unique lobby id.
      *
-     * @return the lobby's unique id.
+     * @return the unique lobby id.
      */
     int getId();
 
     /**
-     * Returns the address of host's avatar icon.
+     * Returns the host avatar address.
      *
-     * @return the address of host's avatar icon.
+     * @return the host avatar address.
      */
     String getHostAvatarAddress();
 
     /**
-     * Returns the host's name.
+     * Returns the host name.
      *
-     * @return the host's name.
+     * @return the host name.
      */
     String getHostName();
 

@@ -2,16 +2,16 @@ package ru.nsu.fit.markelov.interfaces.client;
 
 public interface Player {
     /**
-     * Returns the address of player's avatar icon.
+     * Returns the player avatar address.
      *
-     * @return the address of player's avatar icon.
+     * @return the player avatar address.
      */
     String getAvatarAddress();
 
     /**
-     * Returns the player's unique name.
+     * Returns the unique player name.
      *
-     * @return the player's unique name.
+     * @return the unique player name.
      */
     String getName();
 
