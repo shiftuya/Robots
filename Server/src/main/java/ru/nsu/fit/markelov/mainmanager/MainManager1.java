@@ -60,7 +60,7 @@ public class MainManager1 implements MainManager {
 
   private Map<Integer, SimulationResult> simResultMap;
 
-
+  private Map<Player, Map<Level, List<SimulationResult>>> playerSimResultMap;
 
   private List<Level> levels;
 
@@ -92,6 +92,8 @@ public class MainManager1 implements MainManager {
     idLevelMap = new HashMap<>();
     simulatorManager = new HardcodedSimulatorManager();
 
+    playerSimResultMap = new HashMap<>();
+
     // Hard Code
     addNewLevel(++maxLevelId,
         "/images/labyrinth-icon.png",
@@ -112,6 +114,8 @@ public class MainManager1 implements MainManager {
     Player1 player = new Player1(avatarAddress, name);
     playerSolutionsMap.put(player, new LinkedList<>());
     playerMap.put(name, player);
+
+    playerSimResultMap.put(player, new HashMap<>());
     return player;
   }
 
@@ -273,6 +277,10 @@ public class MainManager1 implements MainManager {
       if (!isSolutionFound) {
         solutionList.add(new Solution1(lobby.getLevel(), result));
       }
+
+      Map<Level, List<SimulationResult>> map = playerSimResultMap.get(player);
+      map.computeIfAbsent(lobby.getLevel(), k -> new LinkedList<>());
+      map.get(lobby.getLevel()).add(result);
     }
 
     lobbies.remove(lobby);
@@ -287,16 +295,10 @@ public class MainManager1 implements MainManager {
     Level level = getLevelById(levelId);
     if (level == null) return null;
 
-    List<Solution> solutionList = playerSolutionsMap.get(player);
-    if (solutionList == null) return new LinkedList<>();
+    Map<Level, List<SimulationResult>> map = playerSimResultMap.get(player);
+    map.computeIfAbsent(level, k -> new LinkedList<>());
 
-    for(Solution solution : solutionList) {
-      if (solution.getLevel() == level) {
-        return solution.getSimulationResults();
-      }
-    }
-
-    return null;
+    return new LinkedList<>(map.get(level));
   }
 
 }
