@@ -70,4 +70,11 @@ public interface Level {
      * @return maximal level's amount of players.
      */
     int getMaxPlayers();
+
+    /**
+     * Returns whether a level is active (available to play).
+     *
+     * @return whether a level is active (available to play).
+     */
+    boolean isActive();
 }

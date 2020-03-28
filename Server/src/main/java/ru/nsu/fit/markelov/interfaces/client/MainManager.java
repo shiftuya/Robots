@@ -33,7 +33,7 @@ public interface MainManager {
      *
      * @return list of created levels.
      */
-    List<Level> getLevels();
+    List<Level> getLevels(boolean onlyActive);
 
     /**
      * Returns list of all the solutions of specified user.
@@ -135,4 +135,21 @@ public interface MainManager {
      * @return         all the user simulation results on specified level.
      */
     List<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId);
+
+    /**
+     * Creates a level and informs whether it is successfully created.
+     *
+     * @param name           level name.
+     * @param difficulty     level difficulty.
+     * @param players        level players.
+     * @param iconResource   level icon.
+     * @param description    level description.
+     * @param rules          level rules.
+     * @param goal           level goal.
+     * @param levelResources level extra resources.
+     * @param code           level code.
+     * @return               whether a level is successfully created.
+     */
+    boolean createLevel(String name, String difficulty, Integer players, Resource iconResource, String description,
+                        String rules, String goal, List<Resource> levelResources, String code);
 }
