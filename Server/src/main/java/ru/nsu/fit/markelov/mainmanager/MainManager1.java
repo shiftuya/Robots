@@ -278,4 +278,25 @@ public class MainManager1 implements MainManager {
     lobbies.remove(lobby);
     idLobbyMap.remove(lobby.getId());
   }
+
+  @Override
+  public List<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId) {
+    Player player = getPlayerByName(username);
+    if (player == null) return null;
+
+    Level level = getLevelById(levelId);
+    if (level == null) return null;
+
+    List<Solution> solutionList = playerSolutionsMap.get(player);
+    if (solutionList == null) return new LinkedList<>();
+
+    for(Solution solution : solutionList) {
+      if (solution.getLevel() == level) {
+        return solution.getSimulationResults();
+      }
+    }
+
+    return null;
+  }
+
 }

@@ -357,4 +357,9 @@ public class MainManagerHardcoded implements MainManager {
             }
         };
     }
+
+    @Override
+    public List<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId) {
+        return null;
+    }
 }
