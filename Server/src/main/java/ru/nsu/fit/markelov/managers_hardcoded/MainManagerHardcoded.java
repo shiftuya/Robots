@@ -5,6 +5,7 @@ import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.Solution;
 import ru.nsu.fit.markelov.interfaces.client.Playback;
@@ -15,6 +16,11 @@ import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SolutionHardcoded;
 import ru.nsu.fit.markelov.util.JsonPacker;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,6 +105,7 @@ public class MainManagerHardcoded implements MainManager {
         level_1.setGoal("Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.");
         level_1.setMinPlayers(1);
         level_1.setMaxPlayers(1);
+        level_1.setActive(true);
         levelManager.addLevel(level_1);
 
         LevelHardcoded level_2 = new LevelHardcoded();
@@ -112,6 +119,7 @@ public class MainManagerHardcoded implements MainManager {
         level_2.setGoal("Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.");
         level_2.setMinPlayers(2);
         level_2.setMaxPlayers(4);
+        level_2.setActive(true);
         levelManager.addLevel(level_2);
 
         LevelHardcoded level_3 = new LevelHardcoded();
@@ -125,6 +133,7 @@ public class MainManagerHardcoded implements MainManager {
         level_3.setGoal("Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.");
         level_3.setMinPlayers(2);
         level_3.setMaxPlayers(2);
+        level_3.setActive(false);
         levelManager.addLevel(level_3);
 
         // ----- lobbies -----
@@ -228,7 +237,7 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public List<Level> getLevels() {
+    public List<Level> getLevels(boolean onlyActive) {
         return levelManager.getLevels();
     }
 
@@ -360,6 +369,25 @@ public class MainManagerHardcoded implements MainManager {
 
     @Override
     public List<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId) {
-        return null;
+        return new ArrayList<>();
+    }
+
+    @Override
+    public boolean createLevel(String name, String difficulty, Integer players, Resource iconResource, String description, String rules, String goal, List<Resource> levelResources, String code) {
+        System.out.println(name);
+        System.out.println(difficulty);
+        System.out.println(players);
+        System.out.println(description);
+        System.out.println(rules);
+        System.out.println(goal);
+        System.out.println(code);
+
+        try {
+            Files.write(Paths.get("src/main/resources/images/icons/" + iconResource.getName()), iconResource.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 }

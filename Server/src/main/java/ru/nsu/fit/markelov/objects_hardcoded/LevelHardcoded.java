@@ -14,6 +14,7 @@ public class LevelHardcoded implements Level {
     private String goal;
     private int minPlayers;
     private int maxPlayers;
+    private boolean isActive;
 
     @Override
     public int getId() {
@@ -103,5 +104,14 @@ public class LevelHardcoded implements Level {
 
     public void setMaxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

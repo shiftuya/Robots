@@ -87,3 +87,9 @@ h1 {
 	-moz-border-radius: 50%;
 	-webkit-border-radius: 50%;
 }
+
+.CodeMirror {
+    clear: both;
+    height: 660px !important;
+    text-align: left;
+}

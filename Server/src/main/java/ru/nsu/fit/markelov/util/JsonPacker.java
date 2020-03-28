@@ -31,7 +31,8 @@ public class JsonPacker {
                     .put("rules", level.getRules())
                     .put("goal", level.getGoal())
                     .put("min_players", level.getMinPlayers())
-                    .put("max_players", level.getMaxPlayers());
+                    .put("max_players", level.getMaxPlayers())
+                    .put("is_active", level.isActive());
 
             jsonLevels.put(jsonLevel);
         }

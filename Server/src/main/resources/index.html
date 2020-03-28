@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="css/choose_level.css">
         <link rel="stylesheet" href="css/my_solutions.css">
         <link rel="stylesheet" href="css/levels.css">
+        <link rel="stylesheet" href="css/level_editor.css">
 		<link rel="stylesheet" href="css/lobby.css">
 		<link rel="stylesheet" href="css/simulation_results.css">
         <link rel="stylesheet" href="css/code_editor.css">
@@ -34,6 +35,7 @@
                     ["list_of_lobbies",   { title: "List of Lobbies",   headerId: "header-main",        contentId: "list-of-lobbies-content"   }],
                     ["my_solutions",      { title: "My Solutions",      headerId: "header-main",        contentId: "my-solutions-content"      }],
                     ["levels",            { title: "Levels",            headerId: "header-main",        contentId: "levels-content"            }],
+                    ["level_editor",      { title: "Level editor",      headerId: "header-main",        contentId: "level-editor-content"      }],
                     ["options",           { title: "Options",           headerId: "header-main",        contentId: "options-content"           }],
                     ["choose_level",      { title: "Choose a Level",    headerId: "header-main",        contentId: "choose-level-content"      }],
                     ["lobby",             { title: "Lobby",             headerId: "header-main",        contentId: "lobby-content"             }],
@@ -41,7 +43,7 @@
                     ["simulation_result", { title: "Simulation Result", headerId: "header-main",        contentId: "simulation-result-content" }]
                 ]);
                 activateListeners(contextManager);
-                contextManager.changeContext("login");
+                contextManager.changeContext("levels");
                 
                 var contextListeners = new ContextListeners(contextManager);
                 contextListeners.activateAll();
@@ -194,9 +196,9 @@
 				</table>
             </section>
             <section id="levels-content" class="content">
-                <div id="create_level" class="new-lobby">
+                <div id="level_editor" class="new-lobby">
                     <div class="new-lobby-icon circle-icon"></div>
-                    <span class="a" data-href="create_level.html">Create New Level</span>
+                    <span class="a" data-href="level_editor.html">Create New Level</span>
                 </div>
                 <table id="teacher-levels-table" class="levels-table">
                     <tr class="skeleton">
@@ -213,11 +215,79 @@
                             <p class="level-details-rules"><span class="leader">Rules: </span><span class="level-details-text"></span></p>
                             <p class="level-details-goal"><span class="leader">Goal: </span><span class="level-details-text"></span></p>
                         </td>
-                        <td class="level-edit-col">
-                            <span class="a highlited-on-hover" data-href="create_level.html">Edit</span>
+                        <td>
+                            <span class="a highlited-on-hover level-publish-a" data-href="level_editor.html">Activate</span>
+                        </td>
+                        <td>
+                            <span class="a highlited-on-hover level-edit-a" data-href="level_editor.html">Edit</span>
+                        </td>
+                        <td>
+                            <span class="a highlited-on-hover level-delete-a" data-href="level_editor.html">Delete</span>
                         </td>
                     </tr>
                 </table>
+            </section>
+            <section id="level-editor-content" class="content level-editor-content">
+                <div id="submit-level" class="submit-level new-lobby">
+                    <div class="new-lobby-icon circle-icon"></div>
+                    <span class="a" data-href="submit-level.html">Submit level</span>
+                </div>
+                <section class="level-editor-shell skeleton">
+                    <form class="level-editor-form">
+                        <input name="bugfix" type="text" style="display: none">
+                        <p>
+                            <span class="level-property">
+                                <label for="name">Name:</label>
+                                <input name="name" type="text" placeholder="Name">
+                            </span>
+                            <span class="level-property">
+                                <label for="difficulty">Difficulty:</label>
+                                <select name="difficulty">
+                                    <option>Easy</option>
+                                    <option>Medium</option>
+                                    <option>Hard</option>
+                                </select>
+                            </span>
+                            <span class="level-property">
+                                <label for="players">Players:</label>
+                                <input name="players" type="number" min="1" max="10" class="level-players-number">
+                            </span>
+                            <span class="level-property">
+                                <label for="icon">Icon:</label>
+                                <input name="icon" type="file">
+                            </span>
+                        </p>
+                        <p class="long-input">
+                            <label for="description">Description:</label>
+                            <br>
+                            <input name="description" type="text" placeholder="Description">
+                        </p>
+                        <p class="long-input">
+                            <label for="rules">Rules:</label>
+                            <br>
+                            <input name="rules" type="text" placeholder="Rules">
+                        </p>
+                        <p class="long-input">
+                            <label for="goal">Goal:</label>
+                            <br>
+                            <input name="goal" type="text" placeholder="Goal">
+                        </p>
+                        <p class="justify-input">
+                            <label for="code">Level code:</label>
+                        </p>
+                        <p>
+                            <span class="a level-code-editor-a open open-icon"></span>
+                            <span class="a level-code-editor-a save save-icon"></span>
+                            <span class="resources">
+                                <label for="resources">Resources:</label>
+                                <input name="resources" type="file" multiple>
+                            </span>
+                        </p>
+                        <div class="level-code-editor-shell">
+                            <textarea name="code" type="text" style="display: none"></textarea>
+                        </div>
+                    </form>
+                </section>
             </section>
             <section id="lobby-content" class="content">
                 <section class="lobby-shell skeleton">

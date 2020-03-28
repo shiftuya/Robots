@@ -11,6 +11,7 @@ import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
 import ru.nsu.fit.markelov.interfaces.client.Solution;
@@ -147,8 +148,8 @@ public class MainManager1 implements MainManager {
   }
 
   @Override
-  public List<Level> getLevels() {
-    return levels;
+  public List<Level> getLevels(boolean onlyActive) {
+    return levels;// onlyActive? ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   }
 
   @Override
@@ -301,4 +302,8 @@ public class MainManager1 implements MainManager {
     return new LinkedList<>(map.get(level));
   }
 
+  @Override
+  public boolean createLevel(String name, String difficulty, Integer players, Resource iconResource, String description, String rules, String goal, List<Resource> levelResources, String code) {
+    return false;
+  }
 }

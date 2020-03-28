@@ -3,6 +3,7 @@ package ru.nsu.fit.markelov;
 import com.sun.net.httpserver.HttpServer;
 import ru.nsu.fit.markelov.httphandlers.CodeEditHandler;
 import ru.nsu.fit.markelov.httphandlers.CommonHttpHandler;
+import ru.nsu.fit.markelov.httphandlers.LevelSubmitHandler;
 import ru.nsu.fit.markelov.httphandlers.LevelsGetHandler;
 import ru.nsu.fit.markelov.httphandlers.LobbiesGetHandler;
 import ru.nsu.fit.markelov.httphandlers.LobbyCreateHandler;
@@ -47,6 +48,8 @@ public class MainServer {
 
         server.createContext("/api/method/simulation_result.is_ready", new SimulationResultIsReadyHandler(mainManager));
         server.createContext("/api/method/simulation_result.get", new SimulationResultGetHandler(mainManager));
+
+        server.createContext("/api/method/level.submit", new LevelSubmitHandler(mainManager));
 
         server.setExecutor(null);
         server.start();

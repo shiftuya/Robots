@@ -70,6 +70,48 @@ function activateListeners(contextManager) {
             }
         });
     });
+    
+    $("#submit-level").on("click", function() {
+        var form = $("#level-editor-content").find(".level-editor-shell:not('.skeleton')").find("form")
+        form.find("textarea[name='code']").val(codeMirror.getValue());
+        
+        var formData = new FormData(form[0]);
+        $.ajax({
+            url: "/api/method/level.submit",
+            type: "POST",
+            data: formData,
+            processData: false, // not to process the data
+            contentType: false, // not to set contentType
+            success: function(data) {
+                console.log(data);
+                alert(data);
+            }
+        });
+    });
+}
+
+function readFiles(files, oArray) {
+    oArray = [];
+    var reader = new FileReader();
+    readFile(0);
+    
+    function readFile(index) {
+        if (index >= files.length) {
+            return;
+        }
+        
+        var file = files[index];
+        reader.readAsBinaryString(file);
+
+        reader.onload = function(e) {
+            oArray[oArray.length] = {
+                name: file.name,
+                data: e.target.result
+            };
+            
+            readFile(index+1)
+        }
+    }
 }
 
 function ajaxGet(ajaxQuery, handleResponseFunction) {

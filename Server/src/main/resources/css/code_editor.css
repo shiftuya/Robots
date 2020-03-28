@@ -49,9 +49,4 @@
 
 .code-editor-shell {
     padding: 0 10px;
-    text-align: left;
-}
-
-.CodeMirror {
-    height: 660px !important;
 }

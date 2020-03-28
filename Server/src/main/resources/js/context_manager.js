@@ -6,10 +6,10 @@ class ContextManager {
     constructor(entriesArray) {
         this.contextMap = new Map(entriesArray);
         this.standardAjaxQueryMap = new Map([
-            ["list_of_lobbies", "lobbies.get"  ],
-            ["choose_level",    "levels.get"   ],
-            ["my_solutions",    "solutions.get"],
-            ["levels",          "levels.get"   ]
+            ["list_of_lobbies", "lobbies.get"                 ],
+            ["choose_level",    "levels.get?only_active=true" ],
+            ["my_solutions",    "solutions.get"               ],
+            ["levels",          "levels.get?only_active=false"]
         ]);
         this.insertFunctionMap = new Map([
             ["list_of_lobbies",   insertListOfLobbiesData   ],
@@ -43,9 +43,7 @@ class ContextManager {
         document.title = title + " | Robotics Game Server";
 
         // скрываем все хедеры, кроме нового
-        $("header:not(#" + dependencies.headerId + ")").each(function() {
-            $(this).removeClass("active");
-        });
+        $("header:not(#" + dependencies.headerId + ")").removeClass("active");
 
         // активируем все ссылки внутри всех хедеров
         let ids = [...this.getContextNames()];
@@ -60,16 +58,14 @@ class ContextManager {
         }
 
         // скрываем все контент-блоки, кроме нового
-        $(".content:not(#" + dependencies.contentId + ")").each(function() {
-            $(this).removeClass("active");
-        });
+        $(".content:not(#" + dependencies.contentId + ")").removeClass("active");
 
         // показываем новый контент-блок
         if (!content.hasClass("active")) {
             content.addClass("active"); // alert("content added");
         }
 
-        this.getAndInsertData(contextName, ajaxQuery || this.getAjaxStandardQuery(contextName));
+        this.getAndInsertData(contextName, ajaxQuery);
         this.removeCurrentData();
 
         this.currentContextName = contextName;
@@ -77,7 +73,13 @@ class ContextManager {
 
     getAndInsertData(contextName, ajaxQuery) {
         var contextManager = this;
-        ajaxGet(ajaxQuery, function(data) {
+        
+        if (contextName == "level_editor") {
+            insertLevelEditorData(contextManager);
+            return;
+        }
+        
+        ajaxGet(ajaxQuery || this.getAjaxStandardQuery(contextName), function(data) {
             contextManager.getInsertFunction(contextName)(JSON.parse(data), contextManager);
         });
     }
@@ -99,6 +101,9 @@ class ContextManager {
                 break;
             case "levels":
                 removeNode("teacher-levels-table", "tr");
+                break;
+            case "level_editor":
+                removeNode("level-editor-content", ".level-editor-shell");
                 break;
             case "lobby":
                 removeNode("lobby-content", ".lobby-shell");
@@ -270,16 +275,55 @@ function insertLevelsData(obj, contextManager) {
             tr.find(".level-details-description").find(".level-details-text").text(item.description);
             tr.find(".level-details-rules").find(".level-details-text").text(item.rules);
             tr.find(".level-details-goal").find(".level-details-text").text(item.goal);
+            if (item.is_active) {
+                tr.find(".level-publish-a").html("[Active]").addClass("inactive-link");
+            }
 
             table.append(tr);
 
-            tr.find(".level-edit-col").find(".a").on("click", function() {
+            if (!item.is_active) {
+                tr.find(".level-publish-a").on("click", function() {
+                    var id = item.level_id;
+                    alert(id);
+
+                });
+            }
+
+            tr.find(".level-edit-a").on("click", function() {
                 var id = item.level_id;
                 alert(id);
-                //                                    contextManager.changeContext("lobby", "lobby.create?id=" + id + "&players_amount=" + players_amount);
+
+            });
+
+            tr.find(".level-delete-a").on("click", function() {
+                var id = item.level_id;
+                alert(id);
+
             });
         });
     }
+}
+
+function insertLevelEditorData(contextManager) {
+    var skeleton = $("#level-editor-content").find("section.skeleton");
+    var section = $(skeleton).clone();
+    section.removeClass("skeleton");
+    
+    section.find(".open").on("click", loadFile);
+
+    section.find(".save").on("click", function() {
+        downloadFile(codeMirror.getValue(), "robotics.groovy", "application/groovy");
+    });
+
+    $("#level-editor-content").append(section);
+
+    // creating after section appending for CodeMirror's bugs avoiding
+    codeMirror = CodeMirror(section.find(".level-code-editor-shell")[0], {
+        mode: "groovy",
+        value: "level code",
+        theme: "darcula",
+        lineNumbers: true
+    });
 }
 
 function insertLobbyData(obj, contextManager) {
