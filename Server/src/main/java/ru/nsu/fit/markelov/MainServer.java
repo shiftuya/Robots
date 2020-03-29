@@ -1,26 +1,26 @@
 package ru.nsu.fit.markelov;
 
 import com.sun.net.httpserver.HttpServer;
-import ru.nsu.fit.markelov.httphandlers.CodeEditHandler;
-import ru.nsu.fit.markelov.httphandlers.CommonHttpHandler;
-import ru.nsu.fit.markelov.httphandlers.LevelSubmitHandler;
-import ru.nsu.fit.markelov.httphandlers.LevelsGetHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbiesGetHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbyCreateHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbyJoinHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbyLeaveHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbyReturnHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbySubmitHandler;
-import ru.nsu.fit.markelov.httphandlers.LogInHandler;
-import ru.nsu.fit.markelov.httphandlers.LogOutHandler;
-import ru.nsu.fit.markelov.httphandlers.SimulationResultGetHandler;
-import ru.nsu.fit.markelov.httphandlers.SimulationResultIsReadyHandler;
-import ru.nsu.fit.markelov.httphandlers.SolutionsGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.CodeEditHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.CommonHttpHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LevelSubmitHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LevelsGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LobbiesGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LobbyCreateHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LobbyJoinHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LobbyLeaveHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LobbyReturnHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LobbySubmitHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LogInHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LogOutHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.SimulationResultGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.SimulationResultIsReadyHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.SolutionsGetHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.mainmanager.MainManager1;
-import ru.nsu.fit.markelov.managers_hardcoded.MainManagerHardcoded;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 
 public class MainServer {
     public static void main(String[] args) throws Exception {
@@ -51,7 +51,7 @@ public class MainServer {
 
         server.createContext("/api/method/level.submit", new LevelSubmitHandler(mainManager));
 
-        server.setExecutor(null);
+        server.setExecutor(Executors.newCachedThreadPool());
         server.start();
     }
 }
