@@ -1,9 +1,6 @@
 package ru.nsu.fit.markelov.interfaces.server;
 
 import ru.nsu.fit.markelov.interfaces.client.Player;
-import ru.nsu.fit.markelov.interfaces.client.Solution;
-
-import java.util.List;
 
 /**
  * This is just a general idea of the interface
@@ -15,9 +12,9 @@ public interface DatabaseHandler {
 
 
   // Important: Solutions include Simulation Results
-  List<Solution> getSolutionsOfPlayer(Player player);
+  //List<Solution> getSolutionsOfPlayer(Player player);
 
-  void saveSolutionForPlayer(Player player, Solution solution);
+  //void saveSolutionForPlayer(Player player, Solution solution);
 
   void removePlayer(Player player);
 }

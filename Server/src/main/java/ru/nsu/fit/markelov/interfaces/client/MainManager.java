@@ -42,7 +42,7 @@ public interface MainManager {
      * @param userName unique user name.
      * @return list of all the solutions of specified user.
      */
-    List<Solution> getSolutions(String userName);
+    //List<Solution> getSolutions(String userName);
 
     /**
      * Places a user in the lobby gotten by specified 'lobbyID'.

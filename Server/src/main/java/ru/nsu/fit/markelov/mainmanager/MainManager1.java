@@ -14,7 +14,7 @@ import ru.nsu.fit.markelov.interfaces.client.Player;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
-import ru.nsu.fit.markelov.interfaces.client.Solution;
+//import ru.nsu.fit.markelov.interfaces.client.Solution;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 public class MainManager1 implements MainManager {
@@ -50,8 +50,6 @@ public class MainManager1 implements MainManager {
 
   private int maxLobbyId, maxLevelId;
 
-  private Map<Player, List<Solution>> playerSolutionsMap;
-
  // private Map<Integer, String> levelIdToFile;
 
   private Map<String, Player1> playerMap;
@@ -85,7 +83,6 @@ public class MainManager1 implements MainManager {
   public MainManager1() {
     lobbies = new ArrayList<>();
     levels = new ArrayList<>();
-    playerSolutionsMap = new HashMap<>();
     playerMap = new HashMap<>();
     maxLevelId = maxLobbyId = 0;
     simResultMap = new HashMap<>();
@@ -113,7 +110,6 @@ public class MainManager1 implements MainManager {
   // For hardcoding purposes
   Player addNewPlayer(String name, String avatarAddress) {
     Player1 player = new Player1(avatarAddress, name);
-    playerSolutionsMap.put(player, new LinkedList<>());
     playerMap.put(name, player);
 
     playerSimResultMap.put(player, new HashMap<>());
@@ -149,13 +145,13 @@ public class MainManager1 implements MainManager {
 
   @Override
   public List<Level> getLevels(boolean onlyActive) {
-    return levels;// onlyActive? ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    return levels;// TODO onlyActive? ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   }
 
-  @Override
+/*  @Override
   public List<Solution> getSolutions(String userName) {
-    return playerSolutionsMap.get(getPlayerByName(userName));
-  }
+    return null;
+  }*/
 
   @Override
   public Lobby joinLobby(String userName, int lobbyID) {
@@ -263,21 +259,6 @@ public class MainManager1 implements MainManager {
     // Filling the Solutions Lists for each player
     for(Player player : lobby.getPlayers()) {
       ((Player1)player).setSubmitted(false);
-
-      List<Solution> solutionList = playerSolutionsMap.get(player);
-
-      boolean isSolutionFound = false;
-
-      for (Solution solution : solutionList) {
-        if (solution.getLevel() == lobby.getLevel()) {
-          ((Solution1) solution).simulationResults.add(0, result);
-          isSolutionFound = true;
-        }
-      }
-
-      if (!isSolutionFound) {
-        solutionList.add(new Solution1(lobby.getLevel(), result));
-      }
 
       Map<Level, List<SimulationResult>> map = playerSimResultMap.get(player);
       map.computeIfAbsent(lobby.getLevel(), k -> new LinkedList<>());

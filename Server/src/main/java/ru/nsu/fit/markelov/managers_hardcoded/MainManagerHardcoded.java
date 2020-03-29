@@ -8,7 +8,6 @@ import ru.nsu.fit.markelov.interfaces.client.Playback;
 import ru.nsu.fit.markelov.interfaces.client.Player;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.client.Solution;
 import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.PlayerHardcoded;
@@ -222,10 +221,10 @@ public class MainManagerHardcoded implements MainManager {
         return levelManager.getLevels();
     }
 
-    @Override
+   /* @Override
     public List<Solution> getSolutions(String userName) {
         return null;
-    }
+    }*/
 
     @Override
     public Lobby joinLobby(String userName, int lobbyID) {
