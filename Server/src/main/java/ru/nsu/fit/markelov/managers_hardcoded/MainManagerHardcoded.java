@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.managers_hardcoded;
 
+import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
+import ru.nsu.fit.markelov.interfaces.client.Code;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
@@ -12,7 +14,6 @@ import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.PlayerHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
-import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -248,7 +249,7 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public CompileResult submit(String username, String code, int lobbyId) {
+    public CompileResult submit(String username, int lobbyId, Code code) {
         return new CompileResult() {
             @Override
             public boolean isSimulated() {

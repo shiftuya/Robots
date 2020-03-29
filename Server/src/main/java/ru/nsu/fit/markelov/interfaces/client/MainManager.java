@@ -37,14 +37,6 @@ public interface MainManager {
     List<Level> getLevels(boolean onlyActive);
 
     /**
-     * Returns list of all the solutions of specified user.
-     *
-     * @param userName unique user name.
-     * @return list of all the solutions of specified user.
-     */
-    //List<Solution> getSolutions(String userName);
-
-    /**
      * Places a user in the lobby gotten by specified 'lobbyID'.
      *
      * A host-user must be in the head of the list.
@@ -94,12 +86,12 @@ public interface MainManager {
      *
      * (A simulation itself starts automatically when all the users successfully submitted the code)
      *
-     * @param lobbyId  unique lobby id.
      * @param username unique user name.
      * @param code     a code to compile.
+     * @param lobbyId  unique lobby id.
      * @return the result of compilation.
      */
-    CompileResult submit(String username, String code, int lobbyId);
+    CompileResult submit(String username, int lobbyId, Code code);
 
     /**
      * Cancels the submission of the lately compiled code and returns the code itself. In case the

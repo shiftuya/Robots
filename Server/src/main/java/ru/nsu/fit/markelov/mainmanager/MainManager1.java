@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import ru.nsu.fit.markelov.interfaces.client.Code;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
@@ -215,12 +216,12 @@ public class MainManager1 implements MainManager {
   }
 
   @Override
-  public CompileResult submit(String username, String code, int lobbyId) {
+  public CompileResult submit(String username, int lobbyId, Code code) {
     // TODO try to compile
 
     Lobby1 lobby = getLobbyById(lobbyId);
     Player1 player = getPlayerByName(username);
-    lobby.addSolution(player, code);
+    lobby.addSolution(player, code.getCode());
 
     boolean isSimulated = lobby.isReady();
 

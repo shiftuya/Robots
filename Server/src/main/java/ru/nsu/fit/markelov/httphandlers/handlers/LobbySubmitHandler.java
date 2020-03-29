@@ -2,6 +2,7 @@ package ru.nsu.fit.markelov.httphandlers.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import ru.nsu.fit.markelov.interfaces.client.Code;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
 import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
@@ -28,11 +29,22 @@ public class LobbySubmitHandler implements HttpHandler {
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
         Integer id = uriParametersParser.getIntegerParameter("id");
 
-        String code = PostRequestBodyParserHARDCODED.getCodeHARDCODED(exchange.getRequestBody());
+        String sourceCode = PostRequestBodyParserHARDCODED.getCodeHARDCODED(exchange.getRequestBody());
+        Code code = new Code() {
+            @Override
+            public String getLanguage() {
+                return "groovy";
+            }
+
+            @Override
+            public String getCode() {
+                return sourceCode;
+            }
+        };
 
         try (OutputStream oStream = exchange.getResponseBody()) {
-            if (cookieUserName != null && code != null && id != null) {
-                byte[] bytes = JsonPacker.packCompileResult(mainManager.submit(cookieUserName, code, id)).getBytes();
+            if (cookieUserName != null && code.getCode() != null && id != null) {
+                byte[] bytes = JsonPacker.packCompileResult(mainManager.submit(cookieUserName, id, code)).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {
