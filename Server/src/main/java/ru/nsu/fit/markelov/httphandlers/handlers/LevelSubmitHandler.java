@@ -72,7 +72,7 @@ public class LevelSubmitHandler implements HttpHandler {
                     mainManager.submitLevel(null, levelInput.getName(), levelInput.getDifficulty(),
                         levelInput.getPlayers(), levelInput.getIconResource(), levelInput.getDescription(),
                         levelInput.getRules(), levelInput.getGoal(), levelInput.getLevelResources(),
-                        levelInput.getCode())
+                        levelInput.getCode(), "groovy")
                 ) {
                     responder.sendResponse("true");
                 } else {

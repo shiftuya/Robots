@@ -145,11 +145,12 @@ public interface MainManager {
      * @param goal           level goal.
      * @param levelResources level extra resources.
      * @param code           level code.
+     * @param language       level language.
      * @return whether a level is successfully submitted.
      */
     boolean submitLevel(Integer levelID, String name, String difficulty, Integer players,
                         Resource iconResource, String description, String rules, String goal,
-                        List<Resource> levelResources, String code);
+                        List<Resource> levelResources, String code, String language);
 
     /**
      * Deletes a level and informs whether it is successfully deleted.
