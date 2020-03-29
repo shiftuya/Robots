@@ -158,4 +158,27 @@ public interface MainManager {
      * @return whether a level is successfully deleted.
      */
     boolean deleteLevel(int levelID);
+
+    /**
+     * Returns a list of simulator units url.
+     *
+     * @return a list of simulator units url.
+     */
+    List<String> getSimulators();
+
+    /**
+     * Adds new simulator unit and informs whether it is successfully added.
+     *
+     * @param url location of new simulator unit.
+     * @return whether simulator unit is successfully added.
+     */
+    boolean addSimulator(String url);
+
+    /**
+     * Deletes new simulator unit and informs whether it is successfully deleted.
+     *
+     * @param url location of simulator unit to remove.
+     * @return whether simulator unit is successfully deleted.
+     */
+    boolean removeSimulator(String url);
 }
