@@ -6,10 +6,10 @@ class ContextManager {
     constructor(entriesArray) {
         this.contextMap = new Map(entriesArray);
         this.standardAjaxQueryMap = new Map([
-            ["list_of_lobbies", "lobbies.get"                 ],
-            ["choose_level",    "levels.get?only_active=true" ],
-            ["my_solutions",    "solutions.get"               ],
-            ["levels",          "levels.get?only_active=false"]
+            ["list_of_lobbies", "lobbies.get"  ],
+            ["choose_level",    "levels.get"   ],
+            ["my_solutions",    "solutions.get"],
+            ["levels",          "levels.get"   ]
         ]);
         this.insertFunctionMap = new Map([
             ["list_of_lobbies",   insertListOfLobbiesData   ],

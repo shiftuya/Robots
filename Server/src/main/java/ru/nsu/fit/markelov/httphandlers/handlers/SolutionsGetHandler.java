@@ -32,7 +32,7 @@ public class SolutionsGetHandler implements HttpHandler {
             if (cookieUserName != null) {
 
                 Map<Level, List<SimulationResult>> solutions = new HashMap<>();
-                for (Level level : mainManager.getLevels(false)) {
+                for (Level level : mainManager.getLevels()) {
                     solutions.put(level, mainManager.getUserSimulationResultsOnLevel(cookieUserName, level.getId()));
                 }
 

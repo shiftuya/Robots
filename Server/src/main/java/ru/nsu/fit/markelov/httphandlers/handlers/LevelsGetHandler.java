@@ -2,9 +2,8 @@ package ru.nsu.fit.markelov.httphandlers.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,12 +18,8 @@ public class LevelsGetHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) {
-        UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
-        String onlyActiveStr = uriParametersParser.getStringParameter("only_active");
-        boolean onlyActive = onlyActiveStr.equals("true");
-
         try (OutputStream oStream = exchange.getResponseBody()) {
-            byte[] bytes = JsonPacker.packLevels(mainManager.getLevels(onlyActive)).getBytes();
+            byte[] bytes = JsonPacker.packLevels(mainManager.getLevels()).getBytes();
             exchange.sendResponseHeaders(200, bytes.length);
             oStream.write(bytes);
         } catch (IOException e) {

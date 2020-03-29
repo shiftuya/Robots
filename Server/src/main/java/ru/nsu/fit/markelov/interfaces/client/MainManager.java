@@ -31,10 +31,9 @@ public interface MainManager {
     /**
      * Returns a list of created levels.
      *
-     * @param onlyActive if true - return only active levels. If false - return all the levels.
      * @return a list of created levels.
      */
-    List<Level> getLevels(boolean onlyActive);
+    List<Level> getLevels();
 
     /**
      * Places a user in the lobby gotten by specified 'lobbyID'.

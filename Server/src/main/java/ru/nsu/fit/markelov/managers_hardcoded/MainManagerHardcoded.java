@@ -218,7 +218,7 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public List<Level> getLevels(boolean onlyActive) {
+    public List<Level> getLevels() {
         return levelManager.getLevels();
     }
 

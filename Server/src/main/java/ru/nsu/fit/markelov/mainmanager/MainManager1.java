@@ -143,8 +143,8 @@ public class MainManager1 implements MainManager {
   }
 
   @Override
-  public List<Level> getLevels(boolean onlyActive) {
-    return levels;// TODO onlyActive? ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  public List<Level> getLevels() {
+    return levels;
   }
 
 /*  @Override
