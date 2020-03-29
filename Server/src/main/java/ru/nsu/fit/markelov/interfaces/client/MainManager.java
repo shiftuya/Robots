@@ -134,10 +134,19 @@ public interface MainManager {
      * Id levelID is null - a new level must be created;
      *          otherwise - an existing level (gotten by this id) must be edited.
      *
+     * If level is being created:
+     *     - if iconResource is null, default icon must be used.
+     *
+     * If level is being edited:
+     *     - if iconResource is null, previously saved icon must be used.
+     *     - if levelResources is null, previously saved level resources must be used.
+     *     - if levelResources is not null, new resources must be added to previously saved ones.
+     *
      * @param levelID        unique level id.
      * @param name           level name.
      * @param difficulty     level difficulty.
-     * @param players        level players.
+     * @param minPlayers     level minimal players count.
+     * @param maxPlayers     level maximal players count.
      * @param iconResource   level icon.
      * @param description    level description.
      * @param rules          level rules.
@@ -147,9 +156,9 @@ public interface MainManager {
      * @param language       level language.
      * @return whether a level is successfully submitted.
      */
-    boolean submitLevel(Integer levelID, String name, String difficulty, Integer players,
-                        Resource iconResource, String description, String rules, String goal,
-                        List<Resource> levelResources, String code, String language);
+    boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
+                        Integer maxPlayers, Resource iconResource, String description, String rules,
+                        String goal, List<Resource> levelResources, String code, String language);
 
     /**
      * Deletes a level and informs whether it is successfully deleted.

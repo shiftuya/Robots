@@ -109,4 +109,14 @@ public class LevelHardcoded implements Level {
     public void setActive(boolean active) {
         isActive = active;
     }
+
+    @Override
+    public String getCode() {
+        return "null code";
+    }
+
+    @Override
+    public String getLanguage() {
+        return "groovy";
+    }
 }

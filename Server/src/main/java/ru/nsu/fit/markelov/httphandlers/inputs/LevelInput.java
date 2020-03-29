@@ -10,7 +10,8 @@ public class LevelInput {
 
     private String name;
     private String difficulty;
-    private String players;
+    private String minPlayers;
+    private String maxPlayers;
     private LevelResource iconResource;
     private String description;
     private String rules;
@@ -34,13 +35,22 @@ public class LevelInput {
             error += "Difficulty field cannot be empty.\n";
         }
 
-        if (players.isEmpty()) {
+        if (minPlayers.isEmpty()) {
             error += "Players field cannot be empty.\n";
         }
 
         try {
-            int players = getPlayers();
-            if (players < 1 || players > 10) {
+            int minPlayers = getMinPlayers();
+            if (minPlayers < 1 || minPlayers > 10) {
+                error += "Players must be from 1 to 10.\n";
+            }
+        } catch (NumberFormatException e) {
+            error += "Players must be a number.\n";
+        }
+
+        try {
+            int maxPlayers = getMaxPlayers();
+            if (maxPlayers < 1 || maxPlayers > 10) {
                 error += "Players must be from 1 to 10.\n";
             }
         } catch (NumberFormatException e) {
@@ -82,12 +92,20 @@ public class LevelInput {
         this.difficulty = difficulty;
     }
 
-    public Integer getPlayers() {
-        return Integer.parseInt(players);
+    public int getMinPlayers() {
+        return Integer.parseInt(minPlayers);
     }
 
-    public void setPlayers(String players) {
-        this.players = players;
+    public void setMinPlayers(String minPlayers) {
+        this.minPlayers = minPlayers;
+    }
+
+    public int getMaxPlayers() {
+        return Integer.parseInt(maxPlayers);
+    }
+
+    public void setMaxPlayers(String maxPlayers) {
+        this.maxPlayers = maxPlayers;
     }
 
     public LevelResource getIconResource() {

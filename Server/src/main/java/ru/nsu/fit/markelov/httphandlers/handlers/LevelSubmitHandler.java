@@ -52,7 +52,8 @@ public class LevelSubmitHandler implements HttpHandler {
 
         levelInput.setName(textParametersMap.get("name").value);
         levelInput.setDifficulty(textParametersMap.get("difficulty").value);
-        levelInput.setPlayers(textParametersMap.get("players").value);
+        levelInput.setMinPlayers(textParametersMap.get("min_players").value);
+        levelInput.setMaxPlayers(textParametersMap.get("max_players").value);
         levelInput.setDescription(textParametersMap.get("description").value);
         levelInput.setRules(textParametersMap.get("rules").value);
         levelInput.setGoal(textParametersMap.get("goal").value);
@@ -70,9 +71,9 @@ public class LevelSubmitHandler implements HttpHandler {
             try {
                 if (
                     mainManager.submitLevel(null, levelInput.getName(), levelInput.getDifficulty(),
-                        levelInput.getPlayers(), levelInput.getIconResource(), levelInput.getDescription(),
-                        levelInput.getRules(), levelInput.getGoal(), levelInput.getLevelResources(),
-                        levelInput.getCode(), "groovy")
+                        levelInput.getMinPlayers(), levelInput.getMaxPlayers(), levelInput.getIconResource(),
+                        levelInput.getDescription(), levelInput.getRules(), levelInput.getGoal(),
+                        levelInput.getLevelResources(), levelInput.getCode(), "groovy")
                 ) {
                     responder.sendResponse("true");
                 } else {

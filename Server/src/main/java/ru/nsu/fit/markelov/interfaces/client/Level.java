@@ -70,4 +70,18 @@ public interface Level {
      * @return maximal level amount of players.
      */
     int getMaxPlayers();
+
+    /**
+     * Returns level code.
+     *
+     * @return level code.
+     */
+    String getCode();
+
+    /**
+     * Returns level language.
+     *
+     * @return level language.
+     */
+    String getLanguage();
 }

@@ -84,4 +84,14 @@ public class Level1 implements Level {
   public int getMaxPlayers() {
     return maxPlayers;
   }
+
+  @Override
+  public String getCode() {
+    return null;
+  }
+
+  @Override
+  public String getLanguage() {
+    return null;
+  }
 }
