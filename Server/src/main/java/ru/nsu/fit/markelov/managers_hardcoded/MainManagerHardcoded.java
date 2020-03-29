@@ -1,6 +1,7 @@
 package ru.nsu.fit.markelov.managers_hardcoded;
 
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
@@ -362,6 +363,10 @@ public class MainManagerHardcoded implements MainManager {
         System.out.println(goal);
         System.out.println(code);
 
+        if (true) {
+            throw new ProcessingException("qwerty");
+        }
+
         try {
             Files.write(Paths.get("src/main/resources/images/icons/" + iconResource.getName()), iconResource.getBytes());
         } catch (IOException e) {
@@ -369,5 +374,10 @@ public class MainManagerHardcoded implements MainManager {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean deleteLevel(int levelID) {
+        return false;
     }
 }

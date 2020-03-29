@@ -3,6 +3,7 @@ package ru.nsu.fit.markelov.httphandlers.handlers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
 import ru.nsu.fit.markelov.httphandlers.inputs.LevelInput;
@@ -66,15 +67,20 @@ public class LevelSubmitHandler implements HttpHandler {
                 return;
             }
 
-            if (
-                mainManager.submitLevel(null, levelInput.getName(), levelInput.getDifficulty(),
-                    levelInput.getPlayers(), levelInput.getIconResource(), levelInput.getDescription(),
-                    levelInput.getRules(), levelInput.getGoal(), levelInput.getLevelResources(),
-                    levelInput.getCode())
-            ) {
-                responder.sendResponse("true");
-            } else {
-                responder.sendResponse("false");
+            try {
+                if (
+                    mainManager.submitLevel(null, levelInput.getName(), levelInput.getDifficulty(),
+                        levelInput.getPlayers(), levelInput.getIconResource(), levelInput.getDescription(),
+                        levelInput.getRules(), levelInput.getGoal(), levelInput.getLevelResources(),
+                        levelInput.getCode())
+                ) {
+                    responder.sendResponse("true");
+                } else {
+                    responder.sendResponse("false");
+                }
+            } catch (ProcessingException e) {
+                System.out.println("ProcessingException");
+                responder.sendError(e.getMessage());
             }
         } catch (IOException e) {
             System.out.println(e.toString());

@@ -286,4 +286,9 @@ public class MainManager1 implements MainManager {
   public boolean submitLevel(Integer levelID, String name, String difficulty, Integer players, Resource iconResource, String description, String rules, String goal, List<Resource> levelResources, String code) {
     return false; // TODO
   }
+
+  @Override
+  public boolean deleteLevel(int levelID) {
+    return false; // TODO
+  }
 }

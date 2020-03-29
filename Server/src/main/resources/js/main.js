@@ -123,10 +123,10 @@ function readFiles(files, oArray) {
 }
 
 function ajaxGet(ajaxQuery, handleResponseFunction) {
-    $.get("/api/method/" + ajaxQuery, function(data, status) {
-        if (status == "success" && data) {
+    $.get("/api/method/" + ajaxQuery, function(result, status) {
+        if (status == "success" && result) {
             try {
-                handleResponseFunction(data);
+                handleResponseFunction(result);
             } catch(e) {
                 alert(e);
             }
