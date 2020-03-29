@@ -1,12 +1,12 @@
-package ru.nsu.fit.markelov.httphandlers;
+package ru.nsu.fit.markelov.httphandlers.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.json.JSONObject;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.util.FormDataHandler;
-import ru.nsu.fit.markelov.util.LevelInput;
-import ru.nsu.fit.markelov.util.LevelResource;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
+import ru.nsu.fit.markelov.httphandlers.inputs.LevelInput;
+import ru.nsu.fit.markelov.httphandlers.util.LevelResource;
 
 import java.io.IOException;
 import java.io.InputStream;

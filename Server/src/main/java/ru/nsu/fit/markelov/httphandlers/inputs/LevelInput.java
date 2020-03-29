@@ -1,6 +1,7 @@
-package ru.nsu.fit.markelov.util;
+package ru.nsu.fit.markelov.httphandlers.inputs;
 
 import ru.nsu.fit.markelov.interfaces.client.Resource;
+import ru.nsu.fit.markelov.httphandlers.util.LevelResource;
 
 import java.util.ArrayList;
 import java.util.List;

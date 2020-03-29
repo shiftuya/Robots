@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.util;
+package ru.nsu.fit.markelov.httphandlers.util;
 
 public class DebugUtil {
 

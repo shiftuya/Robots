@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.util;
+package ru.nsu.fit.markelov.httphandlers.util.parsers;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;

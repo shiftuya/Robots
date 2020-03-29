@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.util;
+package ru.nsu.fit.markelov.httphandlers.util.parsers;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * https://gist.github.com/JensWalter/0f19780d131d903879a2#file-formdatahandler-java
+ *
+ * @author JensWalter
+ */
 public abstract class FormDataHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {

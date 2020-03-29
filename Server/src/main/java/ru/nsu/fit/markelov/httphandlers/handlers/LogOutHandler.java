@@ -1,11 +1,11 @@
-package ru.nsu.fit.markelov.httphandlers;
+package ru.nsu.fit.markelov.httphandlers.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.util.CookieParser;
-import ru.nsu.fit.markelov.util.DebugUtil;
-import ru.nsu.fit.markelov.util.JsonPacker;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
+import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
+import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 
 import java.io.IOException;
 import java.io.OutputStream;

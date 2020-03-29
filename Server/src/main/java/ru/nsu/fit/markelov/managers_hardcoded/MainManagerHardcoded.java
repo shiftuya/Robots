@@ -13,7 +13,7 @@ import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.PlayerHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
-import ru.nsu.fit.markelov.util.JsonPacker;
+import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 
 import java.io.IOException;
 import java.nio.file.Files;

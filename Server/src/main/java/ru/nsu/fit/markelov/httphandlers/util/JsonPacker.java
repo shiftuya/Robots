@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.util;
+package ru.nsu.fit.markelov.httphandlers.util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

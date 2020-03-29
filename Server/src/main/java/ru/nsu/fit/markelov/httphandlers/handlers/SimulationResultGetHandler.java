@@ -1,23 +1,21 @@
-package ru.nsu.fit.markelov.httphandlers;
+package ru.nsu.fit.markelov.httphandlers.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.json.JSONObject;
-import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.util.CookieParser;
-import ru.nsu.fit.markelov.util.DebugUtil;
-import ru.nsu.fit.markelov.util.JsonPacker;
-import ru.nsu.fit.markelov.util.UriParametersParser;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
+import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
+import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class LobbyJoinHandler implements HttpHandler {
+public class SimulationResultGetHandler implements HttpHandler {
 
     private MainManager mainManager;
 
-    public LobbyJoinHandler(MainManager mainManager) {
+    public SimulationResultGetHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
@@ -30,17 +28,8 @@ public class LobbyJoinHandler implements HttpHandler {
         Integer id = uriParametersParser.getIntegerParameter("id");
 
         try (OutputStream oStream = exchange.getResponseBody()) {
-            String jsonStr;
             if (cookieUserName != null && id != null) {
-                Lobby lobby = mainManager.joinLobby(cookieUserName, id);
-
-                if (lobby == null) {
-                    jsonStr = new JSONObject().put("response", JSONObject.NULL).toString();
-                } else {
-                    jsonStr = JsonPacker.packLobby(lobby);
-                }
-
-                byte[] bytes = jsonStr.getBytes();
+                byte[] bytes = JsonPacker.packSimulationResult(mainManager.getSimulationResult(cookieUserName, id), cookieUserName).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {
