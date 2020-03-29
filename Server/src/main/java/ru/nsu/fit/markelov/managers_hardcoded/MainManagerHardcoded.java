@@ -4,22 +4,19 @@ import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.Playback;
 import ru.nsu.fit.markelov.interfaces.client.Player;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.Solution;
-import ru.nsu.fit.markelov.interfaces.client.Playback;
 import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.PlayerHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
-import ru.nsu.fit.markelov.objects_hardcoded.SolutionHardcoded;
 import ru.nsu.fit.markelov.util.JsonPacker;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,12 +60,10 @@ public class MainManagerHardcoded implements MainManager {
 
     private LobbyManagerHardcoded lobbyManager;
     private LevelManagerHardcoded levelManager;
-    private UserManagerHardcoded userManager;
 
     public MainManagerHardcoded() {
         lobbyManager = new LobbyManagerHardcoded();
         levelManager = new LevelManagerHardcoded();
-        userManager = new UserManagerHardcoded();
 
         // ----- players -----
 
@@ -212,20 +207,6 @@ public class MainManagerHardcoded implements MainManager {
             attempts_for_solution_2.add(attempt_1_for_solution_2);
             attempts_for_solution_2.add(attempt_2_for_solution_2);
             attempts_for_solution_2.add(attempt_3_for_solution_2);
-            // -----------------------------------------------------------------------------------------
-            SolutionHardcoded solution_1 = new SolutionHardcoded();
-            solution_1.setLevel(level_1);
-            solution_1.setAttempts(attempts_for_solution_1);
-            userManager.addSolution(solution_1);
-
-            SolutionHardcoded solution_2 = new SolutionHardcoded();
-            solution_2.setLevel(level_2);
-            solution_2.setAttempts(attempts_for_solution_2);
-            userManager.addSolution(solution_2);
-
-            SolutionHardcoded solution_3 = new SolutionHardcoded();
-            solution_3.setLevel(level_3);
-            userManager.addSolution(solution_3);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
         }
@@ -243,7 +224,7 @@ public class MainManagerHardcoded implements MainManager {
 
     @Override
     public List<Solution> getSolutions(String userName) {
-        return userManager.getSolutions(userName);
+        return null;
     }
 
     @Override
