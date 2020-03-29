@@ -1,7 +1,6 @@
 package ru.nsu.fit.markelov.managers_hardcoded;
 
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
-import ru.nsu.fit.markelov.interfaces.client.Code;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
@@ -249,7 +248,7 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public CompileResult submit(String username, int lobbyId, Code code) {
+    public CompileResult submit(String username, int lobbyId, String code) {
         return new CompileResult() {
             @Override
             public boolean isSimulated() {

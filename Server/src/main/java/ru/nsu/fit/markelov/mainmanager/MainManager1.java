@@ -1,12 +1,5 @@
 package ru.nsu.fit.markelov.mainmanager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import ru.nsu.fit.markelov.interfaces.client.Code;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
@@ -15,8 +8,13 @@ import ru.nsu.fit.markelov.interfaces.client.Player;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
-//import ru.nsu.fit.markelov.interfaces.client.Solution;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class MainManager1 implements MainManager {
   @Override
@@ -216,12 +214,12 @@ public class MainManager1 implements MainManager {
   }
 
   @Override
-  public CompileResult submit(String username, int lobbyId, Code code) {
+  public CompileResult submit(String username, int lobbyId, String code) {
     // TODO try to compile
 
     Lobby1 lobby = getLobbyById(lobbyId);
     Player1 player = getPlayerByName(username);
-    lobby.addSolution(player, code.getCode());
+    lobby.addSolution(player, code);
 
     boolean isSimulated = lobby.isReady();
 

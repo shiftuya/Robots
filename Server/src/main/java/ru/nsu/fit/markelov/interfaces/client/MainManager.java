@@ -91,7 +91,7 @@ public interface MainManager {
      * @param lobbyId  unique lobby id.
      * @return the result of compilation.
      */
-    CompileResult submit(String username, int lobbyId, Code code);
+    CompileResult submit(String username, int lobbyId, String code);
 
     /**
      * Cancels the submission of the lately compiled code and returns the code itself. In case the
