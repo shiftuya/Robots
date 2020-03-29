@@ -308,4 +308,9 @@ public class MainManager1 implements MainManager {
   public boolean removeSimulator(String url) {
     return false;
   }
+
+  @Override
+  public Level getLevel(int levelID) {
+    return null;
+  }
 }

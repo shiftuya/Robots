@@ -22,23 +22,40 @@ public class JsonPacker {
         for (Level level : levels) {
             JSONObject jsonLevel = new JSONObject();
             jsonLevel
-                    .put("level_id", level.getId())
-                    .put("level_icon", level.getIconAddress())
-                    .put("level_name", level.getName())
-                    .put("level_difficulty", level.getDifficulty())
-                    .put("level_type", level.getType())
-                    .put("description", level.getDescription())
-                    .put("rules", level.getRules())
-                    .put("goal", level.getGoal())
-                    .put("min_players", level.getMinPlayers())
-                    .put("max_players", level.getMaxPlayers())
-                    .put("code", level.getCode())
-                    .put("language", level.getLanguage());
+                .put("level_id", level.getId())
+                .put("level_icon", level.getIconAddress())
+                .put("level_name", level.getName())
+                .put("level_difficulty", level.getDifficulty())
+                .put("level_type", level.getType())
+                .put("description", level.getDescription())
+                .put("rules", level.getRules())
+                .put("goal", level.getGoal())
+                .put("min_players", level.getMinPlayers())
+                .put("max_players", level.getMaxPlayers());
 
             jsonLevels.put(jsonLevel);
         }
 
         return new JSONObject().put("response", jsonLevels).toString();
+    }
+
+    // у этого левела другая схема json - его нельзя использовать в packLevels
+    public static String packLevel(Level level) {
+        JSONObject jsonLevel = new JSONObject();
+        jsonLevel
+            .put("level_id", level.getId())
+            .put("level_name", level.getName())
+            .put("level_difficulty", level.getDifficulty())
+            .put("level_type", level.getType())
+            .put("description", level.getDescription())
+            .put("rules", level.getRules())
+            .put("goal", level.getGoal())
+            .put("min_players", level.getMinPlayers())
+            .put("max_players", level.getMaxPlayers())
+            .put("code", level.getCode())
+            .put("language", level.getLanguage());
+
+        return new JSONObject().put("response", jsonLevel).toString();
     }
 
     public static String packSolutions(String username, Map<Level, List<SimulationResult>> solutions) {

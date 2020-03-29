@@ -357,6 +357,11 @@ public class MainManagerHardcoded implements MainManager {
     public boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
                                Integer maxPlayers, Resource iconResource, String description, String rules,
                                String goal, List<Resource> levelResources, String code, String language) {
+        if (levelID == null) {
+            System.out.println("null");
+        } else {
+            System.out.println("NOT null");
+        }
         System.out.println(name);
         System.out.println(difficulty);
         System.out.println(minPlayers);
@@ -366,8 +371,21 @@ public class MainManagerHardcoded implements MainManager {
         System.out.println(goal);
         System.out.println(code);
 
-        if (true) {
+        if (false) {
             throw new ProcessingException("qwerty");
+        }
+
+        if (levelResources == null) {
+            System.out.println("null");
+        } else {
+            System.out.println("NOT null");
+        }
+
+        if (iconResource == null) {
+            System.out.println("null");
+            return true;
+        } else {
+            System.out.println("NOT null");
         }
 
         try {
@@ -397,5 +415,10 @@ public class MainManagerHardcoded implements MainManager {
     @Override
     public boolean removeSimulator(String url) {
         return false;
+    }
+
+    @Override
+    public Level getLevel(int levelID) {
+        return levelManager.getLevels().get(levelID - 1);
     }
 }

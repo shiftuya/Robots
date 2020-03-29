@@ -37,7 +37,7 @@ public class LevelSubmitHandler implements HttpHandler {
                         if (part.type == PartType.FILE) {
                             if (part.name.equals("icon")) {
                                 levelInput.getIconResource().setName(part.filename).setBytes(part.bytes);
-                            } else {
+                            } else if (part.name.equals("resources")) {
                                 levelInput.getLevelResources().add(new LevelResource().setName(part.filename).setBytes(part.bytes));
                             }
                         } else {
@@ -50,6 +50,9 @@ public class LevelSubmitHandler implements HttpHandler {
             e.printStackTrace();
         }
 
+        if (textParametersMap.containsKey("id")) {
+            levelInput.setId(textParametersMap.get("id").value);
+        }
         levelInput.setName(textParametersMap.get("name").value);
         levelInput.setDifficulty(textParametersMap.get("difficulty").value);
         levelInput.setMinPlayers(textParametersMap.get("min_players").value);
@@ -58,6 +61,8 @@ public class LevelSubmitHandler implements HttpHandler {
         levelInput.setRules(textParametersMap.get("rules").value);
         levelInput.setGoal(textParametersMap.get("goal").value);
         levelInput.setCode(textParametersMap.get("code").value);
+
+        levelInput.prepare();
 
         try (OutputStream oStream = exchange.getResponseBody()) {
             Responder responder = new Responder(exchange, oStream);
@@ -69,16 +74,27 @@ public class LevelSubmitHandler implements HttpHandler {
             }
 
             try {
-                if (
-                    mainManager.submitLevel(null, levelInput.getName(), levelInput.getDifficulty(),
-                        levelInput.getMinPlayers(), levelInput.getMaxPlayers(), levelInput.getIconResource(),
-                        levelInput.getDescription(), levelInput.getRules(), levelInput.getGoal(),
-                        levelInput.getLevelResources(), levelInput.getCode(), "groovy")
-                ) {
+                if (mainManager.submitLevel(
+                        levelInput.getId(),
+                        levelInput.getName(),
+                        levelInput.getDifficulty(),
+                        levelInput.getMinPlayers(),
+                        levelInput.getMaxPlayers(),
+                        levelInput.getIconResource(),
+                        levelInput.getDescription(),
+                        levelInput.getRules(),
+                        levelInput.getGoal(),
+                        levelInput.getLevelResources(),
+                        levelInput.getCode(),
+                        "groovy"
+                    )) {
                     responder.sendResponse("true");
                 } else {
                     responder.sendResponse("false");
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("level_id is not a number");
+                responder.sendError("level_id is not a number");
             } catch (ProcessingException e) {
                 System.out.println("ProcessingException");
                 responder.sendError(e.getMessage());

@@ -8,20 +8,33 @@ import java.util.List;
 
 public class LevelInput {
 
+    private String id;
     private String name;
     private String difficulty;
     private String minPlayers;
     private String maxPlayers;
-    private LevelResource iconResource;
     private String description;
     private String rules;
     private String goal;
-    private List<Resource> levelResources;
     private String code;
+
+    private LevelResource iconResource;
+    private List<Resource> levelResources;
 
     public LevelInput() {
         iconResource = new LevelResource();
         levelResources = new ArrayList<>();
+    }
+
+    public void prepare() {
+        if (iconResource.getBytes().length == 0) {
+            iconResource = null;
+        }
+
+        levelResources.removeIf(resource -> resource.getBytes().length == 0);
+        if (levelResources.isEmpty()) {
+            levelResources = null;
+        }
     }
 
     public String getError() {
@@ -74,6 +87,14 @@ public class LevelInput {
         }
 
         return error;
+    }
+
+    public Integer getId() {
+        return id != null ? Integer.parseInt(id) : null;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

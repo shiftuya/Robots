@@ -9,13 +9,15 @@ class ContextManager {
             ["list_of_lobbies", "lobbies.get"  ],
             ["choose_level",    "levels.get"   ],
             ["my_solutions",    "solutions.get"],
-            ["levels",          "levels.get"   ]
+            ["levels",          "levels.get"   ],
+            ["level_editor",    ""             ]
         ]);
         this.insertFunctionMap = new Map([
             ["list_of_lobbies",   insertListOfLobbiesData   ],
             ["choose_level",      insertChooseLevelData     ],
             ["my_solutions",      insertSolutionsData       ],
             ["levels",            insertLevelsData          ],
+            ["level_editor",      insertLevelEditorData     ],
             ["lobby",             insertLobbyData           ],
             ["code_editor",       insertCodeEditorData      ],
             ["simulation_result", insertSimulationResultData]
@@ -74,13 +76,8 @@ class ContextManager {
     getAndInsertData(contextName, ajaxQuery) {
         var contextManager = this;
         
-        if (contextName == "level_editor") {
-            insertLevelEditorData(contextManager);
-            return;
-        }
-        
-        ajaxGet(ajaxQuery || this.getAjaxStandardQuery(contextName), function(data) {
-            contextManager.getInsertFunction(contextName)(JSON.parse(data), contextManager);
+        ajaxGet(ajaxQuery || this.getAjaxStandardQuery(contextName), function(result) {
+            contextManager.getInsertFunction(contextName)(result == undefined ? undefined : JSON.parse(result), contextManager);
         });
     }
 
@@ -279,9 +276,7 @@ function insertLevelsData(obj, contextManager) {
             table.append(tr);
 
             tr.find(".level-edit-a").on("click", function() {
-                var id = item.level_id;
-                alert(id);
-
+                contextManager.changeContext("level_editor", "level.get?id=" + item.level_id);
             });
 
             tr.find(".level-delete-a").on("click", function() {
@@ -293,10 +288,25 @@ function insertLevelsData(obj, contextManager) {
     }
 }
 
-function insertLevelEditorData(contextManager) {
+function insertLevelEditorData(obj, contextManager) {
     var skeleton = $("#level-editor-content").find("section.skeleton");
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
+    
+    var code = "level code";
+    if (obj != undefined) {
+        var item = obj.response;
+        
+        section.find("form.level-editor-form").append('<input name="id" type="text" value="' + item.level_id + '" style="display: none">');
+        section.find("input[name=name]").attr("value", item.level_name);
+        section.find("select[name=difficulty]").val(item.level_difficulty);
+        section.find("input[name=min_players]").attr("value", item.min_players);
+        section.find("input[name=max_players]").attr("value", item.max_players);
+        section.find("input[name=description]").attr("value", item.description);
+        section.find("input[name=rules]").attr("value", item.rules);
+        section.find("input[name=goal]").attr("value", item.goal);
+        code = item.code;
+    }
     
     section.find(".open").on("click", loadFile);
 
@@ -309,7 +319,7 @@ function insertLevelEditorData(contextManager) {
     // creating after section appending for CodeMirror's bugs avoiding
     codeMirror = CodeMirror(section.find(".level-code-editor-shell")[0], {
         mode: "groovy",
-        value: "level code",
+        value: code,
         theme: "darcula",
         lineNumbers: true
     });
