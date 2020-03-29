@@ -161,6 +161,14 @@ public interface MainManager {
                         String goal, List<Resource> levelResources, String code, String language);
 
     /**
+     * Returns a level gotten by specified 'levelID'.
+     *
+     * @param levelID unique level id.
+     * @return a level.
+     */
+    Level getLevel(int levelID);
+
+    /**
      * Deletes a level and informs whether it is successfully deleted.
      *
      * @param levelID unique level id.
