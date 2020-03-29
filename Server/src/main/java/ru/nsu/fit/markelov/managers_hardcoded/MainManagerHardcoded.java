@@ -353,7 +353,7 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public boolean createLevel(String name, String difficulty, Integer players, Resource iconResource, String description, String rules, String goal, List<Resource> levelResources, String code) {
+    public boolean submitLevel(Integer levelID, String name, String difficulty, Integer players, Resource iconResource, String description, String rules, String goal, List<Resource> levelResources, String code) {
         System.out.println(name);
         System.out.println(difficulty);
         System.out.println(players);

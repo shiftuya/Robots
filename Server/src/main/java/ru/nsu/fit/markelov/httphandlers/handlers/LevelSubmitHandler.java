@@ -2,7 +2,6 @@ package ru.nsu.fit.markelov.httphandlers.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.json.JSONObject;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
@@ -68,7 +67,7 @@ public class LevelSubmitHandler implements HttpHandler {
             }
 
             if (
-                mainManager.createLevel(levelInput.getName(), levelInput.getDifficulty(),
+                mainManager.submitLevel(null, levelInput.getName(), levelInput.getDifficulty(),
                     levelInput.getPlayers(), levelInput.getIconResource(), levelInput.getDescription(),
                     levelInput.getRules(), levelInput.getGoal(), levelInput.getLevelResources(),
                     levelInput.getCode())

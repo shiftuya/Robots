@@ -283,7 +283,7 @@ public class MainManager1 implements MainManager {
   }
 
   @Override
-  public boolean createLevel(String name, String difficulty, Integer players, Resource iconResource, String description, String rules, String goal, List<Resource> levelResources, String code) {
-    return false;
+  public boolean submitLevel(Integer levelID, String name, String difficulty, Integer players, Resource iconResource, String description, String rules, String goal, List<Resource> levelResources, String code) {
+    return false; // TODO
   }
 }

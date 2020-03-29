@@ -130,8 +130,12 @@ public interface MainManager {
     List<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId);
 
     /**
-     * Creates a level and informs whether it is successfully created.
+     * Submits a level and informs whether it is successfully submitted.
      *
+     * Id levelID is null - a new level must be created;
+     *          otherwise - an existing level (gotten by this id) must be edited.
+     *
+     * @param levelID        unique level id.
      * @param name           level name.
      * @param difficulty     level difficulty.
      * @param players        level players.
@@ -141,8 +145,17 @@ public interface MainManager {
      * @param goal           level goal.
      * @param levelResources level extra resources.
      * @param code           level code.
-     * @return whether a level is successfully created.
+     * @return whether a level is successfully submitted.
      */
-    boolean createLevel(String name, String difficulty, Integer players, Resource iconResource, String description,
-                        String rules, String goal, List<Resource> levelResources, String code);
+    boolean submitLevel(Integer levelID, String name, String difficulty, Integer players,
+                        Resource iconResource, String description, String rules, String goal,
+                        List<Resource> levelResources, String code);
+
+    /**
+     * Deletes a level and informs whether it is successfully deleted.
+     *
+     * @param levelID unique level id.
+     * @return whether a level is successfully deleted.
+     */
+    boolean deleteLevel(int levelID);
 }
