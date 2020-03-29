@@ -3,6 +3,7 @@ package ru.nsu.fit.markelov.httphandlers.handlers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.json.JSONObject;
+import ru.nsu.fit.markelov.httphandlers.util.Responder;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
 import ru.nsu.fit.markelov.httphandlers.inputs.LevelInput;
@@ -58,9 +59,11 @@ public class LevelSubmitHandler implements HttpHandler {
         levelInput.setCode(textParametersMap.get("code").value);
 
         try (OutputStream oStream = exchange.getResponseBody()) {
+            Responder responder = new Responder(exchange, oStream);
+
             String error = levelInput.getError();
             if (!error.isEmpty()) {
-                sendResponse("error", error, exchange, oStream);
+                responder.sendError(error);
                 return;
             }
 
@@ -70,22 +73,15 @@ public class LevelSubmitHandler implements HttpHandler {
                     levelInput.getRules(), levelInput.getGoal(), levelInput.getLevelResources(),
                     levelInput.getCode())
             ) {
-                sendResponse("response", "true", exchange, oStream);
+                responder.sendResponse("true");
             } else {
-                sendResponse("response", "false", exchange, oStream);
+                responder.sendResponse("false");
             }
         } catch (IOException e) {
             System.out.println(e.toString());
         } finally {
             exchange.close();
         }
-    }
-
-    private void sendResponse(String type, String message, HttpExchange exchange, OutputStream oStream) throws IOException {
-        byte[] bytes = new JSONObject().put(type, message).toString().getBytes();
-        exchange.sendResponseHeaders(200, bytes.length);
-        oStream.write(bytes);
-        System.out.println(new String(bytes));
     }
 
     private void printRequestBodyDEBUG(HttpExchange exchange) {
