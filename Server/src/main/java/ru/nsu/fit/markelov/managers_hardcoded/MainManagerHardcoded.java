@@ -380,4 +380,19 @@ public class MainManagerHardcoded implements MainManager {
     public boolean deleteLevel(int levelID) {
         return false;
     }
+
+    @Override
+    public List<String> getSimulators() {
+        return null;
+    }
+
+    @Override
+    public boolean addSimulator(String url) {
+        return false;
+    }
+
+    @Override
+    public boolean removeSimulator(String url) {
+        return false;
+    }
 }

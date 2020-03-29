@@ -84,9 +84,4 @@ public class Level1 implements Level {
   public int getMaxPlayers() {
     return maxPlayers;
   }
-
-  @Override
-  public boolean isActive() {
-    return false;
-  }
 }

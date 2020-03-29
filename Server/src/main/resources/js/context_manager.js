@@ -275,19 +275,8 @@ function insertLevelsData(obj, contextManager) {
             tr.find(".level-details-description").find(".level-details-text").text(item.description);
             tr.find(".level-details-rules").find(".level-details-text").text(item.rules);
             tr.find(".level-details-goal").find(".level-details-text").text(item.goal);
-            if (item.is_active) {
-                tr.find(".level-publish-a").html("[Active]").addClass("inactive-link");
-            }
 
             table.append(tr);
-
-            if (!item.is_active) {
-                tr.find(".level-publish-a").on("click", function() {
-                    var id = item.level_id;
-                    alert(id);
-
-                });
-            }
 
             tr.find(".level-edit-a").on("click", function() {
                 var id = item.level_id;

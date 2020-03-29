@@ -291,4 +291,19 @@ public class MainManager1 implements MainManager {
   public boolean deleteLevel(int levelID) {
     return false; // TODO
   }
+
+  @Override
+  public List<String> getSimulators() {
+    return null;
+  }
+
+  @Override
+  public boolean addSimulator(String url) {
+    return false;
+  }
+
+  @Override
+  public boolean removeSimulator(String url) {
+    return false;
+  }
 }
