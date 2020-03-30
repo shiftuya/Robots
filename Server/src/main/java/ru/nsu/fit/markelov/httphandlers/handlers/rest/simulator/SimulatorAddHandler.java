@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.httphandlers.handlers;
+package ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -9,11 +9,11 @@ import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class SimulatorDeleteHandler implements HttpHandler {
+public class SimulatorAddHandler implements HttpHandler {
 
     private MainManager mainManager;
 
-    public SimulatorDeleteHandler(MainManager mainManager) {
+    public SimulatorAddHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
@@ -24,7 +24,7 @@ public class SimulatorDeleteHandler implements HttpHandler {
 
         try (OutputStream oStream = exchange.getResponseBody()) {
             if (url != null) {
-                byte[] bytes = JsonPacker.packSimulatorDelete(mainManager.removeSimulator(url)).getBytes();
+                byte[] bytes = JsonPacker.packSimulatorAdd(mainManager.addSimulator(url)).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {

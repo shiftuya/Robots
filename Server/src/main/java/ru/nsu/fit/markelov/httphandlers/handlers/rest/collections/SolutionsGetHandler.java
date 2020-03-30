@@ -1,21 +1,25 @@
-package ru.nsu.fit.markelov.httphandlers.handlers;
+package ru.nsu.fit.markelov.httphandlers.handlers.rest.collections;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
 import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class CodeEditHandler implements HttpHandler {
+public class SolutionsGetHandler implements HttpHandler {
 
     private MainManager mainManager;
 
-    public CodeEditHandler(MainManager mainManager) {
+    public SolutionsGetHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
@@ -24,12 +28,15 @@ public class CodeEditHandler implements HttpHandler {
         String cookieUserName = CookieParser.getCookieUserName(exchange);
         DebugUtil.printCookieUserName(cookieUserName);
 
-        UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
-        Integer id = uriParametersParser.getIntegerParameter("id");
-
         try (OutputStream oStream = exchange.getResponseBody()) {
-            if (cookieUserName != null && id != null) {
-                byte[] bytes = JsonPacker.packCode(mainManager.editSubmittedCode(cookieUserName, id)).getBytes();
+            if (cookieUserName != null) {
+
+                Map<Level, List<SimulationResult>> solutions = new HashMap<>();
+                for (Level level : mainManager.getLevels()) {
+                    solutions.put(level, mainManager.getUserSimulationResultsOnLevel(cookieUserName, level.getId()));
+                }
+
+                byte[] bytes = JsonPacker.packSolutions(cookieUserName, solutions).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {

@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.httphandlers.handlers;
+package ru.nsu.fit.markelov.httphandlers.handlers.rest.log;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -6,18 +6,17 @@ import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
 import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogInHandler implements HttpHandler {
+public class LogOutHandler implements HttpHandler {
 
     private MainManager mainManager;
 
-    public LogInHandler(MainManager mainManager) {
+    public LogOutHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
@@ -27,24 +26,21 @@ public class LogInHandler implements HttpHandler {
             String cookieUserName = CookieParser.getCookieUserName(exchange);
             DebugUtil.printCookieUserName(cookieUserName);
 
-            UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
-            String userName = uriParametersParser.getStringParameter("username");
+            if (cookieUserName != null) {
+                boolean loggedOut = mainManager.logout(cookieUserName);
 
-            if (userName != null) {
-                boolean loggedIn = mainManager.login(userName);
-
-                if (loggedIn) {
+                if (loggedOut) {
                     List<String> values = new ArrayList<>();
-                    values.add(CookieParser.COOKIE_NAME + "=" + userName + ";");
+                    values.add(CookieParser.COOKIE_NAME + "=NULL;");
                     exchange.getResponseHeaders().put("Set-Cookie", values);
                 }
 
-                byte[] bytes = JsonPacker.packLoggingIn(loggedIn).getBytes();
+                byte[] bytes = JsonPacker.packLoggingOut(loggedOut).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {
                 exchange.sendResponseHeaders(204, -1);
-                System.out.println("userName is null");
+                System.out.println("cookieUserName is null");
             }
         } catch (IOException e) {
             System.out.println(e.toString());

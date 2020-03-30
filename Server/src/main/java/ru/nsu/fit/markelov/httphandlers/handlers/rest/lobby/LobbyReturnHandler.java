@@ -1,9 +1,7 @@
-package ru.nsu.fit.markelov.httphandlers.handlers;
+package ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.json.JSONObject;
-import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
 import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
@@ -13,11 +11,11 @@ import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class LobbyJoinHandler implements HttpHandler {
+public class LobbyReturnHandler implements HttpHandler {
 
     private MainManager mainManager;
 
-    public LobbyJoinHandler(MainManager mainManager) {
+    public LobbyReturnHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
@@ -30,17 +28,8 @@ public class LobbyJoinHandler implements HttpHandler {
         Integer id = uriParametersParser.getIntegerParameter("id");
 
         try (OutputStream oStream = exchange.getResponseBody()) {
-            String jsonStr;
             if (cookieUserName != null && id != null) {
-                Lobby lobby = mainManager.joinLobby(cookieUserName, id);
-
-                if (lobby == null) {
-                    jsonStr = new JSONObject().put("response", JSONObject.NULL).toString();
-                } else {
-                    jsonStr = JsonPacker.packLobby(lobby);
-                }
-
-                byte[] bytes = jsonStr.getBytes();
+                byte[] bytes = JsonPacker.packLobby(mainManager.returnToLobby(cookieUserName, id)).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {

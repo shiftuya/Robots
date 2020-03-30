@@ -1,30 +1,35 @@
-package ru.nsu.fit.markelov.httphandlers.handlers;
+package ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
+import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
-import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class SimulatorAddHandler implements HttpHandler {
+public class LobbyLeaveHandler implements HttpHandler {
 
     private MainManager mainManager;
 
-    public SimulatorAddHandler(MainManager mainManager) {
+    public LobbyLeaveHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
     @Override
     public void handle(HttpExchange exchange) {
+        String cookieUserName = CookieParser.getCookieUserName(exchange);
+        DebugUtil.printCookieUserName(cookieUserName);
+
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
-        String url = uriParametersParser.getStringParameter("url");
+        Integer id = uriParametersParser.getIntegerParameter("id");
 
         try (OutputStream oStream = exchange.getResponseBody()) {
-            if (url != null) {
-                byte[] bytes = JsonPacker.packSimulatorAdd(mainManager.addSimulator(url)).getBytes();
+            if (cookieUserName != null && id != null) {
+                byte[] bytes = JsonPacker.packLeavingLobby(mainManager.leaveLobby(cookieUserName, id)).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {

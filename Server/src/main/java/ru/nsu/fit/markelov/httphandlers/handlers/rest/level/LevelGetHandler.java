@@ -1,36 +1,30 @@
-package ru.nsu.fit.markelov.httphandlers.handlers;
+package ru.nsu.fit.markelov.httphandlers.handlers.rest.level;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
-import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class LobbyCreateHandler implements HttpHandler {
+public class LevelGetHandler implements HttpHandler {
 
     private MainManager mainManager;
 
-    public LobbyCreateHandler(MainManager mainManager) {
+    public LevelGetHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
     @Override
     public void handle(HttpExchange exchange) {
-        String cookieUserName = CookieParser.getCookieUserName(exchange);
-        DebugUtil.printCookieUserName(cookieUserName);
-
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
         Integer id = uriParametersParser.getIntegerParameter("id");
-        Integer playersAmount = uriParametersParser.getIntegerParameter("players_amount");
 
         try (OutputStream oStream = exchange.getResponseBody()) {
-            if (cookieUserName != null && id != null && playersAmount != null) {
-                byte[] bytes = JsonPacker.packLobby(mainManager.createLobby(cookieUserName, id, playersAmount)).getBytes();
+            if (id != null) {
+                byte[] bytes = JsonPacker.packLevel(mainManager.getLevel(id)).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {
