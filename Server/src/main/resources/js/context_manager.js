@@ -3,8 +3,8 @@ class BracketsBugAvoiding_1{}
 class ContextManager {
     currentContextName;
 
-    constructor(entriesArray) {
-        this.contextMap = new Map(entriesArray);
+    constructor(dependenciesArray) {
+        this.contextMap = new Map(dependenciesArray);
     }
 
     getContextNames() {
@@ -21,6 +21,7 @@ class ContextManager {
         var insertFunction = dependencies.insertFunction;
         var deleteData = dependencies.deleteData;
 
+        window.history.pushState("", "", contextName);
         document.title = title + " | Robotics Game Server";
 
         // hide all headers, except the new one

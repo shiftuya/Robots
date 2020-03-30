@@ -111,7 +111,7 @@ $(document).ready(function() {
     ]);
     
     activateListeners(contextManager);
-    contextManager.changeContext("login");
+    contextManager.changeContext(initialContext);
 
     var contextListeners = new ContextListeners(contextManager);
     contextListeners.activateAll();

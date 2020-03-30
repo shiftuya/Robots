@@ -34,7 +34,19 @@ public class MainServer {
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(5051), 0);
 
-        server.createContext("/", new CommonHttpHandler());
+        server.createContext("/", new CommonHttpHandler(null));
+
+        server.createContext("/login", new CommonHttpHandler("login"));
+        server.createContext("/list_of_lobbies", new CommonHttpHandler("list_of_lobbies"));
+        server.createContext("/choose_level", new CommonHttpHandler("choose_level"));
+        server.createContext("/my_solutions", new CommonHttpHandler("my_solutions"));
+        server.createContext("/levels", new CommonHttpHandler("levels"));
+        server.createContext("/level_editor", new CommonHttpHandler("level_editor"));
+        server.createContext("/simulators", new CommonHttpHandler("simulators"));
+        server.createContext("/options", new CommonHttpHandler("options"));
+        server.createContext("/lobby", new CommonHttpHandler("lobby"));
+        server.createContext("/code_editor", new CommonHttpHandler("code_editor"));
+        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result"));
 
         server.createContext("/api/method/sign.login", new LogInHandler(mainManager));
         server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));
