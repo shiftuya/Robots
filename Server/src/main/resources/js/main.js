@@ -20,6 +20,17 @@ $(document).ready(function() {
                 contentUnit: "tr:not(':first-of-type')"
             }
         }],
+        ["choose_level", {
+            title: "Choose a Level",
+            headerId: "header-main",
+            contentId: "choose-level-content",
+            defaultAjaxQuery: "levels.get",
+            insertFunction: insertChooseLevelData,
+            deleteData: {
+                id: "levels-table",
+                contentUnit: "tr:not(':first-of-type')"
+            }
+        }],
         ["my_solutions", {
             title: "My Solutions",
             headerId: "header-main",
@@ -28,7 +39,7 @@ $(document).ready(function() {
             insertFunction: insertSolutionsData,
             deleteData: {
                 id: "solutions-table",
-                contentUnit: "tbody"
+                contentUnit: "tbody:not(':first-of-type')"
             }
         }],
         ["levels", {
@@ -39,7 +50,7 @@ $(document).ready(function() {
             insertFunction: insertLevelsData,
             deleteData: {
                 id: "teacher-levels-table",
-                contentUnit: "tr"
+                contentUnit: "tr:not(':first-of-type')"
             }
         }],
         ["level_editor", {
@@ -60,24 +71,13 @@ $(document).ready(function() {
             insertFunction: insertSimulatorsData,
             deleteData: {
                 id: "simulators-table",
-                contentUnit: "tr"
+                contentUnit: "tr:not(':first-of-type')"
             }
         }],
         ["options", {
             title: "Options",
             headerId: "header-main",
             contentId: "options-content"
-        }],
-        ["choose_level", {
-            title: "Choose a Level",
-            headerId: "header-main",
-            contentId: "choose-level-content",
-            defaultAjaxQuery: "levels.get",
-            insertFunction: insertChooseLevelData,
-            deleteData: {
-                id: "levels-table",
-                contentUnit: "tr"
-            }
         }],
         ["lobby", {
             title: "Lobby",
@@ -112,7 +112,7 @@ $(document).ready(function() {
     ]);
     
     activateListeners(contextManager);
-    contextManager.changeContext("simulators");
+    contextManager.changeContext("Login");
 
     var contextListeners = new ContextListeners(contextManager);
     contextListeners.activateAll();

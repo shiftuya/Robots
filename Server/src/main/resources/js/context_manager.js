@@ -88,7 +88,6 @@ function insertListOfLobbiesData(obj, contextManager) {
             table.append(tr);
 
             tr.on("click", function() {
-                //                        alert("lobby_id is " + item.lobby_id);
                 contextManager.changeContext("lobby", "lobby.join?id=" + item.lobby_id);
             });
         });

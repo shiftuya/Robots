@@ -11,7 +11,6 @@
 		<link rel="stylesheet" href="css/list_of_lobbies.css">
         <link rel="stylesheet" href="css/choose_level.css">
         <link rel="stylesheet" href="css/my_solutions.css">
-        <link rel="stylesheet" href="css/levels.css">
         <link rel="stylesheet" href="css/level_editor.css">
 		<link rel="stylesheet" href="css/lobby.css">
 		<link rel="stylesheet" href="css/simulation_results.css">
@@ -90,7 +89,7 @@
 					<div class="new-lobby-icon circle-icon"></div>
                     <span class="a" data-href="choose_level.html">Create New Lobby</span>
 				</div>
-                <table id="lobbies-table" class="lobbies-table">
+                <table id="lobbies-table" class="common-table lobbies-table">
 					<tr>
 						<th>Host</th>
 						<th>Level</th>
@@ -113,7 +112,13 @@
 			</section>
             <section id="choose-level-content" class="content">
 				<h1 class="content-header">Choose a level</h1>
-                <table id="levels-table" class="levels-table">
+                <table id="levels-table" class="common-table levels-table">
+                    <tr>
+                        <th>Level</th>
+                        <th>Info</th>
+                        <th>Players</th>
+                        <th>Actions</th>
+                    </tr>
                     <tr class="skeleton">
                         <td class="level-common-col">
                             <div class="level-common-shell">
@@ -138,7 +143,14 @@
 				</table>
 			</section>
             <section id="my-solutions-content" class="content">
-                <table id="solutions-table" class="solutions-table">
+                <table id="solutions-table" class="common-table solutions-table">
+                    <tbody>
+                        <tr>
+                            <th>Level</th>
+                            <th>Attempts</th>
+                            <th>Status</th>
+                        </tr>
+                    </tbody>
                     <tbody class="solution-rows-shell skeleton">
                         <tr class="solution-row highlited-on-hover">
                             <td class="level-common-col">
@@ -179,12 +191,12 @@
                     <div class="new-lobby-icon circle-icon"></div>
                     <span class="a" data-href="level_editor.html">Create New Level</span>
                 </div>
-                <table id="teacher-levels-table" class="levels-table">
-<!--                    <tr>-->
-<!--                        <th>Name</th>-->
-<!--                        <th>Details</th>-->
-<!--                        <th>Actions</th>-->
-<!--                    </tr>-->
+                <table id="teacher-levels-table" class="common-table levels-table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Details</th>
+                        <th colspan="2">Actions</th>
+                    </tr>
                     <tr class="highlited-on-hover skeleton">
                         <td class="level-common-col">
                             <div class="level-common-shell">
@@ -276,7 +288,12 @@
                     <div class="new-lobby-icon circle-icon"></div>
                     <span class="a" data-href="add-simulator.html">Add simulator</span>
                 </div>
-                <table id="simulators-table" class="levels-table">
+                <table id="simulators-table" class="common-table simulators-table">
+                    <tr>
+                        <th>№</th>
+                        <th>Url</th>
+                        <th>Actions</th>
+                    </tr>
                     <tr class="highlited-on-hover skeleton">
                         <td class="simulator-number-col"></td>
                         <td class="simulator-url-col"></td>
