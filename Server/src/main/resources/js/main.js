@@ -70,11 +70,11 @@ function activateListeners(contextManager) {
             }
         });
     });
-    
+
     $("#submit-level").on("click", function() {
         var form = $("#level-editor-content").find(".level-editor-shell:not('.skeleton')").find("form")
         form.find("textarea[name='code']").val(codeMirror.getValue());
-        
+
         var formData = new FormData(form[0]);
         $.ajax({
             url: "/api/method/level.submit",
@@ -94,6 +94,20 @@ function activateListeners(contextManager) {
             error: function(xhr, status, error) {
                 alert(error);
             }
+        });
+    });
+
+    $("#add-simulator").on("click", function() {
+        var url = prompt("Type simulator url:", "");
+        if (url == null || url == "") {
+            alert("Canceled");
+            return;
+        }
+        
+        ajaxGet("simulator.add?url=" + url, function(result) {
+            var obj = JSON.parse(result);
+            alert(obj.response.added ? "Added" : "Not added");
+            contextManager.changeContext("simulators");
         });
     });
 }

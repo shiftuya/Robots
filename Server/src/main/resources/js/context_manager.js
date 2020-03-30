@@ -6,11 +6,12 @@ class ContextManager {
     constructor(entriesArray) {
         this.contextMap = new Map(entriesArray);
         this.standardAjaxQueryMap = new Map([
-            ["list_of_lobbies", "lobbies.get"  ],
-            ["choose_level",    "levels.get"   ],
-            ["my_solutions",    "solutions.get"],
-            ["levels",          "levels.get"   ],
-            ["level_editor",    ""             ]
+            ["list_of_lobbies", "lobbies.get"   ],
+            ["choose_level",    "levels.get"    ],
+            ["my_solutions",    "solutions.get" ],
+            ["levels",          "levels.get"    ],
+            ["level_editor",    ""              ],
+            ["simulators",      "simulators.get"]
         ]);
         this.insertFunctionMap = new Map([
             ["list_of_lobbies",   insertListOfLobbiesData   ],
@@ -18,6 +19,7 @@ class ContextManager {
             ["my_solutions",      insertSolutionsData       ],
             ["levels",            insertLevelsData          ],
             ["level_editor",      insertLevelEditorData     ],
+            ["simulators",        insertSimulatorsData      ],
             ["lobby",             insertLobbyData           ],
             ["code_editor",       insertCodeEditorData      ],
             ["simulation_result", insertSimulationResultData]
@@ -101,6 +103,9 @@ class ContextManager {
                 break;
             case "level_editor":
                 removeNode("level-editor-content", ".level-editor-shell");
+                break;
+            case "simulators":
+                removeNode("simulators-table", "tr");
                 break;
             case "lobby":
                 removeNode("lobby-content", ".lobby-shell");
@@ -280,9 +285,11 @@ function insertLevelsData(obj, contextManager) {
             });
 
             tr.find(".level-delete-a").on("click", function() {
-                var id = item.level_id;
-                alert(id);
-
+                ajaxGet("level.delete?id=" + item.level_id, function(result) {
+                    var obj = JSON.parse(result);
+                    alert(obj.response.deleted ? "Deleted" : "Not deleted");
+                    contextManager.changeContext("levels");
+                });
             });
         });
     }
@@ -323,6 +330,32 @@ function insertLevelEditorData(obj, contextManager) {
         theme: "darcula",
         lineNumbers: true
     });
+}
+
+function insertSimulatorsData(obj, contextManager) {
+    var table = $("#simulators-table");
+    if (obj.response.length == 0) {
+        $("<tr><td colspan=\"100%\">No created simulators.</td></tr>").appendTo(table);
+    } else {
+        var skeleton = table.find("tr.skeleton");
+        obj.response.forEach(function(item, number) {
+            var tr = $(skeleton).clone();
+            tr.removeClass("skeleton");
+
+            tr.find(".simulator-number-col").text(number + 1);
+            tr.find(".simulator-url-col").text(item.url);
+
+            table.append(tr);
+
+            tr.find(".simulator-delete-a").on("click", function() {
+                ajaxGet("simulator.delete?url=" + item.url, function(result) {
+                    var obj = JSON.parse(result);
+                    alert(obj.response.deleted ? "Deleted" : "Not deleted");
+                    contextManager.changeContext("simulators");
+                });
+            });
+        });
+    }
 }
 
 function insertLobbyData(obj, contextManager) {

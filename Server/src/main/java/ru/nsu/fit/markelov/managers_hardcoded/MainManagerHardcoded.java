@@ -29,6 +29,7 @@ import java.util.TreeSet;
 public class MainManagerHardcoded implements MainManager {
 
     private Set<String> userNames = new TreeSet<>();
+    private Set<String> simulators = new TreeSet<>();
 
     @Override
     public boolean login(String userName) {
@@ -210,6 +211,9 @@ public class MainManagerHardcoded implements MainManager {
         } catch (ParseException e) {
             System.out.println(e.getMessage());
         }
+
+        simulators.add("robotics.nsu.ru/simulators/1");
+        simulators.add("robotics.nsu.ru/simulators/2");
     }
 
     @Override
@@ -220,12 +224,8 @@ public class MainManagerHardcoded implements MainManager {
     @Override
     public List<Level> getLevels() {
         return levelManager.getLevels();
+//        return new ArrayList<>();
     }
-
-   /* @Override
-    public List<Solution> getSolutions(String userName) {
-        return null;
-    }*/
 
     @Override
     public Lobby joinLobby(String userName, int lobbyID) {
@@ -398,27 +398,29 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
+    public Level getLevel(int levelID) {
+        return levelManager.getLevels().get(levelID - 1);
+    }
+
+    @Override
     public boolean deleteLevel(int levelID) {
-        return false;
+        levelManager.getLevels().remove(levelID - 1);
+
+        return true;
     }
 
     @Override
     public List<String> getSimulators() {
-        return null;
+        return new ArrayList<>(simulators);
     }
 
     @Override
     public boolean addSimulator(String url) {
-        return false;
+        return simulators.add(url);
     }
 
     @Override
     public boolean removeSimulator(String url) {
-        return false;
-    }
-
-    @Override
-    public Level getLevel(int levelID) {
-        return levelManager.getLevels().get(levelID - 1);
+        return simulators.remove(url);
     }
 }

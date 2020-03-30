@@ -3,6 +3,7 @@ package ru.nsu.fit.markelov;
 import com.sun.net.httpserver.HttpServer;
 import ru.nsu.fit.markelov.httphandlers.handlers.CodeEditHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.CommonHttpHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.LevelDeleteHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.LevelGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.LevelSubmitHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.LevelsGetHandler;
@@ -16,6 +17,9 @@ import ru.nsu.fit.markelov.httphandlers.handlers.LogInHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.LogOutHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.SimulationResultGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.SimulationResultIsReadyHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.SimulatorAddHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.SimulatorDeleteHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.SimulatorsGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.SolutionsGetHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.mainmanager.MainManager1;
@@ -38,6 +42,7 @@ public class MainServer {
         server.createContext("/api/method/lobbies.get", new LobbiesGetHandler(mainManager));
         server.createContext("/api/method/levels.get", new LevelsGetHandler(mainManager));
         server.createContext("/api/method/solutions.get", new SolutionsGetHandler(mainManager));
+        server.createContext("/api/method/simulators.get", new SimulatorsGetHandler(mainManager));
 
         server.createContext("/api/method/lobby.join", new LobbyJoinHandler(mainManager));
         server.createContext("/api/method/lobby.create", new LobbyCreateHandler(mainManager));
@@ -52,6 +57,10 @@ public class MainServer {
 
         server.createContext("/api/method/level.get", new LevelGetHandler(mainManager));
         server.createContext("/api/method/level.submit", new LevelSubmitHandler(mainManager));
+        server.createContext("/api/method/level.delete", new LevelDeleteHandler(mainManager));
+
+        server.createContext("/api/method/simulator.add", new SimulatorAddHandler(mainManager));
+        server.createContext("/api/method/simulator.delete", new SimulatorDeleteHandler(mainManager));
 
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();

@@ -2,20 +2,18 @@ package ru.nsu.fit.markelov.httphandlers.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class LevelGetHandler implements HttpHandler {
+public class LevelDeleteHandler implements HttpHandler {
 
     private MainManager mainManager;
 
-    public LevelGetHandler(MainManager mainManager) {
+    public LevelDeleteHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
@@ -26,7 +24,7 @@ public class LevelGetHandler implements HttpHandler {
 
         try (OutputStream oStream = exchange.getResponseBody()) {
             if (id != null) {
-                byte[] bytes = JsonPacker.packLevel(mainManager.getLevel(id)).getBytes();
+                byte[] bytes = JsonPacker.packLevelDelete(mainManager.deleteLevel(id)).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {

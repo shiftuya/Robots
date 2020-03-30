@@ -2,31 +2,29 @@ package ru.nsu.fit.markelov.httphandlers.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class LevelGetHandler implements HttpHandler {
+public class SimulatorAddHandler implements HttpHandler {
 
     private MainManager mainManager;
 
-    public LevelGetHandler(MainManager mainManager) {
+    public SimulatorAddHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
     @Override
     public void handle(HttpExchange exchange) {
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
-        Integer id = uriParametersParser.getIntegerParameter("id");
+        String url = uriParametersParser.getStringParameter("url");
 
         try (OutputStream oStream = exchange.getResponseBody()) {
-            if (id != null) {
-                byte[] bytes = JsonPacker.packLevel(mainManager.getLevel(id)).getBytes();
+            if (url != null) {
+                byte[] bytes = JsonPacker.packSimulatorAdd(mainManager.addSimulator(url)).getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 oStream.write(bytes);
             } else {

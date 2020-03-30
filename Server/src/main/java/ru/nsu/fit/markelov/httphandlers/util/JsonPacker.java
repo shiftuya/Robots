@@ -58,6 +58,44 @@ public class JsonPacker {
         return new JSONObject().put("response", jsonLevel).toString();
     }
 
+    public static String packLevelDelete(boolean deleted) {
+        JSONObject jsonDeleted = new JSONObject();
+        jsonDeleted
+            .put("deleted", deleted);
+
+        return new JSONObject().put("response", jsonDeleted).toString();
+    }
+
+    public static String packSimulators(List<String> urls) {
+        JSONArray jsonUrls = new JSONArray();
+
+        for (String url : urls) {
+            JSONObject jsonUrl = new JSONObject();
+            jsonUrl
+                .put("url", url);
+
+            jsonUrls.put(jsonUrl);
+        }
+
+        return new JSONObject().put("response", jsonUrls).toString();
+    }
+
+    public static String packSimulatorAdd(boolean added) {
+        JSONObject jsonDeleted = new JSONObject();
+        jsonDeleted
+            .put("added", added);
+
+        return new JSONObject().put("response", jsonDeleted).toString();
+    }
+
+    public static String packSimulatorDelete(boolean deleted) {
+        JSONObject jsonDeleted = new JSONObject();
+        jsonDeleted
+            .put("deleted", deleted);
+
+        return new JSONObject().put("response", jsonDeleted).toString();
+    }
+
     public static String packSolutions(String username, Map<Level, List<SimulationResult>> solutions) {
         JSONArray jsonSolutions = new JSONArray();
 
