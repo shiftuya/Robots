@@ -9,7 +9,9 @@ class ContextListeners {
         var contextManager = this.contextManager;
         for (let contextName of contextManager.getContextNames()) {
             $("#" + contextName).on("click", function() {
-                contextManager.changeContext(contextName);
+                if (!$(this).hasClass("inactive-link")) {
+                    contextManager.changeContext(contextName);
+                }
             });
         }
     }
