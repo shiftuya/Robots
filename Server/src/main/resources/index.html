@@ -28,28 +28,6 @@
         <script src="js/main.js"></script>
         <script src="js/context_manager.js"></script>
         <script src="js/context_listeners.js"></script>
-		<script>
-            $(document).ready(function() {
-                var contextManager = new ContextManager([
-                    ["login",             { title: "Login",             headerId: undefined,            contentId: "login-content"             }],
-                    ["list_of_lobbies",   { title: "List of Lobbies",   headerId: "header-main",        contentId: "list-of-lobbies-content"   }],
-                    ["my_solutions",      { title: "My Solutions",      headerId: "header-main",        contentId: "my-solutions-content"      }],
-                    ["levels",            { title: "Levels",            headerId: "header-main",        contentId: "levels-content"            }],
-                    ["level_editor",      { title: "Level editor",      headerId: "header-main",        contentId: "level-editor-content"      }],
-                    ["simulators",        { title: "Simulators",        headerId: "header-main",        contentId: "simulators-content"        }],
-                    ["options",           { title: "Options",           headerId: "header-main",        contentId: "options-content"           }],
-                    ["choose_level",      { title: "Choose a Level",    headerId: "header-main",        contentId: "choose-level-content"      }],
-                    ["lobby",             { title: "Lobby",             headerId: "header-main",        contentId: "lobby-content"             }],
-                    ["code_editor",       { title: "Code Editor",       headerId: "header-code-editor", contentId: "code-editor-content"       }],
-                    ["simulation_result", { title: "Simulation Result", headerId: "header-main",        contentId: "simulation-result-content" }]
-                ]);
-                activateListeners(contextManager);
-                contextManager.changeContext("login");
-                
-                var contextListeners = new ContextListeners(contextManager);
-                contextListeners.activateAll();
-			});
-		</script>
 	</head>
     <body>
 		<div class="shell">

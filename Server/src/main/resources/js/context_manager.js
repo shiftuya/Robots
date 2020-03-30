@@ -5,46 +5,19 @@ class ContextManager {
 
     constructor(entriesArray) {
         this.contextMap = new Map(entriesArray);
-        this.standardAjaxQueryMap = new Map([
-            ["list_of_lobbies", "lobbies.get"   ],
-            ["choose_level",    "levels.get"    ],
-            ["my_solutions",    "solutions.get" ],
-            ["levels",          "levels.get"    ],
-            ["level_editor",    ""              ],
-            ["simulators",      "simulators.get"]
-        ]);
-        this.insertFunctionMap = new Map([
-            ["list_of_lobbies",   insertListOfLobbiesData   ],
-            ["choose_level",      insertChooseLevelData     ],
-            ["my_solutions",      insertSolutionsData       ],
-            ["levels",            insertLevelsData          ],
-            ["level_editor",      insertLevelEditorData     ],
-            ["simulators",        insertSimulatorsData      ],
-            ["lobby",             insertLobbyData           ],
-            ["code_editor",       insertCodeEditorData      ],
-            ["simulation_result", insertSimulationResultData]
-        ]);
     }
 
     getContextNames() {
         return this.contextMap.keys();
     }
 
-    getAjaxStandardQuery(contextName) {
-        return this.standardAjaxQueryMap.get(contextName);
-    }
-
-    getInsertFunction(contextName) {
-        return this.insertFunctionMap.get(contextName);
-    }
-
     changeContext(contextName, ajaxQuery) {
         var dependencies = this.contextMap.get(contextName);
-        var title = dependencies.title;
+        
         var header = $("#" + dependencies.headerId);
         var content = $("#" + dependencies.contentId);
 
-        document.title = title + " | Robotics Game Server";
+        document.title = dependencies.title + " | Robotics Game Server";
 
         // скрываем все хедеры, кроме нового
         $("header:not(#" + dependencies.headerId + ")").removeClass("active");
@@ -69,58 +42,28 @@ class ContextManager {
             content.addClass("active"); // alert("content added");
         }
 
-        this.getAndInsertData(contextName, ajaxQuery);
-        this.removeCurrentData();
+        this.getAndInsertData(contextName, ajaxQuery || dependencies.defaultAjaxQuery, dependencies.insertFunction);
+        this.removeCurrentData(dependencies.deleteData.id, dependencies.deleteData.contentUnit);
 
         this.currentContextName = contextName;
     }
 
-    getAndInsertData(contextName, ajaxQuery) {
+    getAndInsertData(contextName, ajaxQuery, insertFunction) {
         var contextManager = this;
         
-        ajaxGet(ajaxQuery || this.getAjaxStandardQuery(contextName), function(result) {
-            contextManager.getInsertFunction(contextName)(result == undefined ? undefined : JSON.parse(result), contextManager);
+        ajaxGet(ajaxQuery, function(result) {
+            insertFunction(result == undefined ? undefined : JSON.parse(result), contextManager);
         });
     }
 
-    removeCurrentData() {
-        switch (this.currentContextName) {
-            case "login":
-                $("#login-content").removeClass("active");
-                $("#login-content").find("input.login-form-input").val("");
-                break;
-            case "list_of_lobbies":
-                removeNode("lobbies-table", "tr:not(':first-of-type')");
-                break;
-            case "choose_level":
-                removeNode("levels-table", "tr");
-                break;
-            case "my_solutions":
-                removeNode("solutions-table", "tbody");
-                break;
-            case "levels":
-                removeNode("teacher-levels-table", "tr");
-                break;
-            case "level_editor":
-                removeNode("level-editor-content", ".level-editor-shell");
-                break;
-            case "simulators":
-                removeNode("simulators-table", "tr");
-                break;
-            case "lobby":
-                removeNode("lobby-content", ".lobby-shell");
-                break;
-            case "code_editor":
-                removeNode("code-editor-content", ".code-editor-shell");
-                break;
-            case "simulation_result":
-                removeNode("simulation-result-content", ".simulation-result-shell");
-                break;
+    removeCurrentData(id, contentUnit) {
+        if (this.currentContextName == "login") {
+            $("#login-content").removeClass("active");
+            $("#login-content").find("input.login-form-input").val("");
+            return;
         }
-
-        function removeNode(id, contentUnit) {
-            $("#" + id).find(contentUnit + ":not('.skeleton')").remove();
-        }
+        
+        $("#" + id).find(contentUnit + ":not('.skeleton')").remove();
     }
 }
 

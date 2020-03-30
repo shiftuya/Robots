@@ -2,6 +2,122 @@ var codeMirror;
 
 class BracketsBugAvoiding_0{}
 
+$(document).ready(function() {
+    var contextManager = new ContextManager([
+        ["login", {
+            title: "Login",
+            headerId: undefined,
+            contentId: "login-content"
+        }],
+        ["list_of_lobbies", {
+            title: "List of Lobbies",
+            headerId: "header-main",
+            contentId: "list-of-lobbies-content",
+            defaultAjaxQuery: "lobbies.get",
+            insertFunction: insertListOfLobbiesData,
+            deleteData: {
+                id: "lobbies-table",
+                contentUnit: "tr:not(':first-of-type')"
+            }
+        }],
+        ["my_solutions", {
+            title: "My Solutions",
+            headerId: "header-main",
+            contentId: "my-solutions-content",
+            defaultAjaxQuery: "solutions.get",
+            insertFunction: insertSolutionsData,
+            deleteData: {
+                id: "solutions-table",
+                contentUnit: "tbody"
+            }
+        }],
+        ["levels", {
+            title: "Levels",
+            headerId: "header-main",
+            contentId: "levels-content",
+            defaultAjaxQuery: "levels.get",
+            insertFunction: insertLevelsData,
+            deleteData: {
+                id: "teacher-levels-table",
+                contentUnit: "tr"
+            }
+        }],
+        ["level_editor", {
+            title: "Level editor",
+            headerId: "header-main",
+            contentId: "level-editor-content",
+            insertFunction: insertLevelEditorData,
+            deleteData: {
+                id: "level-editor-content",
+                contentUnit: ".level-editor-shell"
+            }
+        }],
+        ["simulators", {
+            title: "Simulators",
+            headerId: "header-main",
+            contentId: "simulators-content",
+            defaultAjaxQuery: "simulators.get",
+            insertFunction: insertSimulatorsData,
+            deleteData: {
+                id: "simulators-table",
+                contentUnit: "tr"
+            }
+        }],
+        ["options", {
+            title: "Options",
+            headerId: "header-main",
+            contentId: "options-content"
+        }],
+        ["choose_level", {
+            title: "Choose a Level",
+            headerId: "header-main",
+            contentId: "choose-level-content",
+            defaultAjaxQuery: "levels.get",
+            insertFunction: insertChooseLevelData,
+            deleteData: {
+                id: "levels-table",
+                contentUnit: "tr"
+            }
+        }],
+        ["lobby", {
+            title: "Lobby",
+            headerId: "header-main",
+            contentId: "lobby-content",
+            insertFunction: insertLobbyData,
+            deleteData: {
+                id: "lobby-content",
+                contentUnit: ".lobby-shell"
+            }
+        }],
+        ["code_editor", {
+            title: "Code Editor",
+            headerId: "header-code-editor",
+            contentId: "code-editor-content",
+            insertFunction: insertCodeEditorData,
+            deleteData: {
+                id: "code-editor-content",
+                contentUnit: ".code-editor-shell"
+            }
+        }],
+        ["simulation_result", {
+            title: "Simulation Result",
+            headerId: "header-main",
+            contentId: "simulation-result-content",
+            insertFunction: insertSimulationResultData,
+            deleteData: {
+                id: "simulation-result-content",
+                contentUnit: ".simulation-result-shell"
+            }
+        }]
+    ]);
+    
+    activateListeners(contextManager);
+    contextManager.changeContext("simulators");
+
+    var contextListeners = new ContextListeners(contextManager);
+    contextListeners.activateAll();
+});
+
 function activateListeners(contextManager) {
     $("#login-submit").on("click", function() {
         var username = $("#login-content").find("input.login-form-input[type='text']").val();
@@ -112,32 +228,8 @@ function activateListeners(contextManager) {
     });
 }
 
-function readFiles(files, oArray) {
-    oArray = [];
-    var reader = new FileReader();
-    readFile(0);
-    
-    function readFile(index) {
-        if (index >= files.length) {
-            return;
-        }
-        
-        var file = files[index];
-        reader.readAsBinaryString(file);
-
-        reader.onload = function(e) {
-            oArray[oArray.length] = {
-                name: file.name,
-                data: e.target.result
-            };
-            
-            readFile(index+1)
-        }
-    }
-}
-
 function ajaxGet(ajaxQuery, handleResponseFunction) {
-    if (ajaxQuery == "") {
+    if (ajaxQuery == undefined) {
         handleResponseFunction();
         return;
     }
