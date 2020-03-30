@@ -6,7 +6,6 @@ $(document).ready(function() {
     var contextManager = new ContextManager([
         ["login", {
             title: "Login",
-            headerId: undefined,
             contentId: "login-content"
         }],
         ["list_of_lobbies", {
@@ -229,11 +228,6 @@ function activateListeners(contextManager) {
 }
 
 function ajaxGet(ajaxQuery, handleResponseFunction) {
-    if (ajaxQuery == undefined) {
-        handleResponseFunction();
-        return;
-    }
-    
     $.get("/api/method/" + ajaxQuery, function(result, status) {
         if (status == "success" && result) {
             try {

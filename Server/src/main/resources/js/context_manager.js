@@ -14,45 +14,60 @@ class ContextManager {
     changeContext(contextName, ajaxQuery) {
         var dependencies = this.contextMap.get(contextName);
         
+        var title = dependencies.title;
         var header = $("#" + dependencies.headerId);
         var content = $("#" + dependencies.contentId);
+        ajaxQuery = ajaxQuery || dependencies.defaultAjaxQuery;
+        var insertFunction = dependencies.insertFunction;
+        var deleteData = dependencies.deleteData;
 
-        document.title = dependencies.title + " | Robotics Game Server";
+        document.title = title + " | Robotics Game Server";
 
-        // скрываем все хедеры, кроме нового
+        // hide all headers, except the new one
         $("header:not(#" + dependencies.headerId + ")").removeClass("active");
 
-        // активируем все ссылки внутри всех хедеров
+        // activate all the links inside every header
         let ids = [...this.getContextNames()];
         $("header").find("#" + ids.join(",#")).removeClass("inactive-link");
 
-        // деактивируем новую ссылку
+        // deactivate new link
         $("header").find("#" + contextName).addClass("inactive-link");
 
-        // показываем новый хедер
+        // show new header
         if (!header.hasClass("active")) {
             header.addClass("active"); // alert("header added");
         }
 
-        // скрываем все контент-блоки, кроме нового
+        // hide all content-blocks, except the new one
         $(".content:not(#" + dependencies.contentId + ")").removeClass("active");
 
-        // показываем новый контент-блок
+        // show new content-block
         if (!content.hasClass("active")) {
             content.addClass("active"); // alert("content added");
         }
 
-        this.getAndInsertData(contextName, ajaxQuery || dependencies.defaultAjaxQuery, dependencies.insertFunction);
-        this.removeCurrentData(dependencies.deleteData.id, dependencies.deleteData.contentUnit);
+        // delete current data if needed
+        if (deleteData) {
+            this.removeCurrentData(deleteData.id, deleteData.contentUnit);
+        }
+
+        // get and insert new data if needed
+        if (insertFunction) {
+            this.getAndInsertData(contextName, ajaxQuery, insertFunction);
+        }
 
         this.currentContextName = contextName;
     }
 
     getAndInsertData(contextName, ajaxQuery, insertFunction) {
+        if (!ajaxQuery) {
+            insertFunction();
+            return;
+        }
+
         var contextManager = this;
-        
         ajaxGet(ajaxQuery, function(result) {
-            insertFunction(result == undefined ? undefined : JSON.parse(result), contextManager);
+            insertFunction(result ? JSON.parse(result) : undefined, contextManager);
         });
     }
 
@@ -243,7 +258,7 @@ function insertLevelEditorData(obj, contextManager) {
     section.removeClass("skeleton");
     
     var code = "level code";
-    if (obj != undefined) {
+    if (obj) {
         var item = obj.response;
         
         section.find("form.level-editor-form").append('<input name="id" type="text" value="' + item.level_id + '" style="display: none">');
