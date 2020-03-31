@@ -243,11 +243,13 @@ function insertLevelsData(obj, contextManager) {
             });
 
             tr.find(".level-delete-a").on("click", function() {
-                ajaxGet("level.delete?id=" + item.level_id, function(result) {
-                    var obj = JSON.parse(result);
-                    alert(obj.response.deleted ? "Deleted" : "Not deleted");
-                    contextManager.changeContext("levels");
-                });
+                if (confirm("Are you sure you want to delete the level? This action cannot be undone.")) {
+                    ajaxGet("level.delete?id=" + item.level_id, function(result) {
+                        var obj = JSON.parse(result);
+                        alert(obj.response.deleted ? "Deleted" : "Not deleted");
+                        contextManager.changeContext("levels");
+                    });
+                }
             });
         });
     }
