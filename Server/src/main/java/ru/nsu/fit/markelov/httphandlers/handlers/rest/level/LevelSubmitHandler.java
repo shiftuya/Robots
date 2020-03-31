@@ -1,22 +1,21 @@
 package ru.nsu.fit.markelov.httphandlers.handlers.rest.level;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import ru.nsu.fit.markelov.httphandlers.util.Responder;
-import ru.nsu.fit.markelov.interfaces.ProcessingException;
-import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.inputs.LevelInput;
 import ru.nsu.fit.markelov.httphandlers.util.LevelResource;
+import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class LevelSubmitHandler implements HttpHandler {
+public class LevelSubmitHandler extends RestHandler {
 
     private MainManager mainManager;
 
@@ -25,7 +24,7 @@ public class LevelSubmitHandler implements HttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchange) {
+    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
         Map<String, FormDataHandler.MultiPart> textParametersMap = new TreeMap<>();
         LevelInput levelInput = new LevelInput();
 
@@ -64,45 +63,32 @@ public class LevelSubmitHandler implements HttpHandler {
 
         levelInput.prepare();
 
-        try (OutputStream oStream = exchange.getResponseBody()) {
-            Responder responder = new Responder(exchange, oStream);
+        String error = levelInput.getError();
+        if (!error.isEmpty()) {
+            throw new ProcessingException(error);
+        }
 
-            String error = levelInput.getError();
-            if (!error.isEmpty()) {
-                responder.sendError(error);
-                return;
+        try {
+            if (mainManager.submitLevel(
+                levelInput.getId(),
+                levelInput.getName(),
+                levelInput.getDifficulty(),
+                levelInput.getMinPlayers(),
+                levelInput.getMaxPlayers(),
+                levelInput.getIconResource(),
+                levelInput.getDescription(),
+                levelInput.getRules(),
+                levelInput.getGoal(),
+                levelInput.getLevelResources(),
+                levelInput.getCode(),
+                "groovy"
+            )) {
+                responder.sendResponse(levelInput.getId() == null ? "New level is created." : "The level is updated.");
+            } else {
+                responder.sendResponse(levelInput.getId() == null ? "New level is not created." : "The level is not updated.");
             }
-
-            try {
-                if (mainManager.submitLevel(
-                        levelInput.getId(),
-                        levelInput.getName(),
-                        levelInput.getDifficulty(),
-                        levelInput.getMinPlayers(),
-                        levelInput.getMaxPlayers(),
-                        levelInput.getIconResource(),
-                        levelInput.getDescription(),
-                        levelInput.getRules(),
-                        levelInput.getGoal(),
-                        levelInput.getLevelResources(),
-                        levelInput.getCode(),
-                        "groovy"
-                    )) {
-                    responder.sendResponse("true");
-                } else {
-                    responder.sendResponse("false");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("level_id is not a number");
-                responder.sendError("level_id is not a number");
-            } catch (ProcessingException e) {
-                System.out.println("ProcessingException");
-                responder.sendError(e.getMessage());
-            }
-        } catch (IOException e) {
-            System.out.println(e.toString());
-        } finally {
-            exchange.close();
+        } catch (NumberFormatException e) {
+            throw new ProcessingException("level_id is not a number");
         }
     }
 

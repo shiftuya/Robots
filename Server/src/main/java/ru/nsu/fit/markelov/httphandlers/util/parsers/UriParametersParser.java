@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.httphandlers.util.parsers;
 
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
@@ -16,6 +18,8 @@ public class UriParametersParser {
             params = splitQuery(uri.split("\\?")[1]);
         } catch (UnsupportedEncodingException e) {
             System.out.println(e.getMessage());
+        } catch (Exception e) {
+            throw new ProcessingException(e.getClass().getSimpleName());
         }
     }
 
@@ -28,6 +32,8 @@ public class UriParametersParser {
             }
         } catch (NumberFormatException e) {
             System.out.println(e.getMessage());
+        } catch (Exception e) {
+            throw new ProcessingException(e.getClass().getSimpleName());
         }
 
         System.out.println("Bad int parameter: " + parameterList.get(0));
@@ -35,10 +41,14 @@ public class UriParametersParser {
     }
 
     public String getStringParameter(String parameterName) {
-        List<String> parameterList = params.get(parameterName);
+        try {
+            List<String> parameterList = params.get(parameterName);
 
-        if (parameterList.size() == 1) {
-            return parameterList.get(0);
+            if (parameterList.size() == 1) {
+                return parameterList.get(0);
+            }
+        } catch (Exception e) {
+            throw new ProcessingException(e.getClass().getSimpleName());
         }
 
         return null;

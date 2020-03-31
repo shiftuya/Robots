@@ -67,7 +67,7 @@ class ContextManager {
         }
 
         var contextManager = this;
-        ajaxGet(ajaxQuery, function(result) {
+        sendAjax(ajaxQuery, function(result) {
             insertFunction(result ? JSON.parse(result) : undefined, contextManager);
         });
     }
@@ -244,7 +244,7 @@ function insertLevelsData(obj, contextManager) {
 
             tr.find(".level-delete-a").on("click", function() {
                 if (confirm("Are you sure you want to delete the level? This action cannot be undone.")) {
-                    ajaxGet("level.delete?id=" + item.level_id, function(result) {
+                    sendAjax("level.delete?id=" + item.level_id, function(result) {
                         var obj = JSON.parse(result);
                         alert(obj.response.deleted ? "Deleted" : "Not deleted");
                         contextManager.changeContext("levels");
@@ -308,7 +308,7 @@ function insertSimulatorsData(obj, contextManager) {
             table.append(tr);
 
             tr.find(".simulator-delete-a").on("click", function() {
-                ajaxGet("simulator.delete?url=" + item.url, function(result) {
+                sendAjax("simulator.delete?url=" + item.url, function(result) {
                     var obj = JSON.parse(result);
                     alert(obj.response.deleted ? "Deleted" : "Not deleted");
                     contextManager.changeContext("simulators");
@@ -364,7 +364,7 @@ function insertLobbyData(obj, contextManager) {
             });
 
             section.find("#leave-lobby").on("click", function() {
-                ajaxGet("lobby.leave?id=" + item.lobby_id, function(data) {
+                sendAjax("lobby.leave?id=" + item.lobby_id, function(data) {
                     var obj = JSON.parse(data);
                     if (obj.response.length == 0) {
                         alert("Bad response!");
@@ -379,7 +379,7 @@ function insertLobbyData(obj, contextManager) {
             });
 
             section.find("#get-simulation-result").on("click", function() {
-                ajaxGet("simulation_result.is_ready?id=" + item.lobby_id, function(data) {
+                sendAjax("simulation_result.is_ready?id=" + item.lobby_id, function(data) {
                     var obj = JSON.parse(data);
                     if (obj.response.length == 0) {
                         alert("Bad response!");

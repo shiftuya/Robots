@@ -1,14 +1,14 @@
 package ru.nsu.fit.markelov.httphandlers.handlers.rest.collections;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
+import ru.nsu.fit.markelov.httphandlers.util.Responder;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
-public class LevelsGetHandler implements HttpHandler {
+public class LevelsGetHandler extends RestHandler {
 
     private MainManager mainManager;
 
@@ -17,15 +17,7 @@ public class LevelsGetHandler implements HttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchange) {
-        try (OutputStream oStream = exchange.getResponseBody()) {
-            byte[] bytes = JsonPacker.packLevels(mainManager.getLevels()).getBytes();
-            exchange.sendResponseHeaders(200, bytes.length);
-            oStream.write(bytes);
-        } catch (IOException e) {
-            System.out.println(e.toString());
-        } finally {
-            exchange.close();
-        }
+    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
+        responder.sendResponse(JsonPacker.packLevels(mainManager.getLevels()));
     }
 }

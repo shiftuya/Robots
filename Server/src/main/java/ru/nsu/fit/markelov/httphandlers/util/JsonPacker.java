@@ -16,7 +16,7 @@ public class JsonPacker {
 
     public static final String DATE_FORMAT = "dd.MM.yyyy";
 
-    public static String packLevels(List<Level> levels) {
+    public static JSONArray packLevels(List<Level> levels) {
         JSONArray jsonLevels = new JSONArray();
 
         for (Level level : levels) {
@@ -36,11 +36,11 @@ public class JsonPacker {
             jsonLevels.put(jsonLevel);
         }
 
-        return new JSONObject().put("response", jsonLevels).toString();
+        return jsonLevels;
     }
 
     // у этого левела другая схема json - его нельзя использовать в packLevels
-    public static String packLevel(Level level) {
+    public static JSONObject packLevel(Level level) {
         JSONObject jsonLevel = new JSONObject();
         jsonLevel
             .put("level_id", level.getId())
@@ -55,18 +55,18 @@ public class JsonPacker {
             .put("code", level.getCode())
             .put("language", level.getLanguage());
 
-        return new JSONObject().put("response", jsonLevel).toString();
+        return jsonLevel;
     }
 
-    public static String packLevelDelete(boolean deleted) {
+    public static JSONObject packLevelDelete(boolean deleted) {
         JSONObject jsonDeleted = new JSONObject();
         jsonDeleted
             .put("deleted", deleted);
 
-        return new JSONObject().put("response", jsonDeleted).toString();
+        return jsonDeleted;
     }
 
-    public static String packSimulators(List<String> urls) {
+    public static JSONArray packSimulators(List<String> urls) {
         JSONArray jsonUrls = new JSONArray();
 
         for (String url : urls) {
@@ -77,26 +77,26 @@ public class JsonPacker {
             jsonUrls.put(jsonUrl);
         }
 
-        return new JSONObject().put("response", jsonUrls).toString();
+        return jsonUrls;
     }
 
-    public static String packSimulatorAdd(boolean added) {
+    public static JSONObject packSimulatorAdd(boolean added) {
         JSONObject jsonDeleted = new JSONObject();
         jsonDeleted
             .put("added", added);
 
-        return new JSONObject().put("response", jsonDeleted).toString();
+        return jsonDeleted;
     }
 
-    public static String packSimulatorDelete(boolean deleted) {
+    public static JSONObject packSimulatorDelete(boolean deleted) {
         JSONObject jsonDeleted = new JSONObject();
         jsonDeleted
             .put("deleted", deleted);
 
-        return new JSONObject().put("response", jsonDeleted).toString();
+        return jsonDeleted;
     }
 
-    public static String packSolutions(String username, Map<Level, List<SimulationResult>> solutions) {
+    public static JSONArray packSolutions(String username, Map<Level, List<SimulationResult>> solutions) {
         JSONArray jsonSolutions = new JSONArray();
 
         for (Level level : solutions.keySet()) {
@@ -128,10 +128,10 @@ public class JsonPacker {
             jsonSolutions.put(jsonSolution);
         }
 
-        return new JSONObject().put("response", jsonSolutions).toString();
+        return jsonSolutions;
     }
 
-    public static String packLobbies(List<Lobby> lobbies) {
+    public static JSONArray packLobbies(List<Lobby> lobbies) {
         JSONArray jsonLobbies = new JSONArray();
 
         for (Lobby lobby : lobbies) {
@@ -150,11 +150,11 @@ public class JsonPacker {
             jsonLobbies.put(jsonLobby);
         }
 
-        return new JSONObject().put("response", jsonLobbies).toString();
+        return jsonLobbies;
     }
 
     // у этого лобби другая схема json - его нельзя использовать в packLobbies
-    public static String packLobby(Lobby lobby) {
+    public static JSONObject packLobby(Lobby lobby) {
         JSONArray jsonPlayers = new JSONArray();
 
         for (Player player : lobby.getPlayers()) {
@@ -182,39 +182,39 @@ public class JsonPacker {
                 .put("goal", lobby.getLevel().getGoal())
                 .put("players_list", jsonPlayers);
 
-        return new JSONObject().put("response", jsonLobby).toString();
+        return jsonLobby;
     }
 
-    public static String packLeavingLobby(boolean userRemovedFromLobby) {
-        return new JSONObject().put("response", new JSONObject().put("successful", userRemovedFromLobby)).toString();
+    public static JSONObject packLeavingLobby(boolean userRemovedFromLobby) {
+        return new JSONObject().put("successful", userRemovedFromLobby);
     }
 
-    public static String packCompileResult(CompileResult compileResult) {
+    public static JSONObject packCompileResult(CompileResult compileResult) {
         JSONObject jsonCompileResult = new JSONObject();
         jsonCompileResult
                 .put("simulated", compileResult.isSimulated())
                 .put("compiled", compileResult.isCompiled())
                 .put("message", compileResult.getMessage());
 
-        return new JSONObject().put("response", jsonCompileResult).toString();
+        return jsonCompileResult;
     }
 
-    public static String packCode(String code) {
+    public static JSONObject packCode(String code) {
         JSONObject jsonCode = new JSONObject();
         jsonCode.put("code", (code != null) ? code : "");
 
-        return new JSONObject().put("response", jsonCode).toString();
+        return jsonCode;
     }
 
-    public static String packSimulationResultReadiness(boolean isSimulationFinished) {
+    public static JSONObject packSimulationResultReadiness(boolean isSimulationFinished) {
         JSONObject jsonSimulationResultReadiness = new JSONObject();
         jsonSimulationResultReadiness
                 .put("simulation_finished", isSimulationFinished);
 
-        return new JSONObject().put("response", jsonSimulationResultReadiness).toString();
+        return jsonSimulationResultReadiness;
     }
 
-    public static String packSimulationResult(SimulationResult simulationResult, String username) {
+    public static JSONObject packSimulationResult(SimulationResult simulationResult, String username) {
         JSONObject jsonSimulationResult = new JSONObject();
         jsonSimulationResult
                 .put("simulation_result_id", simulationResult.getId())
@@ -222,24 +222,24 @@ public class JsonPacker {
                 .put("simulation_result_status", simulationResult.isSuccessful(username))
                 .put("simulation_result_log", simulationResult.getLog(username));
 
-        return new JSONObject().put("response", jsonSimulationResult).toString();
+        return jsonSimulationResult;
     }
 
-    public static String packLoggingIn(boolean loggedIn) {
+    public static JSONObject packLoggingIn(boolean loggedIn) {
         JSONObject jsonLoggingIn = new JSONObject();
         jsonLoggingIn
                 .put("logged_in", loggedIn)
                 .put("message", loggedIn ? "You are successfully logged in." : "Error: You logged in earlier.");
 
-        return new JSONObject().put("response", jsonLoggingIn).toString();
+        return jsonLoggingIn;
     }
 
-    public static String packLoggingOut(boolean loggedOut) {
+    public static JSONObject packLoggingOut(boolean loggedOut) {
         JSONObject jsonLoggingOut = new JSONObject();
         jsonLoggingOut
                 .put("logged_out", loggedOut)
                 .put("message", loggedOut ? "You are successfully logged out." : "Error: You haven't logged in yet.");
 
-        return new JSONObject().put("response", jsonLoggingOut).toString();
+        return jsonLoggingOut;
     }
 }

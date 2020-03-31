@@ -223,6 +223,10 @@ public class MainManagerHardcoded implements MainManager {
 
     @Override
     public List<Level> getLevels() {
+        if (false) {
+            throw new ProcessingException("qwerty");
+        }
+
         return levelManager.getLevels();
 //        return new ArrayList<>();
     }

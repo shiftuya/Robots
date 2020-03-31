@@ -126,7 +126,7 @@ function activateListeners(contextManager) {
     $("#login-submit").on("click", function() {
         var username = $("#login-content").find("input.login-form-input[type='text']").val();
         
-        ajaxGet("sign.login?username=" + username, function(data) {
+        sendAjax("sign.login?username=" + username, function(data) {
             var obj = JSON.parse(data);
             if (obj.response.length == 0) {
                 alert("Bad response!");
@@ -140,7 +140,7 @@ function activateListeners(contextManager) {
     });
 
     $("#logout").on("click", function() {
-        ajaxGet("sign.logout", function(data) {
+        sendAjax("sign.logout", function(data) {
             var obj = JSON.parse(data);
             if (obj.response.length == 0) {
                 alert("Bad response!");
@@ -166,29 +166,21 @@ function activateListeners(contextManager) {
         var id = $(this).attr("data-lobby-id");
         var code = codeMirror.getValue();
 
-        $.post("/api/method/lobby.submit?id=" + id, {code: code}, function(data, status) {
-            if (status == "success" && data) {
-                try {
-                    var obj = JSON.parse(data);
-                    if (obj.response.length == 0) {
-                        alert("Bad response!");
-                    } else {
-                        alert(obj.response.message);
-                        if (obj.response.simulated) {
-                            contextManager.changeContext("simulation_result", "simulation_result.get?id=" + id);
-                        } else if (obj.response.compiled) {
-                            contextManager.changeContext("lobby", "lobby.return?id=" + id);
-                        } else {
-                            alert("Debug: not compiled and not simulated!");
-                        }
-                    }
-                } catch(e) {
-                    alert(e);
-                }
+        sendAjax("lobby.submit?id=" + id, function(result) {
+            var obj = JSON.parse(result);
+            if (obj.response.length == 0) {
+                alert("Bad response!");
             } else {
-                alert("Bad request!");
+                alert(obj.response.message);
+                if (obj.response.simulated) {
+                    contextManager.changeContext("simulation_result", "simulation_result.get?id=" + id);
+                } else if (obj.response.compiled) {
+                    contextManager.changeContext("lobby", "lobby.return?id=" + id);
+                } else {
+                    alert("Debug: not compiled and not simulated!");
+                }
             }
-        });
+        }, {code: code});
     });
 
     $("#submit-level").on("click", function() {
@@ -196,25 +188,11 @@ function activateListeners(contextManager) {
         form.find("textarea[name='code']").val(codeMirror.getValue());
 
         var formData = new FormData(form[0]);
-        $.ajax({
-            url: "/api/method/level.submit",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function(result, status, xhr) {
-                var obj = JSON.parse(result);
-                if (obj.response) {
-                    alert(obj.response);
-                } else if (obj.error) {
-                    alert(obj.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                alert(error);
-            }
-        });
+        sendAjax("level.submit", function(result) {
+            var obj = JSON.parse(result);
+            alert(obj.response);
+            contextManager.changeContext("levels");
+        }, undefined, formData);
     });
 
     $("#add-simulator").on("click", function() {
@@ -224,7 +202,7 @@ function activateListeners(contextManager) {
             return;
         }
         
-        ajaxGet("simulator.add?url=" + url, function(result) {
+        sendAjax("simulator.add?url=" + url, function(result) {
             var obj = JSON.parse(result);
             alert(obj.response.added ? "Added" : "Not added");
             contextManager.changeContext("simulators");
@@ -232,16 +210,20 @@ function activateListeners(contextManager) {
     });
 }
 
-function ajaxGet(ajaxQuery, handleResponseFunction) {
-    $.get("/api/method/" + ajaxQuery, function(result, status) {
-        if (status == "success" && result) {
-            try {
-                handleResponseFunction(result);
-            } catch(e) {
-                alert(e);
-            }
-        } else {
-            alert("Bad request!");
+function sendAjax(ajaxQuery, handleResponseFunction, data, formData) {
+    $.ajax({
+        url: "/api/method/" + ajaxQuery,
+        type: formData || data ? "POST" : "GET",
+        data: formData || data,
+        processData: !formData,
+        contentType: false,
+        cache: false,
+        success: function(result, status, xhr) {
+            handleResponseFunction(result);
+        },
+        error: function(xhr, status, error) {
+            var obj = JSON.parse(xhr.responseText);
+            alert("Server error: " + obj.error);
         }
     });
 }

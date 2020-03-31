@@ -1,18 +1,18 @@
 package ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
-import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
+import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.PostRequestBodyParserHARDCODED;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
-public class LobbySubmitHandler implements HttpHandler {
+public class LobbySubmitHandler extends RestHandler {
 
     private MainManager mainManager;
 
@@ -21,27 +21,32 @@ public class LobbySubmitHandler implements HttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchange) {
+    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
         String cookieUserName = CookieParser.getCookieUserName(exchange);
-        DebugUtil.printCookieUserName(cookieUserName);
+
+        if (cookieUserName == null) {
+            throw new ProcessingException("cookieUserName is null.");
+        }
+        System.out.println("cookieUserName: " + cookieUserName);
 
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
         Integer id = uriParametersParser.getIntegerParameter("id");
 
+        if (id == null) {
+            throw new ProcessingException("Id is null.");
+        }
+
         String code = PostRequestBodyParserHARDCODED.getCodeHARDCODED(exchange.getRequestBody());
 
-        try (OutputStream oStream = exchange.getResponseBody()) {
-            if (cookieUserName != null && code != null && id != null) {
-                byte[] bytes = JsonPacker.packCompileResult(mainManager.submit(cookieUserName, id, code)).getBytes();
-                exchange.sendResponseHeaders(200, bytes.length);
-                oStream.write(bytes);
-            } else {
-                exchange.sendResponseHeaders(204, -1);
-            }
-        } catch (IOException e) {
-            System.out.println(e.toString());
-        } finally {
-            exchange.close();
+        if (code == null) {
+            throw new ProcessingException("Code is null.");
+        }
+        System.out.println(code);
+
+        try { // TODO don't catch when Simon does it right
+            responder.sendResponse(JsonPacker.packCompileResult(mainManager.submit(cookieUserName, id, code)));
+        } catch (RuntimeException e) {
+            throw new ProcessingException(e.getClass().getSimpleName());
         }
     }
 }

@@ -1,15 +1,16 @@
 package ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
+import ru.nsu.fit.markelov.httphandlers.util.Responder;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
-public class SimulatorAddHandler implements HttpHandler {
+public class SimulatorAddHandler extends RestHandler {
 
     private MainManager mainManager;
 
@@ -18,22 +19,14 @@ public class SimulatorAddHandler implements HttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange exchange) {
+    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
         String url = uriParametersParser.getStringParameter("url");
 
-        try (OutputStream oStream = exchange.getResponseBody()) {
-            if (url != null) {
-                byte[] bytes = JsonPacker.packSimulatorAdd(mainManager.addSimulator(url)).getBytes();
-                exchange.sendResponseHeaders(200, bytes.length);
-                oStream.write(bytes);
-            } else {
-                exchange.sendResponseHeaders(204, -1);
-            }
-        } catch (IOException e) {
-            System.out.println(e.toString());
-        } finally {
-            exchange.close();
+        if (url == null) {
+            throw new ProcessingException("Url is null.");
         }
+
+        responder.sendResponse(JsonPacker.packSimulatorAdd(mainManager.addSimulator(url)));
     }
 }
