@@ -78,6 +78,11 @@ $(document).ready(function() {
             headerId: "header-main",
             contentId: "options-content"
         }],
+        ["404", {
+            title: "404 Not Found",
+            headerId: "header-main",
+            contentId: "404-content"
+        }],
         ["lobby", {
             title: "Lobby",
             headerId: "header-main",
