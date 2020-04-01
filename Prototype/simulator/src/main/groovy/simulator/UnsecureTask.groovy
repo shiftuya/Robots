@@ -23,14 +23,14 @@ class UnsecureTask implements Task {
         return res
     }
 
-    UnsecureTask(String jsonData) {
+    UnsecureTask(String jsonData, LevelSrcManager mng) {
         def jsonSlurp = new JsonSlurper()
         def jsonObject = jsonSlurp.parseText(jsonData)
         solutions = jsonObject.solutions
         String lvlName = jsonObject.level
-        def gcl = new GroovyClassLoader()
-        def levelClass = gcl.parseClass(new File("levels/" + lvlName + "_lvl.groovy"))
-        lvl = (Level) levelClass.newInstance(solutions.size())
+        def levelClass = mng.getLevel(lvlName)
+        if (levelClass != null)
+            lvl = (Level) levelClass.newInstance(solutions.size())
         scripts = new ArrayList<>()
         loggers = new ArrayList<>()
         lvlTime = 0
@@ -41,7 +41,9 @@ class UnsecureTask implements Task {
     String run() {
         long startRunTime = System.currentTimeMillis()
         String result = ""
-        assert lvl != null
+        if(lvl==null){
+            throw new RuntimeException("No level available")
+        }
         boolean finished = false;
 
         for (int i = 0; i < solutions.size(); i++) {
@@ -76,7 +78,6 @@ class UnsecureTask implements Task {
             try {
                 start = System.currentTimeMillis()
                 String cmd = scripts.get(robotId).evaluate(solutions.get(robotId))
-                //writeLog(robotId, "\tCoordinates: (" + lvl.getSensorReadings(robotId, "x") + ";" + lvl.getSensorReadings(robotId, "y") + ")\n")
                 end = System.currentTimeMillis()
                 timeForScripts += end - start
                 def cmds = cmd.split()
@@ -89,12 +90,10 @@ class UnsecureTask implements Task {
                 lvl.breakRobot(robotId)
                 continue
             }
-            //println("Run script")
             start = System.currentTimeMillis()
             lvl.setAction(robotId, action, duration)
             end = System.currentTimeMillis()
             lvlTime += end - start
-            //println(action)
 
             if (lvl.checkGoal(robotId)) {
                 ArrayList<Boolean> passed = new ArrayList<>()
@@ -113,16 +112,7 @@ class UnsecureTask implements Task {
 
 
         }
-        //println("Task time: " + (System.currentTimeMillis() - startRunTime))
-        //println("Level time:" + lvlTime)
-        //println("Script time:" + timeForScripts)
         return result
     }
-}
-/*
 
-{
-level:"simple_plane",
-solutions:["some code","other code"]
 }
- */

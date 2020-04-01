@@ -4,6 +4,7 @@
 
 package simulator
 
+import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import groovy.transform.CompileStatic
 import groovy.transform.Synchronized
@@ -16,20 +17,26 @@ class App {
     static long sim_count = 0
 
     @Synchronized
-    static long modify(long dif){
-        sim_count+=dif
+    static long modify(long dif) {
+        sim_count += dif
         return sim_count
+    }
+
+    static void sendError(HttpExchange http, String message) {
+        http.responseBody.withWriter { out ->
+            out << "{\"error\":\"" + message + "\"}"
+        }
     }
 
     @CompileStatic
     static void main(String[] args) {
         long id_next = 0
+        LevelSrcManager srcManager = new SourceManager("levels")
         HttpServer.create(new InetSocketAddress(PORT), 0).with {
             println "Server is listening on ${PORT}, hit Ctrl+C to exit."
             createContext("/simulate") { http ->
                 modify(+1)
                 try {
-
                     http.responseHeaders.add("Content-type", "text/plain")
                     if (http.requestMethod != "POST") {
                         println "Wrong method"
@@ -37,31 +44,79 @@ class App {
                         http.close()
                         return
                     }
-                    http.sendResponseHeaders(200, 0)
-
-                    Task task = new UnsecureTask("${http.requestBody}")
+                    Task task = new UnsecureTask("${http.requestBody}", srcManager)
                     String result = task.run()
-                    //println(result)
+                    http.sendResponseHeaders(200, 0)
                     http.responseBody.withWriter { out ->
                         out << result + "\n"
                     }
-                    http.close()
                 } catch (Exception e) {
                     println "Exception when processing solution"
                     println(e)
-                    http.sendResponseHeaders(500, 0)
-                    http.responseBody.withWriter { out ->
-                        out << "error: " + e
-                    }
-                    http.close()
-
+                    http.sendResponseHeaders(200, 0)
+                    sendError(http, e.getMessage())
                 }
                 modify(-1)
+                http.close()
             }
             createContext("/test") { http ->
                 http.sendResponseHeaders(200, 0)
                 http.responseBody.withWriter { out ->
-                    out << "{\"status\":\"online\", \"sim_count\": "+modify(0)+"}"
+                    out << "{\"status\":\"online\", \"sim_count\": " + modify(0) + "}"
+                }
+                http.close()
+            }
+            createContext("/addLevel/") { http ->
+                def parts = http.requestURI.getPath().split("/")
+                println(parts)
+                if (parts.size() != 3) {
+                    http.sendResponseHeaders(200, 0)
+                    sendError(http, "No name specified")
+                    http.close()
+                    return
+                }
+                String lvlName = parts.last()
+                Resource resource = new LevelResource(lvlName, 1, http.requestBody.bytes)
+                Boolean status = srcManager.saveLevel(resource, null)
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.withWriter { out ->
+                    out << "{\"status\":" + status.toString() + "}"
+                }
+                http.close()
+            }
+            createContext("/addResource/") { http ->
+                def parts = http.requestURI.getPath().split("/")
+                println(parts)
+                if (parts.size() != 4) {
+                    http.sendResponseHeaders(200, 0)
+                    sendError(http, "No name specified")
+                    http.close()
+                    return
+                }
+                String lvlName = parts[2]
+                String resourceName = parts[3]
+                Resource resource = new LevelResource(resourceName, 1, http.requestBody.bytes)
+                Boolean status = srcManager.addResource(lvlName, resource)
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.withWriter { out ->
+                    out << "{\"status\":" + status.toString() + "}"
+                }
+                http.close()
+            }
+            createContext("/removeLevel/") { http ->
+                def parts = http.requestURI.getPath().split("/")
+                println(parts)
+                if (parts.size() != 3) {
+                    http.sendResponseHeaders(200, 0)
+                    sendError(http, "No name specified")
+                    http.close()
+                    return
+                }
+                String lvlName = parts.last()
+                Boolean status = srcManager.deleteLevel(lvlName)
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.withWriter { out ->
+                    out << "{\"status\":" + status.toString() + "}"
                 }
                 http.close()
             }
