@@ -1,0 +1,33 @@
+.level-editor-form > p {
+    margin-bottom: 15px;
+}
+
+.long-input, .justify-input {
+    text-align: left;
+}
+
+.long-input label, .justify-input label {
+    margin-left: 20px;
+}
+
+.long-input input {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.level-property {
+	margin: 10px;
+}
+
+.level-code-editor-a {
+    display: block;
+    float: left;
+    width: 24px;
+    height: 24px;
+    margin-bottom: 5px;
+}
+
+.resources {
+    float: right;
+}
+

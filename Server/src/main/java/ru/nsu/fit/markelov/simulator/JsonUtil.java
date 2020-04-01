@@ -2,7 +2,7 @@ package ru.nsu.fit.markelov.simulator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import ru.nsu.fit.markelov.interfaces.Player;
+import ru.nsu.fit.markelov.interfaces.client.Player;
 import ru.nsu.fit.markelov.mainmanager.SimulationResult1;
 
 import java.util.ArrayList;

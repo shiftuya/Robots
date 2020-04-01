@@ -1,7 +1,7 @@
 package ru.nsu.fit.markelov.objects_hardcoded;
 
-import ru.nsu.fit.markelov.interfaces.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.playback.Playback;
+import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.client.Playback;
 
 import java.util.Date;
 

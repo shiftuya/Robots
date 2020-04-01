@@ -1,25 +1,31 @@
 package ru.nsu.fit.markelov;
 
 import com.sun.net.httpserver.HttpServer;
-import ru.nsu.fit.markelov.httphandlers.CodeEditHandler;
-import ru.nsu.fit.markelov.httphandlers.CommonHttpHandler;
-import ru.nsu.fit.markelov.httphandlers.LevelsGetHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbiesGetHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbyCreateHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbyJoinHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbyLeaveHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbyReturnHandler;
-import ru.nsu.fit.markelov.httphandlers.LobbySubmitHandler;
-import ru.nsu.fit.markelov.httphandlers.LogInHandler;
-import ru.nsu.fit.markelov.httphandlers.LogOutHandler;
-import ru.nsu.fit.markelov.httphandlers.SimulationResultGetHandler;
-import ru.nsu.fit.markelov.httphandlers.SimulationResultIsReadyHandler;
-import ru.nsu.fit.markelov.httphandlers.SolutionsGetHandler;
-import ru.nsu.fit.markelov.interfaces.MainManager;
+import ru.nsu.fit.markelov.httphandlers.handlers.CommonHttpHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.code.CodeEditHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.LevelsGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.LobbiesGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.SimulatorsGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.SolutionsGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.level.LevelDeleteHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.level.LevelGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.level.LevelSubmitHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbyCreateHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbyJoinHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbyLeaveHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbyReturnHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbySubmitHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.log.LogInHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.log.LogOutHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultIsReadyHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorAddHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorDeleteHandler;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.mainmanager.MainManager1;
-import ru.nsu.fit.markelov.managers_hardcoded.MainManagerHardcoded;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 
 public class MainServer {
     public static void main(String[] args) throws Exception {
@@ -28,7 +34,19 @@ public class MainServer {
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(5051), 0);
 
-        server.createContext("/", new CommonHttpHandler());
+        server.createContext("/", new CommonHttpHandler(null));
+
+        server.createContext("/login", new CommonHttpHandler("login"));
+        server.createContext("/list_of_lobbies", new CommonHttpHandler("list_of_lobbies"));
+        server.createContext("/choose_level", new CommonHttpHandler("choose_level"));
+        server.createContext("/my_solutions", new CommonHttpHandler("my_solutions"));
+        server.createContext("/levels", new CommonHttpHandler("levels"));
+        server.createContext("/level_editor", new CommonHttpHandler("level_editor"));
+        server.createContext("/simulators", new CommonHttpHandler("simulators"));
+        server.createContext("/options", new CommonHttpHandler("options"));
+        server.createContext("/lobby", new CommonHttpHandler("lobby"));
+        server.createContext("/code_editor", new CommonHttpHandler("code_editor"));
+        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result"));
 
         server.createContext("/api/method/sign.login", new LogInHandler(mainManager));
         server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));
@@ -36,6 +54,7 @@ public class MainServer {
         server.createContext("/api/method/lobbies.get", new LobbiesGetHandler(mainManager));
         server.createContext("/api/method/levels.get", new LevelsGetHandler(mainManager));
         server.createContext("/api/method/solutions.get", new SolutionsGetHandler(mainManager));
+        server.createContext("/api/method/simulators.get", new SimulatorsGetHandler(mainManager));
 
         server.createContext("/api/method/lobby.join", new LobbyJoinHandler(mainManager));
         server.createContext("/api/method/lobby.create", new LobbyCreateHandler(mainManager));
@@ -48,7 +67,14 @@ public class MainServer {
         server.createContext("/api/method/simulation_result.is_ready", new SimulationResultIsReadyHandler(mainManager));
         server.createContext("/api/method/simulation_result.get", new SimulationResultGetHandler(mainManager));
 
-        server.setExecutor(null);
+        server.createContext("/api/method/level.get", new LevelGetHandler(mainManager));
+        server.createContext("/api/method/level.submit", new LevelSubmitHandler(mainManager));
+        server.createContext("/api/method/level.delete", new LevelDeleteHandler(mainManager));
+
+        server.createContext("/api/method/simulator.add", new SimulatorAddHandler(mainManager));
+        server.createContext("/api/method/simulator.delete", new SimulatorDeleteHandler(mainManager));
+
+        server.setExecutor(Executors.newCachedThreadPool());
         server.start();
     }
 }

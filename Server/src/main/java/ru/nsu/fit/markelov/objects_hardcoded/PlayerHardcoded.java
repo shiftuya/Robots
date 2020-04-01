@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.objects_hardcoded;
 
-import ru.nsu.fit.markelov.interfaces.Player;
+import ru.nsu.fit.markelov.interfaces.client.Player;
 
 public class PlayerHardcoded implements Player {
 

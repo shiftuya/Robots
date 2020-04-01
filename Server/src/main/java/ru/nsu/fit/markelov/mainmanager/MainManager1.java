@@ -1,22 +1,21 @@
 package ru.nsu.fit.markelov.mainmanager;
 
+import ru.nsu.fit.markelov.interfaces.client.CompileResult;
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Lobby;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.Resource;
+import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
+import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import ru.nsu.fit.markelov.interfaces.CompileResult;
-import ru.nsu.fit.markelov.interfaces.Level;
-import ru.nsu.fit.markelov.interfaces.Lobby;
-import ru.nsu.fit.markelov.interfaces.MainManager;
-import ru.nsu.fit.markelov.interfaces.Player;
-import ru.nsu.fit.markelov.interfaces.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.SimulatorManager;
-import ru.nsu.fit.markelov.interfaces.Solution;
-import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 public class MainManager1 implements MainManager {
   @Override
@@ -51,8 +50,6 @@ public class MainManager1 implements MainManager {
 
   private int maxLobbyId, maxLevelId;
 
-  private Map<Player, List<Solution>> playerSolutionsMap;
-
  // private Map<Integer, String> levelIdToFile;
 
   private Map<String, Player1> playerMap;
@@ -62,7 +59,7 @@ public class MainManager1 implements MainManager {
 
   private Map<Integer, SimulationResult> simResultMap;
 
-
+  private Map<Player, Map<Level, List<SimulationResult>>> playerSimResultMap;
 
   private List<Level> levels;
 
@@ -86,7 +83,6 @@ public class MainManager1 implements MainManager {
   public MainManager1() {
     lobbies = new ArrayList<>();
     levels = new ArrayList<>();
-    playerSolutionsMap = new HashMap<>();
     playerMap = new HashMap<>();
     maxLevelId = maxLobbyId = 0;
     simResultMap = new HashMap<>();
@@ -94,11 +90,13 @@ public class MainManager1 implements MainManager {
     idLevelMap = new HashMap<>();
     simulatorManager = new HardcodedSimulatorManager();
 
+    playerSimResultMap = new HashMap<>();
+
     // Hard Code
     addNewLevel(++maxLevelId,
         "/images/labyrinth-icon.png",
         "Simple Plane",
-        "Easy",
+        Level.LevelDifficulty.Easy,
         "Multiplayer",
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim",
         "Suspendisse sed nisi lacus sed viverra tellus in hac habitasse",
@@ -112,8 +110,9 @@ public class MainManager1 implements MainManager {
   // For hardcoding purposes
   Player addNewPlayer(String name, String avatarAddress) {
     Player1 player = new Player1(avatarAddress, name);
-    playerSolutionsMap.put(player, new LinkedList<>());
     playerMap.put(name, player);
+
+    playerSimResultMap.put(player, new HashMap<>());
     return player;
   }
 
@@ -122,8 +121,8 @@ public class MainManager1 implements MainManager {
   }
 
   // For hardcoding purposes
-  void addNewLevel(int id, String iconAddress, String name, String difficulty, String type,
-      String description, String rules, String goal, int minPlayers, int maxPlayers, String filename) {
+  void addNewLevel(int id, String iconAddress, String name, Level.LevelDifficulty difficulty, String type,
+                   String description, String rules, String goal, int minPlayers, int maxPlayers, String filename) {
 
     Level1 level = new Level1(id, iconAddress, name, difficulty, type,
         description, rules, goal, minPlayers, maxPlayers, filename);
@@ -149,10 +148,10 @@ public class MainManager1 implements MainManager {
     return levels;
   }
 
-  @Override
+/*  @Override
   public List<Solution> getSolutions(String userName) {
-    return playerSolutionsMap.get(getPlayerByName(userName));
-  }
+    return null;
+  }*/
 
   @Override
   public Lobby joinLobby(String userName, int lobbyID) {
@@ -216,7 +215,7 @@ public class MainManager1 implements MainManager {
   }
 
   @Override
-  public CompileResult submit(String username, String code, int lobbyId) {
+  public CompileResult submit(String username, int lobbyId, String code) {
     // TODO try to compile
 
     Lobby1 lobby = getLobbyById(lobbyId);
@@ -261,23 +260,58 @@ public class MainManager1 implements MainManager {
     for(Player player : lobby.getPlayers()) {
       ((Player1)player).setSubmitted(false);
 
-      List<Solution> solutionList = playerSolutionsMap.get(player);
-
-      boolean isSolutionFound = false;
-
-      for (Solution solution : solutionList) {
-        if (solution.getLevel() == lobby.getLevel()) {
-          ((Solution1) solution).simulationResults.add(0, result);
-          isSolutionFound = true;
-        }
-      }
-
-      if (!isSolutionFound) {
-        solutionList.add(new Solution1(lobby.getLevel(), result));
-      }
+      Map<Level, List<SimulationResult>> map = playerSimResultMap.get(player);
+      map.computeIfAbsent(lobby.getLevel(), k -> new LinkedList<>());
+      map.get(lobby.getLevel()).add(result);
     }
 
     lobbies.remove(lobby);
     idLobbyMap.remove(lobby.getId());
+  }
+
+  @Override
+  public List<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId) {
+    Player player = getPlayerByName(username);
+    if (player == null) return null;
+
+    Level level = getLevelById(levelId);
+    if (level == null) return null;
+
+    Map<Level, List<SimulationResult>> map = playerSimResultMap.get(player);
+    map.computeIfAbsent(level, k -> new LinkedList<>());
+
+    return new LinkedList<>(map.get(level));
+  }
+
+  @Override
+  public boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
+                             Integer maxPlayers, Resource iconResource, String description, String rules,
+                             String goal, Collection<Resource> levelResources, String code, String language) {
+    return false; // TODO
+  }
+
+  @Override
+  public boolean deleteLevel(int levelID) {
+    return false; // TODO
+  }
+
+  @Override
+  public List<String> getSimulators() {
+    return null;
+  }
+
+  @Override
+  public boolean addSimulator(String url) {
+    return false;
+  }
+
+  @Override
+  public boolean removeSimulator(String url) {
+    return false;
+  }
+
+  @Override
+  public Level getLevel(int levelID) {
+    return null;
   }
 }

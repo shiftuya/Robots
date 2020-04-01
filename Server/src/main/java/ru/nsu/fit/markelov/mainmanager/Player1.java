@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.mainmanager;
 
-import ru.nsu.fit.markelov.interfaces.Player;
+import ru.nsu.fit.markelov.interfaces.client.Player;
 
 class Player1 implements Player {
   private String avatarAddress;

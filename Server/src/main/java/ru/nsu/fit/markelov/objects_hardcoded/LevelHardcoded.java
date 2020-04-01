@@ -1,19 +1,20 @@
 package ru.nsu.fit.markelov.objects_hardcoded;
 
-import ru.nsu.fit.markelov.interfaces.Level;
+import ru.nsu.fit.markelov.interfaces.client.Level;
 
 public class LevelHardcoded implements Level {
 
     private int id;
     private String iconAddress;
     private String name;
-    private String difficulty;
+    private LevelDifficulty difficulty;
     private String type;
     private String description;
     private String rules;
     private String goal;
     private int minPlayers;
     private int maxPlayers;
+    private boolean isActive;
 
     @Override
     public int getId() {
@@ -43,11 +44,11 @@ public class LevelHardcoded implements Level {
     }
 
     @Override
-    public String getDifficulty() {
+    public LevelDifficulty getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(LevelDifficulty difficulty) {
         this.difficulty = difficulty;
     }
 
@@ -103,5 +104,19 @@ public class LevelHardcoded implements Level {
 
     public void setMaxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    @Override
+    public String getCode() {
+        return "null code";
+    }
+
+    @Override
+    public String getLanguage() {
+        return "groovy";
     }
 }
