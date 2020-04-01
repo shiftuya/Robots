@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface MainManager {
     /**
@@ -20,25 +20,25 @@ public interface MainManager {
     boolean logout(String username);
 
     /**
-     * Returns list of available lobbies.
+     * Returns collection of available lobbies.
      *
-     * The list of lobbies must be sorted by date of creation (the newest one - in the head).
+     * The collection of lobbies must be sorted by date of creation (the newest one - in the head).
      *
-     * @return list of available lobbies.
+     * @return collection of available lobbies.
      */
-    List<Lobby> getLobbies();
+    Collection<Lobby> getLobbies();
 
     /**
-     * Returns a list of created levels.
+     * Returns a collection of created levels.
      *
-     * @return a list of created levels.
+     * @return a collection of created levels.
      */
-    List<Level> getLevels();
+    Collection<Level> getLevels();
 
     /**
      * Places a user in the lobby gotten by specified 'lobbyID'.
      *
-     * A host-user must be in the head of the list.
+     * A host-user must be in the head of the collection.
      *
      * @param userName unique user name.
      * @param lobbyID  unique lobby id.
@@ -49,7 +49,7 @@ public interface MainManager {
     /**
      * Creates a new lobby by 'levelID' and places a user in it.
      *
-     * A host-user must be in the head of the list.
+     * A host-user must be in the head of the collection.
      *
      * @param userName      unique user name.
      * @param levelID       unique level id.
@@ -70,7 +70,7 @@ public interface MainManager {
     /**
      * Returns the lobby gotten by specified 'lobbyID'.
      *
-     * A host-user must be in the head of the list.
+     * A host-user must be in the head of the collection.
      *
      * @param userName unique user name.
      * @param lobbyID  unique lobby id.
@@ -126,7 +126,7 @@ public interface MainManager {
      * @param levelId  unique level id.
      * @return all the user simulation results on specified level.
      */
-    List<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId);
+    Collection<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId);
 
     /**
      * Submits a level and informs whether it is successfully submitted.
@@ -158,7 +158,7 @@ public interface MainManager {
      */
     boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
                         Integer maxPlayers, Resource iconResource, String description, String rules,
-                        String goal, List<Resource> levelResources, String code, String language);
+                        String goal, Collection<Resource> levelResources, String code, String language);
 
     /**
      * Returns a level gotten by specified 'levelID'.
@@ -177,11 +177,11 @@ public interface MainManager {
     boolean deleteLevel(int levelID);
 
     /**
-     * Returns a list of simulator units url.
+     * Returns a collection of simulator units url.
      *
-     * @return a list of simulator units url.
+     * @return a collection of simulator units url.
      */
-    List<String> getSimulators();
+    Collection<String> getSimulators();
 
     /**
      * Adds new simulator unit and informs whether it is successfully added.

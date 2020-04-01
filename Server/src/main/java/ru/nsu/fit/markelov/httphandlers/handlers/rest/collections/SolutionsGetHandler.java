@@ -11,8 +11,8 @@ import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SolutionsGetHandler extends RestHandler {
@@ -32,7 +32,7 @@ public class SolutionsGetHandler extends RestHandler {
         }
         System.out.println("cookieUserName: " + cookieUserName);
 
-        Map<Level, List<SimulationResult>> solutions = new HashMap<>();
+        Map<Level, Collection<SimulationResult>> solutions = new HashMap<>();
         for (Level level : mainManager.getLevels()) {
             solutions.put(level, mainManager.getUserSimulationResultsOnLevel(cookieUserName, level.getId()));
         }

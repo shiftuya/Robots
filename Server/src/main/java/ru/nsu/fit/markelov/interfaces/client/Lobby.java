@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface Lobby {
     /**
@@ -43,7 +43,7 @@ public interface Lobby {
      *
      * @return the list of players.
      */
-    List<Player> getPlayers();
+    Collection<Player> getPlayers();
 
     /**
      * Returns the level.

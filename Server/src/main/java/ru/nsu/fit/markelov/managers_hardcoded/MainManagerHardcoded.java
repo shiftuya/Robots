@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -360,7 +361,7 @@ public class MainManagerHardcoded implements MainManager {
     @Override
     public boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
                                Integer maxPlayers, Resource iconResource, String description, String rules,
-                               String goal, List<Resource> levelResources, String code, String language) {
+                               String goal, Collection<Resource> levelResources, String code, String language) {
         if (levelID == null) {
             System.out.println("null");
         } else {

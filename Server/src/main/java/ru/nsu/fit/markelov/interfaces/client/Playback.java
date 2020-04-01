@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 public interface Playback {
@@ -17,5 +17,5 @@ public interface Playback {
      *
      * @return a map of dynamic objects to the list of its position at every step of simulation.
      */
-    Map<GameObject, List<Vector3>> getDynamicGameObjects();
+    Map<GameObject, Collection<Vector3>> getDynamicGameObjects();
 }

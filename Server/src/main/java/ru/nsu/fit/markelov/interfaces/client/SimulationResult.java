@@ -1,7 +1,5 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
-import ru.nsu.fit.markelov.interfaces.client.Playback;
-
 import java.util.Date;
 
 public interface SimulationResult {

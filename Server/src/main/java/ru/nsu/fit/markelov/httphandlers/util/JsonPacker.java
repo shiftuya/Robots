@@ -9,14 +9,14 @@ import ru.nsu.fit.markelov.interfaces.client.Player;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 public class JsonPacker {
 
     public static final String DATE_FORMAT = "dd.MM.yyyy";
 
-    public static JSONArray packLevels(List<Level> levels) {
+    public static JSONArray packLevels(Collection<Level> levels) {
         JSONArray jsonLevels = new JSONArray();
 
         for (Level level : levels) {
@@ -66,7 +66,7 @@ public class JsonPacker {
         return jsonDeleted;
     }
 
-    public static JSONArray packSimulators(List<String> urls) {
+    public static JSONArray packSimulators(Collection<String> urls) {
         JSONArray jsonUrls = new JSONArray();
 
         for (String url : urls) {
@@ -96,7 +96,7 @@ public class JsonPacker {
         return jsonDeleted;
     }
 
-    public static JSONArray packSolutions(String username, Map<Level, List<SimulationResult>> solutions) {
+    public static JSONArray packSolutions(String username, Map<Level, Collection<SimulationResult>> solutions) {
         JSONArray jsonSolutions = new JSONArray();
 
         for (Level level : solutions.keySet()) {
@@ -131,7 +131,7 @@ public class JsonPacker {
         return jsonSolutions;
     }
 
-    public static JSONArray packLobbies(List<Lobby> lobbies) {
+    public static JSONArray packLobbies(Collection<Lobby> lobbies) {
         JSONArray jsonLobbies = new JSONArray();
 
         for (Lobby lobby : lobbies) {

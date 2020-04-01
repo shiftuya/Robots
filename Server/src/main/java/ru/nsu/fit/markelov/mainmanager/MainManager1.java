@@ -11,6 +11,7 @@ import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -285,7 +286,7 @@ public class MainManager1 implements MainManager {
   @Override
   public boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
                              Integer maxPlayers, Resource iconResource, String description, String rules,
-                             String goal, List<Resource> levelResources, String code, String language) {
+                             String goal, Collection<Resource> levelResources, String code, String language) {
     return false; // TODO
   }
 
