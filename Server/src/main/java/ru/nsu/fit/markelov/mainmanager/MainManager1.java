@@ -314,4 +314,29 @@ public class MainManager1 implements MainManager {
   public Level getLevel(int levelID) {// TODO
     return null;
   }
+
+  @Override
+  public Collection<User> getUsers(String userName) {
+    return null;
+  }
+
+  @Override
+  public boolean createUser(String userName, String password, User.UserType type, String avatarAddress) {
+    return false;
+  }
+
+  @Override
+  public boolean updateUser(String userName, String password, User.UserType type, String avatarAddress) {
+    return false;
+  }
+
+  @Override
+  public boolean blockUser(String userName, boolean block) {
+    return false;
+  }
+
+  @Override
+  public boolean removeUser(String userName) {
+    return false;
+  }
 }

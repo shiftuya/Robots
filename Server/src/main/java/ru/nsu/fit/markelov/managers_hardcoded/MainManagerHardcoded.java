@@ -428,4 +428,29 @@ public class MainManagerHardcoded implements MainManager {
     public boolean removeSimulator(String url) {
         return simulators.remove(url);
     }
+
+    @Override
+    public Collection<User> getUsers(String userName) {
+        return null;
+    }
+
+    @Override
+    public boolean createUser(String userName, String password, User.UserType type, String avatarAddress) {
+        return false;
+    }
+
+    @Override
+    public boolean updateUser(String userName, String password, User.UserType type, String avatarAddress) {
+        return false;
+    }
+
+    @Override
+    public boolean blockUser(String userName, boolean block) {
+        return false;
+    }
+
+    @Override
+    public boolean removeUser(String userName) {
+        return false;
+    }
 }

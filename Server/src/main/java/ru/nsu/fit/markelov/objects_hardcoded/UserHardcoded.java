@@ -46,4 +46,9 @@ public class UserHardcoded implements User {
     public Date getLastActive() {
         return new Date();
     }
+
+    @Override
+    public boolean isBlocked() {
+        return false;
+    }
 }

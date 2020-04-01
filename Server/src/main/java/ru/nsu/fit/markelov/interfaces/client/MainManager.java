@@ -29,6 +29,19 @@ public interface MainManager {
     Collection<Lobby> getLobbies();
 
     /**
+     * Returns collection of required users.
+     *
+     * If user (gotten by 'userName') is a teacher - collection of students must be returned,
+     * If user (gotten by 'userName') is an admin - collection of all users must be returned.
+     *
+     * A collection must be sorted by user names.
+     *
+     * @param userName user unique name.
+     * @return collection of required users.
+     */
+    Collection<User> getUsers(String userName);
+
+    /**
      * Returns a collection of created levels.
      *
      * @return a collection of created levels.
@@ -38,7 +51,7 @@ public interface MainManager {
     /**
      * Places a user in the lobby gotten by specified 'lobbyID'.
      *
-     * A host-user must be in the head of the collection.
+     * A host-user must be in the head of the user list.
      *
      * @param userName unique user name.
      * @param lobbyID  unique lobby id.
@@ -49,7 +62,7 @@ public interface MainManager {
     /**
      * Creates a new lobby by 'levelID' and places a user in it.
      *
-     * A host-user must be in the head of the collection.
+     * A host-user must be in the head of the user list.
      *
      * @param userName      unique user name.
      * @param levelID       unique level id.
@@ -70,7 +83,7 @@ public interface MainManager {
     /**
      * Returns the lobby gotten by specified 'lobbyID'.
      *
-     * A host-user must be in the head of the collection.
+     * A host-user must be in the head of the user list.
      *
      * @param userName unique user name.
      * @param lobbyID  unique lobby id.
@@ -129,7 +142,49 @@ public interface MainManager {
     Collection<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId);
 
     /**
-     * Submits a level and informs whether it is successfully submitted.
+     * Creates a user and informs whether it is successfully created.
+     *
+     * @param userName      unique user name.
+     * @param password      user password.
+     * @param type          user type.
+     * @param avatarAddress user avatar address.
+     * @return whether user is successfully created.
+     */
+    boolean createUser(String userName, String password, User.UserType type, String avatarAddress);
+
+    /**
+     * Updates a user and informs whether it is successfully updated.
+     *
+     * If 'password', 'type' or 'avatarAddress' is null, then corresponding user field stays the
+     * same.
+     *
+     * @param userName      unique user name.
+     * @param password      user password.
+     * @param type          user type.
+     * @param avatarAddress user avatar address.
+     * @return whether user is successfully created.
+     */
+    boolean updateUser(String userName, String password, User.UserType type, String avatarAddress);
+
+    /**
+     * Blocks/unblocks user and informs whether it is successfully blocked/unblocked.
+     *
+     * @param userName unique user name.
+     * @param block    true to for blocking and false for unblocking.
+     * @return whether user is successfully blocked/unblocked.
+     */
+    boolean blockUser(String userName, boolean block);
+
+    /**
+     * Deletes user and informs whether it is successfully deleted.
+     *
+     * @param userName unique user name.
+     * @return whether user is successfully deleted.
+     */
+    boolean removeUser(String userName);
+
+    /**
+     * Creates/edits a level and informs whether it is successfully created/edited.
      *
      * Id levelID is null - a new level must be created;
      *          otherwise - an existing level (gotten by this id) must be edited.
@@ -154,11 +209,12 @@ public interface MainManager {
      * @param levelResources level extra resources.
      * @param code           level code.
      * @param language       level language.
-     * @return whether a level is successfully submitted.
+     * @return whether a level is successfully created/edited.
      */
-    boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
-                        Integer maxPlayers, Resource iconResource, String description, String rules,
-                        String goal, Collection<Resource> levelResources, String code, String language);
+    boolean submitLevel(Integer levelID, String name, String difficulty,
+                        Integer minPlayers, Integer maxPlayers, Resource iconResource,
+                        String description, String rules, String goal,
+                        Collection<Resource> levelResources, String code, String language);
 
     /**
      * Returns a level gotten by specified 'levelID'.

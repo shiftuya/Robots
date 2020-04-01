@@ -44,4 +44,9 @@ class User1 implements User {
   public Date getLastActive() {//TODO
     return null;
   }
+
+  @Override
+  public boolean isBlocked() {//TODO
+    return false;
+  }
 }

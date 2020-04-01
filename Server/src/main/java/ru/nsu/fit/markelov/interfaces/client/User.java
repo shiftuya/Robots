@@ -33,4 +33,11 @@ public interface User {
      * @return the date of last user activity.
      */
     Date getLastActive();
+
+    /**
+     * Returns whether user is blocked.
+     *
+     * @return whether user is blocked.
+     */
+    boolean isBlocked();
 }
