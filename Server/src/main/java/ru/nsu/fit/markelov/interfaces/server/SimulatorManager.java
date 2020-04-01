@@ -1,7 +1,7 @@
 package ru.nsu.fit.markelov.interfaces.server;
 
 import ru.nsu.fit.markelov.interfaces.client.Level;
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public interface SimulatorManager {
    * @throws ru.nsu.fit.markelov.simulator.MissingSimulationUnits if there are no active Simulation
    *     Units.
    */
-  SimulationResult runSimulation(String levelId, int lobbyId, Map<Player, String> solutions);
+  SimulationResult runSimulation(String levelId, int lobbyId, Map<User, String> solutions);
 
   /**
    * Get a list of all active levels.

@@ -1,14 +1,14 @@
 package ru.nsu.fit.markelov.interfaces.server;
 
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.User;
 
 /**
  * This is just a general idea of the interface
  */
 public interface DatabaseHandler {
-  Player getPlayerByName(String name);
+  User getPlayerByName(String name);
 
-  void savePlayer(Player player);
+  void savePlayer(User user);
 
 
   // Important: Solutions include Simulation Results
@@ -16,5 +16,5 @@ public interface DatabaseHandler {
 
   //void saveSolutionForPlayer(Player player, Solution solution);
 
-  void removePlayer(Player player);
+  void removePlayer(User user);
 }

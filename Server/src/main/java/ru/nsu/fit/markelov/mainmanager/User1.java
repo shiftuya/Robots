@@ -1,8 +1,10 @@
 package ru.nsu.fit.markelov.mainmanager;
 
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.User;
 
-class Player1 implements Player {
+import java.util.Date;
+
+class User1 implements User {
   private String avatarAddress;
   private String name;
   private String solutionCode;
@@ -17,7 +19,7 @@ class Player1 implements Player {
     this.submitted = submitted;
   }
 
-  Player1(String avatarAddress, String name) {
+  User1(String avatarAddress, String name) {
     this.avatarAddress = avatarAddress;
     this.name = name;
     submitted = false;
@@ -34,7 +36,12 @@ class Player1 implements Player {
   }
 
   @Override
-  public boolean isSubmitted() {
-    return submitted;
+  public UserType getType() {//TODO
+    return null;
+  }
+
+  @Override
+  public Date getLastActive() {//TODO
+    return null;
   }
 }

@@ -5,7 +5,8 @@ import org.json.JSONObject;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.Pair;
+import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 
 import java.text.SimpleDateFormat;
@@ -139,8 +140,8 @@ public class JsonPacker {
 
             jsonLobby
                     .put("lobby_id", lobby.getId())
-                    .put("avatar", lobby.getHostAvatarAddress())
-                    .put("host_name", lobby.getHostName())
+                    .put("avatar", lobby.getUsers().get(0).getKey().getAvatarAddress())
+                    .put("host_name", lobby.getUsers().get(0).getKey().getName())
                     .put("level_icon", lobby.getLevel().getIconAddress())
                     .put("level_name", lobby.getLevel().getName())
                     .put("level_difficulty", lobby.getLevel().getDifficulty())
@@ -157,13 +158,13 @@ public class JsonPacker {
     public static JSONObject packLobby(Lobby lobby) {
         JSONArray jsonPlayers = new JSONArray();
 
-        for (Player player : lobby.getPlayers()) {
+        for (Pair<User, Boolean> user : lobby.getUsers()) {
             JSONObject jsonPlayer = new JSONObject();
 
             jsonPlayer
-                    .put("avatar", player.getAvatarAddress())
-                    .put("user_name", player.getName())
-                    .put("submitted", player.isSubmitted());
+                    .put("avatar", user.getKey().getAvatarAddress())
+                    .put("user_name", user.getKey().getName())
+                    .put("submitted", user.getValue());
 
             jsonPlayers.put(jsonPlayer);
         }

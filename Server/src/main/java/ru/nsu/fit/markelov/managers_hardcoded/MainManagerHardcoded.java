@@ -7,12 +7,12 @@ import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.interfaces.client.Playback;
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
-import ru.nsu.fit.markelov.objects_hardcoded.PlayerHardcoded;
+import ru.nsu.fit.markelov.objects_hardcoded.UserHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
 
 import java.io.IOException;
@@ -69,22 +69,22 @@ public class MainManagerHardcoded implements MainManager {
 
         // ----- players -----
 
-        PlayerHardcoded player_1 = new PlayerHardcoded();
+        UserHardcoded player_1 = new UserHardcoded();
         player_1.setAvatarAddress("/images/person-icon.png");
         player_1.setName("Vasily");
         player_1.setSubmitted(true);
 
-        PlayerHardcoded player_2 = new PlayerHardcoded();
+        UserHardcoded player_2 = new UserHardcoded();
         player_2.setAvatarAddress("/images/person-icon.png");
         player_2.setName("Simon");
         player_2.setSubmitted(true);
 
-        PlayerHardcoded player_3 = new PlayerHardcoded();
+        UserHardcoded player_3 = new UserHardcoded();
         player_3.setAvatarAddress("/images/person-icon.png");
         player_3.setName("Ivan");
         player_3.setSubmitted(false);
 
-        PlayerHardcoded player_4 = new PlayerHardcoded();
+        UserHardcoded player_4 = new UserHardcoded();
         player_4.setAvatarAddress("/images/person-icon.png");
         player_4.setName("Oleg");
         player_4.setSubmitted(false);
@@ -135,42 +135,42 @@ public class MainManagerHardcoded implements MainManager {
 
         // ----- lobbies -----
 
-        List<Player> players_for_lobby_1 = new ArrayList<>();
+        List<User> players_for_lobby_1 = new ArrayList<>();
         players_for_lobby_1.add(player_2);
         LobbyHardcoded lobby_1 = new LobbyHardcoded();
         lobby_1.setId(1);
-        lobby_1.setHostAvatarAddress("/images/person-icon.png");
-        lobby_1.setHostName("Simon");
+        /*lobby_1.setHostAvatarAddress("/images/person-icon.png");
+        lobby_1.setHostName("Simon");*/
         lobby_1.setLevel(level_3);
         lobby_1.setCurrentPlayersAmount(1);
         lobby_1.setAcceptablePlayersAmount(2);
-        lobby_1.setPlayers(players_for_lobby_1);
+        lobby_1.setUsers(players_for_lobby_1);
         lobbyManager.addLobby(lobby_1);
 
-        List<Player> players_for_lobby_2 = new ArrayList<>();
+        List<User> players_for_lobby_2 = new ArrayList<>();
         players_for_lobby_2.add(player_1);
         players_for_lobby_2.add(player_2);
         players_for_lobby_2.add(player_4);
         LobbyHardcoded lobby_2 = new LobbyHardcoded();
         lobby_2.setId(2);
-        lobby_2.setHostAvatarAddress("/images/person-icon.png");
-        lobby_2.setHostName("Vasily");
+        /*lobby_2.setHostAvatarAddress("/images/person-icon.png");
+        lobby_2.setHostName("Vasily");*/
         lobby_2.setLevel(level_2);
         lobby_2.setCurrentPlayersAmount(3);
         lobby_2.setAcceptablePlayersAmount(4);
-        lobby_2.setPlayers(players_for_lobby_2);
+        lobby_2.setUsers(players_for_lobby_2);
         lobbyManager.addLobby(lobby_2);
 
-        List<Player> players_for_lobby_3 = new ArrayList<>();
+        List<User> players_for_lobby_3 = new ArrayList<>();
         players_for_lobby_3.add(player_4);
         LobbyHardcoded lobby_3 = new LobbyHardcoded();
         lobby_3.setId(3);
-        lobby_3.setHostAvatarAddress("/images/person-icon.png");
-        lobby_3.setHostName("Ivan");
+        /*lobby_3.setHostAvatarAddress("/images/person-icon.png");
+        lobby_3.setHostName("Ivan");*/
         lobby_3.setLevel(level_3);
         lobby_3.setCurrentPlayersAmount(1);
         lobby_3.setAcceptablePlayersAmount(2);
-        lobby_3.setPlayers(players_for_lobby_3);
+        lobby_3.setUsers(players_for_lobby_3);
         lobbyManager.addLobby(lobby_3);
 
         // ----- Solutions -----

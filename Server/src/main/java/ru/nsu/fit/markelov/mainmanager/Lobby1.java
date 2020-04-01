@@ -6,47 +6,48 @@ import java.util.List;
 import java.util.Map;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.Pair;
+import ru.nsu.fit.markelov.interfaces.client.User;
 
 class Lobby1 implements Lobby {
   private int id;
-  private List<Player> players;
+  private List<User> users;
   private Level level;
 
 
-  private Map<Player, String> solutions;
+  private Map<User, String> solutions;
 
   private int acceptablePlayersAmount;
 
-  Map<Player, String> getSolutions() {
+  Map<User, String> getSolutions() {
     return solutions;
   }
 
 
 
-  private Player getHost() {
-    return players.get(0);
+  private User getHost() {
+    return users.get(0);
   }
 
-  boolean isReady() {
-    for (Player player : players) {
-      if (!player.isSubmitted()) return false;
+  boolean isReady() {return false;/*TODO
+    for (User user : users) {
+      if (!user.isSubmitted()) return false;
     }
-    return solutions.size() == players.size() && players.size() == acceptablePlayersAmount;
+    return solutions.size() == users.size() && users.size() == acceptablePlayersAmount;*/
   }
 
-  boolean addPlayer(Player player) {
-    if (getCurrentPlayersAmount() >= getAcceptablePlayersAmount() || players.contains(player)) {
+  boolean addPlayer(User user) {
+    if (getCurrentPlayersAmount() >= getAcceptablePlayersAmount() || users.contains(user)) {
       return false;
     }
 
-    players.add(player);
+    users.add(user);
 
     return true;
   }
 
-  boolean addSolution(Player1 player, String solution) {
-    if (!players.contains(player)) {
+  boolean addSolution(User1 player, String solution) {
+    if (!users.contains(player)) {
       return false;
     }
     solutions.put(player, solution);
@@ -55,21 +56,21 @@ class Lobby1 implements Lobby {
     return true;
   }
 
-  String getSolution(Player player) {
-    return solutions.get(player);
+  String getSolution(User user) {
+    return solutions.get(user);
   }
 
-  void removeSolution(Player player) {
-    solutions.remove(player);
+  void removeSolution(User user) {
+    solutions.remove(user);
   }
 
-  boolean removePlayer(Player player) {
-    solutions.remove(player);
-    return players.remove(player);
+  boolean removePlayer(User user) {
+    solutions.remove(user);
+    return users.remove(user);
   }
 
   Lobby1(int id, Level level, int acceptablePlayersAmount) {
-    players = new LinkedList<>();
+    users = new LinkedList<>();
     solutions = new HashMap<>();
     this.id = id;
     this.level = level;
@@ -81,7 +82,7 @@ class Lobby1 implements Lobby {
     return id;
   }
 
-  @Override
+  /*@Override
   public String getHostAvatarAddress() {
     return getHost().getAvatarAddress();
   }
@@ -89,11 +90,11 @@ class Lobby1 implements Lobby {
   @Override
   public String getHostName() {
     return getHost().getName();
-  }
+  }*/
 
   @Override
   public int getCurrentPlayersAmount() {
-    return players.size();
+    return users.size();
   }
 
   @Override
@@ -102,8 +103,8 @@ class Lobby1 implements Lobby {
   }
 
   @Override
-  public List<Player> getPlayers() {
-    return players;
+  public List<Pair<User, Boolean>> getUsers() {//TODO
+    return null;
   }
 
   @Override

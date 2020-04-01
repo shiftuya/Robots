@@ -4,7 +4,7 @@ import java.util.Date;
 
 public interface User {
 
-    enum UserType { STUDENT, TEACHER, ADMIN }
+    enum UserType { Student, Teacher, Admin }
 
     /**
      * Returns user type.
