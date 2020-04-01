@@ -7,6 +7,7 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.LevelsGetHandl
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.LobbiesGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.SimulatorsGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.SolutionsGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.UsersGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.level.LevelDeleteHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.level.LevelGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.level.LevelSubmitHandler;
@@ -40,6 +41,7 @@ public class MainServer {
         server.createContext("/list_of_lobbies", new CommonHttpHandler("list_of_lobbies"));
         server.createContext("/choose_level", new CommonHttpHandler("choose_level"));
         server.createContext("/my_solutions", new CommonHttpHandler("my_solutions"));
+        server.createContext("/users", new CommonHttpHandler("users"));
         server.createContext("/levels", new CommonHttpHandler("levels"));
         server.createContext("/level_editor", new CommonHttpHandler("level_editor"));
         server.createContext("/simulators", new CommonHttpHandler("simulators"));
@@ -52,8 +54,9 @@ public class MainServer {
         server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));
 
         server.createContext("/api/method/lobbies.get", new LobbiesGetHandler(mainManager));
-        server.createContext("/api/method/levels.get", new LevelsGetHandler(mainManager));
         server.createContext("/api/method/solutions.get", new SolutionsGetHandler(mainManager));
+        server.createContext("/api/method/users.get", new UsersGetHandler(mainManager));
+        server.createContext("/api/method/levels.get", new LevelsGetHandler(mainManager));
         server.createContext("/api/method/simulators.get", new SimulatorsGetHandler(mainManager));
 
         server.createContext("/api/method/lobby.join", new LobbyJoinHandler(mainManager));

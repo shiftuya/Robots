@@ -62,32 +62,46 @@ public class MainManagerHardcoded implements MainManager {
 
     private LobbyManagerHardcoded lobbyManager;
     private LevelManagerHardcoded levelManager;
+    private List<User> users;
 
     public MainManagerHardcoded() {
         lobbyManager = new LobbyManagerHardcoded();
         levelManager = new LevelManagerHardcoded();
+        users = new ArrayList<>();
 
         // ----- players -----
 
         UserHardcoded player_1 = new UserHardcoded();
         player_1.setAvatarAddress("/images/person-icon.png");
         player_1.setName("Vasily");
-        player_1.setSubmitted(true);
+        player_1.setType(User.UserType.Admin);
+        player_1.setBlocked(false);
+        player_1.setLastActive(new Date());
+        users.add(player_1);
 
         UserHardcoded player_2 = new UserHardcoded();
         player_2.setAvatarAddress("/images/person-icon.png");
         player_2.setName("Simon");
-        player_2.setSubmitted(true);
+        player_2.setType(User.UserType.Teacher);
+        player_2.setBlocked(false);
+        player_2.setLastActive(new Date());
+        users.add(player_2);
 
         UserHardcoded player_3 = new UserHardcoded();
         player_3.setAvatarAddress("/images/person-icon.png");
         player_3.setName("Ivan");
-        player_3.setSubmitted(false);
+        player_3.setType(User.UserType.Student);
+        player_3.setBlocked(true);
+        player_3.setLastActive(new Date());
+        users.add(player_3);
 
         UserHardcoded player_4 = new UserHardcoded();
         player_4.setAvatarAddress("/images/person-icon.png");
         player_4.setName("Oleg");
-        player_4.setSubmitted(false);
+        player_4.setType(User.UserType.Student);
+        player_4.setBlocked(false);
+        player_4.setLastActive(new Date());
+        users.add(player_4);
 
         // ----- levels -----
 
@@ -431,7 +445,7 @@ public class MainManagerHardcoded implements MainManager {
 
     @Override
     public Collection<User> getUsers(String userName) {
-        return null;
+        return users;
     }
 
     @Override

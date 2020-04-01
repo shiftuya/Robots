@@ -8,11 +8,17 @@ public class UserHardcoded implements User {
 
     private String avatarAddress;
     private String name;
-    private boolean submitted;
+    private UserType type;
+    private Date lastActive;
+    private boolean isBlocked;
 
     @Override
     public String getAvatarAddress() {
         return avatarAddress;
+    }
+
+    public void setAvatarAddress(String avatarAddress) {
+        this.avatarAddress = avatarAddress;
     }
 
     @Override
@@ -20,35 +26,34 @@ public class UserHardcoded implements User {
         return name;
     }
 
-    /*@Override
-    public boolean isSubmitted() {
-        return submitted;
-    }*/
-
-    public void setAvatarAddress(String avatarAddress) {
-        this.avatarAddress = avatarAddress;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setSubmitted(boolean submitted) {
-        this.submitted = submitted;
-    }
-
     @Override
     public UserType getType() {
-        return UserType.Student;
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
     }
 
     @Override
     public Date getLastActive() {
-        return new Date();
+        return lastActive;
+    }
+
+    public void setLastActive(Date lastActive) {
+        this.lastActive = lastActive;
     }
 
     @Override
     public boolean isBlocked() {
-        return false;
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 }

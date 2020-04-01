@@ -17,6 +17,25 @@ public class JsonPacker {
 
     public static final String DATE_FORMAT = "dd.MM.yyyy";
 
+    public static JSONArray packUsers(Collection<User> users) {
+        JSONArray jsonLevels = new JSONArray();
+
+        for (User user : users) {
+            JSONObject jsonUser = new JSONObject();
+            jsonUser
+                .put("avatar", user.getAvatarAddress())
+                .put("name", user.getName())
+                .put("type", user.getType())
+                .put("last_active", user.getLastActive() == null ? "Never" :
+                    DateFormatter.formatLastActive(user.getLastActive().getTime()))
+                .put("is_blocked", user.isBlocked());
+
+            jsonLevels.put(jsonUser);
+        }
+
+        return jsonLevels;
+    }
+
     public static JSONArray packLevels(Collection<Level> levels) {
         JSONArray jsonLevels = new JSONArray();
 

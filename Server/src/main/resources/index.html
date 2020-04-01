@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="css/list_of_lobbies.css">
         <link rel="stylesheet" href="css/choose_level.css">
         <link rel="stylesheet" href="css/my_solutions.css">
+        <link rel="stylesheet" href="css/users.css">
         <link rel="stylesheet" href="css/level_editor.css">
 		<link rel="stylesheet" href="css/lobby.css">
 		<link rel="stylesheet" href="css/simulation_results.css">
@@ -185,6 +186,27 @@
                         </tr>
                     </tbody>
 				</table>
+            </section>
+            <section id="users-content" class="content">
+                <div id="user_editor" class="new-lobby">
+                    <div class="new-lobby-icon circle-icon"></div>
+                    <span class="a" data-href="user_editor.html">Create New User</span>
+                </div>
+                <table id="users-table" class="common-table users-table">
+                    <tr>
+                        <th>User</th>
+                        <th>Levels Finished</th>
+                        <th>Last Active</th>
+                    </tr>
+                    <tr class="lobby-row highlited-on-hover skeleton">
+                        <td>
+                            <div class="lobbies-table-icon avatar-icon"></div>
+                            <span class="username"></span>
+                        </td>
+                        <td class="user-type"></td>
+                        <td class="last-active"></td>
+                    </tr>
+                </table>
             </section>
             <section id="levels-content" class="content">
                 <div id="level_editor" class="new-lobby">

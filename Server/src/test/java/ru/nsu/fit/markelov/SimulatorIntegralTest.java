@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -37,7 +38,17 @@ public class SimulatorIntegralTest {
     }
 
     @Override
-    public boolean isSubmitted() {
+    public UserType getType() {
+      return null;
+    }
+
+    @Override
+    public Date getLastActive() {
+      return null;
+    }
+
+    @Override
+    public boolean isBlocked() {
       return false;
     }
   }

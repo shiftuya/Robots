@@ -218,6 +218,35 @@ function insertSolutionsData(obj, contextManager) {
     }
 }
 
+function insertUsersData(obj, contextManager) {
+    var table = $("#users-table");
+    if (obj.response.length == 0) {
+        $("<tr><td colspan=\"100%\">No created users.</td></tr>").appendTo(table);
+    } else {
+        var skeleton = table.find("tr.skeleton");
+        obj.response.forEach(function(item) {
+            var tr = $(skeleton).clone();
+            tr.removeClass("skeleton");
+
+            tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
+            tr.find(".username").text(item.name);
+            tr.find(".user-type").text(item.type);
+            tr.find(".last-active").text(item.last_active);
+            
+            if (item.is_blocked) {
+                tr.addClass("blocked-user");
+            }
+
+            table.append(tr);
+
+            tr.on("click", function() {
+                alert(item.name);
+//                contextManager.changeContext("lobby", "lobby.join?id=" + item.lobby_id);
+            });
+        });
+    }
+}
+
 function insertLevelsData(obj, contextManager) {
     var table = $("#teacher-levels-table");
     if (obj.response.length == 0) {

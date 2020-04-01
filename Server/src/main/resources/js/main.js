@@ -41,6 +41,17 @@ $(document).ready(function() {
                 contentUnit: "tbody:not(':first-of-type')"
             }
         }],
+        ["users", {
+            title: "Users",
+            headerId: "header-main",
+            contentId: "users-content",
+            defaultAjaxQuery: "users.get",
+            insertFunction: insertUsersData,
+            deleteData: {
+                id: "users-table",
+                contentUnit: "tr:not(':first-of-type')"
+            }
+        }],
         ["levels", {
             title: "Levels",
             headerId: "header-main",
