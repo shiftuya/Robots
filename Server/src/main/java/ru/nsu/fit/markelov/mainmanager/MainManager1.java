@@ -321,6 +321,11 @@ public class MainManager1 implements MainManager {
   }
 
   @Override
+  public User getUser(String userName) {
+    return null;
+  }
+
+  @Override
   public boolean createUser(String userName, String password, User.UserType type, String avatarAddress) {
     return false;
   }

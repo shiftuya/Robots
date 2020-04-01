@@ -31,8 +31,10 @@ public interface MainManager {
     /**
      * Returns collection of required users.
      *
-     * If user (gotten by 'userName') is a teacher - collection of students must be returned,
-     * If user (gotten by 'userName') is an admin - collection of all users must be returned.
+     * If user (gotten by specified 'userName') is a teacher - collection of students must be
+     * returned.
+     * If user (gotten by specified 'userName') is an admin - collection of all users must be
+     * returned.
      *
      * A collection must be sorted by user names.
      *
@@ -142,6 +144,14 @@ public interface MainManager {
     Collection<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId);
 
     /**
+     * Returns a user gotten by specified 'userName'.
+     *
+     * @param userName unique user name.
+     * @return a user.
+     */
+    User getUser(String userName);
+
+    /**
      * Creates a user and informs whether it is successfully created.
      *
      * @param userName      unique user name.
@@ -187,7 +197,7 @@ public interface MainManager {
      * Creates/edits a level and informs whether it is successfully created/edited.
      *
      * Id levelID is null - a new level must be created;
-     *          otherwise - an existing level (gotten by this id) must be edited.
+     *          otherwise - an existing level (gotten by specified 'levelID') must be edited.
      *
      * If level is being created:
      *     - if iconResource is null, default icon must be used.
