@@ -7,7 +7,7 @@ public class LevelHardcoded implements Level {
     private int id;
     private String iconAddress;
     private String name;
-    private String difficulty;
+    private LevelDifficulty difficulty;
     private String type;
     private String description;
     private String rules;
@@ -44,11 +44,11 @@ public class LevelHardcoded implements Level {
     }
 
     @Override
-    public String getDifficulty() {
+    public LevelDifficulty getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(LevelDifficulty difficulty) {
         this.difficulty = difficulty;
     }
 

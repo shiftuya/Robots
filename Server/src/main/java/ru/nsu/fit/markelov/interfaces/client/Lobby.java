@@ -39,9 +39,9 @@ public interface Lobby {
     int getAcceptablePlayersAmount();
 
     /**
-     * Returns the list of players.
+     * Returns the collection of players.
      *
-     * @return the list of players.
+     * @return the collection of players.
      */
     Collection<Player> getPlayers();
 

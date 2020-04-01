@@ -96,7 +96,7 @@ public class MainManager1 implements MainManager {
     addNewLevel(++maxLevelId,
         "/images/labyrinth-icon.png",
         "Simple Plane",
-        "Easy",
+        Level.LevelDifficulty.Easy,
         "Multiplayer",
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim",
         "Suspendisse sed nisi lacus sed viverra tellus in hac habitasse",
@@ -121,8 +121,8 @@ public class MainManager1 implements MainManager {
   }
 
   // For hardcoding purposes
-  void addNewLevel(int id, String iconAddress, String name, String difficulty, String type,
-      String description, String rules, String goal, int minPlayers, int maxPlayers, String filename) {
+  void addNewLevel(int id, String iconAddress, String name, Level.LevelDifficulty difficulty, String type,
+                   String description, String rules, String goal, int minPlayers, int maxPlayers, String filename) {
 
     Level1 level = new Level1(id, iconAddress, name, difficulty, type,
         description, rules, goal, minPlayers, maxPlayers, filename);

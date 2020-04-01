@@ -95,7 +95,7 @@ public class MainManagerHardcoded implements MainManager {
         level_1.setId(1);
         level_1.setIconAddress("/images/labyrinth-icon.png");
         level_1.setName("Labyrinth");
-        level_1.setDifficulty("Easy");
+        level_1.setDifficulty(Level.LevelDifficulty.Easy);
         level_1.setType("Single");
         level_1.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of...");
         level_1.setRules("Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
@@ -109,7 +109,7 @@ public class MainManagerHardcoded implements MainManager {
         level_2.setId(2);
         level_2.setIconAddress("/images/vacuum-cleaner-icon.png");
         level_2.setName("Vacuum Cleaner");
-        level_2.setDifficulty("Medium");
+        level_2.setDifficulty(Level.LevelDifficulty.Medium);
         level_2.setType("Multiplayer (2-4)");
         level_2.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of...");
         level_2.setRules("Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
@@ -123,7 +123,7 @@ public class MainManagerHardcoded implements MainManager {
         level_3.setId(3);
         level_3.setIconAddress("/images/robot-wars-icon.png");
         level_3.setName("Robot Wars");
-        level_3.setDifficulty("Hard");
+        level_3.setDifficulty(Level.LevelDifficulty.Hard);
         level_3.setType("Multiplayer (2)");
         level_3.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of...");
         level_3.setRules("Lorem Ipsum is simply dummy text of the printing and typesetting industry.");

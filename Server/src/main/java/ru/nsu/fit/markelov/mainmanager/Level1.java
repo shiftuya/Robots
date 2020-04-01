@@ -6,7 +6,7 @@ public class Level1 implements Level {
   private int id;
   private String iconAddress;
   private String name;
-  private String difficulty;
+  private LevelDifficulty difficulty;
   private String type;
   private String description;
   private String rules;
@@ -15,7 +15,7 @@ public class Level1 implements Level {
   private int maxPlayers;
   private String filename;
 
-  Level1(int id, String iconAddress, String name, String difficulty, String type,
+  Level1(int id, String iconAddress, String name, LevelDifficulty difficulty, String type,
       String description, String rules, String goal, int minPlayers, int maxPlayers, String filename) {
     this.id = id;
     this.iconAddress = iconAddress;
@@ -51,7 +51,7 @@ public class Level1 implements Level {
   }
 
   @Override
-  public String getDifficulty() {
+  public LevelDifficulty getDifficulty() {
     return difficulty;
   }
 

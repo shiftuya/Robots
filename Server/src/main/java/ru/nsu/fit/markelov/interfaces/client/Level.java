@@ -1,59 +1,62 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
 public interface Level {
+
+    enum LevelDifficulty {Easy, Medium, Hard}
+
     /**
-     * Returns the unique level id.
+     * Returns unique level id.
      *
-     * @return the unique level id.
+     * @return unique level id.
      */
     int getId();
 
     /**
-     * Returns the level icon address.
+     * Returns level icon address.
      *
-     * @return the level icon address.
+     * @return level icon address.
      */
     String getIconAddress();
 
     /**
-     * Returns the level name.
+     * Returns level name.
      *
-     * @return the level name.
+     * @return level name.
      */
     String getName();
 
     /**
-     * Returns the level difficulty.
+     * Returns level difficulty.
      *
-     * @return the level difficulty.
+     * @return level difficulty.
      */
-    String getDifficulty();
+    LevelDifficulty getDifficulty();
 
     /**
-     * Returns the level type.
+     * Returns level type.
      *
-     * @return the level type.
+     * @return level type.
      */
     String getType();
 
     /**
-     * Returns the level description.
+     * Returns level description.
      *
-     * @return the level description.
+     * @return level description.
      */
     String getDescription();
 
     /**
-     * Returns the level rules.
+     * Returns level rules.
      *
-     * @return the level rules.
+     * @return level rules.
      */
     String getRules();
 
     /**
-     * Returns the level goal.
+     * Returns level goal.
      *
-     * @return the level goal.
+     * @return level goal.
      */
     String getGoal();
 
