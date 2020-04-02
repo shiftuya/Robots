@@ -152,29 +152,26 @@ public interface MainManager {
     User getUser(String userName);
 
     /**
-     * Creates a user and informs whether it is successfully created.
+     * Creates/edits a user and informs whether it is successfully created/edited.
      *
-     * @param userName      unique user name.
-     * @param password      user password.
-     * @param type          user type.
-     * @param avatarAddress user avatar address.
-     * @return whether user is successfully created.
+     * If 'create' is true - a new user must be created;
+     *           otherwise - an existing user (gotten by specified 'userName') must be edited.
+     *
+     * If user is being created:
+     *     - if 'avatarResource' is null, default avatar must be used.
+     *
+     * If user is being edited:
+     *     - if 'avatarResource' is null, previously saved avatar must be used.
+     *
+     * @param create         true for creating and false for editing.
+     * @param userName       unique user name.
+     * @param password       user password.
+     * @param type           user type.
+     * @param avatarResource user avatar resource.
+     * @return whether user is successfully created/edited.
      */
-    boolean createUser(String userName, String password, User.UserType type, String avatarAddress);
-
-    /**
-     * Updates a user and informs whether it is successfully updated.
-     *
-     * If 'password', 'type' or 'avatarAddress' is null, then corresponding user field stays the
-     * same.
-     *
-     * @param userName      unique user name.
-     * @param password      user password.
-     * @param type          user type.
-     * @param avatarAddress user avatar address.
-     * @return whether user is successfully updated.
-     */
-    boolean updateUser(String userName, String password, User.UserType type, String avatarAddress);
+    boolean submitUser(boolean create, String userName, String password, String type,
+                       Resource avatarResource);
 
     /**
      * Blocks/unblocks user and informs whether it is successfully blocked/unblocked.
