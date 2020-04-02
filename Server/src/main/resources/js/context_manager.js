@@ -258,11 +258,13 @@ function insertUserData(obj, contextManager) {
     section.find(".user-type").text(item.type);
     section.find(".user-last-active").text(item.last_active);
     
-    var solutionsTable = $("#solutions-table").clone().removeAttr("id");
+    // simple cloaning the table is not working, as jQuery doesn't remove the data immediately
+    var solutionsTable = $("<table class=\"common-table solutions-table\">");
+    solutionsTable.append($("#solutions-table").find("tbody:first-of-type").clone());
+    solutionsTable.append($("#solutions-table").find("tbody.skeleton").clone());
     insertSolutionsData({response: obj.response.solutions}, contextManager, solutionsTable);
     
     section.append(solutionsTable);
-    
     $("#user-content").append(section);
 
     section.find(".user-edit-a").on("click", function() {
