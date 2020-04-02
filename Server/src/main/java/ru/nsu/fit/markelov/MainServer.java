@@ -22,6 +22,7 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.Simulatio
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultIsReadyHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorAddHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorDeleteHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserGetHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.mainmanager.MainManager1;
 
@@ -42,13 +43,14 @@ public class MainServer {
         server.createContext("/choose_level", new CommonHttpHandler("choose_level"));
         server.createContext("/my_solutions", new CommonHttpHandler("my_solutions"));
         server.createContext("/users", new CommonHttpHandler("users"));
+//        server.createContext("/user", new CommonHttpHandler("user"));
         server.createContext("/levels", new CommonHttpHandler("levels"));
         server.createContext("/level_editor", new CommonHttpHandler("level_editor"));
         server.createContext("/simulators", new CommonHttpHandler("simulators"));
         server.createContext("/options", new CommonHttpHandler("options"));
-        server.createContext("/lobby", new CommonHttpHandler("lobby"));
-        server.createContext("/code_editor", new CommonHttpHandler("code_editor"));
-        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result"));
+//        server.createContext("/lobby", new CommonHttpHandler("lobby"));
+//        server.createContext("/code_editor", new CommonHttpHandler("code_editor"));
+//        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result"));
 
         server.createContext("/api/method/sign.login", new LogInHandler(mainManager));
         server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));
@@ -69,6 +71,8 @@ public class MainServer {
 
         server.createContext("/api/method/simulation_result.is_ready", new SimulationResultIsReadyHandler(mainManager));
         server.createContext("/api/method/simulation_result.get", new SimulationResultGetHandler(mainManager));
+
+        server.createContext("/api/method/user.get", new UserGetHandler(mainManager));
 
         server.createContext("/api/method/level.get", new LevelGetHandler(mainManager));
         server.createContext("/api/method/level.submit", new LevelSubmitHandler(mainManager));

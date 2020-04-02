@@ -172,7 +172,7 @@ public interface MainManager {
      * @param password      user password.
      * @param type          user type.
      * @param avatarAddress user avatar address.
-     * @return whether user is successfully created.
+     * @return whether user is successfully updated.
      */
     boolean updateUser(String userName, String password, User.UserType type, String avatarAddress);
 
@@ -180,7 +180,7 @@ public interface MainManager {
      * Blocks/unblocks user and informs whether it is successfully blocked/unblocked.
      *
      * @param userName unique user name.
-     * @param block    true to for blocking and false for unblocking.
+     * @param block    true for blocking and false for unblocking.
      * @return whether user is successfully blocked/unblocked.
      */
     boolean blockUser(String userName, boolean block);

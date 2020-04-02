@@ -450,7 +450,7 @@ public class MainManagerHardcoded implements MainManager {
 
     @Override
     public User getUser(String userName) {
-        return null;
+        return users.get(0);
     }
 
     @Override

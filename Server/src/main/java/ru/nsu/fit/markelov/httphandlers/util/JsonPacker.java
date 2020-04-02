@@ -21,19 +21,29 @@ public class JsonPacker {
         JSONArray jsonLevels = new JSONArray();
 
         for (User user : users) {
-            JSONObject jsonUser = new JSONObject();
-            jsonUser
-                .put("avatar", user.getAvatarAddress())
-                .put("name", user.getName())
-                .put("type", user.getType())
-                .put("last_active", user.getLastActive() == null ? "Never" :
-                    DateFormatter.formatLastActive(user.getLastActive().getTime()))
-                .put("is_blocked", user.isBlocked());
-
-            jsonLevels.put(jsonUser);
+            jsonLevels.put(packUser(user));
         }
 
         return jsonLevels;
+    }
+
+    public static JSONObject packUser(User user) {
+        JSONObject jsonUser = new JSONObject();
+        jsonUser
+            .put("avatar", user.getAvatarAddress())
+            .put("name", user.getName())
+            .put("type", user.getType())
+            .put("last_active", user.getLastActive() == null ? "Never" :
+                DateFormatter.formatLastActive(user.getLastActive().getTime()))
+            .put("is_blocked", user.isBlocked());
+
+        return jsonUser;
+    }
+
+    public static JSONObject packUserInfo(JSONObject jsonUser, JSONArray jsonSolutions) {
+        return new JSONObject()
+            .put("info", jsonUser)
+            .put("solutions", jsonSolutions);
     }
 
     public static JSONArray packLevels(Collection<Level> levels) {

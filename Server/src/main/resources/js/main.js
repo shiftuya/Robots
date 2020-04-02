@@ -52,6 +52,16 @@ $(document).ready(function() {
                 contentUnit: "tr:not(':first-of-type')"
             }
         }],
+        ["user", {
+            title: "User",
+            headerId: "header-main",
+            contentId: "user-content",
+            insertFunction: insertUserData,
+            deleteData: {
+                id: "user-content",
+                contentUnit: ".user-shell"
+            }
+        }],
         ["levels", {
             title: "Levels",
             headerId: "header-main",

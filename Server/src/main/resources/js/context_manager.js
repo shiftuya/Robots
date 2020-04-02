@@ -143,8 +143,8 @@ function insertChooseLevelData(obj, contextManager) {
     }
 }
 
-function insertSolutionsData(obj, contextManager) {
-    var table = $("#solutions-table");
+function insertSolutionsData(obj, contextManager, inbuiltTable) {
+    var table = inbuiltTable || $("#solutions-table");
     if (obj.response.length == 0) {
         $("<tbody><tr><td colspan=\"100%\">No created levels.</td></tr></tbody>").appendTo(table);
     } else {
@@ -240,11 +240,59 @@ function insertUsersData(obj, contextManager) {
             table.append(tr);
 
             tr.on("click", function() {
-                alert(item.name);
-//                contextManager.changeContext("lobby", "lobby.join?id=" + item.lobby_id);
+                contextManager.changeContext("user", "user.get?username=" + item.name);
             });
         });
     }
+}
+
+function insertUserData(obj, contextManager) {
+    var skeleton = $("#user-content").find("section.skeleton");
+    var item = obj.response.info;
+
+    var section = $(skeleton).clone();
+    section.removeClass("skeleton");
+
+    section.find(".lobby-common-icon").css("background-image", "url(\".." + item.avatar + "\")");
+    section.find(".user-name").text(item.name);
+    section.find(".user-type").text(item.type);
+    section.find(".user-last-active").text(item.last_active);
+    
+    var solutionsTable = $("#solutions-table").clone().removeAttr("id");
+    insertSolutionsData({response: obj.response.solutions}, contextManager, solutionsTable);
+    
+    section.append(solutionsTable);
+    
+    $("#user-content").append(section);
+
+    section.find(".user-edit-a").on("click", function() {
+        alert(item.name);
+        /*sendAjax("level.delete?id=" + item.level_id, function(result) {
+            var obj = JSON.parse(result);
+            alert(obj.response.deleted ? "Deleted" : "Not deleted");
+            contextManager.changeContext("levels");
+        });*/
+    });
+
+    section.find(".user-block-a").on("click", function() {
+        alert(item.name);
+        /*sendAjax("level.delete?id=" + item.level_id, function(result) {
+            var obj = JSON.parse(result);
+            alert(obj.response.deleted ? "Deleted" : "Not deleted");
+            contextManager.changeContext("levels");
+        });*/
+    });
+
+    section.find(".user-delete-a").on("click", function() {
+        if (confirm("Are you sure you want to delete the user? This action cannot be undone.")) {
+            alert(item.name);
+            /*sendAjax("level.delete?id=" + item.level_id, function(result) {
+                var obj = JSON.parse(result);
+                alert(obj.response.deleted ? "Deleted" : "Not deleted");
+                contextManager.changeContext("levels");
+            });*/
+        }
+    });
 }
 
 function insertLevelsData(obj, contextManager) {
