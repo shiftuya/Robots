@@ -50,7 +50,7 @@
                         <input class="login-form-input" type="password">
                     </section>
                     <section class="login-form-section">
-                        <span id="login-submit" class="a">Log In</span>
+                        <span id="login-submit" class="a highlited-on-hover">Log In</span>
 <!--                        <button id="login-submit" class="login-form-input login-form-button" type="submit">Log In</button>-->
                     </section>
                 </form>
@@ -216,9 +216,41 @@
                         <span class="user-type"></span>
                         <span class="user-last-active"></span>
                         <span class="a highlited-on-hover user-edit-a">Edit</span>
-                        <span class="a highlited-on-hover user-block-a">Block</span>
+                        <span class="a highlited-on-hover user-block-a"></span>
                         <span class="a highlited-on-hover user-delete-a">Delete</span>
                     </div>
+                </section>
+            </section>
+            <section id="user-editor-content" class="content user-editor-content">
+                <section class="user-editor-shell skeleton">
+                    <form class="user-editor-form">
+                        <input name="bugfix" type="text" style="display: none">
+                        <span>
+                            <label for="name">Name:</label>
+                            <input name="name" type="text" placeholder="Name">
+                        </span>
+                        <span>
+                            <label for="password">Password:</label>
+                            <input name="password" type="password">
+                        </span>
+                        <span>
+                            <label for="repeat_password">Repeat password:</label>
+                            <input name="repeat_password" type="password">
+                        </span>
+                        <span>
+                            <label for="type">Type:</label>
+                            <select name="type">
+                                <option value="Student">Student</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </span>
+                        <span>
+                            <label for="avatar">Avatar:</label>
+                            <input name="avatar" type="file">
+                        </span>
+                        <span class="a highlited-on-hover user-submit-a">Submit</span>
+                    </form>
                 </section>
             </section>
             <section id="levels-content" class="content">
@@ -258,7 +290,7 @@
             <section id="level-editor-content" class="content level-editor-content">
                 <div id="submit-level" class="submit-level new-lobby">
                     <div class="new-lobby-icon circle-icon"></div>
-                    <span class="a" data-href="submit-level.html">Submit level</span>
+                    <span class="a" data-href="submit-level.html">Submit Level</span>
                 </div>
                 <section class="level-editor-shell skeleton">
                     <form class="level-editor-form">

@@ -2,7 +2,7 @@ package ru.nsu.fit.markelov.httphandlers.util;
 
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 
-public class LevelResource implements Resource {
+public class FileResource implements Resource {
 
     private String name;
     private byte[] bytes;
@@ -12,7 +12,7 @@ public class LevelResource implements Resource {
         return name;
     }
 
-    public LevelResource setName(String name) {
+    public FileResource setName(String name) {
         this.name = name;
 
         return this;
@@ -23,7 +23,7 @@ public class LevelResource implements Resource {
         return bytes;
     }
 
-    public LevelResource setBytes(byte[] bytes) {
+    public FileResource setBytes(byte[] bytes) {
         this.bytes = bytes;
 
         return this;

@@ -326,13 +326,8 @@ public class MainManager1 implements MainManager {
   }
 
   @Override
-  public boolean createUser(String userName, String password, User.UserType type, String avatarAddress) {
-    return false;
-  }
-
-  @Override
-  public boolean updateUser(String userName, String password, User.UserType type, String avatarAddress) {
-    return false;
+  public boolean submitUser(boolean create, String userName, String password, String type, Resource avatarResource) {
+    return true;
   }
 
   @Override

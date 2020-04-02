@@ -454,22 +454,17 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public boolean createUser(String userName, String password, User.UserType type, String avatarAddress) {
-        return false;
-    }
-
-    @Override
-    public boolean updateUser(String userName, String password, User.UserType type, String avatarAddress) {
-        return false;
+    public boolean submitUser(boolean create, String userName, String password, String type, Resource avatarResource) {
+        return true;
     }
 
     @Override
     public boolean blockUser(String userName, boolean block) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean removeUser(String userName) {
-        return false;
+        return true;
     }
 }

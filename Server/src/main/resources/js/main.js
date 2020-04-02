@@ -62,6 +62,16 @@ $(document).ready(function() {
                 contentUnit: ".user-shell"
             }
         }],
+        ["user_editor", {
+            title: "User editor",
+            headerId: "header-main",
+            contentId: "user-editor-content",
+            insertFunction: insertUserEditorData,
+            deleteData: {
+                id: "user-editor-content",
+                contentUnit: ".user-editor-shell"
+            }
+        }],
         ["levels", {
             title: "Levels",
             headerId: "header-main",
@@ -218,8 +228,7 @@ function activateListeners(contextManager) {
 
     $("#add-simulator").on("click", function() {
         var url = prompt("Type simulator url:", "");
-        if (url == null || url == "") {
-            alert("Canceled");
+        if (!url) {
             return;
         }
         

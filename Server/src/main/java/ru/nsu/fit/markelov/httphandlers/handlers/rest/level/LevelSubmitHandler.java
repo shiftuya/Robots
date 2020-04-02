@@ -3,7 +3,7 @@ package ru.nsu.fit.markelov.httphandlers.handlers.rest.level;
 import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.inputs.LevelInput;
-import ru.nsu.fit.markelov.httphandlers.util.LevelResource;
+import ru.nsu.fit.markelov.httphandlers.util.FileResource;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
@@ -37,7 +37,7 @@ public class LevelSubmitHandler extends RestHandler {
                             if (part.name.equals("icon")) {
                                 levelInput.getIconResource().setName(part.filename).setBytes(part.bytes);
                             } else if (part.name.equals("resources")) {
-                                levelInput.getLevelResources().add(new LevelResource().setName(part.filename).setBytes(part.bytes));
+                                levelInput.getLevelResources().add(new FileResource().setName(part.filename).setBytes(part.bytes));
                             }
                         } else {
                             textParametersMap.put(part.name, part);

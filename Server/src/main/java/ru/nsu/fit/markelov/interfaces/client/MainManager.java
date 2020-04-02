@@ -193,16 +193,16 @@ public interface MainManager {
     /**
      * Creates/edits a level and informs whether it is successfully created/edited.
      *
-     * Id levelID is null - a new level must be created;
-     *          otherwise - an existing level (gotten by specified 'levelID') must be edited.
+     * Id 'levelID' is null - a new level must be created;
+     *            otherwise - an existing level (gotten by specified 'levelID') must be edited.
      *
      * If level is being created:
      *     - if iconResource is null, default icon must be used.
      *
      * If level is being edited:
-     *     - if iconResource is null, previously saved icon must be used.
-     *     - if levelResources is null, previously saved level resources must be used.
-     *     - if levelResources is not null, new resources must be added to previously saved ones.
+     *     - if 'iconResource' is null, previously saved icon must be used.
+     *     - if 'levelResources' is null, previously saved level resources must be used.
+     *     - if 'levelResources' is not null, new resources must be added to previously saved ones.
      *
      * @param levelID        unique level id.
      * @param name           level name.

@@ -22,7 +22,9 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.Simulatio
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultIsReadyHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorAddHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorDeleteHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserDeleteHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserSubmitHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.mainmanager.MainManager1;
 
@@ -73,6 +75,9 @@ public class MainServer {
         server.createContext("/api/method/simulation_result.get", new SimulationResultGetHandler(mainManager));
 
         server.createContext("/api/method/user.get", new UserGetHandler(mainManager));
+        server.createContext("/api/method/user.delete", new UserDeleteHandler(mainManager));
+        server.createContext("/api/method/user.create", new UserSubmitHandler(mainManager, true));
+        server.createContext("/api/method/user.edit", new UserSubmitHandler(mainManager, false));
 
         server.createContext("/api/method/level.get", new LevelGetHandler(mainManager));
         server.createContext("/api/method/level.submit", new LevelSubmitHandler(mainManager));
