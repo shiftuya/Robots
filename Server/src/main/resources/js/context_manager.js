@@ -19,7 +19,11 @@ class ContextManager {
         var content = $("#" + dependencies.contentId);
         ajaxQuery = ajaxQuery || dependencies.defaultAjaxQuery;
         var insertFunction = dependencies.insertFunction;
-        var deleteData = dependencies.deleteData;
+        
+        var deleteData;
+        if (this.currentContextName) {
+            deleteData = this.contextMap.get(this.currentContextName).deleteData;
+        }
 
         window.history.pushState("", "", contextName);
         document.title = title + " | Robotics Game Server";
@@ -47,20 +51,20 @@ class ContextManager {
             content.addClass("active"); // alert("content added");
         }
 
-        // delete current data if needed
-        if (deleteData) {
-            this.removeCurrentData(deleteData.id, deleteData.contentUnit);
-        }
+        // delete current data
+        this.removeCurrentData(deleteData);
 
-        // get and insert new data if needed
-        if (insertFunction) {
-            this.getAndInsertData(contextName, ajaxQuery, insertFunction, obj);
-        }
+        // get and insert new data
+        this.getAndInsertData(contextName, ajaxQuery, insertFunction, obj);
 
         this.currentContextName = contextName;
     }
 
     getAndInsertData(contextName, ajaxQuery, insertFunction, obj) {
+        if (!insertFunction) {
+            return;
+        }
+        
         if (!ajaxQuery) {
             insertFunction(obj, this);
             return;
@@ -72,14 +76,18 @@ class ContextManager {
         });
     }
 
-    removeCurrentData(id, contentUnit) {
+    removeCurrentData(deleteData) {
         if (this.currentContextName == "login") {
             $("#login-content").removeClass("active");
             $("#login-content").find("input[name='name']").val("");
             return;
         }
         
-        $("#" + id).find(contentUnit + ":not('.skeleton')").remove();
+        if (!deleteData) {
+            return;
+        }
+        
+        $("#" + deleteData.id).find(deleteData.contentUnit + ":not('.skeleton')").remove();
     }
 }
 
@@ -259,9 +267,7 @@ function insertUserData(obj, contextManager) {
     section.find(".user-last-active").text(item.last_active);
     section.find(".user-block-a").text(item.is_blocked ? "Unblock" : "Block");
     
-    // simple cloaning the table is not working, as jQuery doesn't remove the data immediately
-    var solutionsTable = $("<table class=\"common-table solutions-table\">");
-    solutionsTable.append($("#solutions-table").find("tbody:first-of-type, tbody.skeleton").clone());
+    var solutionsTable = $("#solutions-table").clone().removeAttr("id");
     insertSolutionsData({response: obj.response.solutions}, contextManager, solutionsTable);
     
     section.append(solutionsTable);
