@@ -14,6 +14,17 @@ class SourceManager implements LevelSrcManager {
         path = _path
         gcl = new GroovyClassLoader()
         levels = new HashMap<>()
+        File dir = new File(path)
+        File[] contents = dir.listFiles()
+        for (File cont : contents) {
+            File src = new File(path + "/" + cont.getName() + "/" + cont.getName() + "_lvl.groovy")
+            try {
+                Resource lvlSrc = new LevelResource(cont.getName(), 1, src)
+                levels.put(cont.getName(), lvlSrc)
+            } catch (IOException e) {
+                System.err.println(e.toString())
+            }
+        }
     }
 
     @Override
