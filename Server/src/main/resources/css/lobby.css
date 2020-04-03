@@ -19,7 +19,7 @@
 	text-align: left;
 }
 
-.lobby-common-icon {
+.common-big-icon {
 	float: left;
 	width: 64px;
 	height: 64px;
@@ -30,9 +30,7 @@
 }
 
 .lobby-common-info {
-	display: block;
-	float: none;
-	padding-top: 12px;
+	margin-top: 12px;
 }
 
 .level-difficulty, .level-type {

@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="css/choose_level.css">
         <link rel="stylesheet" href="css/my_solutions.css">
         <link rel="stylesheet" href="css/users.css">
+        <link rel="stylesheet" href="css/user.css">
         <link rel="stylesheet" href="css/level_editor.css">
 		<link rel="stylesheet" href="css/lobby.css">
 		<link rel="stylesheet" href="css/simulation_results.css">
@@ -202,20 +203,21 @@
                     <tr class="lobby-row highlited-on-hover skeleton">
                         <td>
                             <div class="lobbies-table-icon avatar-icon"></div>
-                            <span class="username"></span>
+                            <span class="user-name"></span>
                         </td>
                         <td class="user-type"></td>
-                        <td class="last-active"></td>
+                        <td class="user-last-active"></td>
                     </tr>
                 </table>
             </section>
             <section id="user-content" class="content user-content">
                 <section class="user-shell skeleton">
-                    <div class="lobby-common-shell">
-                        <div class="lobby-common-icon"></div>
-                        <span class="user-name"></span>
-                        <span class="user-type"></span>
-                        <span class="user-last-active"></span>
+                    <div class="user-info">
+                        <div class="common-big-icon"></div>
+                        <p><span class="user-name"></span> (<span class="user-type"></span>)</p>
+                        <p>Last active: <span class="user-last-active"></span></p>
+                    </div>
+                    <div class="user-actions">
                         <span class="a highlited-on-hover user-edit-a">Edit</span>
                         <span class="a highlited-on-hover user-block-a"></span>
                         <span class="a highlited-on-hover user-delete-a">Delete</span>
@@ -378,10 +380,9 @@
                 <section class="lobby-shell skeleton">
                     <section class="lobby-content">
                         <div class="lobby-common-shell">
-                            <div class="lobby-common-icon"></div>
-                            <span class="lobby-common-info"><span class="lobby-level-name"></span> Lobby <span class="lobby-players"></span></span>
-                            <span class="level-difficulty"></span>
-                            <span class="level-type"></span>
+                            <div class="common-big-icon"></div>
+                            <p class="lobby-common-info"><span class="lobby-level-name"></span> Lobby <span class="lobby-players"></span></p>
+                            <p><span class="level-difficulty"></span><span class="level-type"></span></p>
                         </div>
                         <table class="players-table">
                             <tr class="skeleton">

@@ -255,9 +255,9 @@ function insertUsersData(obj, contextManager) {
             tr.removeClass("skeleton");
 
             tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
-            tr.find(".username").text(item.name);
+            tr.find(".user-name").text(item.name);
             tr.find(".user-type").text(item.type);
-            tr.find(".last-active").text(item.last_active);
+            tr.find(".user-last-active").text(item.last_active);
             
             if (item.is_blocked) {
                 tr.addClass("blocked-user");
@@ -279,11 +279,15 @@ function insertUserData(obj, contextManager) {
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
 
-    section.find(".lobby-common-icon").css("background-image", "url(\".." + item.avatar + "\")");
+    section.find(".common-big-icon").css("background-image", "url(\".." + item.avatar + "\")");
     section.find(".user-name").text(item.name);
     section.find(".user-type").text(item.type);
     section.find(".user-last-active").text(item.last_active);
     section.find(".user-block-a").text(item.is_blocked ? "Unblock" : "Block");
+    
+    if (item.is_blocked) {
+        section.find(".user-info").addClass("blocked-user");
+    }
     
     var solutionsTable = $("#solutions-table").clone().removeAttr("id");
     insertSolutionsData({response: obj.response.solutions}, contextManager, solutionsTable);
@@ -330,7 +334,7 @@ function insertUserEditorData(obj, contextManager) {
         message = "User edited";
         
         var item = obj.response.info;
-        section.find("input[name=name]").attr("value", item.name).attr("readonly", true);
+        section.find("input[name=name]").attr("value", item.name).attr("readonly", true).addClass("readonly");
         section.find("select[name=type]").val(item.type);
     }
     
@@ -465,7 +469,7 @@ function insertLobbyData(obj, contextManager) {
             section.removeClass("skeleton");
 
             section.attr("data-lobby-id", item.lobby_id);
-            section.find(".lobby-common-icon").css("background-image", "url(\".." + item.level_icon + "\")");
+            section.find(".common-big-icon").css("background-image", "url(\".." + item.level_icon + "\")");
             section.find(".lobby-level-name").text(item.level_name);
             section.find(".lobby-players").text(item.players + "/" + item.players_at_most);
             section.find(".level-difficulty").text(item.level_difficulty);

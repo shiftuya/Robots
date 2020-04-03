@@ -2,6 +2,6 @@
     color: gray;
 }
 
-.blocked-user .username {
+.blocked-user .user-name {
     text-decoration: line-through;
 }

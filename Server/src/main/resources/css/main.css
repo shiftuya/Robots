@@ -123,6 +123,10 @@ input[name="bugfix_for_form_with_file"] {
     font: 18px Trebuchet MS, sans-serif;
 }
 
+select.readonly, input.readonly {
+    color: gray;
+}
+
 .circle-icon {
 	border: 2px solid black;
 	border-radius: 50%;
