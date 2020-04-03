@@ -155,7 +155,7 @@ $(document).ready(function() {
 
 function activateListeners(contextManager) {
     $("#login-submit").on("click", function() {
-        var username = $("#login-content").find("input.login-form-input[type='text']").val();
+        var username = $("#login-content").find("input[name='name']").val();
         
         sendAjax("sign.login?username=" + username, function(data) {
             var obj = JSON.parse(data);

@@ -60,6 +60,10 @@ h1 {
 	font-size: 32px;
 }
 
+input[name="bugfix_for_form_with_file"] {
+    display: none;
+}
+
 .shell {
     position: relative;
     overflow: hidden;
@@ -91,6 +95,32 @@ h1 {
 
 .skeleton {
     display: none;
+}
+
+.common-form {
+    width: 200px;
+    margin: auto;
+}
+
+.form-section {
+    margin-top: 20px;
+}
+
+.form-section:last-of-type {
+    margin-top: 30px;
+}
+
+.common-form label {
+    display: block;
+    margin: 0 0 5px 10px;
+    text-align: left;
+}
+
+.common-form select, .common-form input:not([type="file"]) {
+    box-sizing: border-box;
+    width: 100%;
+    height: 26px;
+    font: 18px Trebuchet MS, sans-serif;
 }
 
 .circle-icon {

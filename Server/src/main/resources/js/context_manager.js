@@ -75,7 +75,7 @@ class ContextManager {
     removeCurrentData(id, contentUnit) {
         if (this.currentContextName == "login") {
             $("#login-content").removeClass("active");
-            $("#login-content").find("input.login-form-input").val("");
+            $("#login-content").find("input[name='name']").val("");
             return;
         }
         
@@ -295,18 +295,22 @@ function insertUserEditorData(obj, contextManager) {
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
 
-    var ajaxQuery, message;
+    var ajaxQuery, header, message;
     if (!obj) {
         ajaxQuery = "user.create";
+        header = "Create user:";
         message = "User created";
     } else {
         ajaxQuery = "user.edit";
+        header = "Edit user:";
         message = "User edited";
         
         var item = obj.response.info;
         section.find("input[name=name]").attr("value", item.name).attr("readonly", true);
         section.find("select[name=type]").val(item.type);
     }
+    
+    section.find(".content-header").text(header);
 
     section.find(".user-submit-a").on("click", function() {
         var form = $("#user-editor-content").find(".user-editor-shell:not('.skeleton')").find("form")
