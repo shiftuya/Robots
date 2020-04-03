@@ -111,7 +111,7 @@ public class SUMonitor extends Thread {
         }
       }
       try {
-        sleep(2000);
+        sleep(200);
       } catch (InterruptedException e) {
         break;
       }

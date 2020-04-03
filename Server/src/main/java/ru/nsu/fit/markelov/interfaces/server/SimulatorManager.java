@@ -1,6 +1,7 @@
 package ru.nsu.fit.markelov.interfaces.server;
 
 import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 
@@ -35,7 +36,7 @@ public interface SimulatorManager {
   /**
    * Run simulation on available simulation unit.
    *
-   * @param levelId filename of the level.
+   * @param levelId name of the level.
    * @param lobbyId id of lobby, used to define id of simulation.
    * @param solutions map of players and their solutions.
    * @return result of the simulation.
@@ -55,11 +56,12 @@ public interface SimulatorManager {
    * Add a new level. If a level with same name and language exists then does nothing.
    *
    * @param name name of level to be referred.
-   * @param source code of te level.
    * @param language language of the level.
+   * @param levelSrc code of the level.
+   * @param resources list of resources to be stored along.
    * @return true if added, false if a level with the same name and language exists.
    */
-  boolean addLevel(String name, String source, String language);
+  boolean addLevel(String name, String language, Resource levelSrc, List<Resource> resources);
 
   /**
    * Remove a level.
