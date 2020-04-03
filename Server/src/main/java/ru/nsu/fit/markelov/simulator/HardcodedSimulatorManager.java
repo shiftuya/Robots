@@ -1,6 +1,7 @@
 package ru.nsu.fit.markelov.simulator;
 
 import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
@@ -61,8 +62,7 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   }
 
   @Override
-  public SimulationResult runSimulation(
-      String levelId, int lobbyId, Map<User, String> solutions) {
+  public SimulationResult runSimulation(String levelId, int lobbyId, Map<User, String> solutions) {
     ArrayList<Map.Entry<User, String>> entryList = new ArrayList<>(solutions.entrySet());
     ArrayList<String> sol = new ArrayList<>();
     for (Map.Entry<User, String> entry : entryList) {
@@ -71,7 +71,7 @@ public class HardcodedSimulatorManager implements SimulatorManager {
     String request = JsonUtil.formJSON(levelId, sol);
     try {
       URL url = monitor.chooseSim();
-      if(printDebug){
+      if (printDebug) {
         System.out.println(url.toString());
       }
       if (url == null) throw new MissingSimulationUnits("No Simulation Units available");
@@ -110,7 +110,8 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   }
 
   @Override
-  public boolean addLevel(String name, String source, String language) {
+  public boolean addLevel(
+      String name, String language, Resource levelSrc, List<Resource> resources) {
     return false;
   }
 
