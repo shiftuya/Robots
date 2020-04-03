@@ -100,6 +100,28 @@ h1 {
 	-webkit-border-radius: 50%;
 }
 
+.new-unit {
+    display: inline-block;
+    height: 70px;
+    line-height: 70px;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+
+.new-unit-icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 64px;
+    height: 64px;
+    margin-right: 10px;
+    background: center no-repeat url("../images/plus-icon.png");
+}
+
+.new-unit a {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .CodeMirror {
     clear: both;
     height: 660px !important;
