@@ -7,6 +7,7 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.LevelsGetHandl
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.LobbiesGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.SimulatorsGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.SolutionsGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.UsersGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.level.LevelDeleteHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.level.LevelGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.level.LevelSubmitHandler;
@@ -21,6 +22,9 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.Simulatio
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultIsReadyHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorAddHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorDeleteHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserDeleteHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserSubmitHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.mainmanager.MainManager1;
 
@@ -40,20 +44,23 @@ public class MainServer {
         server.createContext("/list_of_lobbies", new CommonHttpHandler("list_of_lobbies"));
         server.createContext("/choose_level", new CommonHttpHandler("choose_level"));
         server.createContext("/my_solutions", new CommonHttpHandler("my_solutions"));
+        server.createContext("/users", new CommonHttpHandler("users"));
+//        server.createContext("/user", new CommonHttpHandler("user"));
         server.createContext("/levels", new CommonHttpHandler("levels"));
         server.createContext("/level_editor", new CommonHttpHandler("level_editor"));
         server.createContext("/simulators", new CommonHttpHandler("simulators"));
         server.createContext("/options", new CommonHttpHandler("options"));
-        server.createContext("/lobby", new CommonHttpHandler("lobby"));
-        server.createContext("/code_editor", new CommonHttpHandler("code_editor"));
-        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result"));
+//        server.createContext("/lobby", new CommonHttpHandler("lobby"));
+//        server.createContext("/code_editor", new CommonHttpHandler("code_editor"));
+//        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result"));
 
         server.createContext("/api/method/sign.login", new LogInHandler(mainManager));
         server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));
 
         server.createContext("/api/method/lobbies.get", new LobbiesGetHandler(mainManager));
-        server.createContext("/api/method/levels.get", new LevelsGetHandler(mainManager));
         server.createContext("/api/method/solutions.get", new SolutionsGetHandler(mainManager));
+        server.createContext("/api/method/users.get", new UsersGetHandler(mainManager));
+        server.createContext("/api/method/levels.get", new LevelsGetHandler(mainManager));
         server.createContext("/api/method/simulators.get", new SimulatorsGetHandler(mainManager));
 
         server.createContext("/api/method/lobby.join", new LobbyJoinHandler(mainManager));
@@ -66,6 +73,11 @@ public class MainServer {
 
         server.createContext("/api/method/simulation_result.is_ready", new SimulationResultIsReadyHandler(mainManager));
         server.createContext("/api/method/simulation_result.get", new SimulationResultGetHandler(mainManager));
+
+        server.createContext("/api/method/user.get", new UserGetHandler(mainManager));
+        server.createContext("/api/method/user.delete", new UserDeleteHandler(mainManager));
+        server.createContext("/api/method/user.create", new UserSubmitHandler(mainManager, true));
+        server.createContext("/api/method/user.edit", new UserSubmitHandler(mainManager, false));
 
         server.createContext("/api/method/level.get", new LevelGetHandler(mainManager));
         server.createContext("/api/method/level.submit", new LevelSubmitHandler(mainManager));

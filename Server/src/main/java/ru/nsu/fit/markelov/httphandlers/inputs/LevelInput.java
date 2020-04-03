@@ -1,7 +1,7 @@
 package ru.nsu.fit.markelov.httphandlers.inputs;
 
 import ru.nsu.fit.markelov.interfaces.client.Resource;
-import ru.nsu.fit.markelov.httphandlers.util.LevelResource;
+import ru.nsu.fit.markelov.httphandlers.util.FileResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +18,11 @@ public class LevelInput {
     private String goal;
     private String code;
 
-    private LevelResource iconResource;
+    private FileResource iconResource;
     private List<Resource> levelResources;
 
     public LevelInput() {
-        iconResource = new LevelResource();
+        iconResource = new FileResource();
         levelResources = new ArrayList<>();
     }
 
@@ -129,11 +129,11 @@ public class LevelInput {
         this.maxPlayers = maxPlayers;
     }
 
-    public LevelResource getIconResource() {
+    public FileResource getIconResource() {
         return iconResource;
     }
 
-    public void setIconResource(LevelResource iconResource) {
+    public void setIconResource(FileResource iconResource) {
         this.iconResource = iconResource;
     }
 

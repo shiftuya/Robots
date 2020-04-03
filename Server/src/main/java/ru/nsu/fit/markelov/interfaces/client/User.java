@@ -4,7 +4,7 @@ import java.util.Date;
 
 public interface User {
 
-    enum UserType { STUDENT, TEACHER, ADMIN }
+    enum UserType { Student, Teacher, Admin }
 
     /**
      * Returns user type.
@@ -33,4 +33,11 @@ public interface User {
      * @return the date of last user activity.
      */
     Date getLastActive();
+
+    /**
+     * Returns whether user is blocked.
+     *
+     * @return whether user is blocked.
+     */
+    boolean isBlocked();
 }

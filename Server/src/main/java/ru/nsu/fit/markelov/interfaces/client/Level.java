@@ -2,7 +2,7 @@ package ru.nsu.fit.markelov.interfaces.client;
 
 public interface Level {
 
-    enum LevelDifficulty {Easy, Medium, Hard}
+    enum LevelDifficulty { Easy, Medium, Hard }
 
     /**
      * Returns unique level id.

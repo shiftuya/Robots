@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="css/list_of_lobbies.css">
         <link rel="stylesheet" href="css/choose_level.css">
         <link rel="stylesheet" href="css/my_solutions.css">
+        <link rel="stylesheet" href="css/users.css">
         <link rel="stylesheet" href="css/level_editor.css">
 		<link rel="stylesheet" href="css/lobby.css">
 		<link rel="stylesheet" href="css/simulation_results.css">
@@ -49,7 +50,7 @@
                         <input class="login-form-input" type="password">
                     </section>
                     <section class="login-form-section">
-                        <span id="login-submit" class="a">Log In</span>
+                        <span id="login-submit" class="a highlited-on-hover">Log In</span>
 <!--                        <button id="login-submit" class="login-form-input login-form-button" type="submit">Log In</button>-->
                     </section>
                 </form>
@@ -59,7 +60,7 @@
 					<span class="nav-bar-left">
                         <span id="list_of_lobbies" class="a highlited-on-hover" data-href="list_of_lobbies.html">List of Lobbies</span>
                         <span id="my_solutions" class="a highlited-on-hover" data-href="my_solutions.html">My Solutions</span>
-                        <span id="students" class="a highlited-on-hover" data-href="students.html">Students</span>
+                        <span id="users" class="a highlited-on-hover" data-href="users.html">Users</span>
                         <span id="levels" class="a highlited-on-hover" data-href="levels.html">Levels</span>
                         <span id="simulators" class="a highlited-on-hover" data-href="simulators.html">Simulators</span>
 					</span>
@@ -186,6 +187,72 @@
                     </tbody>
 				</table>
             </section>
+            <section id="users-content" class="content">
+                <div id="user_editor" class="new-lobby">
+                    <div class="new-lobby-icon circle-icon"></div>
+                    <span class="a" data-href="user_editor.html">Create New User</span>
+                </div>
+                <table id="users-table" class="common-table users-table">
+                    <tr>
+                        <th>User</th>
+                        <th>Levels Finished</th>
+                        <th>Last Active</th>
+                    </tr>
+                    <tr class="lobby-row highlited-on-hover skeleton">
+                        <td>
+                            <div class="lobbies-table-icon avatar-icon"></div>
+                            <span class="username"></span>
+                        </td>
+                        <td class="user-type"></td>
+                        <td class="last-active"></td>
+                    </tr>
+                </table>
+            </section>
+            <section id="user-content" class="content user-content">
+                <section class="user-shell skeleton">
+                    <div class="lobby-common-shell">
+                        <div class="lobby-common-icon"></div>
+                        <span class="user-name"></span>
+                        <span class="user-type"></span>
+                        <span class="user-last-active"></span>
+                        <span class="a highlited-on-hover user-edit-a">Edit</span>
+                        <span class="a highlited-on-hover user-block-a"></span>
+                        <span class="a highlited-on-hover user-delete-a">Delete</span>
+                    </div>
+                </section>
+            </section>
+            <section id="user-editor-content" class="content user-editor-content">
+                <section class="user-editor-shell skeleton">
+                    <form class="user-editor-form">
+                        <input name="bugfix" type="text" style="display: none">
+                        <span>
+                            <label for="name">Name:</label>
+                            <input name="name" type="text" placeholder="Name">
+                        </span>
+                        <span>
+                            <label for="password">Password:</label>
+                            <input name="password" type="password">
+                        </span>
+                        <span>
+                            <label for="repeat_password">Repeat password:</label>
+                            <input name="repeat_password" type="password">
+                        </span>
+                        <span>
+                            <label for="type">Type:</label>
+                            <select name="type">
+                                <option value="Student">Student</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </span>
+                        <span>
+                            <label for="avatar">Avatar:</label>
+                            <input name="avatar" type="file">
+                        </span>
+                        <span class="a highlited-on-hover user-submit-a">Submit</span>
+                    </form>
+                </section>
+            </section>
             <section id="levels-content" class="content">
                 <div id="level_editor" class="new-lobby">
                     <div class="new-lobby-icon circle-icon"></div>
@@ -223,7 +290,7 @@
             <section id="level-editor-content" class="content level-editor-content">
                 <div id="submit-level" class="submit-level new-lobby">
                     <div class="new-lobby-icon circle-icon"></div>
-                    <span class="a" data-href="submit-level.html">Submit level</span>
+                    <span class="a" data-href="submit-level.html">Submit Level</span>
                 </div>
                 <section class="level-editor-shell skeleton">
                     <form class="level-editor-form">

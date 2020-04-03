@@ -11,7 +11,7 @@ class ContextManager {
         return this.contextMap.keys();
     }
 
-    changeContext(contextName, ajaxQuery) {
+    changeContext(contextName, ajaxQuery, obj) {
         var dependencies = this.contextMap.get(contextName);
         
         var title = dependencies.title;
@@ -54,15 +54,15 @@ class ContextManager {
 
         // get and insert new data if needed
         if (insertFunction) {
-            this.getAndInsertData(contextName, ajaxQuery, insertFunction);
+            this.getAndInsertData(contextName, ajaxQuery, insertFunction, obj);
         }
 
         this.currentContextName = contextName;
     }
 
-    getAndInsertData(contextName, ajaxQuery, insertFunction) {
+    getAndInsertData(contextName, ajaxQuery, insertFunction, obj) {
         if (!ajaxQuery) {
-            insertFunction();
+            insertFunction(obj, this);
             return;
         }
 
@@ -143,8 +143,8 @@ function insertChooseLevelData(obj, contextManager) {
     }
 }
 
-function insertSolutionsData(obj, contextManager) {
-    var table = $("#solutions-table");
+function insertSolutionsData(obj, contextManager, inbuiltTable) {
+    var table = inbuiltTable || $("#solutions-table");
     if (obj.response.length == 0) {
         $("<tbody><tr><td colspan=\"100%\">No created levels.</td></tr></tbody>").appendTo(table);
     } else {
@@ -216,6 +216,110 @@ function insertSolutionsData(obj, contextManager) {
             table.append(tbody);
         });
     }
+}
+
+function insertUsersData(obj, contextManager) {
+    var table = $("#users-table");
+    if (obj.response.length == 0) {
+        $("<tr><td colspan=\"100%\">No created users.</td></tr>").appendTo(table);
+    } else {
+        var skeleton = table.find("tr.skeleton");
+        obj.response.forEach(function(item) {
+            var tr = $(skeleton).clone();
+            tr.removeClass("skeleton");
+
+            tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
+            tr.find(".username").text(item.name);
+            tr.find(".user-type").text(item.type);
+            tr.find(".last-active").text(item.last_active);
+            
+            if (item.is_blocked) {
+                tr.addClass("blocked-user");
+            }
+
+            table.append(tr);
+
+            tr.on("click", function() {
+                contextManager.changeContext("user", "user.get?username=" + item.name);
+            });
+        });
+    }
+}
+
+function insertUserData(obj, contextManager) {
+    var skeleton = $("#user-content").find("section.skeleton");
+    var item = obj.response.info;
+
+    var section = $(skeleton).clone();
+    section.removeClass("skeleton");
+
+    section.find(".lobby-common-icon").css("background-image", "url(\".." + item.avatar + "\")");
+    section.find(".user-name").text(item.name);
+    section.find(".user-type").text(item.type);
+    section.find(".user-last-active").text(item.last_active);
+    section.find(".user-block-a").text(item.is_blocked ? "Unblock" : "Block");
+    
+    // simple cloaning the table is not working, as jQuery doesn't remove the data immediately
+    var solutionsTable = $("<table class=\"common-table solutions-table\">");
+    solutionsTable.append($("#solutions-table").find("tbody:first-of-type, tbody.skeleton").clone());
+    insertSolutionsData({response: obj.response.solutions}, contextManager, solutionsTable);
+    
+    section.append(solutionsTable);
+    $("#user-content").append(section);
+
+    section.find(".user-edit-a").on("click", function() {
+        contextManager.changeContext("user_editor", undefined, obj);
+    });
+
+    section.find(".user-block-a").on("click", function() {
+        sendAjax("user.block?username=" + item.name + "&block=" + !item.is_blocked, function(result) {
+//            var obj = JSON.parse(result);
+            alert("User is " + (item.is_blocked ? "unblocked" : "blocked"));
+            contextManager.changeContext("user", "user.get?username=" + item.name);
+        });
+    });
+
+    section.find(".user-delete-a").on("click", function() {
+        if (confirm("Are you sure you want to delete the user? This action cannot be undone.")) {
+            sendAjax("user.delete?username=" + item.name, function(result) {
+//                var obj = JSON.parse(result);
+                alert("User is deleted");
+                contextManager.changeContext("users");
+            });
+        }
+    });
+}
+
+function insertUserEditorData(obj, contextManager) {
+    var skeleton = $("#user-editor-content").find("section.skeleton");
+    var section = $(skeleton).clone();
+    section.removeClass("skeleton");
+
+    var ajaxQuery, message;
+    if (!obj) {
+        ajaxQuery = "user.create";
+        message = "User created";
+    } else {
+        ajaxQuery = "user.edit";
+        message = "User edited";
+        
+        var item = obj.response.info;
+        section.find("input[name=name]").attr("value", item.name).attr("readonly", true);
+        section.find("select[name=type]").val(item.type);
+    }
+
+    section.find(".user-submit-a").on("click", function() {
+        var form = $("#user-editor-content").find(".user-editor-shell:not('.skeleton')").find("form")
+
+        var formData = new FormData(form[0]);
+        sendAjax(ajaxQuery, function(result) {
+//            var obj = JSON.parse(result);
+            alert(message);
+            contextManager.changeContext("users");
+        }, undefined, formData);
+    });
+
+    $("#user-editor-content").append(section);
 }
 
 function insertLevelsData(obj, contextManager) {

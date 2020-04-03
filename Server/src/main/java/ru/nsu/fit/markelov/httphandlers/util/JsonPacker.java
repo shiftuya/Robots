@@ -5,7 +5,8 @@ import org.json.JSONObject;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.Pair;
+import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 
 import java.text.SimpleDateFormat;
@@ -15,6 +16,35 @@ import java.util.Map;
 public class JsonPacker {
 
     public static final String DATE_FORMAT = "dd.MM.yyyy";
+
+    public static JSONArray packUsers(Collection<User> users) {
+        JSONArray jsonLevels = new JSONArray();
+
+        for (User user : users) {
+            jsonLevels.put(packUser(user));
+        }
+
+        return jsonLevels;
+    }
+
+    public static JSONObject packUser(User user) {
+        JSONObject jsonUser = new JSONObject();
+        jsonUser
+            .put("avatar", user.getAvatarAddress())
+            .put("name", user.getName())
+            .put("type", user.getType())
+            .put("last_active", user.getLastActive() == null ? "Never" :
+                DateFormatter.formatLastActive(user.getLastActive().getTime()))
+            .put("is_blocked", user.isBlocked());
+
+        return jsonUser;
+    }
+
+    public static JSONObject packUserInfo(JSONObject jsonUser, JSONArray jsonSolutions) {
+        return new JSONObject()
+            .put("info", jsonUser)
+            .put("solutions", jsonSolutions);
+    }
 
     public static JSONArray packLevels(Collection<Level> levels) {
         JSONArray jsonLevels = new JSONArray();
@@ -139,8 +169,8 @@ public class JsonPacker {
 
             jsonLobby
                     .put("lobby_id", lobby.getId())
-                    .put("avatar", lobby.getHostAvatarAddress())
-                    .put("host_name", lobby.getHostName())
+                    .put("avatar", lobby.getUsers().get(0).getKey().getAvatarAddress())
+                    .put("host_name", lobby.getUsers().get(0).getKey().getName())
                     .put("level_icon", lobby.getLevel().getIconAddress())
                     .put("level_name", lobby.getLevel().getName())
                     .put("level_difficulty", lobby.getLevel().getDifficulty())
@@ -157,13 +187,13 @@ public class JsonPacker {
     public static JSONObject packLobby(Lobby lobby) {
         JSONArray jsonPlayers = new JSONArray();
 
-        for (Player player : lobby.getPlayers()) {
+        for (Pair<User, Boolean> user : lobby.getUsers()) {
             JSONObject jsonPlayer = new JSONObject();
 
             jsonPlayer
-                    .put("avatar", player.getAvatarAddress())
-                    .put("user_name", player.getName())
-                    .put("submitted", player.isSubmitted());
+                    .put("avatar", user.getKey().getAvatarAddress())
+                    .put("user_name", user.getKey().getName())
+                    .put("submitted", user.getValue());
 
             jsonPlayers.put(jsonPlayer);
         }

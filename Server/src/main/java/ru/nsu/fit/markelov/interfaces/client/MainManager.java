@@ -29,6 +29,21 @@ public interface MainManager {
     Collection<Lobby> getLobbies();
 
     /**
+     * Returns collection of required users.
+     *
+     * If user (gotten by specified 'userName') is a teacher - collection of students must be
+     * returned.
+     * If user (gotten by specified 'userName') is an admin - collection of all users must be
+     * returned.
+     *
+     * A collection must be sorted by user names.
+     *
+     * @param userName user unique name.
+     * @return collection of required users.
+     */
+    Collection<User> getUsers(String userName);
+
+    /**
      * Returns a collection of created levels.
      *
      * @return a collection of created levels.
@@ -38,7 +53,7 @@ public interface MainManager {
     /**
      * Places a user in the lobby gotten by specified 'lobbyID'.
      *
-     * A host-user must be in the head of the collection.
+     * A host-user must be in the head of the user list.
      *
      * @param userName unique user name.
      * @param lobbyID  unique lobby id.
@@ -49,7 +64,7 @@ public interface MainManager {
     /**
      * Creates a new lobby by 'levelID' and places a user in it.
      *
-     * A host-user must be in the head of the collection.
+     * A host-user must be in the head of the user list.
      *
      * @param userName      unique user name.
      * @param levelID       unique level id.
@@ -70,7 +85,7 @@ public interface MainManager {
     /**
      * Returns the lobby gotten by specified 'lobbyID'.
      *
-     * A host-user must be in the head of the collection.
+     * A host-user must be in the head of the user list.
      *
      * @param userName unique user name.
      * @param lobbyID  unique lobby id.
@@ -129,18 +144,65 @@ public interface MainManager {
     Collection<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId);
 
     /**
-     * Submits a level and informs whether it is successfully submitted.
+     * Returns a user gotten by specified 'userName'.
      *
-     * Id levelID is null - a new level must be created;
-     *          otherwise - an existing level (gotten by this id) must be edited.
+     * @param userName unique user name.
+     * @return a user.
+     */
+    User getUser(String userName);
+
+    /**
+     * Creates/edits a user and informs whether it is successfully created/edited.
+     *
+     * If 'create' is true - a new user must be created;
+     *           otherwise - an existing user (gotten by specified 'userName') must be edited.
+     *
+     * If user is being created:
+     *     - if 'avatarResource' is null, default avatar must be used.
+     *
+     * If user is being edited:
+     *     - if 'avatarResource' is null, previously saved avatar must be used.
+     *
+     * @param create         true for creating and false for editing.
+     * @param userName       unique user name.
+     * @param password       user password.
+     * @param type           user type.
+     * @param avatarResource user avatar resource.
+     * @return whether user is successfully created/edited.
+     */
+    boolean submitUser(boolean create, String userName, String password, String type,
+                       Resource avatarResource);
+
+    /**
+     * Blocks/unblocks user and informs whether it is successfully blocked/unblocked.
+     *
+     * @param userName unique user name.
+     * @param block    true for blocking and false for unblocking.
+     * @return whether user is successfully blocked/unblocked.
+     */
+    boolean blockUser(String userName, boolean block);
+
+    /**
+     * Deletes user and informs whether it is successfully deleted.
+     *
+     * @param userName unique user name.
+     * @return whether user is successfully deleted.
+     */
+    boolean removeUser(String userName);
+
+    /**
+     * Creates/edits a level and informs whether it is successfully created/edited.
+     *
+     * Id 'levelID' is null - a new level must be created;
+     *            otherwise - an existing level (gotten by specified 'levelID') must be edited.
      *
      * If level is being created:
      *     - if iconResource is null, default icon must be used.
      *
      * If level is being edited:
-     *     - if iconResource is null, previously saved icon must be used.
-     *     - if levelResources is null, previously saved level resources must be used.
-     *     - if levelResources is not null, new resources must be added to previously saved ones.
+     *     - if 'iconResource' is null, previously saved icon must be used.
+     *     - if 'levelResources' is null, previously saved level resources must be used.
+     *     - if 'levelResources' is not null, new resources must be added to previously saved ones.
      *
      * @param levelID        unique level id.
      * @param name           level name.
@@ -154,11 +216,12 @@ public interface MainManager {
      * @param levelResources level extra resources.
      * @param code           level code.
      * @param language       level language.
-     * @return whether a level is successfully submitted.
+     * @return whether a level is successfully created/edited.
      */
-    boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
-                        Integer maxPlayers, Resource iconResource, String description, String rules,
-                        String goal, Collection<Resource> levelResources, String code, String language);
+    boolean submitLevel(Integer levelID, String name, String difficulty,
+                        Integer minPlayers, Integer maxPlayers, Resource iconResource,
+                        String description, String rules, String goal,
+                        Collection<Resource> levelResources, String code, String language);
 
     /**
      * Returns a level gotten by specified 'levelID'.

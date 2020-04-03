@@ -2,7 +2,7 @@ package ru.nsu.fit.markelov;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -19,10 +20,10 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.*;
 
 public class SimulatorIntegralTest {
-  private class PlayerTest implements Player {
+  private class UserTest implements User {
     private String name;
 
-    PlayerTest(String _name) {
+    UserTest(String _name) {
       name = _name;
     }
 
@@ -37,7 +38,17 @@ public class SimulatorIntegralTest {
     }
 
     @Override
-    public boolean isSubmitted() {
+    public UserType getType() {
+      return null;
+    }
+
+    @Override
+    public Date getLastActive() {
+      return null;
+    }
+
+    @Override
+    public boolean isBlocked() {
       return false;
     }
   }
@@ -53,9 +64,9 @@ public class SimulatorIntegralTest {
     @Override
     public void run() {
       try {
-        Player p1 = new PlayerTest("Good Guy");
-        Player p2 = new PlayerTest("Bad Guy");
-        HashMap<Player, String> argMap = new HashMap<>();
+        User p1 = new UserTest("Good Guy");
+        User p2 = new UserTest("Bad Guy");
+        HashMap<User, String> argMap = new HashMap<>();
         argMap.put(p1, correctSolution);
         argMap.put(p2, wrongSolution);
         SimulationResult result = sm.runSimulation("simple_plane", 0, argMap);
@@ -113,9 +124,9 @@ public class SimulatorIntegralTest {
   @Test
   public void testCorrectSolutions() {
     if (hostAvailabilityCheck()) {
-      Player p1 = new PlayerTest("Nice Guy");
-      Player p2 = new PlayerTest("Good Guy");
-      HashMap<Player, String> argMap = new HashMap<>();
+      User p1 = new UserTest("Nice Guy");
+      User p2 = new UserTest("Good Guy");
+      HashMap<User, String> argMap = new HashMap<>();
       argMap.put(p1, correctSolution);
       argMap.put(p2, correctSolution);
       HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
@@ -133,10 +144,10 @@ public class SimulatorIntegralTest {
   @Test
   public void testDifferentSolutions() {
     if (hostAvailabilityCheck()) {
-      Player p1 = new PlayerTest("Good Guy");
-      Player p2 = new PlayerTest("Bad Guy");
+      User p1 = new UserTest("Good Guy");
+      User p2 = new UserTest("Bad Guy");
 
-      HashMap<Player, String> argMap = new HashMap<>();
+      HashMap<User, String> argMap = new HashMap<>();
       argMap.put(p1, correctSolution);
       argMap.put(p2, wrongSolution);
       HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
@@ -155,10 +166,10 @@ public class SimulatorIntegralTest {
   @Test
   public void loadTest() {
     if (hostAvailabilityCheck()) {
-      Player p1 = new PlayerTest("Good Guy");
-      Player p2 = new PlayerTest("Bad Guy");
+      User p1 = new UserTest("Good Guy");
+      User p2 = new UserTest("Bad Guy");
 
-      HashMap<Player, String> argMap = new HashMap<>();
+      HashMap<User, String> argMap = new HashMap<>();
       argMap.put(p1, correctSolution);
       argMap.put(p2, wrongSolution);
       HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);

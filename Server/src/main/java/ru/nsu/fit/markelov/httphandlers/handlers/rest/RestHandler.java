@@ -19,8 +19,8 @@ public abstract class RestHandler implements HttpHandler {
             } catch (ProcessingException e) {
                 responder.sendError(e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println(e.toString());
+        } catch (IOException|RuntimeException e) {
+            e.printStackTrace();
         } finally {
             exchange.close();
         }

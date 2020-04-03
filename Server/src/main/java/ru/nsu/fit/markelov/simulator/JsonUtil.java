@@ -2,7 +2,7 @@ package ru.nsu.fit.markelov.simulator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.mainmanager.SimulationResult1;
 
 import java.util.ArrayList;
@@ -20,14 +20,14 @@ class JsonUtil {
   }
 
   static SimulationResult1 parseSimResponse(
-      int id, String jsonStr, ArrayList<Map.Entry<Player, String>> entryList) {
+      int id, String jsonStr, ArrayList<Map.Entry<User, String>> entryList) {
     JSONObject jsObj = new JSONObject(jsonStr);
     HashMap<String, Boolean> passed = new HashMap<>();
     HashMap<String, String> logs = new HashMap<>();
     try {
       if (jsObj.getBoolean("timeout") || jsObj.getBoolean("broken")) {
         for (int i = 0; i < entryList.size(); i++) {
-          for (Map.Entry<Player, String> entry : entryList) {
+          for (Map.Entry<User, String> entry : entryList) {
             passed.put(entry.getKey().getName(), false);
           }
         }

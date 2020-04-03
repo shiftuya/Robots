@@ -41,6 +41,37 @@ $(document).ready(function() {
                 contentUnit: "tbody:not(':first-of-type')"
             }
         }],
+        ["users", {
+            title: "Users",
+            headerId: "header-main",
+            contentId: "users-content",
+            defaultAjaxQuery: "users.get",
+            insertFunction: insertUsersData,
+            deleteData: {
+                id: "users-table",
+                contentUnit: "tr:not(':first-of-type')"
+            }
+        }],
+        ["user", {
+            title: "User",
+            headerId: "header-main",
+            contentId: "user-content",
+            insertFunction: insertUserData,
+            deleteData: {
+                id: "user-content",
+                contentUnit: ".user-shell"
+            }
+        }],
+        ["user_editor", {
+            title: "User editor",
+            headerId: "header-main",
+            contentId: "user-editor-content",
+            insertFunction: insertUserEditorData,
+            deleteData: {
+                id: "user-editor-content",
+                contentUnit: ".user-editor-shell"
+            }
+        }],
         ["levels", {
             title: "Levels",
             headerId: "header-main",
@@ -197,8 +228,7 @@ function activateListeners(contextManager) {
 
     $("#add-simulator").on("click", function() {
         var url = prompt("Type simulator url:", "");
-        if (url == null || url == "") {
-            alert("Canceled");
+        if (!url) {
             return;
         }
         

@@ -1,7 +1,7 @@
 package ru.nsu.fit.markelov.simulator;
 
 import ru.nsu.fit.markelov.interfaces.client.Level;
-import ru.nsu.fit.markelov.interfaces.client.Player;
+import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
 
@@ -62,10 +62,10 @@ public class HardcodedSimulatorManager implements SimulatorManager {
 
   @Override
   public SimulationResult runSimulation(
-      String levelId, int lobbyId, Map<Player, String> solutions) {
-    ArrayList<Map.Entry<Player, String>> entryList = new ArrayList<>(solutions.entrySet());
+      String levelId, int lobbyId, Map<User, String> solutions) {
+    ArrayList<Map.Entry<User, String>> entryList = new ArrayList<>(solutions.entrySet());
     ArrayList<String> sol = new ArrayList<>();
-    for (Map.Entry<Player, String> entry : entryList) {
+    for (Map.Entry<User, String> entry : entryList) {
       sol.add(entry.getValue());
     }
     String request = JsonUtil.formJSON(levelId, sol);

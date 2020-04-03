@@ -1,6 +1,6 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface Lobby {
     /**
@@ -9,20 +9,6 @@ public interface Lobby {
      * @return the unique lobby id.
      */
     int getId();
-
-    /**
-     * Returns the host avatar address.
-     *
-     * @return the host avatar address.
-     */
-    String getHostAvatarAddress();
-
-    /**
-     * Returns the host name.
-     *
-     * @return the host name.
-     */
-    String getHostName();
 
     /**
      * Returns the amount of players present in the lobby.
@@ -39,11 +25,13 @@ public interface Lobby {
     int getAcceptablePlayersAmount();
 
     /**
-     * Returns the collection of players.
+     * Returns the list of pairs (User, isSubmitted).
      *
-     * @return the collection of players.
+     * A host-user must be in the head of the collection.
+     *
+     * @return the list of pairs (User, isSubmitted).
      */
-    Collection<Player> getPlayers();
+    List<Pair<User, Boolean>> getUsers();
 
     /**
      * Returns the level.
