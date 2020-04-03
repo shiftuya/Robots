@@ -77,18 +77,36 @@ class ContextManager {
     }
 
     removeCurrentData(deleteData) {
-        if (this.currentContextName == "login") {
-            $("#login-content").removeClass("active");
-            $("#login-content").find("input[name='name']").val("");
-            return;
-        }
-        
         if (!deleteData) {
             return;
         }
         
         $("#" + deleteData.id).find(deleteData.contentUnit + ":not('.skeleton')").remove();
     }
+}
+
+function insertLoginData(obj, contextManager) {
+    var skeleton = $("#login-content").find("section.skeleton");
+    var section = $(skeleton).clone();
+    section.removeClass("skeleton");
+
+    section.find(".login-submit-a").on("click", function() {
+        var username = section.find("input[name='name']").val();
+
+        sendAjax("sign.login?username=" + username, function(data) {
+            var obj = JSON.parse(data);
+            if (obj.response.length == 0) {
+                alert("Bad response!");
+            } else if (obj.response.logged_in) {
+                $("#logout").text("Log Out (" + username + ")");
+                contextManager.changeContext("list_of_lobbies");
+            } else {
+                alert(obj.response.message);
+            }
+        });
+    });
+
+    $("#login-content").append(section);
 }
 
 function insertListOfLobbiesData(obj, contextManager) {

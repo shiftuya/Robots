@@ -33,26 +33,28 @@
 		<div class="shell">
             <section id="login-content" class="content">
                 <img class="logo" src="images/logo.png" alt="Robotics Game Server Logotype">
-                <form class="common-form login-form">
-                    <section class="form-section">
-                        <label for="server">Server:</label>
-                        <select name="server">
-                            <option value="NSU Robotics Club">NSU Robotics Club</option>
-                            <option value="Robotics Game Center">Robotics Game Center</option>
-                        </select>
-                    </section>
-                    <section class="form-section">
-                        <label for="name">Login:</label>
-                        <input name="name" type="text">
-                    </section>
-                    <section class="form-section">
-                        <label for="password">Password:</label>
-                        <input name="password" type="password">
-                    </section>
-                    <section class="form-section">
-                        <span id="login-submit" class="a highlited-on-hover">Log In</span>
-                    </section>
-                </form>
+                <section class="login-shell skeleton">
+                    <form class="common-form login-form">
+                        <section class="form-section">
+                            <label for="server">Server:</label>
+                            <select name="server">
+                                <option value="NSU Robotics Club">NSU Robotics Club</option>
+                                <option value="Robotics Game Center">Robotics Game Center</option>
+                            </select>
+                        </section>
+                        <section class="form-section">
+                            <label for="name">Login:</label>
+                            <input name="name" type="text">
+                        </section>
+                        <section class="form-section">
+                            <label for="password">Password:</label>
+                            <input name="password" type="password">
+                        </section>
+                        <section class="form-section">
+                            <span class="a highlited-on-hover login-submit-a">Log In</span>
+                        </section>
+                    </form>
+                </section>
             </section>
             <header id="header-main" class="header-main">
 				<nav class="nav-bar">
@@ -194,7 +196,7 @@
                 <table id="users-table" class="common-table users-table">
                     <tr>
                         <th>User</th>
-                        <th>Levels Finished</th>
+                        <th>Type</th>
                         <th>Last Active</th>
                     </tr>
                     <tr class="lobby-row highlited-on-hover skeleton">
