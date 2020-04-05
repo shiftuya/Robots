@@ -1,28 +1,33 @@
 package ru.nsu.fit.markelov.mainmanager;
 
-import ru.nsu.fit.markelov.interfaces.client.User;
-
 import java.util.Date;
 
-class User1 implements User {
+public class User1 implements UserExtended {
   private String avatarAddress;
   private String name;
-  private String solutionCode;
+  private UserType type;
+  private boolean blocked;
+  private Date lastActive;
+  private String password;
 
-  private boolean submitted;
 
-  void setSolutionCode(String code) {
-    solutionCode = code;
-  }
-
-  void setSubmitted(boolean submitted) {
-    this.submitted = submitted;
-  }
-
-  User1(String avatarAddress, String name) {
+  public User1(String avatarAddress, String name, UserType type, String password) {
     this.avatarAddress = avatarAddress;
     this.name = name;
-    submitted = false;
+    this.type = type;
+    this.password = password;
+    blocked = false;
+    lastActive = new Date();
+  }
+
+  public User1(String avatarAddress, String name,
+      UserType type, boolean blocked, Date lastActive, String password) {
+    this.avatarAddress = avatarAddress;
+    this.name = name;
+    this.type = type;
+    this.blocked = blocked;
+    this.lastActive = lastActive;
+    this.password = password;
   }
 
   @Override
@@ -36,17 +41,47 @@ class User1 implements User {
   }
 
   @Override
-  public UserType getType() {//TODO
-    return null;
+  public UserType getType() {
+    return type;
   }
 
   @Override
-  public Date getLastActive() {//TODO
-    return null;
+  public Date getLastActive() {
+    return lastActive;
   }
 
   @Override
-  public boolean isBlocked() {//TODO
-    return false;
+  public boolean isBlocked() {
+    return blocked;
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
+  }
+
+  @Override
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  @Override
+  public void setType(UserType type) {
+    this.type = type;
+  }
+
+  @Override
+  public void setAvatarAddress(String avatarAddress) {
+    this.avatarAddress = avatarAddress;
+  }
+
+  @Override
+  public void setBlocked(boolean blocked) {
+    this.blocked = blocked;
+  }
+
+  @Override
+  public void refreshLastActive() {
+    lastActive = new Date();
   }
 }

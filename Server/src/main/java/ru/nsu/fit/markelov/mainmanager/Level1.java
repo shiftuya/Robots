@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.mainmanager;
 
+import java.util.Date;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 
 public class Level1 implements Level {
@@ -14,6 +15,8 @@ public class Level1 implements Level {
   private int minPlayers;
   private int maxPlayers;
   private String filename;
+  private String language;
+  private String code;
 
   Level1(int id, String iconAddress, String name, LevelDifficulty difficulty, String type,
       String description, String rules, String goal, int minPlayers, int maxPlayers, String filename) {
@@ -28,11 +31,24 @@ public class Level1 implements Level {
     this.minPlayers = minPlayers;
     this.maxPlayers = maxPlayers;
     this.filename = filename;
+
   }
 
-
-  String getFilename() {
-    return filename;
+  public Level1(int id, String iconAddress, String name, LevelDifficulty difficulty, String type,
+      String description, String rules, String goal, int minPlayers, int maxPlayers,
+      String language, String code) {
+    this.id = id;
+    this.iconAddress = iconAddress;
+    this.name = name;
+    this.difficulty = difficulty;
+    this.type = type;
+    this.description = description;
+    this.rules = rules;
+    this.goal = goal;
+    this.minPlayers = minPlayers;
+    this.maxPlayers = maxPlayers;
+    this.language = language;
+    this.code = code;
   }
 
   @Override
@@ -87,11 +103,13 @@ public class Level1 implements Level {
 
   @Override
   public String getCode() {
-    return null;
+    return code;
   }
 
   @Override
   public String getLanguage() {
-    return null;
+    return language;
   }
+
+
 }

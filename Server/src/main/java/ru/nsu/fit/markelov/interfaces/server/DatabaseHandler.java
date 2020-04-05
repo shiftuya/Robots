@@ -1,20 +1,35 @@
 package ru.nsu.fit.markelov.interfaces.server;
 
-import ru.nsu.fit.markelov.interfaces.client.User;
+import java.util.List;
+import ru.nsu.fit.markelov.interfaces.client.Level;
+import ru.nsu.fit.markelov.mainmanager.SimulationResultExtended;
+import ru.nsu.fit.markelov.mainmanager.UserExtended;
 
-/**
- * This is just a general idea of the interface
- */
+
 public interface DatabaseHandler {
-  User getPlayerByName(String name);
+  List<UserExtended> getUsers();
 
-  void savePlayer(User user);
+  UserExtended getUserByName(String name);
 
+  void saveUser(UserExtended user);
 
-  // Important: Solutions include Simulation Results
-  //List<Solution> getSolutionsOfPlayer(Player player);
+  void removeUser(UserExtended user);
 
-  //void saveSolutionForPlayer(Player player, Solution solution);
+  List<String> getSimulatorsUrls();
 
-  void removePlayer(User user);
+  void removeSimulatorUrl(String url);
+
+  void saveSimulatorUrl(String url);
+
+  void saveLevel(Level level);
+
+  void removeLevel(Level level);
+
+  List<Level> getLevels();
+
+  Level getLevelById(int id);
+
+  void addSimulationResult(SimulationResultExtended result);
+
+  List<SimulationResultExtended> getSimulationResults();
 }
