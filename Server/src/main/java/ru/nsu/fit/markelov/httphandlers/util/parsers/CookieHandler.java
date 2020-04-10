@@ -4,18 +4,23 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.net.HttpCookie;
+import java.util.ArrayList;
 import java.util.List;
 
-public class CookieParser {
+public class CookieHandler {
 
-    public static final String COOKIE_NAME = "ROBOTICS_TOKEN";
+    public static final String COOKIE_NAME = "ROBOTICS_USER";
 
-    public static String getCookieUserName(HttpExchange exchange) {
+    private HttpExchange exchange;
+    private String cookie;
+
+    public CookieHandler(HttpExchange exchange) {
+        this.exchange = exchange;
         Headers requestHeaders = exchange.getRequestHeaders();
         List<String> cookies = requestHeaders.get("Cookie");
 
         if (cookies == null) {
-            return null;
+            return;
         }
 
         for (String cookie : cookies) {
@@ -23,18 +28,27 @@ public class CookieParser {
             for (HttpCookie httpCookie : httpCookies) {
                 if (httpCookie.getName().endsWith(COOKIE_NAME)) {
                     if (httpCookie.getValue().equals("NULL")) {
-                        return null;
+                        return;
                     }
 
-                    return httpCookie.getValue();
+                    this.cookie = httpCookie.getValue();
+                    return;
                 }
             }
         }
-
-        return null;
     }
 
-    public static void printCookieDEBUG(String cookie) {
+    public String getCookie() {
+        return cookie;
+    }
+
+    public void putCookie(String token) {
+        List<String> values = new ArrayList<>();
+        values.add(COOKIE_NAME + "=" + token + ";");
+        exchange.getResponseHeaders().put("Set-Cookie", values);
+    }
+
+    public void printCookieDEBUG() {
         if (cookie != null) {
             System.out.println("cookie: " + cookie);
         } else {

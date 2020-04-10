@@ -17,6 +17,7 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbyLeaveHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbyReturnHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbySubmitHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.log.LogInHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.log.LogOutHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultIsReadyHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorAddHandler;
@@ -55,6 +56,7 @@ public class MainServer {
 //        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result"));
 
         server.createContext("/api/method/sign.login", new LogInHandler(mainManager));
+        server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));
 
         server.createContext("/api/method/lobbies.get", new LobbiesGetHandler(mainManager));
         server.createContext("/api/method/solutions.get", new SolutionsGetHandler(mainManager));

@@ -5,6 +5,7 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.inputs.LevelInput;
 import ru.nsu.fit.markelov.httphandlers.util.FileResource;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataParser;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
@@ -22,7 +23,7 @@ public class LevelSubmitHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
         LevelInput levelInput = new LevelInput();
 
         FormDataParser formDataParser = new FormDataParser(exchange) {
@@ -54,7 +55,9 @@ public class LevelSubmitHandler extends RestHandler {
         }
 
         try {
-            if (mainManager.submitLevel(
+            mainManager.submitLevel(
+                cookieHandler.getCookie(),
+                levelInput.getId() == null,
                 levelInput.getId(),
                 levelInput.getName(),
                 levelInput.getDifficulty(),
@@ -67,11 +70,7 @@ public class LevelSubmitHandler extends RestHandler {
                 levelInput.getLevelResources(),
                 levelInput.getCode(),
                 "groovy"
-            )) {
-                responder.sendResponse(levelInput.getId() == null ? "New level is created." : "The level is updated.");
-            } else {
-                responder.sendResponse(levelInput.getId() == null ? "New level is not created." : "The level is not updated.");
-            }
+            );
         } catch (NumberFormatException e) {
             throw new ProcessingException("level_id is not a number");
         }

@@ -2,9 +2,8 @@ package ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby;
 
 import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
-import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
@@ -20,14 +19,7 @@ public class LobbyLeaveHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
-        String cookieUserName = CookieParser.getCookieUserName(exchange);
-
-        if (cookieUserName == null) {
-            throw new ProcessingException("cookieUserName is null.");
-        }
-        System.out.println("cookieUserName: " + cookieUserName);
-
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
         Integer id = uriParametersParser.getIntegerParameter("id");
 
@@ -35,6 +27,8 @@ public class LobbyLeaveHandler extends RestHandler {
             throw new ProcessingException("Id is null.");
         }
 
-        responder.sendResponse(JsonPacker.packLeavingLobby(mainManager.leaveLobby(cookieUserName, id)));
+        mainManager.leaveLobby(cookieHandler.getCookie(), id);
+
+        responder.sendResponse();
     }
 }

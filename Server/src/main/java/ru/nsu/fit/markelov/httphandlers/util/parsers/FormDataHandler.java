@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * https://gist.github.com/JensWalter/0f19780d131d903879a2#file-formdatahandler-java
  *
- * @author JensWalter
+ * @author Jens Walter
  */
 public abstract class FormDataHandler implements HttpHandler {
     @Override

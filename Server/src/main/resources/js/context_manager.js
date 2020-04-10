@@ -97,8 +97,6 @@ function insertLoginData(obj, contextManager) {
 
         var formData = new FormData(form[0]);
         sendAjax("sign.login", function(result) {
-            alert(result);
-            alert(document.cookie);
             $("#logout").text("Log Out (" + username + ")");
             contextManager.changeContext("list_of_lobbies");
         }, undefined, formData);
@@ -379,8 +377,6 @@ function insertLevelsData(obj, contextManager) {
             tr.find(".level-delete-a").on("click", function() {
                 if (confirm("Are you sure you want to delete the level? This action cannot be undone.")) {
                     sendAjax("level.delete?id=" + item.level_id, function(result) {
-                        var obj = JSON.parse(result);
-                        alert(obj.response.deleted ? "Deleted" : "Not deleted");
                         contextManager.changeContext("levels");
                     });
                 }
@@ -443,8 +439,6 @@ function insertSimulatorsData(obj, contextManager) {
 
             tr.find(".simulator-delete-a").on("click", function() {
                 sendAjax("simulator.delete?url=" + item.url, function(result) {
-                    var obj = JSON.parse(result);
-                    alert(obj.response.deleted ? "Deleted" : "Not deleted");
                     contextManager.changeContext("simulators");
                 });
             });
@@ -499,30 +493,17 @@ function insertLobbyData(obj, contextManager) {
 
             section.find("#leave-lobby").on("click", function() {
                 sendAjax("lobby.leave?id=" + item.lobby_id, function(data) {
-                    var obj = JSON.parse(data);
-                    if (obj.response.length == 0) {
-                        alert("Bad response!");
-                    } else {
-                        if (obj.response.successful) {
-                            contextManager.changeContext("list_of_lobbies");
-                        } else {
-                            alert("Sorry, we could not remove you from the lobby. Try again later.");
-                        }
-                    }
+                    contextManager.changeContext("list_of_lobbies");
                 });
             });
 
             section.find("#get-simulation-result").on("click", function() {
                 sendAjax("simulation_result.is_ready?id=" + item.lobby_id, function(data) {
                     var obj = JSON.parse(data);
-                    if (obj.response.length == 0) {
-                        alert("Bad response!");
+                    if (obj.response.simulation_finished) {
+                        contextManager.changeContext("simulation_result", "simulation_result.get?id=" + item.lobby_id);
                     } else {
-                        if (obj.response.simulation_finished) {
-                            contextManager.changeContext("simulation_result", "simulation_result.get?id=" + item.lobby_id);
-                        } else {
-                            alert("The simulation hasn't been processed yet. Try again later.");
-                        }
+                        alert("The simulation hasn't been processed yet. Try again later.");
                     }
                 });
             });
@@ -534,23 +515,20 @@ function insertLobbyData(obj, contextManager) {
 
 function insertCodeEditorData(obj, contextManager) {
     var skeleton = $("#code-editor-content").find("section.skeleton");
-    if (obj.response.length == 0) {
-        alert("Bad response!");
-    } else {
-        var section = $(skeleton).clone();
-        section.removeClass("skeleton");
-        var code = obj.response.code; // new variable is needed to get exactly a string instead of object (strange, but still)
+    var section = $(skeleton).clone();
+    
+    section.removeClass("skeleton");
+    var code = obj.response.code; // new variable is needed to get exactly a string instead of object (strange, but still)
 
-        $("#code-editor-content").append(section);
+    $("#code-editor-content").append(section);
 
-        // creating after section appending for CodeMirror's bugs avoiding
-        codeMirror = CodeMirror(section[0], {
-            mode: "groovy",
-            value: code,
-            theme: "darcula",
-            lineNumbers: true
-        });
-    }
+    // creating after section appending for CodeMirror's bugs avoiding
+    codeMirror = CodeMirror(section[0], {
+        mode: "groovy",
+        value: code,
+        theme: "darcula",
+        lineNumbers: true
+    });
 }
 
 function insertSimulationResultData(obj, contextManager) {

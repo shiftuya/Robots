@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.inputs.UserInput;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataParser;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
@@ -22,7 +23,7 @@ public class UserSubmitHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
         UserInput userInput = new UserInput();
 
         FormDataParser formDataParser = new FormDataParser(exchange) {
@@ -47,6 +48,7 @@ public class UserSubmitHandler extends RestHandler {
         }
 
         mainManager.submitUser(
+            cookieHandler.getCookie(),
             create,
             userInput.getName(),
             userInput.getPassword(),
@@ -54,6 +56,6 @@ public class UserSubmitHandler extends RestHandler {
             userInput.getAvatarResource()
         );
 
-        responder.sendResponse("OK");
+        responder.sendResponse();
     }
 }

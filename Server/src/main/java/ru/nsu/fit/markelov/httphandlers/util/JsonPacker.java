@@ -6,18 +6,17 @@ import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.Pair;
-import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.client.User;
 
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Map;
 
 public class JsonPacker {
 
     public static final String DATE_FORMAT = "dd.MM.yyyy";
 
-    public static JSONArray packUsers(Collection<User> users) {
+    public static JSONArray packUsers(Iterable<User> users) {
         JSONArray jsonLevels = new JSONArray();
 
         for (User user : users) {
@@ -46,7 +45,7 @@ public class JsonPacker {
             .put("solutions", jsonSolutions);
     }
 
-    public static JSONArray packLevels(Collection<Level> levels) {
+    public static JSONArray packLevels(Iterable<Level> levels) {
         JSONArray jsonLevels = new JSONArray();
 
         for (Level level : levels) {
@@ -88,15 +87,7 @@ public class JsonPacker {
         return jsonLevel;
     }
 
-    public static JSONObject packLevelDelete(boolean deleted) {
-        JSONObject jsonDeleted = new JSONObject();
-        jsonDeleted
-            .put("deleted", deleted);
-
-        return jsonDeleted;
-    }
-
-    public static JSONArray packSimulators(Collection<String> urls) {
+    public static JSONArray packSimulators(Iterable<String> urls) {
         JSONArray jsonUrls = new JSONArray();
 
         for (String url : urls) {
@@ -110,23 +101,7 @@ public class JsonPacker {
         return jsonUrls;
     }
 
-    public static JSONObject packSimulatorAdd(boolean added) {
-        JSONObject jsonDeleted = new JSONObject();
-        jsonDeleted
-            .put("added", added);
-
-        return jsonDeleted;
-    }
-
-    public static JSONObject packSimulatorDelete(boolean deleted) {
-        JSONObject jsonDeleted = new JSONObject();
-        jsonDeleted
-            .put("deleted", deleted);
-
-        return jsonDeleted;
-    }
-
-    public static JSONArray packSolutions(String username, Map<Level, Collection<SimulationResult>> solutions) {
+    public static JSONArray packSolutions(String username, Map<Level, Iterable<SimulationResult>> solutions) {
         JSONArray jsonSolutions = new JSONArray();
 
         for (Level level : solutions.keySet()) {
@@ -161,7 +136,7 @@ public class JsonPacker {
         return jsonSolutions;
     }
 
-    public static JSONArray packLobbies(Collection<Lobby> lobbies) {
+    public static JSONArray packLobbies(Iterable<Lobby> lobbies) {
         JSONArray jsonLobbies = new JSONArray();
 
         for (Lobby lobby : lobbies) {
@@ -215,10 +190,6 @@ public class JsonPacker {
         return jsonLobby;
     }
 
-    public static JSONObject packLeavingLobby(boolean userRemovedFromLobby) {
-        return new JSONObject().put("successful", userRemovedFromLobby);
-    }
-
     public static JSONObject packCompileResult(CompileResult compileResult) {
         JSONObject jsonCompileResult = new JSONObject();
         jsonCompileResult
@@ -262,23 +233,5 @@ public class JsonPacker {
             .put("id", simulationResult.getId())
             .put("date", new SimpleDateFormat(DATE_FORMAT).format(simulationResult.getDate()))
             .put("users", jsonSimulationResults);
-    }
-
-    public static JSONObject packLoggingIn(boolean loggedIn) {
-        JSONObject jsonLoggingIn = new JSONObject();
-        jsonLoggingIn
-                .put("logged_in", loggedIn)
-                .put("message", loggedIn ? "You are successfully logged in." : "Error: You logged in earlier.");
-
-        return jsonLoggingIn;
-    }
-
-    public static JSONObject packLoggingOut(boolean loggedOut) {
-        JSONObject jsonLoggingOut = new JSONObject();
-        jsonLoggingOut
-                .put("logged_out", loggedOut)
-                .put("message", loggedOut ? "You are successfully logged out." : "Error: You haven't logged in yet.");
-
-        return jsonLoggingOut;
     }
 }

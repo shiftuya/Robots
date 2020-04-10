@@ -3,6 +3,7 @@ package ru.nsu.fit.markelov.httphandlers.handlers.rest.user;
 import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
@@ -18,12 +19,12 @@ public class UserBlockHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
-        String username = uriParametersParser.getStringParameter("username");
+        String userName = uriParametersParser.getStringParameter("username");
         String block = uriParametersParser.getStringParameter("block");
 
-        if (username == null) {
+        if (userName == null) {
             throw new ProcessingException("Username is null.");
         }
 
@@ -31,8 +32,8 @@ public class UserBlockHandler extends RestHandler {
             throw new ProcessingException("Bad input.");
         }
 
-        mainManager.blockUser(username, block.equals("true"));
+        mainManager.blockUser(cookieHandler.getCookie(), userName, block.equals("true"));
 
-        responder.sendResponse("OK");
+        responder.sendResponse();
     }
 }

@@ -1,16 +1,5 @@
 package ru.nsu.fit.markelov.mainmanager;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
@@ -27,7 +16,24 @@ import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
 import ru.nsu.fit.markelov.mainmanager.database.SQLiteDatabaseHandler;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class MainManagerWithDatabase implements MainManager {
+
+  @Override
+  public String getUserName(String token) {
+    return "null";
+  }
 
   @Override
   public String login(String userName, String password) {
@@ -35,12 +41,17 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public String getLog(String username, int simulationResultId) {
+  public void logout(String token) {
+
+  }
+
+  @Override
+  public String getLog(String token, String userName, int simulationResultId) {
     return "null";
   }
 
   @Override
-  public String getScript(String username, int simulationResultId) {
+  public String getScript(String token, String userName, int simulationResultId) {
     return "null";
   }
 
@@ -102,7 +113,7 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Collection<Lobby> getLobbies() { // ok
+  public Collection<Lobby> getLobbies(String token) { // ok
     List<LobbyExtended> lobbies = new ArrayList<>(lobbyMap.values());
     lobbies.sort(Comparator.comparing(LobbyExtended::getCreationDate));
     Collections.reverse(lobbies);
@@ -110,12 +121,12 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Collection<Level> getLevels() { // ok
+  public Collection<Level> getLevels(String token) { // ok
     return levelMap.values();
   }
 
   @Override
-  public Lobby joinLobby(String userName, int lobbyID) { // ok
+  public Lobby joinLobby(String userName, int lobbyID) { // ok TODO first arg is not userName!!!
     UserExtended user = getUserFromMap(userName);
     if (user == null) {
       throw new ProcessingException("User not found");
@@ -141,7 +152,7 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Lobby createLobby(String userName, int levelID, int playersAmount) { // ok
+  public Lobby createLobby(String userName, int levelID, int playersAmount) { // ok TODO first arg is not userName!!!
     UserExtended host = getUserFromMap(userName);
     if (host == null) {
       throw new ProcessingException("User not found");
@@ -163,7 +174,7 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public boolean leaveLobby(String userName, int lobbyID) {
+  public void leaveLobby(String userName, int lobbyID) { // TODO first arg is not userName!!!
     UserExtended user = getUserFromMap(userName);
     if (user == null) {
       throw new ProcessingException("User not found");
@@ -177,17 +188,15 @@ public class MainManagerWithDatabase implements MainManager {
     lobby.removePlayer(user);
 
     refreshActiveTime(user);
-
-    return true;
   }
 
   @Override
-  public Lobby returnToLobby(String userName, int lobbyID) {
+  public Lobby returnToLobby(String userName, int lobbyID) { // TODO first arg is not userName!!!
     return null;
   }
 
   @Override
-  public CompileResult submit(String username, int lobbyId, String code) {
+  public CompileResult submit(String username, int lobbyId, String code) { // TODO first arg is not userName!!!
     LobbyExtended lobby = getLobbyFromMap(lobbyId);
     if (lobby == null) {
       throw new ProcessingException("Lobby not found");
@@ -238,7 +247,7 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public String editSubmittedCode(String username, int lobbyId) {
+  public String editSubmittedCode(String username, int lobbyId) { // TODO first arg is not userName!!!
     UserExtended user = getUserFromMap(username);
     if (user == null) {
       throw new ProcessingException("User not found");
@@ -256,12 +265,12 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public boolean isSimulationFinished(int lobbyId) {
+  public boolean isSimulationFinished(String token, int lobbyId) {
     return simulationResultKeyMap.get(lobbyId) != null;
   }
 
   @Override
-  public SimulationResult getSimulationResult(String username, int lobbyId) {
+  public SimulationResult getSimulationResult(String username, int lobbyId) { // TODO first arg is not userName!!!
     UserExtended user = getUserFromMap(username);
     if (user == null) {
       throw new ProcessingException("User not found");
@@ -271,7 +280,7 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Collection<SimulationResult> getUserSimulationResultsOnLevel(String username,
+  public Collection<SimulationResult> getUserSimulationResultsOnLevel(String token, String username,
       int levelId) {
     UserExtended user = getUserFromMap(username);
     if (user == null) {
@@ -289,7 +298,7 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Collection<User> getUsers(String userName) {
+  public Collection<User> getUsers(String userName) { // TODO first arg is not userName!!!
     UserExtended reference = getUserFromMap(userName);
 
     if (reference == null) {
@@ -311,31 +320,30 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public boolean blockUser(String userName, boolean block) {
+  public void blockUser(String token, String userName, boolean block) {
     UserExtended user = getUserFromMap(userName);
     if (user == null) {
       throw new ProcessingException("User not found");
     }
     user.setBlocked(block);
     databaseHandler.saveUser(user);
-    return true;
   }
 
   @Override
-  public boolean removeUser(String userName) {
+  public void removeUser(String token, String userName) {
     UserExtended user = getUserFromMap(userName);
     if (user != null) {
       userMap.remove(userName);
       simulationResultMap.remove(user);
       databaseHandler.removeUser(user);
     }
-    return true;
   }
 
   @Override
-  public boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
-      Integer maxPlayers, Resource iconResource, String description, String rules, String goal,
-      Collection<Resource> levelResources, String code, String language) {
+  public void submitLevel(String token, boolean create, Integer levelID, String name,
+                          String difficulty, Integer minPlayers, Integer maxPlayers,
+                          Resource iconResource, String description, String rules, String goal,
+                          Iterable<Resource> levelResources, String code, String language) {
     if (getLevelFromMap(levelID) != null) {
       throw new ProcessingException("Level already exists");
     }
@@ -354,12 +362,10 @@ public class MainManagerWithDatabase implements MainManager {
     for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
       map.put(level, new ArrayList<>());
     }
-
-    return true;
   }
 
   @Override
-  public Level getLevel(int levelID) {
+  public Level getLevel(String token, int levelID) {
     Level level = getLevelFromMap(levelID);
     if (level == null) {
       throw new ProcessingException("Level not found");
@@ -368,44 +374,40 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public boolean deleteLevel(int levelID) {
+  public void deleteLevel(String token, int levelID) {
     Level level = getLevelFromMap(levelID);
 
     databaseHandler.removeLevel(level);
 
     if (level == null) {
-      return true;
+      return; // TODO throw exception please
     }
 
     levelMap.remove(levelID);
     for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
       map.remove(level);
     }
-
-    return true;
   }
 
   @Override
-  public Collection<String> getSimulators() {
+  public Collection<String> getSimulators(String token) {
     return simulators;
   }
 
   @Override
-  public boolean addSimulator(String url) {
+  public void addSimulator(String token, String url) {
     databaseHandler.saveSimulatorUrl(url);
     simulators.add(url);
-    return true;
   }
 
   @Override
-  public boolean removeSimulator(String url) {
+  public void removeSimulator(String token, String url) {
     databaseHandler.removeSimulatorUrl(url);
     simulators.remove(url);
-    return true;
   }
 
   @Override
-  public User getUser(String userName) {
+  public User getUser(String token, String userName) {
     User user = getUserFromMap(userName);
     if (user == null) {
       throw new ProcessingException("User not found");
@@ -414,7 +416,7 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public boolean submitUser(boolean create, String userName, String password, String type,
+  public void submitUser(String token, boolean create, String userName, String password, String type,
       Resource avatarResource) {
     UserType userType;
     try {
@@ -440,7 +442,7 @@ public class MainManagerWithDatabase implements MainManager {
       }
       simulationResultMap.put(user, map);
 
-      return true;
+      return;
     }
 
     // update
@@ -453,8 +455,6 @@ public class MainManagerWithDatabase implements MainManager {
     user.setType(userType);
 
     databaseHandler.saveUser(user);
-
-    return true;
   }
 
 

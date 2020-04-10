@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class LevelsGetHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
-        responder.sendResponse(JsonPacker.packLevels(mainManager.getLevels()));
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
+        responder.sendResponse(JsonPacker.packLevels(mainManager.getLevels(cookieHandler.getCookie())));
     }
 }

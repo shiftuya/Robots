@@ -2,8 +2,8 @@ package ru.nsu.fit.markelov.httphandlers.handlers.rest.user;
 
 import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
-import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
@@ -19,16 +19,16 @@ public class UserDeleteHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
-        String username = uriParametersParser.getStringParameter("username");
+        String userName = uriParametersParser.getStringParameter("username");
 
-        if (username == null) {
+        if (userName == null) {
             throw new ProcessingException("Username is null.");
         }
 
-        mainManager.removeUser(username);
+        mainManager.removeUser(cookieHandler.getCookie(), userName);
 
-        responder.sendResponse("OK");
+        responder.sendResponse();
     }
 }

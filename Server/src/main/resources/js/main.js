@@ -160,8 +160,9 @@ $(document).ready(function() {
 
 function activateListeners(contextManager) {
     $("#logout").on("click", function() {
-        // TODO delete cookies
-        contextManager.changeContext("login");
+        sendAjax("sign.logout", function(data) {
+            contextManager.changeContext("login");
+        });
     });
 
     $("#header-code-editor").find(".open").on("click", loadFile);
@@ -214,8 +215,6 @@ function activateListeners(contextManager) {
         }
         
         sendAjax("simulator.add?url=" + url, function(result) {
-            var obj = JSON.parse(result);
-            alert(obj.response.added ? "Added" : "Not added");
             contextManager.changeContext("simulators");
         });
     });
