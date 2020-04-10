@@ -92,18 +92,16 @@ function insertLoginData(obj, contextManager) {
 
     section.find(".login-submit-a").on("click", function() {
         var username = section.find("input[name='name']").val();
+        
+        var form = $("#login-content").find(".login-shell:not('.skeleton')").find("form")
 
-        sendAjax("sign.login?username=" + username, function(data) {
-            var obj = JSON.parse(data);
-            if (obj.response.length == 0) {
-                alert("Bad response!");
-            } else if (obj.response.logged_in) {
-                $("#logout").text("Log Out (" + username + ")");
-                contextManager.changeContext("list_of_lobbies");
-            } else {
-                alert(obj.response.message);
-            }
-        });
+        var formData = new FormData(form[0]);
+        sendAjax("sign.login", function(result) {
+            alert(result);
+            alert(document.cookie);
+            $("#logout").text("Log Out (" + username + ")");
+            contextManager.changeContext("list_of_lobbies");
+        }, undefined, formData);
     });
 
     $("#login-content").append(section);
@@ -556,17 +554,23 @@ function insertCodeEditorData(obj, contextManager) {
 }
 
 function insertSimulationResultData(obj, contextManager) {
-    if (obj.response.length == 0) {
-        alert("Bad response!");
-    } else {
-        var skeleton = $("#simulation-result-content").find("section.skeleton");
-        var section = $(skeleton).clone();
-        section.removeClass("skeleton");
+    var skeleton = $("#simulation-result-table").find("tr.skeleton");
+    obj.response.users.forEach(function(item) {
+        var tr = $(skeleton).clone();
+        tr.removeClass("skeleton");
 
-        var log = obj.response.simulation_result_log; // new variable is needed to get exactly a string instead of object (strange, but still)
-        section.find(".simulation-results-status").text(obj.response.simulation_result_status ? "Successful" : "Failed");
-        section.find(".log-content > textarea").val(log);
+        tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
+        tr.find(".username").text(item.username);
+        tr.find(".result").text(item.result);
 
-        $("#simulation-result-content").append(section);
-    }
+        table.append(tr);
+
+        tr.find(".log").on("click", function() {
+            alert(item.username);
+        });
+
+        tr.find(".script").on("click", function() {
+            alert(item.username);
+        });
+    });
 }

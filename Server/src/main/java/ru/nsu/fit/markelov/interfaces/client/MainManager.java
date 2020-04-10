@@ -4,20 +4,13 @@ import java.util.Collection;
 
 public interface MainManager {
     /**
-     * Logs a user in the system if his username exists in the database.
+     * Generates unique token in case a pair [userName/password] exists in the database.
      *
-     * @param username unique user name.
-     * @return whether the user is found in the database and successfully logged in.
+     * @param userName unique user name.
+     * @param password user password.
+     * @return generated unique token.
      */
-    boolean login(String username/*, String password*/);
-
-    /**
-     * Logs a user out of the system if his username exists in the database.
-     *
-     * @param username unique user name.
-     * @return whether the user is found in the database and successfully logged out.
-     */
-    boolean logout(String username);
+    String login(String userName, String password);
 
     /**
      * Returns collection of available lobbies.
@@ -100,22 +93,22 @@ public interface MainManager {
      *
      * (A simulation itself starts automatically when all the users successfully submitted the code)
      *
-     * @param username unique user name.
+     * @param userName unique user name.
      * @param code     a code to compile.
      * @param lobbyId  unique lobby id.
      * @return the result of compilation.
      */
-    CompileResult submit(String username, int lobbyId, String code);
+    CompileResult submit(String userName, int lobbyId, String code);
 
     /**
      * Cancels the submission of the lately compiled code and returns the code itself. In case the
      * user hasn't submitted any code yet, returns null.
      *
-     * @param username unique user name.
+     * @param userName unique user name.
      * @param lobbyId  whether the submission was successfully cancelled.
      * @return the earlier submitted code.
      */
-    String editSubmittedCode(String username, int lobbyId);
+    String editSubmittedCode(String userName, int lobbyId);
 
     /**
      * Returns whether the simulation has already been finished.
@@ -128,20 +121,38 @@ public interface MainManager {
     /**
      * Returns the simulation result or null in case it hasn't been processed yet.
      *
-     * @param username unique user name.
+     * @param userName unique user name.
      * @param lobbyId  unique lobby id.
      * @return simulation result or null in case it hasn't been processed yet.
      */
-    SimulationResult getSimulationResult(String username, int lobbyId);
+    SimulationResult getSimulationResult(String userName, int lobbyId);
+
+    /**
+     * Returns user simulation log.
+     *
+     * @param userName           unique user name.
+     * @param simulationResultId unique simulation result id.
+     * @return user simulation log.
+     */
+    String getLog(String userName, int simulationResultId);
+
+    /**
+     * Returns user script for his robot.
+     *
+     * @param userName           unique user name.
+     * @param simulationResultId unique simulation result id.
+     * @return user script for his robot.
+     */
+    String getScript(String userName, int simulationResultId);
 
     /**
      * Returns all the user simulation results on specified level.
      *
-     * @param username unique user name.
+     * @param userName unique user name.
      * @param levelId  unique level id.
      * @return all the user simulation results on specified level.
      */
-    Collection<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId);
+    Collection<SimulationResult> getUserSimulationResultsOnLevel(String userName, int levelId);
 
     /**
      * Returns a user gotten by specified 'userName'.

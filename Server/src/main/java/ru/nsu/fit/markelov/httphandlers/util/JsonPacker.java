@@ -244,15 +244,24 @@ public class JsonPacker {
         return jsonSimulationResultReadiness;
     }
 
-    public static JSONObject packSimulationResult(SimulationResult simulationResult, String username) {
-        JSONObject jsonSimulationResult = new JSONObject();
-        jsonSimulationResult
-                .put("simulation_result_id", simulationResult.getId())
-                .put("simulation_result_date", new SimpleDateFormat(DATE_FORMAT).format(simulationResult.getDate()))
-                .put("simulation_result_status", simulationResult.isSuccessful(username))
-                .put("simulation_result_log", simulationResult.getLog(username));
+    public static JSONObject packSimulationResult(SimulationResult simulationResult) {
+        JSONArray jsonSimulationResults = new JSONArray();
 
-        return jsonSimulationResult;
+        for (User user : simulationResult.getUsers()) {
+            JSONObject jsonSimulationResult = new JSONObject();
+
+            jsonSimulationResult
+                .put("avatar-icon", user.getAvatarAddress())
+                .put("username", user.getName())
+                .put("result", simulationResult.isSuccessful(user.getName()));
+
+            jsonSimulationResults.put(jsonSimulationResult);
+        }
+
+        return new JSONObject()
+            .put("id", simulationResult.getId())
+            .put("date", new SimpleDateFormat(DATE_FORMAT).format(simulationResult.getDate()))
+            .put("users", jsonSimulationResults);
     }
 
     public static JSONObject packLoggingIn(boolean loggedIn) {

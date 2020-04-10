@@ -22,6 +22,10 @@ public class Responder {
         this.oStream = oStream;
     }
 
+    public void sendResponse() throws IOException {
+        send(RESPONSE_CODE, "");
+    }
+
     public void sendResponse(JSONObject jsonObject) throws IOException {
         send(RESPONSE_CODE, new JSONObject().put(RESPONSE, jsonObject).toString());
     }

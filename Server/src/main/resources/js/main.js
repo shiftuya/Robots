@@ -145,8 +145,8 @@ $(document).ready(function() {
             contentId: "simulation-result-content",
             insertFunction: insertSimulationResultData,
             deleteData: {
-                id: "simulation-result-content",
-                contentUnit: ".simulation-result-shell"
+                id: "simulation-result-table",
+                contentUnit: "tr:not(':first-of-type')"
             }
         }]
     ]);
@@ -160,16 +160,8 @@ $(document).ready(function() {
 
 function activateListeners(contextManager) {
     $("#logout").on("click", function() {
-        sendAjax("sign.logout", function(data) {
-            var obj = JSON.parse(data);
-            if (obj.response.length == 0) {
-                alert("Bad response!");
-            } else if (obj.response.logged_out) {
-                contextManager.changeContext("login");
-            } else {
-                alert(obj.response.message);
-            }
-        });
+        // TODO delete cookies
+        contextManager.changeContext("login");
     });
 
     $("#header-code-editor").find(".open").on("click", loadFile);

@@ -73,7 +73,7 @@ public class SimulationResult1 implements SimulationResultExtended {
     return date;
   }
 
-  @Override
+//  @Override // TODO
   public String getLog(String username) {
     try {
       return privateLogs.get(username);
@@ -88,8 +88,13 @@ public class SimulationResult1 implements SimulationResultExtended {
   }
 
   @Override
-  public Set<String> getUsers() {
+  public Set<String> getUserNames() {
     return results.keySet();
+  }
+
+  @Override
+  public Iterable<User> getUsers() {
+    return null;
   }
 
   @Override

@@ -11,6 +11,15 @@ public interface SimulationResult {
     int getId();
 
     /**
+     * Returns a collection of users of the simulation.
+     *
+     * A host-user must be in the head of the collection.
+     *
+     * @return a collection of users of the simulation.
+     */
+    Iterable<User> getUsers();
+
+    /**
      * Returns whether user robot has reached the goal.
      *
      * @param username unique user name.
@@ -24,14 +33,6 @@ public interface SimulationResult {
      * @return simulation result date.
      */
     Date getDate();
-
-    /**
-     * Returns user simulation log.
-     *
-     * @param username unique user name.
-     * @return user simulation log.
-     */
-    String getLog(String username);
 
     /**
      * Returns simulation playback.

@@ -2,29 +2,6 @@
 	text-align: left;
 }
 
-.lobby-row {
-    cursor: pointer;
-}
-
-.lobbies-table-icon {
-	display: inline-block;
-	vertical-align: middle;
-	width: 32px;
-	height: 32px;
-	margin-right: 5px;
-}
-
-.avatar-icon {
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.level-icon {
-    background-position: center;
-    background-repeat: no-repeat;
-	background-size: 32px 32px;
-}
-
 .username {
 	display: inline-block;
 	vertical-align: middle;

@@ -32,32 +32,11 @@ public class MainManagerHardcoded implements MainManager {
     private Set<String> userNames = new TreeSet<>();
     private Set<String> simulators = new TreeSet<>();
 
-    @Override
-    public boolean login(String userName) {
-        if (userNames.contains(userName)) {
-            System.out.println(userName + " has already logged in!");
-
-            return false;
-        } else {
-            userNames.add(userName);
-            System.out.println(userName + " logged in.");
-
-            return true;
-        }
-    }
+    private int token;
 
     @Override
-    public boolean logout(String userName) {
-        if (userNames.contains(userName)) {
-            userNames.remove(userName);
-            System.out.println(userName + " logged out.");
-
-            return true;
-        } else {
-            System.out.println(userName + " hasn't logged in yet!");
-
-            return false;
-        }
+    public String login(String userName, String password) {
+        return ++token + "";
     }
 
     private LobbyManagerHardcoded lobbyManager;
@@ -302,6 +281,11 @@ public class MainManagerHardcoded implements MainManager {
         return new SimulationResult() {
 
             @Override
+            public Iterable<User> getUsers() {
+                return users;
+            }
+
+            @Override
             public int getId() {
                 return 55;
             }
@@ -317,54 +301,59 @@ public class MainManagerHardcoded implements MainManager {
             }
 
             @Override
-            public String getLog(String username) {
-                return "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997";
-            }
-
-            @Override
             public Playback getPlayback(String username) {
                 return null;
             }
         };
+    }
+
+    @Override
+    public String getLog(String username, int simulationResultId) {
+        return "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997";
+    }
+
+    @Override
+    public String getScript(String username, int simulationResultId) {
+        return "class Clazz { }";
     }
 
     @Override

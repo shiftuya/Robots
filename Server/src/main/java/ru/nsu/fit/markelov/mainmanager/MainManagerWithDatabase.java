@@ -28,6 +28,22 @@ import ru.nsu.fit.markelov.mainmanager.database.SQLiteDatabaseHandler;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 public class MainManagerWithDatabase implements MainManager {
+
+  @Override
+  public String login(String userName, String password) {
+    return "null";
+  }
+
+  @Override
+  public String getLog(String username, int simulationResultId) {
+    return "null";
+  }
+
+  @Override
+  public String getScript(String username, int simulationResultId) {
+    return "null";
+  }
+
   private DatabaseHandler databaseHandler;
   private SimulatorManager simulatorManager;
   private Map<String, UserExtended> userMap;
@@ -76,23 +92,13 @@ public class MainManagerWithDatabase implements MainManager {
       Level level = getLevelFromMap(result.getLevelId());
       if (level == null) continue;
 
-      for (String username : result.getUsers()) {
+      for (String username : result.getUserNames()) {
         UserExtended user = getUserFromMap(username);
         if (user == null) continue;
         List<SimulationResultExtended> list = simulationResultMap.get(user).get(level);
         list.add(result);
       }
     }
-  }
-
-  @Override
-  public boolean login(String username) {
-    return false;
-  }
-
-  @Override
-  public boolean logout(String username) {
-    return false;
   }
 
   @Override

@@ -17,7 +17,6 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbyLeaveHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbyReturnHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbySubmitHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.log.LogInHandler;
-import ru.nsu.fit.markelov.httphandlers.handlers.rest.log.LogOutHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultIsReadyHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorAddHandler;
@@ -27,14 +26,14 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserDeleteHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserSubmitHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.mainmanager.MainManager1;
+import ru.nsu.fit.markelov.managers_hardcoded.MainManagerHardcoded;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
 public class MainServer {
     public static void main(String[] args) throws Exception {
-        MainManager mainManager = new MainManager1();
+        MainManager mainManager = new MainManagerHardcoded();
 
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(5051), 0);
@@ -56,7 +55,6 @@ public class MainServer {
 //        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result"));
 
         server.createContext("/api/method/sign.login", new LogInHandler(mainManager));
-        server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));
 
         server.createContext("/api/method/lobbies.get", new LobbiesGetHandler(mainManager));
         server.createContext("/api/method/solutions.get", new SolutionsGetHandler(mainManager));

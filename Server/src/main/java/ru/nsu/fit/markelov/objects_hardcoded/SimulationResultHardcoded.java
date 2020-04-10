@@ -2,6 +2,7 @@ package ru.nsu.fit.markelov.objects_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.Playback;
+import ru.nsu.fit.markelov.interfaces.client.User;
 
 import java.util.Date;
 
@@ -39,8 +40,8 @@ public class SimulationResultHardcoded implements SimulationResult {
   }
 
   @Override
-  public String getLog(String username) {
-    return "LOOOG!";
+  public Iterable<User> getUsers() {
+    return null;
   }
 
   @Override

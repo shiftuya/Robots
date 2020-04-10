@@ -35,6 +35,6 @@ public class SimulationResultGetHandler extends RestHandler {
             throw new ProcessingException("Simulation result id is null.");
         }
 
-        responder.sendResponse(JsonPacker.packSimulationResult(mainManager.getSimulationResult(cookieUserName, id), cookieUserName));
+        responder.sendResponse(JsonPacker.packSimulationResult(mainManager.getSimulationResult(cookieUserName, id)));
     }
 }

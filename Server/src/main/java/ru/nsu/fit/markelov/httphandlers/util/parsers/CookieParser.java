@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CookieParser {
 
-    public static final String COOKIE_NAME = "ROBOTICS_USER";
+    public static final String COOKIE_NAME = "ROBOTICS_TOKEN";
 
     public static String getCookieUserName(HttpExchange exchange) {
         Headers requestHeaders = exchange.getRequestHeaders();
@@ -32,5 +32,13 @@ public class CookieParser {
         }
 
         return null;
+    }
+
+    public static void printCookieDEBUG(String cookie) {
+        if (cookie != null) {
+            System.out.println("cookie: " + cookie);
+        } else {
+            System.out.println("cookie: null");
+        }
     }
 }
