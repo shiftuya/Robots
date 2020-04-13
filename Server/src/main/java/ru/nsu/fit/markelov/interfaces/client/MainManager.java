@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
+import java.util.Map;
+
 public interface MainManager {
     /**
      * Returns unique user name gotten by specified 'token'.
@@ -29,12 +31,16 @@ public interface MainManager {
     /**
      * Removes the token from the database.
      *
+     * Access: any student and higher.
+     *
      * @param token user unique token.
      */
     void logout(String token);
 
     /**
      * Returns collection of available lobbies.
+     *
+     * Access: any student and higher.
      *
      * The collection of lobbies must be sorted by date of creation (the newest one - in the head).
      *
@@ -44,7 +50,21 @@ public interface MainManager {
     Iterable<Lobby> getLobbies(String token);
 
     /**
+     * Returns map of the level to the collection of its simulation results.
+     *
+     * Access: user himself, any teacher and higher.
+     *
+     * @param token    user unique token.
+     * @param userName unique user name.
+     * @param levelId  unique level id.
+     * @return map of the level to the collection of its simulation results.
+     */
+    Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName, int levelId);
+
+    /**
      * Returns collection of required users.
+     *
+     * Access: any teacher and higher.
      *
      * If user (gotten by specified 'token') is a teacher - collection of students must be returned.
      * If user (gotten by specified 'token') is an admin - collection of all users must be returned.
@@ -59,6 +79,8 @@ public interface MainManager {
     /**
      * Returns a collection of created levels.
      *
+     * Access: any student and higher.
+     *
      * @param token user unique token.
      * @return a collection of created levels.
      */
@@ -66,6 +88,8 @@ public interface MainManager {
 
     /**
      * Places a user in the lobby gotten by specified 'lobbyId'.
+     *
+     * Access: any student and higher.
      *
      * A host-user must be in the head of the user list.
      *
@@ -77,6 +101,8 @@ public interface MainManager {
 
     /**
      * Creates a new lobby by 'levelId' and places a user in it.
+     *
+     * Access: any student and higher.
      *
      * A host-user must be in the head of the user list.
      *
@@ -90,6 +116,8 @@ public interface MainManager {
     /**
      * Removes a user from the lobby gotten by specified 'lobbyId'.
      *
+     * Access: any student and higher.
+     *
      * @param token   unique user token.
      * @param lobbyId unique lobby id.
      */
@@ -97,6 +125,8 @@ public interface MainManager {
 
     /**
      * Returns the lobby gotten by specified 'lobbyId'.
+     *
+     * Access: any student and higher.
      *
      * A host-user must be in the head of the user list.
      *
@@ -108,6 +138,8 @@ public interface MainManager {
 
     /**
      * Compiles the specified code and returns compile result.
+     *
+     * Access: any student and higher.
      *
      * If the compilation is successful, the code is being saved for the future simulation.
      *
@@ -124,6 +156,8 @@ public interface MainManager {
      * Cancels the submission of the lately compiled code and returns the code itself. In case the
      * user hasn't submitted any code yet, returns null.
      *
+     * Access: any student and higher.
+     *
      * @param token   unique user token.
      * @param lobbyId whether the submission was successfully cancelled.
      * @return the earlier submitted code.
@@ -132,6 +166,8 @@ public interface MainManager {
 
     /**
      * Returns whether the simulation has already been finished.
+     *
+     * Access: any student present in the lobby and higher.
      *
      * @param token   unique user token.
      * @param lobbyId unique lobby id.
@@ -142,6 +178,8 @@ public interface MainManager {
     /**
      * Returns the simulation result or null in case it hasn't been processed yet.
      *
+     * Access: any student present in the lobby, any teacher and higher.
+     *
      * @param token   unique user token.
      * @param lobbyId unique lobby id.
      * @return simulation result or null in case it hasn't been processed yet.
@@ -150,6 +188,8 @@ public interface MainManager {
 
     /**
      * Returns user simulation log.
+     *
+     * Access: user himself, any teacher and higher.
      *
      * @param token              unique user token.
      * @param userName           unique user name.
@@ -161,6 +201,8 @@ public interface MainManager {
     /**
      * Returns user script for his robot.
      *
+     * Access: user himself, any teacher and higher.
+     *
      * @param token              unique user token.
      * @param userName           unique user name.
      * @param simulationResultId unique simulation result id.
@@ -168,7 +210,7 @@ public interface MainManager {
      */
     String getScript(String token, String userName, int simulationResultId);
 
-    /**
+    /** TODO delete when getSolutions() is ready
      * Returns all the user simulation results on specified level.
      *
      * @param token    unique user token.
@@ -181,6 +223,8 @@ public interface MainManager {
     /**
      * Returns a user gotten by specified 'userName'.
      *
+     * Access: any teacher and higher.
+     *
      * @param token    unique user token.
      * @param userName unique user name.
      * @return a user.
@@ -189,6 +233,8 @@ public interface MainManager {
 
     /**
      * Creates/edits a user.
+     *
+     * Access: any teacher and higher.
      *
      * If 'create' is true - a new user must be created;
      *           otherwise - an existing user (gotten by specified 'userName') must be edited.
@@ -212,6 +258,8 @@ public interface MainManager {
     /**
      * Blocks/unblocks user.
      *
+     * Access: any teacher and higher.
+     *
      * @param token    unique user token.
      * @param userName unique user name.
      * @param block    true for blocking and false for unblocking.
@@ -221,6 +269,8 @@ public interface MainManager {
     /**
      * Deletes user.
      *
+     * Access: any teacher and higher.
+     *
      * @param token    unique user token.
      * @param userName unique user name.
      */
@@ -228,6 +278,8 @@ public interface MainManager {
 
     /**
      * Creates/edits a level.
+     *
+     * Access: any teacher and higher.
      *
      * Id 'create' is true - a new level must be created;
      *           otherwise - an existing level (gotten by specified 'levelId') must be edited.
@@ -263,6 +315,8 @@ public interface MainManager {
     /**
      * Returns a level gotten by specified 'levelId'.
      *
+     * Access: any teacher and higher.
+     *
      * @param token   unique user token.
      * @param levelId unique level id.
      * @return a level.
@@ -272,6 +326,8 @@ public interface MainManager {
     /**
      * Deletes a level.
      *
+     * Access: any teacher and higher.
+     *
      * @param token   unique user token.
      * @param levelId unique level id.
      */
@@ -279,6 +335,8 @@ public interface MainManager {
 
     /**
      * Returns a collection of simulator units url.
+     *
+     * Access: any admin.
      *
      * @param token unique user token.
      * @return a collection of simulator units url.
@@ -288,6 +346,8 @@ public interface MainManager {
     /**
      * Adds new simulator unit.
      *
+     * Access: any admin.
+     *
      * @param token unique user token.
      * @param url   location of new simulator unit.
      */
@@ -295,6 +355,8 @@ public interface MainManager {
 
     /**
      * Deletes simulator unit.
+     *
+     * Access: any admin.
      *
      * @param token unique user token.
      * @param url   location of simulator unit to remove.
