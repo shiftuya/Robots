@@ -10,6 +10,14 @@ public interface MainManager {
     String getUserName(String token);
 
     /**
+     * Returns user type gotten by specified 'token'.
+     *
+     * @param token user unique token.
+     * @return user type.
+     */
+    User.UserType getUserType(String token);
+
+    /**
      * Generates user unique token in case a pair [userName/password] exists in the database.
      *
      * @param userName unique user name.

@@ -26,16 +26,16 @@ public class Responder {
         send(RESPONSE_CODE, "");
     }
 
+    public void sendResponse(String message) throws IOException {
+        send(RESPONSE_CODE, new JSONObject().put(RESPONSE, message).toString());
+    }
+
     public void sendResponse(JSONObject jsonObject) throws IOException {
         send(RESPONSE_CODE, new JSONObject().put(RESPONSE, jsonObject).toString());
     }
 
     public void sendResponse(JSONArray jsonArray) throws IOException {
         send(RESPONSE_CODE, new JSONObject().put(RESPONSE, jsonArray).toString());
-    }
-
-    public void sendResponse(String message) throws IOException {
-        send(RESPONSE_CODE, new JSONObject().put(RESPONSE, message).toString());
     }
 
     public void sendError(String message) throws IOException {

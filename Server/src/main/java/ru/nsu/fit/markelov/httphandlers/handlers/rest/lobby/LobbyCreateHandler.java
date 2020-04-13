@@ -21,13 +21,6 @@ public class LobbyCreateHandler extends RestHandler {
 
     @Override
     protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
-        String cookieUserName = new CookieHandler(exchange).getCookie();
-
-        if (cookieUserName == null) {
-            throw new ProcessingException("cookieUserName is null.");
-        }
-        System.out.println("cookieUserName: " + cookieUserName);
-
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
         Integer id = uriParametersParser.getIntegerParameter("id");
         Integer playersAmount = uriParametersParser.getIntegerParameter("players_amount");
@@ -40,6 +33,6 @@ public class LobbyCreateHandler extends RestHandler {
             throw new ProcessingException("Players amount is null.");
         }
 
-        responder.sendResponse(JsonPacker.packLobby(mainManager.createLobby(cookieUserName, id, playersAmount)));
+        responder.sendResponse(JsonPacker.packLobby(mainManager.createLobby(cookieHandler.getCookie(), id, playersAmount)));
     }
 }

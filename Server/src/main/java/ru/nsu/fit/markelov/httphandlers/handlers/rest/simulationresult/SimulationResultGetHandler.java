@@ -21,13 +21,6 @@ public class SimulationResultGetHandler extends RestHandler {
 
     @Override
     protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
-        String cookieUserName = new CookieHandler(exchange).getCookie();
-
-        if (cookieUserName == null) {
-            throw new ProcessingException("cookieUserName is null.");
-        }
-        System.out.println("cookieUserName: " + cookieUserName);
-
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
         Integer id = uriParametersParser.getIntegerParameter("id");
 
@@ -35,6 +28,6 @@ public class SimulationResultGetHandler extends RestHandler {
             throw new ProcessingException("Simulation result id is null.");
         }
 
-        responder.sendResponse(JsonPacker.packSimulationResult(mainManager.getSimulationResult(cookieUserName, id)));
+        responder.sendResponse(JsonPacker.packSimulationResult(mainManager.getSimulationResult(cookieHandler.getCookie(), id)));
     }
 }
