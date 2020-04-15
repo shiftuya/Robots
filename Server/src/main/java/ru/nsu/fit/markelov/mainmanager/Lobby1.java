@@ -138,6 +138,7 @@ class Lobby1 implements LobbyExtended {
   @Override
   public void submit(UserExtended user, String code) {
     solutionsMap.put(user, code);
+    setReady(user, true);
   }
 
   @Override
