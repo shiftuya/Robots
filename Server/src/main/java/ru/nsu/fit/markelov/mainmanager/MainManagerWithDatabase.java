@@ -511,12 +511,14 @@ public class MainManagerWithDatabase implements MainManager {
   public void addSimulator(String token, String url) {
     databaseHandler.saveSimulatorUrl(url);
     simulators.add(url);
+    simulatorManager.addSimulator(url);
   }
 
   @Override
   public void removeSimulator(String token, String url) {
     databaseHandler.removeSimulatorUrl(url);
     simulators.remove(url);
+    simulatorManager.removeSimulator(url);
   }
 
   @Override
