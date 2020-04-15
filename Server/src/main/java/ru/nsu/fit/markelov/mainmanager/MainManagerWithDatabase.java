@@ -238,6 +238,10 @@ public class MainManagerWithDatabase implements MainManager {
     lobby.removePlayer(user);
 
     refreshActiveTime(user);
+
+    if (lobby.getCurrentPlayersAmount() == 0) {
+      removeLobby(lobbyID);
+    }
   }
 
   @Override
@@ -594,6 +598,10 @@ public class MainManagerWithDatabase implements MainManager {
       throw new ProcessingException("Token is null");
     }
     return UUID.fromString(token);
+  }
+
+  private void removeLobby(int id) {
+    lobbyMap.remove(id);
   }
 }
 
