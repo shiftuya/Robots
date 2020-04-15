@@ -287,7 +287,6 @@ public class MainManagerWithDatabase implements MainManager {
     Level level = lobby.getLevel();
 
     CompileResult compileResult = simulatorManager.checkCompilation(level.getLanguage(), code);
-//    CompileResult compileResult = new CompileResult1("QWE", true, false);
 
     if (!compileResult.isCompiled()) {
       return compileResult;

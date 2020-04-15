@@ -184,7 +184,10 @@ function activateListeners(contextManager) {
             if (obj.response.length == 0) {
                 alert("Bad response!");
             } else {
-                alert(obj.response.message);
+                if (obj.response.message) {
+                    alert(obj.response.message);
+                }
+                
                 if (obj.response.simulated) {
                     contextManager.changeContext("simulation_result", "simulation_result.get?id=" + id);
                 } else if (obj.response.compiled) {

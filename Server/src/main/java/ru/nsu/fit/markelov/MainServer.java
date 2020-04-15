@@ -18,6 +18,8 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbyReturnHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.lobby.LobbySubmitHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.log.LogInHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.log.LogOutHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.LogGetHandler;
+import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.ScriptGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult.SimulationResultIsReadyHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.simulator.SimulatorAddHandler;
@@ -74,6 +76,8 @@ public class MainServer {
 
         server.createContext("/api/method/simulation_result.is_ready", new SimulationResultIsReadyHandler(mainManager));
         server.createContext("/api/method/simulation_result.get", new SimulationResultGetHandler(mainManager));
+        server.createContext("/api/method/log.get", new LogGetHandler(mainManager));
+        server.createContext("/api/method/script.get", new ScriptGetHandler(mainManager));
 
         server.createContext("/api/method/user.get", new UserGetHandler(mainManager));
         server.createContext("/api/method/user.block", new UserBlockHandler(mainManager));

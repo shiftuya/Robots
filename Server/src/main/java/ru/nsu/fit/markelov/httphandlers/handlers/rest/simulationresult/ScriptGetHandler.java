@@ -2,7 +2,6 @@ package ru.nsu.fit.markelov.httphandlers.handlers.rest.simulationresult;
 
 import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
-import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
@@ -11,11 +10,11 @@ import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
 
-public class LogGetHandler extends RestHandler {
+public class ScriptGetHandler extends RestHandler {
 
     private MainManager mainManager;
 
-    public LogGetHandler(MainManager mainManager) {
+    public ScriptGetHandler(MainManager mainManager) {
         this.mainManager = mainManager;
     }
 
@@ -33,15 +32,12 @@ public class LogGetHandler extends RestHandler {
             throw new ProcessingException("Level id is null.");
         }
 
-        System.out.println(cookieHandler.getCookie());
-        System.out.println(userName);
-        System.out.println(id);
-        String res = mainManager.getLog(cookieHandler.getCookie(), userName, id);
+        String res = mainManager.getScript(cookieHandler.getCookie(), userName, id);
         if (res == null) {
-            System.out.println("log NULL");
+            System.out.println("script NULL");
         } else {
             System.out.println(res);
         }
-        responder.sendResponse(mainManager.getLog(cookieHandler.getCookie(), userName, id));
+        responder.sendResponse(mainManager.getScript(cookieHandler.getCookie(), userName, id));
     }
 }
