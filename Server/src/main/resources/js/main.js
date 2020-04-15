@@ -202,8 +202,6 @@ function activateListeners(contextManager) {
 
         var formData = new FormData(form[0]);
         sendAjax("level.submit", function(result) {
-            var obj = JSON.parse(result);
-            alert(obj.response);
             contextManager.changeContext("levels");
         }, undefined, formData);
     });

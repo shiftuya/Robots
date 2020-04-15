@@ -532,7 +532,8 @@ function insertCodeEditorData(obj, contextManager) {
 }
 
 function insertSimulationResultData(obj, contextManager) {
-    var skeleton = $("#simulation-result-table").find("tr.skeleton");
+    var table = $("#simulation-result-table");
+    var skeleton = table.find("tr.skeleton");
     obj.response.users.forEach(function(item) {
         var tr = $(skeleton).clone();
         tr.removeClass("skeleton");
