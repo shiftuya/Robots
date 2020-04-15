@@ -19,7 +19,11 @@ class ContextManager {
         var content = $("#" + dependencies.contentId);
         ajaxQuery = ajaxQuery || dependencies.defaultAjaxQuery;
         var insertFunction = dependencies.insertFunction;
-        var deleteData = dependencies.deleteData;
+        
+        var deleteData;
+        if (this.currentContextName) {
+            deleteData = this.contextMap.get(this.currentContextName).deleteData;
+        }
 
         window.history.pushState("", "", contextName);
         document.title = title + " | Robotics Game Server";
@@ -47,20 +51,20 @@ class ContextManager {
             content.addClass("active"); // alert("content added");
         }
 
-        // delete current data if needed
-        if (deleteData) {
-            this.removeCurrentData(deleteData.id, deleteData.contentUnit);
-        }
+        // delete current data
+        this.removeCurrentData(deleteData);
 
-        // get and insert new data if needed
-        if (insertFunction) {
-            this.getAndInsertData(contextName, ajaxQuery, insertFunction, obj);
-        }
+        // get and insert new data
+        this.getAndInsertData(contextName, ajaxQuery, insertFunction, obj);
 
         this.currentContextName = contextName;
     }
 
     getAndInsertData(contextName, ajaxQuery, insertFunction, obj) {
+        if (!insertFunction) {
+            return;
+        }
+        
         if (!ajaxQuery) {
             insertFunction(obj, this);
             return;
@@ -72,15 +76,37 @@ class ContextManager {
         });
     }
 
-    removeCurrentData(id, contentUnit) {
-        if (this.currentContextName == "login") {
-            $("#login-content").removeClass("active");
-            $("#login-content").find("input.login-form-input").val("");
+    removeCurrentData(deleteData) {
+        if (!deleteData) {
             return;
         }
         
-        $("#" + id).find(contentUnit + ":not('.skeleton')").remove();
+        $("#" + deleteData.id).find(deleteData.contentUnit + ":not('.skeleton')").remove();
     }
+}
+
+function insertLoginData(obj, contextManager) {
+    var skeleton = $("#login-content").find("section.skeleton");
+    var section = $(skeleton).clone();
+    section.removeClass("skeleton");
+
+    section.find(".login-submit-a").on("click", function() {
+        var username = section.find("input[name='name']").val();
+
+        sendAjax("sign.login?username=" + username, function(data) {
+            var obj = JSON.parse(data);
+            if (obj.response.length == 0) {
+                alert("Bad response!");
+            } else if (obj.response.logged_in) {
+                $("#logout").text("Log Out (" + username + ")");
+                contextManager.changeContext("list_of_lobbies");
+            } else {
+                alert(obj.response.message);
+            }
+        });
+    });
+
+    $("#login-content").append(section);
 }
 
 function insertListOfLobbiesData(obj, contextManager) {
@@ -229,9 +255,9 @@ function insertUsersData(obj, contextManager) {
             tr.removeClass("skeleton");
 
             tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
-            tr.find(".username").text(item.name);
+            tr.find(".user-name").text(item.name);
             tr.find(".user-type").text(item.type);
-            tr.find(".last-active").text(item.last_active);
+            tr.find(".user-last-active").text(item.last_active);
             
             if (item.is_blocked) {
                 tr.addClass("blocked-user");
@@ -253,15 +279,17 @@ function insertUserData(obj, contextManager) {
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
 
-    section.find(".lobby-common-icon").css("background-image", "url(\".." + item.avatar + "\")");
+    section.find(".common-big-icon").css("background-image", "url(\".." + item.avatar + "\")");
     section.find(".user-name").text(item.name);
     section.find(".user-type").text(item.type);
     section.find(".user-last-active").text(item.last_active);
     section.find(".user-block-a").text(item.is_blocked ? "Unblock" : "Block");
     
-    // simple cloaning the table is not working, as jQuery doesn't remove the data immediately
-    var solutionsTable = $("<table class=\"common-table solutions-table\">");
-    solutionsTable.append($("#solutions-table").find("tbody:first-of-type, tbody.skeleton").clone());
+    if (item.is_blocked) {
+        section.find(".user-info").addClass("blocked-user");
+    }
+    
+    var solutionsTable = $("#solutions-table").clone().removeAttr("id");
     insertSolutionsData({response: obj.response.solutions}, contextManager, solutionsTable);
     
     section.append(solutionsTable);
@@ -295,18 +323,22 @@ function insertUserEditorData(obj, contextManager) {
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
 
-    var ajaxQuery, message;
+    var ajaxQuery, header, message;
     if (!obj) {
         ajaxQuery = "user.create";
+        header = "Create user:";
         message = "User created";
     } else {
         ajaxQuery = "user.edit";
+        header = "Edit user:";
         message = "User edited";
         
         var item = obj.response.info;
-        section.find("input[name=name]").attr("value", item.name).attr("readonly", true);
+        section.find("input[name=name]").attr("value", item.name).attr("readonly", true).addClass("readonly");
         section.find("select[name=type]").val(item.type);
     }
+    
+    section.find(".content-header").text(header);
 
     section.find(".user-submit-a").on("click", function() {
         var form = $("#user-editor-content").find(".user-editor-shell:not('.skeleton')").find("form")
@@ -437,7 +469,7 @@ function insertLobbyData(obj, contextManager) {
             section.removeClass("skeleton");
 
             section.attr("data-lobby-id", item.lobby_id);
-            section.find(".lobby-common-icon").css("background-image", "url(\".." + item.level_icon + "\")");
+            section.find(".common-big-icon").css("background-image", "url(\".." + item.level_icon + "\")");
             section.find(".lobby-level-name").text(item.level_name);
             section.find(".lobby-players").text(item.players + "/" + item.players_at_most);
             section.find(".level-difficulty").text(item.level_difficulty);

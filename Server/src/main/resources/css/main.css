@@ -60,6 +60,10 @@ h1 {
 	font-size: 32px;
 }
 
+input[name="bugfix_for_form_with_file"] {
+    display: none;
+}
+
 .shell {
     position: relative;
     overflow: hidden;
@@ -93,11 +97,63 @@ h1 {
     display: none;
 }
 
+.common-form {
+    width: 200px;
+    margin: auto;
+}
+
+.form-section {
+    margin-top: 20px;
+}
+
+.form-section:last-of-type {
+    margin-top: 30px;
+}
+
+.common-form label {
+    display: block;
+    margin: 0 0 5px 10px;
+    text-align: left;
+}
+
+.common-form select, .common-form input:not([type="file"]) {
+    box-sizing: border-box;
+    width: 100%;
+    height: 26px;
+    font: 18px Trebuchet MS, sans-serif;
+}
+
+select.readonly, input.readonly {
+    color: gray;
+}
+
 .circle-icon {
 	border: 2px solid black;
 	border-radius: 50%;
 	-moz-border-radius: 50%;
 	-webkit-border-radius: 50%;
+}
+
+.new-unit {
+    display: inline-block;
+    height: 70px;
+    line-height: 70px;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+
+.new-unit-icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 64px;
+    height: 64px;
+    margin-right: 10px;
+    background: center no-repeat url("../images/plus-icon.png");
+}
+
+.new-unit a {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .CodeMirror {

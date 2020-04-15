@@ -1,17 +1,22 @@
 package ru.nsu.fit.markelov.mainmanager;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.Playback;
 
 import java.util.Date;
 import java.util.HashMap;
+import ru.nsu.fit.markelov.interfaces.client.User;
 
-public class SimulationResult1 implements SimulationResult {
+public class SimulationResult1 implements SimulationResultExtended {
   // Id of simulation equal to id of the lobby.
   private int id;
 
   // Username to Success/Fail.
-  private HashMap<String, Boolean> results;
+  private Map<String, Boolean> results;
 
   // Date of the simulation.
   private Date date;
@@ -20,7 +25,11 @@ public class SimulationResult1 implements SimulationResult {
   private String systemLog;
 
   // Username to privateLog.
-  private HashMap<String, String> privateLogs;
+  private Map<String, String> privateLogs;
+
+  private Map<String, Playback> playbacks;
+
+  private int levelId;
 
   public SimulationResult1(
       int simId,
@@ -31,6 +40,16 @@ public class SimulationResult1 implements SimulationResult {
     results = simResults;
     date = simDate;
     privateLogs = _privateLogs;
+  }
+
+  public SimulationResult1(int id, Map<String, Boolean> results, Date date,
+      Map<String, String> privateLogs, Map<String, Playback> playbacks, int levelId) {
+    this.id = id;
+    this.results = results;
+    this.date = date;
+    this.privateLogs = privateLogs;
+    this.playbacks = playbacks;
+    this.levelId = levelId;
   }
 
   @Override
@@ -65,6 +84,16 @@ public class SimulationResult1 implements SimulationResult {
 
   @Override
   public Playback getPlayback(String username) {
-    return null;
+    return playbacks.get(username);
+  }
+
+  @Override
+  public Set<String> getUsers() {
+    return results.keySet();
+  }
+
+  @Override
+  public int getLevelId() {
+    return levelId;
   }
 }

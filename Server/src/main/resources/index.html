@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="css/choose_level.css">
         <link rel="stylesheet" href="css/my_solutions.css">
         <link rel="stylesheet" href="css/users.css">
+        <link rel="stylesheet" href="css/user.css">
         <link rel="stylesheet" href="css/level_editor.css">
 		<link rel="stylesheet" href="css/lobby.css">
 		<link rel="stylesheet" href="css/simulation_results.css">
@@ -33,27 +34,28 @@
 		<div class="shell">
             <section id="login-content" class="content">
                 <img class="logo" src="images/logo.png" alt="Robotics Game Server Logotype">
-                <form class="login-form" action="">
-                    <section class="login-form-section">
-                        <p class="login-form-label">Server:</p>
-                        <select class="login-form-input">
-                            <option>NSU Robotics Club</option>
-                            <option>Robotics Game Center</option>
-                        </select>
-                    </section>
-                    <section class="login-form-section">
-                        <p class="login-form-label">Login:</p>
-                        <input class="login-form-input" type="text">
-                    </section>
-                    <section class="login-form-section">
-                        <p class="login-form-label">Password:</p>
-                        <input class="login-form-input" type="password">
-                    </section>
-                    <section class="login-form-section">
-                        <span id="login-submit" class="a highlited-on-hover">Log In</span>
-<!--                        <button id="login-submit" class="login-form-input login-form-button" type="submit">Log In</button>-->
-                    </section>
-                </form>
+                <section class="login-shell skeleton">
+                    <form class="common-form login-form">
+                        <section class="form-section">
+                            <label for="server">Server:</label>
+                            <select name="server">
+                                <option value="NSU Robotics Club">NSU Robotics Club</option>
+                                <option value="Robotics Game Center">Robotics Game Center</option>
+                            </select>
+                        </section>
+                        <section class="form-section">
+                            <label for="name">Login:</label>
+                            <input name="name" type="text">
+                        </section>
+                        <section class="form-section">
+                            <label for="password">Password:</label>
+                            <input name="password" type="password">
+                        </section>
+                        <section class="form-section">
+                            <span class="a highlited-on-hover login-submit-a">Log In</span>
+                        </section>
+                    </form>
+                </section>
             </section>
             <header id="header-main" class="header-main">
 				<nav class="nav-bar">
@@ -86,8 +88,8 @@
 				</div>
 			</header>
             <section id="list-of-lobbies-content" class="content">
-                <div id="choose_level" class="new-lobby">
-					<div class="new-lobby-icon circle-icon"></div>
+                <div id="choose_level" class="new-unit">
+                    <div class="new-unit-icon circle-icon"></div>
                     <span class="a">Create New Lobby</span>
 				</div>
                 <table id="lobbies-table" class="common-table lobbies-table">
@@ -188,33 +190,34 @@
 				</table>
             </section>
             <section id="users-content" class="content">
-                <div id="user_editor" class="new-lobby">
-                    <div class="new-lobby-icon circle-icon"></div>
+                <div id="user_editor" class="new-unit">
+                    <div class="new-unit-icon circle-icon"></div>
                     <span class="a">Create New User</span>
                 </div>
                 <table id="users-table" class="common-table users-table">
                     <tr>
                         <th>User</th>
-                        <th>Levels Finished</th>
+                        <th>Type</th>
                         <th>Last Active</th>
                     </tr>
                     <tr class="lobby-row highlited-on-hover skeleton">
                         <td>
                             <div class="lobbies-table-icon avatar-icon"></div>
-                            <span class="username"></span>
+                            <span class="user-name"></span>
                         </td>
                         <td class="user-type"></td>
-                        <td class="last-active"></td>
+                        <td class="user-last-active"></td>
                     </tr>
                 </table>
             </section>
             <section id="user-content" class="content user-content">
                 <section class="user-shell skeleton">
-                    <div class="lobby-common-shell">
-                        <div class="lobby-common-icon"></div>
-                        <span class="user-name"></span>
-                        <span class="user-type"></span>
-                        <span class="user-last-active"></span>
+                    <div class="user-info">
+                        <div class="common-big-icon"></div>
+                        <p><span class="user-name"></span> (<span class="user-type"></span>)</p>
+                        <p>Last active: <span class="user-last-active"></span></p>
+                    </div>
+                    <div class="user-actions">
                         <span class="a highlited-on-hover user-edit-a">Edit</span>
                         <span class="a highlited-on-hover user-block-a"></span>
                         <span class="a highlited-on-hover user-delete-a">Delete</span>
@@ -223,39 +226,42 @@
             </section>
             <section id="user-editor-content" class="content user-editor-content">
                 <section class="user-editor-shell skeleton">
-                    <form class="user-editor-form">
-                        <input name="bugfix" type="text" style="display: none">
-                        <span>
+                    <h1 class="content-header"></h1>
+                    <form class="common-form user-editor-form">
+                        <input name="bugfix_for_form_with_file" type="text">
+                        <section class="form-section">
                             <label for="name">Name:</label>
                             <input name="name" type="text" placeholder="Name">
-                        </span>
-                        <span>
+                        </section>
+                        <section class="form-section">
                             <label for="password">Password:</label>
                             <input name="password" type="password">
-                        </span>
-                        <span>
+                        </section>
+                        <section class="form-section">
                             <label for="repeat_password">Repeat password:</label>
                             <input name="repeat_password" type="password">
-                        </span>
-                        <span>
+                        </section>
+                        <section class="form-section">
                             <label for="type">Type:</label>
                             <select name="type">
                                 <option value="Student">Student</option>
                                 <option value="Teacher">Teacher</option>
                                 <option value="Admin">Admin</option>
                             </select>
-                        </span>
-                        <span>
+                        </section>
+                        <section class="form-section">
                             <label for="avatar">Avatar:</label>
                             <input name="avatar" type="file">
-                        </span>
-                        <span class="a highlited-on-hover user-submit-a">Submit</span>
+                        </section>
+                        <section class="form-section">
+                            <span class="a highlited-on-hover user-submit-a">Submit</span>
+                        </section>
                     </form>
                 </section>
             </section>
             <section id="levels-content" class="content">
-                <div id="level_editor" class="new-lobby">
-                    <div class="new-lobby-icon circle-icon"></div>
+                <div id="level_editor" class="new-unit">
+                    <div class="new-unit-icon circle-icon"></div>
                     <span class="a">Create New Level</span>
                 </div>
                 <table id="teacher-levels-table" class="common-table levels-table">
@@ -288,13 +294,13 @@
                 </table>
             </section>
             <section id="level-editor-content" class="content level-editor-content">
-                <div id="submit-level" class="submit-level new-lobby">
-                    <div class="new-lobby-icon circle-icon"></div>
+                <div id="submit-level" class="submit-level new-unit">
+                    <div class="new-unit-icon circle-icon"></div>
                     <span class="a">Submit Level</span>
                 </div>
                 <section class="level-editor-shell skeleton">
                     <form class="level-editor-form">
-                        <input name="bugfix" type="text" style="display: none">
+                        <input name="bugfix_for_form_with_file" type="text">
                         <p>
                             <span class="level-property">
                                 <label for="name">Name:</label>
@@ -351,8 +357,8 @@
                 </section>
             </section>
             <section id="simulators-content" class="content">
-                <div id="add-simulator" class="new-lobby">
-                    <div class="new-lobby-icon circle-icon"></div>
+                <div id="add-simulator" class="new-unit">
+                    <div class="new-unit-icon circle-icon"></div>
                     <span class="a">Add simulator</span>
                 </div>
                 <table id="simulators-table" class="common-table simulators-table">
@@ -374,10 +380,9 @@
                 <section class="lobby-shell skeleton">
                     <section class="lobby-content">
                         <div class="lobby-common-shell">
-                            <div class="lobby-common-icon"></div>
-                            <span class="lobby-common-info"><span class="lobby-level-name"></span> Lobby <span class="lobby-players"></span></span>
-                            <span class="level-difficulty"></span>
-                            <span class="level-type"></span>
+                            <div class="common-big-icon"></div>
+                            <p class="lobby-common-info"><span class="lobby-level-name"></span> Lobby <span class="lobby-players"></span></p>
+                            <p><span class="level-difficulty"></span><span class="level-type"></span></p>
                         </div>
                         <table class="players-table">
                             <tr class="skeleton">

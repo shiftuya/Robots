@@ -6,7 +6,12 @@ $(document).ready(function() {
     var contextManager = new ContextManager([
         ["login", {
             title: "Login",
-            contentId: "login-content"
+            contentId: "login-content",
+            insertFunction: insertLoginData,
+            deleteData: {
+                id: "login-content",
+                contentUnit: ".login-shell"
+            }
         }],
         ["list_of_lobbies", {
             title: "List of Lobbies",
@@ -154,22 +159,6 @@ $(document).ready(function() {
 });
 
 function activateListeners(contextManager) {
-    $("#login-submit").on("click", function() {
-        var username = $("#login-content").find("input.login-form-input[type='text']").val();
-        
-        sendAjax("sign.login?username=" + username, function(data) {
-            var obj = JSON.parse(data);
-            if (obj.response.length == 0) {
-                alert("Bad response!");
-            } else if (obj.response.logged_in) {
-                $("#logout").text("Log Out (" + username + ")");
-                contextManager.changeContext("list_of_lobbies");
-            } else {
-                alert(obj.response.message);
-            }
-        });
-    });
-
     $("#logout").on("click", function() {
         sendAjax("sign.logout", function(data) {
             var obj = JSON.parse(data);

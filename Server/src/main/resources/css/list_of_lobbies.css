@@ -1,25 +1,3 @@
-.new-lobby {
-    display: inline-block;
-	height: 70px;
-	line-height: 70px;
-	margin-bottom: 30px;
-    cursor: pointer;
-}
-
-.new-lobby-icon {
-	display: inline-block;
-	vertical-align: middle;
-	width: 64px;
-	height: 64px;
-	margin-right: 10px;
-	background: center no-repeat url("../images/plus-icon.png");
-}
-
-.new-lobby a {
-	display: inline-block;
-	vertical-align: middle;
-}
-
 .lobbies-table td:not(:last-of-type) {
 	text-align: left;
 }
