@@ -123,6 +123,9 @@ public class MainManagerWithDatabase implements MainManager {
     tokenUserMap = new HashMap<>();
 
     simulators = new HashSet<>(databaseHandler.getSimulatorsUrls());
+    for (String simulator : simulators) {
+      simulatorManager.addSimulator(simulator);
+    }
 
     List<UserExtended> users = databaseHandler.getUsers();
     for (UserExtended user : users) {
