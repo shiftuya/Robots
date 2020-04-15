@@ -101,18 +101,24 @@ public class HardcodedSimulatorManager implements SimulatorManager {
             errorMessage.append("FAIL\n");
             failed = true;
           }
-          for (Resource resource : resources) {
-            res =
-                sendPOST(
-                    urlStr + "/addResource/" + name + "/" + resource.getName(),
-                    resource.getBytes());
-            uploaded = JsonUtil.parseRequestStatus(res);
-            errorMessage.append(urlStr).append(" adding ").append(resource.getName()).append(": ");
-            if (uploaded) {
-              errorMessage.append("SUCCESS\n");
-            } else {
-              errorMessage.append("FAIL\n");
-              failed = true;
+          if (resources != null) {
+            for (Resource resource : resources) {
+              res =
+                  sendPOST(
+                      urlStr + "/addResource/" + name + "/" + resource.getName(),
+                      resource.getBytes());
+              uploaded = JsonUtil.parseRequestStatus(res);
+              errorMessage
+                  .append(urlStr)
+                  .append(" adding ")
+                  .append(resource.getName())
+                  .append(": ");
+              if (uploaded) {
+                errorMessage.append("SUCCESS\n");
+              } else {
+                errorMessage.append("FAIL\n");
+                failed = true;
+              }
             }
           }
         } catch (Exception e) {
@@ -161,22 +167,13 @@ public class HardcodedSimulatorManager implements SimulatorManager {
 
   @Override
   public CompileResult checkCompilation(String language, String solutionSrc) {
-    return new CompileResult() {
-      @Override
-      public boolean isCompiled() {
-        return true;
-      }
-
-      @Override
-      public boolean isSimulated() {
-        return false;
-      }
-
-      @Override
-      public String getMessage() {
-        return null;
-      }
-    };
+    URL url = monitor.chooseSim("/checkCompilation");
+    try {
+      String res = sendPOST(url, solutionSrc.getBytes());
+      return JsonUtil.parseCompilationStatus(res);
+    } catch (Exception e) {
+      throw new ProcessingException(e.toString());
+    }
   }
 
   private String sendPOST(String urlStr, byte[] data) throws IOException {

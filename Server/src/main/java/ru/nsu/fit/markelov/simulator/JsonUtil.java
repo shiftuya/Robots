@@ -2,6 +2,8 @@ package ru.nsu.fit.markelov.simulator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
+import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.mainmanager.SimulationResult1;
 
@@ -69,6 +71,36 @@ class JsonUtil {
     } catch (Exception e) {
       System.err.println(e.toString());
       return false;
+    }
+  }
+
+  static CompileResult parseCompilationStatus(String jsonStr) {
+    JSONObject jsObj = new JSONObject(jsonStr);
+    try {
+      boolean isCompiled = jsObj.getBoolean("status");
+      String message = null;
+      if (!isCompiled) {
+        message = jsObj.getString("message");
+      }
+      String finalMessage = message;
+      return new CompileResult() {
+        @Override
+        public boolean isCompiled() {
+          return isCompiled;
+        }
+
+        @Override
+        public boolean isSimulated() {
+          return false;
+        }
+
+        @Override
+        public String getMessage() {
+          return finalMessage;
+        }
+      };
+    } catch (Exception e) {
+      throw new ProcessingException(e.toString());
     }
   }
 }
