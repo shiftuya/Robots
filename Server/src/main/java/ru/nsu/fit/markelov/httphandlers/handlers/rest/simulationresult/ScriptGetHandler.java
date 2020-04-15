@@ -32,12 +32,6 @@ public class ScriptGetHandler extends RestHandler {
             throw new ProcessingException("Level id is null.");
         }
 
-        String res = mainManager.getScript(cookieHandler.getCookie(), userName, id);
-        if (res == null) {
-            System.out.println("script NULL");
-        } else {
-            System.out.println(res);
-        }
         responder.sendResponse(mainManager.getScript(cookieHandler.getCookie(), userName, id));
     }
 }

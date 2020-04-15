@@ -209,7 +209,7 @@ function insertSolutionsData(obj, contextManager, inbuiltTable) {
                     li.attr("data-attempt-id", attemptItem.attempt_id);
 
                     li.on("click", function() {
-                        alert("attempt_id is " + attemptItem.attempt_id);
+                        contextManager.changeContext("simulation_result", "simulation_result.get?id=" + attemptItem.attempt_id);
                     });
 
                     tbody.find(".list-of-attempts").append(li);
