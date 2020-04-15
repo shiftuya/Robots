@@ -122,6 +122,11 @@ public class MainManagerWithDatabase implements MainManager {
     simulationResultMap = new HashMap<>();
     tokenUserMap = new HashMap<>();
 
+    if (databaseHandler.getUserByName("admin") == null) { // Temporary solution
+      UserExtended admin = new User1("/images/person-icon.png", "admin", UserType.Admin, "admin");
+      databaseHandler.saveUser(admin);
+    }
+
     simulators = new HashSet<>(databaseHandler.getSimulatorsUrls());
     for (String simulator : simulators) {
       simulatorManager.addSimulator(simulator);
@@ -143,6 +148,7 @@ public class MainManagerWithDatabase implements MainManager {
         currentLevelId = level.getId() + 1;
       }
     }
+
 
     /*List<SimulationResultExtended> simulationResults = databaseHandler.getSimulationResults();
     for (SimulationResultExtended result : simulationResults) {
