@@ -108,9 +108,11 @@ public class MainManagerWithDatabase implements MainManager {
   private Map<Integer, SimulationResultExtended> simulationResultKeyMap;
   private Map<UUID, UserExtended> tokenUserMap;
   private int currentLobbyId;
+  private int currentLevelId;
 
   public MainManagerWithDatabase() {
     currentLobbyId = 0;
+    currentLevelId = 0;
     databaseHandler = new SQLiteDatabaseHandler();
     simulatorManager = new HardcodedSimulatorManager();
     userMap = new HashMap<>();
@@ -133,6 +135,9 @@ public class MainManagerWithDatabase implements MainManager {
       levelMap.put(level.getId(), level);
       for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
         map.put(level, new ArrayList<>());
+      }
+      if (level.getId() > currentLevelId) {
+        currentLevelId = level.getId() + 1;
       }
     //  simulatorManager.addLevel(level.getName(), level.getLanguage(), level.getCode(), level.ge);
     }
@@ -236,8 +241,19 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Lobby returnToLobby(String token, int lobbyID) {
-    return null;
+  public Lobby returnToLobby(String userName, int lobbyID) {
+    LobbyExtended lobby = getLobbyFromMap(lobbyID);
+    if (lobby == null) {
+      throw new ProcessingException("Lobby not found");
+    }
+    UserExtended player = getUserFromMap(userName);
+    if (player == null) {
+      throw new ProcessingException("User not found");
+    }
+    if (lobby.getCode(player) != null) {
+      lobby.setReady(player, true);
+    }
+    return lobby;
   }
 
   @Override
@@ -393,25 +409,50 @@ public class MainManagerWithDatabase implements MainManager {
                           String difficulty, Integer minPlayers, Integer maxPlayers,
                           Resource iconResource, String description, String rules, String goal,
                           Collection<Resource> levelResources, String code, String language) {
-    if (getLevelFromMap(levelID) != null) {
-      throw new ProcessingException("Level already exists");
-    }
+    if (create) {
+      int newLevelId = currentLevelId++;
+      LevelDifficulty levelDifficulty;
+      try {
+        levelDifficulty = LevelDifficulty.valueOf(difficulty);
+      } catch (IllegalArgumentException e) {
+        throw new ProcessingException("Illegal difficulty");
+      }
+      Level level = new Level1(newLevelId, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
+          minPlayers, maxPlayers, language, code); // ???
 
-    LevelDifficulty levelDifficulty;
-    try {
-      levelDifficulty = LevelDifficulty.valueOf(difficulty);
-    } catch (IllegalArgumentException e) {
-      throw new ProcessingException("Illegal difficulty");
-    }
-    Level level = new Level1(levelID, "/images/labyrinth-icon.png", name, levelDifficulty, "heh", description, rules, goal,
-        minPlayers, maxPlayers, language, code); // ???
+      simulatorManager.addLevel(name, language, code, new ArrayList<>(levelResources));
 
-    simulatorManager.addLevel(name, language, code, new ArrayList<>(levelResources));
+      databaseHandler.saveLevel(level);
+      levelMap.put(newLevelId, level);
+      for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
+        map.put(level, new ArrayList<>());
+      }
+    } else {
+      Level level = getLevelFromMap(levelID);
 
-    databaseHandler.saveLevel(level);
-    levelMap.put(levelID, level);
-    for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
-      map.put(level, new ArrayList<>());
+      if (level == null) {
+        throw new ProcessingException("Level does not exist");
+      }
+
+      LevelDifficulty levelDifficulty;
+      try {
+        levelDifficulty = LevelDifficulty.valueOf(difficulty);
+      } catch (IllegalArgumentException e) {
+        throw new ProcessingException("Illegal difficulty");
+      }
+      Level newLevel = new Level1(levelID, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
+          minPlayers, maxPlayers, language, code); // ???
+
+      simulatorManager.removeLevel(name, language);
+      simulatorManager.addLevel(name, language, code, new ArrayList<>(levelResources));
+
+      databaseHandler.removeLevel(level);
+      databaseHandler.saveLevel(newLevel);
+
+      levelMap.put(levelID, newLevel);
+      for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
+        map.put(level, new ArrayList<>());
+      }
     }
   }
 
