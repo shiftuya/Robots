@@ -315,6 +315,8 @@ public class MainManagerWithDatabase implements MainManager {
         if (list == null) continue;
         list.add(simulationResult);
       }
+
+      removeLobby(lobbyId);
     }
     return compileResult;
   }
