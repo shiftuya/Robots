@@ -107,11 +107,6 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   }
 
   @Override
-  public List<Level> getLevels() {
-    return null;
-  }
-
-  @Override
   public void addLevel(String name, String language, String levelSrc, List<Resource> resources) {}
 
   @Override

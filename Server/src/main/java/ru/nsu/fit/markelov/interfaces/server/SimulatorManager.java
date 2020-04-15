@@ -41,13 +41,6 @@ public interface SimulatorManager {
   SimulationResult runSimulation(String levelId, int lobbyId, Map<User, String> solutions);
 
   /**
-   * Get a list of all active levels.
-   *
-   * @return active levels.
-   */
-  List<Level> getLevels();
-
-  /**
    * Add a new level. If a level with same name and language exists then does nothing.
    *
    * @param name name of level to be referred.
