@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -34,7 +35,15 @@ public class MainManagerHardcoded implements MainManager {
 
     private int token;
 
+    @Override
+    public User.UserType getUserType(String token) {
+        return null;
+    }
 
+    @Override
+    public Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName, int levelId) {
+        return null;
+    }
 
     @Override
     public String login(String userName, String password) {

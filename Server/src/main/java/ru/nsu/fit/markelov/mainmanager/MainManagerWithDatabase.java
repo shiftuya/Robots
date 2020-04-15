@@ -36,6 +36,16 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
+  public UserType getUserType(String token) {
+    return null;
+  }
+
+  @Override
+  public Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName, int levelId) {
+    return null;
+  }
+
+  @Override
   public String login(String userName, String password) {
     return "null";
   }
