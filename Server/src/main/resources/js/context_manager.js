@@ -546,10 +546,18 @@ function insertSimulationResultData(obj, contextManager) {
 
         tr.find(".log").on("click", function() {
             alert(item.username);
+            alert(obj.response.id);
+            sendAjax("log.get?username=" + item.username + "&id=" + obj.response.id, function(result) {
+                alert(result);
+            });
         });
 
         tr.find(".script").on("click", function() {
             alert(item.username);
+            alert(obj.response.id);
+            sendAjax("script.get?username=" + item.username + "&id=" + obj.response.id, function(result) {
+                alert(result);
+            });
         });
     });
 }

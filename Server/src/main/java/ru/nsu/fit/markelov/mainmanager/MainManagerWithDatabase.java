@@ -281,6 +281,7 @@ public class MainManagerWithDatabase implements MainManager {
     Level level = lobby.getLevel();
 
     CompileResult compileResult = simulatorManager.checkCompilation(level.getLanguage(), code);
+//    CompileResult compileResult = new CompileResult1("QWE", true, false);
 
     if (!compileResult.isCompiled()) {
       return compileResult;
@@ -436,7 +437,7 @@ public class MainManagerWithDatabase implements MainManager {
         resources = new ArrayList<>(levelResources);
       }
 
-      simulatorManager.addLevel(Integer.toString(levelID), language, code, resources);
+      simulatorManager.addLevel(Integer.toString(newLevelId), language, code, resources);
 
       databaseHandler.saveLevel(level);
       levelMap.put(newLevelId, level);
