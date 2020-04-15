@@ -1,9 +1,6 @@
 package ru.nsu.fit.markelov.interfaces.server;
 
-import ru.nsu.fit.markelov.interfaces.client.Level;
-import ru.nsu.fit.markelov.interfaces.client.Resource;
-import ru.nsu.fit.markelov.interfaces.client.User;
-import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.client.*;
 
 import java.util.List;
 import java.util.Map;
@@ -14,17 +11,15 @@ public interface SimulatorManager {
    * Add new simulator unit in simulator pool.
    *
    * @param url location of new simulator unit.
-   * @return true if SU was added, false otherwise.
    */
-  boolean addSimulator(String url);
+  void addSimulator(String url);
 
   /**
    * Remove simulator unit from the simulator pool.
    *
    * @param url location simulator unit to remove.
-   * @return true if SU was added, false otherwise.
    */
-  boolean removeSimulator(String url);
+  void removeSimulator(String url);
 
   /**
    * Get list of all available SU.
@@ -59,26 +54,32 @@ public interface SimulatorManager {
    * @param language language of the level.
    * @param levelSrc code of the level.
    * @param resources list of resources to be stored along.
-   * @return true if added, false if a level with the same name and language exists.
    */
-  boolean addLevel(String name, String language, Resource levelSrc, List<Resource> resources);
+  void addLevel(String name, String language, String levelSrc, List<Resource> resources);
 
   /**
    * Remove a level.
    *
    * @param name name of the level to remove.
    * @param language language of the level.
-   * @return true if the level was removed, false if no such level exist.
    */
-  boolean removeLevel(String name, String language);
+  void removeLevel(String name, String language);
 
   /**
    * Update existing level source code.
    *
    * @param name name of the level.
-   * @param source new source code of the level.
+   * @param levelSrc new source code of the level.
    * @param language language of the level.
-   * @return true if level was updated successfully.
    */
-  boolean updateLevel(String name, String source, String language);
+  void updateLevel(String name, String language, String levelSrc, List<Resource> resources);
+
+  /**
+   * Check if solution can be compiled;
+   *
+   * @param language language of the solution.
+   * @param solutionSrc code of the solution.
+   * @return result of compilation.
+   */
+  CompileResult checkCompilation(String language, String solutionSrc);
 }

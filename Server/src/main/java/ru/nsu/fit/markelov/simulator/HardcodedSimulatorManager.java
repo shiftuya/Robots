@@ -1,10 +1,9 @@
 package ru.nsu.fit.markelov.simulator;
 
-import ru.nsu.fit.markelov.interfaces.client.Level;
-import ru.nsu.fit.markelov.interfaces.client.Resource;
-import ru.nsu.fit.markelov.interfaces.client.User;
-import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
+import ru.nsu.fit.markelov.interfaces.client.*;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
+import ru.nsu.fit.markelov.mainmanager.CompileResult1;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -40,19 +39,22 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   }
 
   @Override
-  public boolean addSimulator(String url) {
+  public void addSimulator(String url) {
     synchronized (urls) {
-      if (urls.contains(url)) return false;
+      if (urls.contains(url)) throw new ProcessingException("Same simulator unit already exists.");
+      if (monitor.checkSU(url) < 0) {
+        throw new ProcessingException("Failed to connect to simulation unit.");
+      }
       monitor.addSU(url);
-      return urls.add(url);
+      urls.add(url);
     }
   }
 
   @Override
-  public boolean removeSimulator(String url) {
+  public void removeSimulator(String url) {
     synchronized (urls) {
       monitor.removeSU(url);
-      return urls.remove(url);
+      urls.remove(url);
     }
   }
 
@@ -110,18 +112,32 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   }
 
   @Override
-  public boolean addLevel(
-      String name, String language, Resource levelSrc, List<Resource> resources) {
-    return false;
-  }
+  public void addLevel(String name, String language, String levelSrc, List<Resource> resources) {}
 
   @Override
-  public boolean removeLevel(String name, String language) {
-    return false;
-  }
+  public void removeLevel(String name, String language) {}
 
   @Override
-  public boolean updateLevel(String name, String source, String language) {
-    return false;
+  public void updateLevel(
+      String name, String language, String levelSrc, List<Resource> resources) {}
+
+  @Override
+  public CompileResult checkCompilation(String language, String solutionSrc) {
+    return new CompileResult() {
+      @Override
+      public boolean isCompiled() {
+        return true;
+      }
+
+      @Override
+      public boolean isSimulated() {
+        return false;
+      }
+
+      @Override
+      public String getMessage() {
+        return null;
+      }
+    };
   }
 }
