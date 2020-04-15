@@ -142,7 +142,6 @@ public class MainManagerWithDatabase implements MainManager {
       if (level.getId() > currentLevelId) {
         currentLevelId = level.getId() + 1;
       }
-    //  simulatorManager.addLevel(level.getName(), level.getLanguage(), level.getCode(), level.ge);
     }
 
     List<SimulationResultExtended> simulationResults = databaseHandler.getSimulationResults();
@@ -437,7 +436,7 @@ public class MainManagerWithDatabase implements MainManager {
         resources = new ArrayList<>(levelResources);
       }
 
-      simulatorManager.addLevel(name, language, code, resources);
+      simulatorManager.addLevel(Integer.toString(levelID), language, code, resources);
 
       databaseHandler.saveLevel(level);
       levelMap.put(newLevelId, level);
@@ -467,8 +466,8 @@ public class MainManagerWithDatabase implements MainManager {
         resources = new ArrayList<>(levelResources);
       }
 
-      simulatorManager.removeLevel(name, language);
-      simulatorManager.addLevel(name, language, code, resources);
+      simulatorManager.removeLevel(Integer.toString(levelID), language);
+      simulatorManager.addLevel(Integer.toString(levelID), language, code, resources);
 
       databaseHandler.removeLevel(level);
       databaseHandler.saveLevel(newLevel);
@@ -499,7 +498,7 @@ public class MainManagerWithDatabase implements MainManager {
       throw new ProcessingException("Level not found");
     }
 
-    simulatorManager.removeLevel(level.getName(), level.getLanguage());
+    simulatorManager.removeLevel(Integer.toString(level.getId()), level.getLanguage());
 
     levelMap.remove(levelID);
     for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
