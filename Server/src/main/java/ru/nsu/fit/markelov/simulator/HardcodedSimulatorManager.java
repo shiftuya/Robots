@@ -4,6 +4,7 @@ import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.*;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
 import ru.nsu.fit.markelov.mainmanager.CompileResult1;
+import ru.nsu.fit.markelov.mainmanager.SimulationResultExtended;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   }
 
   @Override
-  public SimulationResult runSimulation(String levelId, int lobbyId, Map<User, String> solutions) {
+  public SimulationResultExtended runSimulation(String levelId, int lobbyId, Map<User, String> solutions) {
     ArrayList<Map.Entry<User, String>> entryList = new ArrayList<>(solutions.entrySet());
     ArrayList<String> sol = new ArrayList<>();
     for (Map.Entry<User, String> entry : entryList) {
