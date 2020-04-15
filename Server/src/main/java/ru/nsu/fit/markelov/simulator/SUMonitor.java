@@ -80,7 +80,7 @@ public class SUMonitor extends Thread {
     }
   }
 
-  URL chooseSim() {
+  URL chooseSim(String path) {
     synchronized (statistics) {
       if (statistics.isEmpty()) {
         return null;
@@ -92,7 +92,7 @@ public class SUMonitor extends Thread {
       }
       URL result;
       try {
-        result = new URL(best.getUrl() + "/simulate");
+        result = new URL(best.getUrl() + path);
       } catch (MalformedURLException e) {
         return null;
       }

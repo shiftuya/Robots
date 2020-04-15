@@ -61,4 +61,14 @@ class JsonUtil {
       return -1;
     }
   }
+
+  static boolean parseRequestStatus(String jsonStr) {
+    JSONObject jsObj = new JSONObject(jsonStr);
+    try {
+      return jsObj.getBoolean("status");
+    } catch (Exception e) {
+      System.err.println(e.toString());
+      return false;
+    }
+  }
 }
