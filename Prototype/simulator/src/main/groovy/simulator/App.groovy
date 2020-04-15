@@ -123,22 +123,27 @@ class App {
             }
             createContext("/checkCompilation") { http ->
                 http.sendResponseHeaders(200, 0)
-                SensorReadable sr = null
                 Binding binding = new Binding()
-                binding.setVariable("level", null)
-                binding.setVariable("memory", null)
+                binding.setVariable("level", new Object())
+                binding.setVariable("memory", new Object())
                 def script = new GroovyShell(binding)
+                String code = new String(http.requestBody.bytes)
+                println(code)
                 try {
-                    script.parse(http.requestBody.toString())
+                    script.parse(code)
+                    println("Compiled!")
                     http.responseBody.withWriter { out ->
                         out << "{\"status\":true}"
                     }
-                } catch (CompilationFailedException e) {
+                } catch (Exception e) {
                     http.responseBody.withWriter { out ->
+                        println("Failed: " + e.toString())
                         out << "{\"status\":false, \"message\":\"" + e.toString() + "\"}"
+                        println("Sent response")
                     }
+                } finally {
+                    http.close()
                 }
-                http.close()
             }
             setExecutor(Executors.newCachedThreadPool())
             start()
