@@ -71,6 +71,8 @@ public class LevelSubmitHandler extends RestHandler {
                 levelInput.getCode(),
                 "groovy"
             );
+
+            responder.sendResponse();
         } catch (NumberFormatException e) {
             throw new ProcessingException("level_id is not a number");
         }
