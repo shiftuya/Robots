@@ -188,7 +188,7 @@ public class MainManagerWithDatabase implements MainManager {
     }
 
     if (lobby.getUsersWithoutPair().contains(user)) {
-      throw new ProcessingException("The lobby already contains the user");
+      return lobby;
     }
 
     if (lobby.getCurrentPlayersAmount() == lobby.getAcceptablePlayersAmount()) {
@@ -241,12 +241,12 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Lobby returnToLobby(String userName, int lobbyID) {
+  public Lobby returnToLobby(String token, int lobbyID) {
     LobbyExtended lobby = getLobbyFromMap(lobbyID);
     if (lobby == null) {
       throw new ProcessingException("Lobby not found");
     }
-    UserExtended player = getUserFromMap(userName);
+    UserExtended player = getUserFromTokenMap(getToken(token));
     if (player == null) {
       throw new ProcessingException("User not found");
     }
@@ -420,7 +420,15 @@ public class MainManagerWithDatabase implements MainManager {
       Level level = new Level1(newLevelId, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
           minPlayers, maxPlayers, language, code); // ???
 
-      simulatorManager.addLevel(name, language, code, new ArrayList<>(levelResources));
+
+      List<Resource> resources;
+      if (levelResources == null) {
+        resources = new ArrayList<>();
+      } else {
+        resources = new ArrayList<>(levelResources);
+      }
+
+      simulatorManager.addLevel(name, language, code, resources);
 
       databaseHandler.saveLevel(level);
       levelMap.put(newLevelId, level);
@@ -443,8 +451,15 @@ public class MainManagerWithDatabase implements MainManager {
       Level newLevel = new Level1(levelID, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
           minPlayers, maxPlayers, language, code); // ???
 
+      List<Resource> resources; // TODO change to database interaction
+      if (levelResources == null) {
+        resources = new ArrayList<>();
+      } else {
+        resources = new ArrayList<>(levelResources);
+      }
+
       simulatorManager.removeLevel(name, language);
-      simulatorManager.addLevel(name, language, code, new ArrayList<>(levelResources));
+      simulatorManager.addLevel(name, language, code, resources);
 
       databaseHandler.removeLevel(level);
       databaseHandler.saveLevel(newLevel);
