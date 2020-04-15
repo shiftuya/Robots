@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.mainmanager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +29,8 @@ public class SimulationResult1 implements SimulationResultExtended {
   private Map<String, String> privateLogs;
 
   private Map<String, Playback> playbacks;
+
+  private Map<String, UserExtended> usernameMap;
 
   private int levelId;
 
@@ -88,12 +91,22 @@ public class SimulationResult1 implements SimulationResultExtended {
   }
 
   @Override
-  public Set<String> getUsers() {
+  public Set<String> getUserNames() {
     return results.keySet();
+  }
+
+  @Override
+  public Iterable<User> getUsers() { // TODO put host in head
+    return new ArrayList<>(usernameMap.values());
   }
 
   @Override
   public int getLevelId() {
     return levelId;
+  }
+
+  @Override
+  public void putUsersMap(Map<String, UserExtended> map) {
+    usernameMap = map;
   }
 }

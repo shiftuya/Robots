@@ -2,17 +2,13 @@ package ru.nsu.fit.markelov.httphandlers.handlers.rest.log;
 
 import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
-import ru.nsu.fit.markelov.httphandlers.util.DebugUtil;
-import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
-import ru.nsu.fit.markelov.interfaces.ProcessingException;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataParser;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LogInHandler extends RestHandler {
 
@@ -23,25 +19,20 @@ public class LogInHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
-        String cookieUserName = CookieParser.getCookieUserName(exchange); // TODO delete
-        DebugUtil.printCookieUserName(cookieUserName);                    // TODO delete
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
+        FormDataParser formDataParser = new FormDataParser(exchange) {
+            @Override
+            protected void addFiles(FormDataHandler.MultiPart part) {}
+        };
 
-        UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
-        String userName = uriParametersParser.getStringParameter("username");
+        String userName = formDataParser.getFieldValue("name");
+        String password = formDataParser.getFieldValue("password");
 
-        if (userName == null) {
-            throw new ProcessingException("userName is null.");
-        }
+        String token = mainManager.login(userName, password);
 
-        boolean loggedIn = mainManager.login(userName);
+        cookieHandler.printCookieDEBUG();
+        cookieHandler.putCookie(token);
 
-        if (loggedIn) {
-            List<String> values = new ArrayList<>();
-            values.add(CookieParser.COOKIE_NAME + "=" + userName + ";");
-            exchange.getResponseHeaders().put("Set-Cookie", values);
-        }
-
-        responder.sendResponse(JsonPacker.packLoggingIn(loggedIn));
+        responder.sendResponse();
     }
 }

@@ -4,7 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieParser;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
@@ -20,14 +20,7 @@ public class SimulationResultIsReadyHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
-        String cookieUserName = CookieParser.getCookieUserName(exchange);
-
-        if (cookieUserName == null) {
-            throw new ProcessingException("cookieUserName is null.");
-        }
-        System.out.println("cookieUserName: " + cookieUserName);
-
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
         UriParametersParser uriParametersParser = new UriParametersParser(exchange.getRequestURI().toString());
         Integer id = uriParametersParser.getIntegerParameter("id");
 
@@ -35,6 +28,6 @@ public class SimulationResultIsReadyHandler extends RestHandler {
             throw new ProcessingException("Simulation result id is null.");
         }
 
-        responder.sendResponse(JsonPacker.packSimulationResultReadiness(mainManager.isSimulationFinished(/*cookieUserName, */id)));
+        responder.sendResponse(JsonPacker.packSimulationResultReadiness(mainManager.isSimulationFinished(cookieHandler.getCookie(), id)));
     }
 }

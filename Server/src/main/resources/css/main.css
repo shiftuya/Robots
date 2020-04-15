@@ -56,11 +56,15 @@ tr.highlited-on-hover:hover {
     color: darkgreen;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 h1 {
 	font-size: 32px;
 }
 
-input[name="bugfix_for_form_with_file"] {
+input[name="bugfix_for_form_data"] {
     display: none;
 }
 
@@ -154,6 +158,25 @@ select.readonly, input.readonly {
 .new-unit a {
     display: inline-block;
     vertical-align: middle;
+}
+
+.common-table-icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
+    margin-right: 5px;
+}
+
+.avatar-icon {
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.level-icon {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 32px 32px;
 }
 
 .CodeMirror {

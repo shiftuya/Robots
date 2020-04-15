@@ -4,14 +4,13 @@ import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.inputs.UserInput;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataParser;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class UserSubmitHandler extends RestHandler {
 
@@ -24,33 +23,22 @@ public class UserSubmitHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
-        Map<String, FormDataHandler.MultiPart> textParametersMap = new TreeMap<>();
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
         UserInput userInput = new UserInput();
 
-        try {
-            new FormDataHandler() {
-                @Override
-                public void handle(HttpExchange httpExchange, List<MultiPart> parts) {
-                    for (MultiPart part : parts) {
-                        if (part.type == PartType.FILE) {
-                            if (part.name.equals("avatar")) {
-                                userInput.getAvatarResource().setName(part.filename).setBytes(part.bytes);
-                            }
-                        } else {
-                            textParametersMap.put(part.name, part);
-                        }
-                    }
+        FormDataParser formDataParser = new FormDataParser(exchange) {
+            @Override
+            protected void addFiles(FormDataHandler.MultiPart part) {
+                if (part.name.equals("avatar")) {
+                    userInput.getAvatarResource().setName(part.filename).setBytes(part.bytes);
                 }
-            }.handle(exchange);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            }
+        };
 
-        userInput.setName(textParametersMap.get("name").value);
-        userInput.setPassword(textParametersMap.get("password").value);
-        userInput.setRepeatPassword(textParametersMap.get("repeat_password").value);
-        userInput.setType(textParametersMap.get("type").value);
+        userInput.setName(formDataParser.getFieldValue("name"));
+        userInput.setPassword(formDataParser.getFieldValue("password"));
+        userInput.setRepeatPassword(formDataParser.getFieldValue("repeat_password"));
+        userInput.setType(formDataParser.getFieldValue("type"));
 
         userInput.prepare();
 
@@ -60,6 +48,7 @@ public class UserSubmitHandler extends RestHandler {
         }
 
         mainManager.submitUser(
+            cookieHandler.getCookie(),
             create,
             userInput.getName(),
             userInput.getPassword(),
@@ -67,6 +56,6 @@ public class UserSubmitHandler extends RestHandler {
             userInput.getAvatarResource()
         );
 
-        responder.sendResponse("OK");
+        responder.sendResponse();
     }
 }

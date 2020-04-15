@@ -5,15 +5,14 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
 import ru.nsu.fit.markelov.httphandlers.inputs.LevelInput;
 import ru.nsu.fit.markelov.httphandlers.util.FileResource;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataParser;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class LevelSubmitHandler extends RestHandler {
 
@@ -24,42 +23,29 @@ public class LevelSubmitHandler extends RestHandler {
     }
 
     @Override
-    protected void respond(HttpExchange exchange, Responder responder) throws IOException {
-        Map<String, FormDataHandler.MultiPart> textParametersMap = new TreeMap<>();
+    protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
         LevelInput levelInput = new LevelInput();
 
-        try {
-            new FormDataHandler() {
-                @Override
-                public void handle(HttpExchange httpExchange, List<MultiPart> parts) {
-                    for (MultiPart part : parts) {
-                        if (part.type == PartType.FILE) {
-                            if (part.name.equals("icon")) {
-                                levelInput.getIconResource().setName(part.filename).setBytes(part.bytes);
-                            } else if (part.name.equals("resources")) {
-                                levelInput.getLevelResources().add(new FileResource().setName(part.filename).setBytes(part.bytes));
-                            }
-                        } else {
-                            textParametersMap.put(part.name, part);
-                        }
-                    }
+        FormDataParser formDataParser = new FormDataParser(exchange) {
+            @Override
+            protected void addFiles(FormDataHandler.MultiPart part) {
+                if (part.name.equals("icon")) {
+                    levelInput.getIconResource().setName(part.filename).setBytes(part.bytes);
+                } else if (part.name.equals("resources")) {
+                    levelInput.getLevelResources().add(new FileResource().setName(part.filename).setBytes(part.bytes));
                 }
-            }.handle(exchange);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            }
+        };
 
-        if (textParametersMap.containsKey("id")) {
-            levelInput.setId(textParametersMap.get("id").value);
-        }
-        levelInput.setName(textParametersMap.get("name").value);
-        levelInput.setDifficulty(textParametersMap.get("difficulty").value);
-        levelInput.setMinPlayers(textParametersMap.get("min_players").value);
-        levelInput.setMaxPlayers(textParametersMap.get("max_players").value);
-        levelInput.setDescription(textParametersMap.get("description").value);
-        levelInput.setRules(textParametersMap.get("rules").value);
-        levelInput.setGoal(textParametersMap.get("goal").value);
-        levelInput.setCode(textParametersMap.get("code").value);
+        levelInput.setId(formDataParser.getFieldValue("id"));
+        levelInput.setName(formDataParser.getFieldValue("name"));
+        levelInput.setDifficulty(formDataParser.getFieldValue("difficulty"));
+        levelInput.setMinPlayers(formDataParser.getFieldValue("min_players"));
+        levelInput.setMaxPlayers(formDataParser.getFieldValue("max_players"));
+        levelInput.setDescription(formDataParser.getFieldValue("description"));
+        levelInput.setRules(formDataParser.getFieldValue("rules"));
+        levelInput.setGoal(formDataParser.getFieldValue("goal"));
+        levelInput.setCode(formDataParser.getFieldValue("code"));
 
         levelInput.prepare();
 
@@ -69,7 +55,9 @@ public class LevelSubmitHandler extends RestHandler {
         }
 
         try {
-            if (mainManager.submitLevel(
+            mainManager.submitLevel(
+                cookieHandler.getCookie(),
+                levelInput.getId() == null,
                 levelInput.getId(),
                 levelInput.getName(),
                 levelInput.getDifficulty(),
@@ -82,11 +70,7 @@ public class LevelSubmitHandler extends RestHandler {
                 levelInput.getLevelResources(),
                 levelInput.getCode(),
                 "groovy"
-            )) {
-                responder.sendResponse(levelInput.getId() == null ? "New level is created." : "The level is updated.");
-            } else {
-                responder.sendResponse(levelInput.getId() == null ? "New level is not created." : "The level is not updated.");
-            }
+            );
         } catch (NumberFormatException e) {
             throw new ProcessingException("level_id is not a number");
         }

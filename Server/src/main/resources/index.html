@@ -26,6 +26,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/groovy/groovy.min.js"></script>
         <!--<script src="js/libs/jquery/3.4.1/jquery.min.js"></script>-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="js/libs/cookie.js"></script>
         <script src="js/main.js"></script>
         <script src="js/context_manager.js"></script>
         <script src="js/context_listeners.js"></script>
@@ -36,6 +37,7 @@
                 <img class="logo" src="images/logo.png" alt="Robotics Game Server Logotype">
                 <section class="login-shell skeleton">
                     <form class="common-form login-form">
+                        <input name="bugfix_for_form_data" type="text">
                         <section class="form-section">
                             <label for="server">Server:</label>
                             <select name="server">
@@ -98,13 +100,13 @@
 						<th>Level</th>
 						<th>Players</th>
                     </tr>
-                    <tr class="lobby-row highlited-on-hover skeleton">
+                    <tr class="pointer highlited-on-hover skeleton">
                         <td>
-                            <div class="lobbies-table-icon avatar-icon"></div>
+                            <div class="common-table-icon avatar-icon"></div>
                             <span class="username"></span>
                         </td>
                         <td>
-                            <div class="lobbies-table-icon level-icon"></div>
+                            <div class="common-table-icon level-icon"></div>
                             <span class="level"><span class="levelname"></span> (<span class="difficulty"></span>)</span>
                         </td>
                         <td>
@@ -200,9 +202,9 @@
                         <th>Type</th>
                         <th>Last Active</th>
                     </tr>
-                    <tr class="lobby-row highlited-on-hover skeleton">
+                    <tr class="pointer highlited-on-hover skeleton">
                         <td>
-                            <div class="lobbies-table-icon avatar-icon"></div>
+                            <div class="common-table-icon avatar-icon"></div>
                             <span class="user-name"></span>
                         </td>
                         <td class="user-type"></td>
@@ -228,7 +230,7 @@
                 <section class="user-editor-shell skeleton">
                     <h1 class="content-header"></h1>
                     <form class="common-form user-editor-form">
-                        <input name="bugfix_for_form_with_file" type="text">
+                        <input name="bugfix_for_form_data" type="text">
                         <section class="form-section">
                             <label for="name">Name:</label>
                             <input name="name" type="text" placeholder="Name">
@@ -300,7 +302,7 @@
                 </div>
                 <section class="level-editor-shell skeleton">
                     <form class="level-editor-form">
-                        <input name="bugfix_for_form_with_file" type="text">
+                        <input name="bugfix_for_form_data" type="text">
                         <p>
                             <span class="level-property">
                                 <label for="name">Name:</label>
@@ -412,7 +414,7 @@
                 <section class="code-editor-shell skeleton"></section>
             </section>
             <section id="simulation-result-content" class="content">
-                <section class="simulation-result-shell skeleton">
+                <!--<section class="simulation-result-shell skeleton">
                     <h1 class="content-header">Simulation Results (<span class="simulation-results-status">Failed</span>)</h1>
                     <section class="playback-content">
                         <h3>Playback</h3>
@@ -422,7 +424,30 @@
                         <h3>Log (<span class="a">Download</span>)</h3>
                         <textarea name="log" wrap="off"></textarea>
                     </section>
-                </section>
+                </section>-->
+                <table id="simulation-result-table" class="common-table simulation-result-table">
+                    <tr>
+                        <th>Player</th>
+                        <th>Result</th>
+                        <th>Log</th>
+                        <th>Script</th>
+                    </tr>
+                    <tr class="pointer highlited-on-hover skeleton">
+                        <td>
+                            <div class="common-table-icon avatar-icon"></div>
+                            <span class="username"></span>
+                        </td>
+                        <td>
+                            <span class="result"></span>
+                        </td>
+                        <td>
+                            <span class="log">Download</span>
+                        </td>
+                        <td>
+                            <span class="script">Download</span>
+                        </td>
+                    </tr>
+                </table>
 			</section>
             <section id="options-content" class="content">
                 <h1 class="content-header">Do we still need it?</h1>

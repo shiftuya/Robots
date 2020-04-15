@@ -7,13 +7,13 @@ import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.interfaces.client.Playback;
-import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
+import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
-import ru.nsu.fit.markelov.objects_hardcoded.UserHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
+import ru.nsu.fit.markelov.objects_hardcoded.UserHardcoded;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -32,33 +33,25 @@ public class MainManagerHardcoded implements MainManager {
     private Set<String> userNames = new TreeSet<>();
     private Set<String> simulators = new TreeSet<>();
 
+    private int token;
+
     @Override
-    public boolean login(String userName) {
-        if (userNames.contains(userName)) {
-            System.out.println(userName + " has already logged in!");
-
-            return false;
-        } else {
-            userNames.add(userName);
-            System.out.println(userName + " logged in.");
-
-            return true;
-        }
+    public User.UserType getUserType(String token) {
+        return null;
     }
 
     @Override
-    public boolean logout(String userName) {
-        if (userNames.contains(userName)) {
-            userNames.remove(userName);
-            System.out.println(userName + " logged out.");
-
-            return true;
-        } else {
-            System.out.println(userName + " hasn't logged in yet!");
-
-            return false;
-        }
+    public Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName) {
+        return null;
     }
+
+    @Override
+    public String login(String userName, String password) {
+        return ++token + "";
+    }
+
+    @Override
+    public void logout(String token) {}
 
     private LobbyManagerHardcoded lobbyManager;
     private LevelManagerHardcoded levelManager;
@@ -232,12 +225,12 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public List<Lobby> getLobbies() {
+    public List<Lobby> getLobbies(String token) {
         return lobbyManager.getLobbies();
     }
 
     @Override
-    public List<Level> getLevels() {
+    public List<Level> getLevels(String token) {
         if (false) {
             throw new ProcessingException("qwerty");
         }
@@ -258,8 +251,8 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public boolean leaveLobby(String userName, int lobbyID) {
-        return lobbyManager.leaveLobby(userName, lobbyID);
+    public void leaveLobby(String userName, int lobbyID) {
+        lobbyManager.leaveLobby(userName, lobbyID);
     }
 
     @Override
@@ -293,13 +286,13 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public boolean isSimulationFinished(int lobbyId) {
-        return true;
-    }
-
-    @Override
     public SimulationResult getSimulationResult(String username, int lobbyId) {
         return new SimulationResult() {
+
+            @Override
+            public Iterable<User> getUsers() {
+                return users;
+            }
 
             @Override
             public int getId() {
@@ -317,50 +310,6 @@ public class MainManagerHardcoded implements MainManager {
             }
 
             @Override
-            public String getLog(String username) {
-                return "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997\n" +
-                        "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
-                        "INFO: Msg997";
-            }
-
-            @Override
             public Playback getPlayback(String username) {
                 return null;
             }
@@ -368,14 +317,59 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public List<SimulationResult> getUserSimulationResultsOnLevel(String username, int levelId) {
-        return new ArrayList<>();
+    public String getLog(String token, String username, int simulationResultId) {
+        return "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997\n" +
+            "Nov 07, 2019 2:42:43 AM ru.nsu.fit.markelov.log.LoggingExample main\n" +
+            "INFO: Msg997";
     }
 
     @Override
-    public boolean submitLevel(Integer levelID, String name, String difficulty, Integer minPlayers,
-                               Integer maxPlayers, Resource iconResource, String description, String rules,
-                               String goal, Collection<Resource> levelResources, String code, String language) {
+    public String getScript(String token, String username, int simulationResultId) {
+        return "class Clazz { }";
+    }
+
+    @Override
+    public void submitLevel(String token, boolean create, Integer levelID, String name,
+                            String difficulty, Integer minPlayers, Integer maxPlayers,
+                            Resource iconResource, String description, String rules, String goal,
+                            Iterable<Resource> levelResources, String code, String language) {
         if (levelID == null) {
             System.out.println("null");
         } else {
@@ -402,7 +396,7 @@ public class MainManagerHardcoded implements MainManager {
 
         if (iconResource == null) {
             System.out.println("null");
-            return true;
+            return;
         } else {
             System.out.println("NOT null");
         }
@@ -412,35 +406,31 @@ public class MainManagerHardcoded implements MainManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return true;
     }
 
     @Override
-    public Level getLevel(int levelID) {
+    public Level getLevel(String token, int levelID) {
         return levelManager.getLevels().get(levelID - 1);
     }
 
     @Override
-    public boolean deleteLevel(int levelID) {
+    public void deleteLevel(String token, int levelID) {
         levelManager.getLevels().remove(levelID - 1);
-
-        return true;
     }
 
     @Override
-    public List<String> getSimulators() {
+    public List<String> getSimulators(String token) {
         return new ArrayList<>(simulators);
     }
 
     @Override
-    public boolean addSimulator(String url) {
-        return simulators.add(url);
+    public void addSimulator(String token, String url) {
+        simulators.add(url);
     }
 
     @Override
-    public boolean removeSimulator(String url) {
-        return simulators.remove(url);
+    public void removeSimulator(String token, String url) {
+        simulators.remove(url);
     }
 
     @Override
@@ -449,22 +439,32 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public User getUser(String userName) {
+    public User getUser(String token, String userName) {
         return users.get(0);
     }
 
     @Override
-    public boolean submitUser(boolean create, String userName, String password, String type, Resource avatarResource) {
-        return true;
+    public String getUserName(String token) {
+        return "null";
     }
 
     @Override
-    public boolean blockUser(String userName, boolean block) {
-        return true;
+    public boolean isSimulationFinished(String token, int lobbyId) {
+        return false;
     }
 
     @Override
-    public boolean removeUser(String userName) {
-        return true;
+    public void submitUser(String token, boolean create, String userName, String password, String type, Resource avatarResource) {
+
+    }
+
+    @Override
+    public void blockUser(String token, String userName, boolean block) {
+
+    }
+
+    @Override
+    public void removeUser(String token, String userName) {
+
     }
 }

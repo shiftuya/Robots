@@ -350,13 +350,13 @@ public class SQLiteDatabaseHandler implements DatabaseHandler {
         RESULTS_TABLE, RESULTS_KEY, RESULTS_PLAYER, RESULTS_SUCCESS, RESULTS_PLAYBACK, RESULTS_LOG, RESULTS_DATE, RESULTS_LEVEL);
     connect();
     try {
-      for (String player : result.getUsers()) {
+      for (String player : result.getUserNames()) {
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, result.getId());
         statement.setString(2, player);
         statement.setBoolean(3, result.isSuccessful(player));
         statement.setObject(4, result.getPlayback(player)); // Temporary solution! (kostil)
-        statement.setString(5, result.getLog(player));
+        statement.setString(5, /*TODO result.getLog(player)*/"Sorry...");
         statement.setDate(6, new Date(result.getDate().getTime()));
         statement.setInt(7, result.getLevelId());
         statement.execute();
