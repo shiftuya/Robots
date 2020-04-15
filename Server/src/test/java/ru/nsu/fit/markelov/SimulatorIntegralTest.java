@@ -3,6 +3,7 @@ package ru.nsu.fit.markelov;
 import org.junit.Before;
 import org.junit.Test;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
+import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
@@ -222,6 +223,19 @@ public class SimulatorIntegralTest {
       assertFalse(p2.getName() + " was correct!", result.isSuccessful(p2.getName()));
     } else {
       System.err.println("SimulatorUnit on localhost:1337 wasn't available. Skipping test.");
+    }
+  }
+
+  @Test
+  public void testCompilation() {
+    if (hostAvailabilityCheck()) {
+      CompileResult cr1 = hsm.checkCompilation("groovy", correctSolution);
+      CompileResult cr2 = hsm.checkCompilation("groovy", wrongSolution);
+      CompileResult cr3 =
+          hsm.checkCompilation("groovy", "Hello I am not code but 4ye 4|V| 4 1337 H4x0r");
+      assertTrue(cr1.isCompiled());
+      assertTrue(cr2.isCompiled());
+      assertFalse(cr3.isCompiled());
     }
   }
 }
