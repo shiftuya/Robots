@@ -420,7 +420,15 @@ public class MainManagerWithDatabase implements MainManager {
       Level level = new Level1(newLevelId, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
           minPlayers, maxPlayers, language, code); // ???
 
-      simulatorManager.addLevel(name, language, code, new ArrayList<>(levelResources));
+
+      List<Resource> resources;
+      if (levelResources == null) {
+        resources = new ArrayList<>();
+      } else {
+        resources = new ArrayList<>(levelResources);
+      }
+
+      simulatorManager.addLevel(name, language, code, resources);
 
       databaseHandler.saveLevel(level);
       levelMap.put(newLevelId, level);
@@ -443,8 +451,15 @@ public class MainManagerWithDatabase implements MainManager {
       Level newLevel = new Level1(levelID, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
           minPlayers, maxPlayers, language, code); // ???
 
+      List<Resource> resources; // TODO change to database interaction
+      if (levelResources == null) {
+        resources = new ArrayList<>();
+      } else {
+        resources = new ArrayList<>(levelResources);
+      }
+
       simulatorManager.removeLevel(name, language);
-      simulatorManager.addLevel(name, language, code, new ArrayList<>(levelResources));
+      simulatorManager.addLevel(name, language, code, resources);
 
       databaseHandler.removeLevel(level);
       databaseHandler.saveLevel(newLevel);
