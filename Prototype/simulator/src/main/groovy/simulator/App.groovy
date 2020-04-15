@@ -8,6 +8,7 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import groovy.transform.CompileStatic
 import groovy.transform.Synchronized
+import org.codehaus.groovy.control.CompilationFailedException
 
 import java.util.concurrent.Executors
 
@@ -117,6 +118,25 @@ class App {
                 http.sendResponseHeaders(200, 0)
                 http.responseBody.withWriter { out ->
                     out << "{\"status\":" + status.toString() + "}"
+                }
+                http.close()
+            }
+            createContext("/checkCompilation") { http ->
+                http.sendResponseHeaders(200, 0)
+                SensorReadable sr = null
+                Binding binding = new Binding()
+                binding.setVariable("level", null)
+                binding.setVariable("memory", null)
+                def script = new GroovyShell(binding)
+                try {
+                    script.parse(http.requestBody.toString())
+                    http.responseBody.withWriter { out ->
+                        out << "{\"status\":true}"
+                    }
+                } catch (CompilationFailedException e) {
+                    http.responseBody.withWriter { out ->
+                        out << "{\"status\":false, \"message\":\"" + e.toString() + "\"}"
+                    }
                 }
                 http.close()
             }
