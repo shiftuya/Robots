@@ -369,7 +369,7 @@ public class MainManagerHardcoded implements MainManager {
     public void submitLevel(String token, boolean create, Integer levelID, String name,
                             String difficulty, Integer minPlayers, Integer maxPlayers,
                             Resource iconResource, String description, String rules, String goal,
-                            Iterable<Resource> levelResources, String code, String language) {
+                            Collection<Resource> levelResources, String code, String language) {
         if (levelID == null) {
             System.out.println("null");
         } else {

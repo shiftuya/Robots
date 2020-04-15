@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
@@ -57,7 +58,6 @@ public interface MainManager {
      *
      * @param token    user unique token.
      * @param userName unique user name.
-     * @param levelId  unique level id.
      * @return map of the level to the collection of its simulation results.
      */
     Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName);
@@ -301,7 +301,7 @@ public interface MainManager {
     void submitLevel(String token, boolean create, Integer levelId, String name,
                      String difficulty, Integer minPlayers, Integer maxPlayers,
                      Resource iconResource, String description, String rules, String goal,
-                     Iterable<Resource> levelResources, String code, String language);
+                     Collection<Resource> levelResources, String code, String language);
 
     /**
      * Returns a level gotten by specified 'levelId'.

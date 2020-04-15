@@ -123,12 +123,16 @@ class Lobby1 implements LobbyExtended {
 
   @Override
   public void addPlayer(UserExtended player) {
-
+    usersMap.put(player, new LobbyPair<>(player, false));
+    usersList.add(player);
+    solutionsMap.put(player, null);
   }
 
   @Override
   public void removePlayer(UserExtended player) {
-
+    usersMap.remove(player);
+    usersList.remove(player);
+    solutionsMap.remove(player);
   }
 
   @Override
@@ -144,5 +148,10 @@ class Lobby1 implements LobbyExtended {
   @Override
   public String getCode(UserExtended user) {
     return solutionsMap.get(user);
+  }
+
+  @Override
+  public Map<UserExtended, String> getSolutionsMap() {
+    return solutionsMap;
   }
 }

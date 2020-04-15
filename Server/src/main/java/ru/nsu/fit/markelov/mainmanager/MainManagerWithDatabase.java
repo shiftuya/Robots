@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.mainmanager;
 
+import java.sql.ResultSet;
 import java.util.UUID;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import ru.nsu.fit.markelov.simulator.MissingSimulationUnits;
 
 public class MainManagerWithDatabase implements MainManager {
 
@@ -106,9 +108,11 @@ public class MainManagerWithDatabase implements MainManager {
   private Map<Integer, SimulationResultExtended> simulationResultKeyMap;
   private Map<UUID, UserExtended> tokenUserMap;
   private int currentLobbyId;
+  private int currentLevelId;
 
   public MainManagerWithDatabase() {
     currentLobbyId = 0;
+    currentLevelId = 0;
     databaseHandler = new SQLiteDatabaseHandler();
     simulatorManager = new HardcodedSimulatorManager();
     userMap = new HashMap<>();
@@ -132,6 +136,10 @@ public class MainManagerWithDatabase implements MainManager {
       for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
         map.put(level, new ArrayList<>());
       }
+      if (level.getId() > currentLevelId) {
+        currentLevelId = level.getId() + 1;
+      }
+    //  simulatorManager.addLevel(level.getName(), level.getLanguage(), level.getCode(), level.ge);
     }
 
     List<SimulationResultExtended> simulationResults = databaseHandler.getSimulationResults();
@@ -233,8 +241,19 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Lobby returnToLobby(String token, int lobbyID) {
-    return null;
+  public Lobby returnToLobby(String userName, int lobbyID) {
+    LobbyExtended lobby = getLobbyFromMap(lobbyID);
+    if (lobby == null) {
+      throw new ProcessingException("Lobby not found");
+    }
+    UserExtended player = getUserFromMap(userName);
+    if (player == null) {
+      throw new ProcessingException("User not found");
+    }
+    if (lobby.getCode(player) != null) {
+      lobby.setReady(player, true);
+    }
+    return lobby;
   }
 
   @Override
@@ -253,27 +272,27 @@ public class MainManagerWithDatabase implements MainManager {
       throw new ProcessingException("The user is not in the lobby");
     }
 
-    lobby.submit(user, code);
-
     Level level = lobby.getLevel();
+
+    CompileResult compileResult = simulatorManager.checkCompilation(level.getLanguage(), code);
+
+    if (!compileResult.isCompiled()) {
+      return compileResult;
+    }
+
+    lobby.submit(user, code);
 
     refreshActiveTime(user);
 
-    boolean isSimulated = false;
     if (lobby.isReady()) {
-      isSimulated = true;
-      // simulatorManager.runSimulation() How to run it?
-      // The following is a temporary placeholder
-      Map<String, Playback> playbackMap = new HashMap<>();
-      Map<String, String> logMap = new HashMap<>();
-      Map<String, Boolean> successMap = new HashMap<>();
-      for (UserExtended player : lobby.getUsersWithoutPair()) {
-        playbackMap.put(player.getName(), null);
-        logMap.put(player.getName(), "heh");
-        successMap.put(player.getName(), true);
+      compileResult = new CompileResult1(compileResult.getMessage(), true, true);
+      SimulationResultExtended simulationResult;
+      try {
+        simulationResult = simulatorManager.runSimulation(level.getName(),
+            lobbyId, new HashMap<>(lobby.getSolutionsMap()));
+      } catch (MissingSimulationUnits e) {
+        throw new ProcessingException(e.getMessage());
       }
-      SimulationResultExtended simulationResult = new SimulationResult1(lobbyId, successMap,
-          new Date(), logMap, playbackMap, lobby.getLevel().getId());
 
       simulationResultKeyMap.put(lobbyId, simulationResult);
       databaseHandler.addSimulationResult(simulationResult);
@@ -290,8 +309,7 @@ public class MainManagerWithDatabase implements MainManager {
         list.add(simulationResult);
       }
     }
-
-    return new CompileResult1("Compiled", true, isSimulated);
+    return compileResult;
   }
 
   @Override
@@ -390,24 +408,51 @@ public class MainManagerWithDatabase implements MainManager {
   public void submitLevel(String token, boolean create, Integer levelID, String name,
                           String difficulty, Integer minPlayers, Integer maxPlayers,
                           Resource iconResource, String description, String rules, String goal,
-                          Iterable<Resource> levelResources, String code, String language) {
-    if (getLevelFromMap(levelID) != null) {
-      throw new ProcessingException("Level already exists");
-    }
+                          Collection<Resource> levelResources, String code, String language) {
+    if (create) {
+      int newLevelId = currentLevelId++;
+      LevelDifficulty levelDifficulty;
+      try {
+        levelDifficulty = LevelDifficulty.valueOf(difficulty);
+      } catch (IllegalArgumentException e) {
+        throw new ProcessingException("Illegal difficulty");
+      }
+      Level level = new Level1(newLevelId, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
+          minPlayers, maxPlayers, language, code); // ???
 
-    LevelDifficulty levelDifficulty;
-    try {
-      levelDifficulty = LevelDifficulty.valueOf(difficulty);
-    } catch (IllegalArgumentException e) {
-      throw new ProcessingException("Illegal difficulty");
-    }
-    Level level = new Level1(levelID, "/images/labyrinth-icon.png", name, levelDifficulty, "heh", description, rules, goal,
-        minPlayers, maxPlayers, language, code); // ???
+      simulatorManager.addLevel(name, language, code, new ArrayList<>(levelResources));
 
-    databaseHandler.saveLevel(level);
-    levelMap.put(levelID, level);
-    for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
-      map.put(level, new ArrayList<>());
+      databaseHandler.saveLevel(level);
+      levelMap.put(newLevelId, level);
+      for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
+        map.put(level, new ArrayList<>());
+      }
+    } else {
+      Level level = getLevelFromMap(levelID);
+
+      if (level == null) {
+        throw new ProcessingException("Level does not exist");
+      }
+
+      LevelDifficulty levelDifficulty;
+      try {
+        levelDifficulty = LevelDifficulty.valueOf(difficulty);
+      } catch (IllegalArgumentException e) {
+        throw new ProcessingException("Illegal difficulty");
+      }
+      Level newLevel = new Level1(levelID, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
+          minPlayers, maxPlayers, language, code); // ???
+
+      simulatorManager.removeLevel(name, language);
+      simulatorManager.addLevel(name, language, code, new ArrayList<>(levelResources));
+
+      databaseHandler.removeLevel(level);
+      databaseHandler.saveLevel(newLevel);
+
+      levelMap.put(levelID, newLevel);
+      for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
+        map.put(level, new ArrayList<>());
+      }
     }
   }
 
@@ -429,6 +474,8 @@ public class MainManagerWithDatabase implements MainManager {
     if (level == null) {
       throw new ProcessingException("Level not found");
     }
+
+    simulatorManager.removeLevel(level.getName(), level.getLanguage());
 
     levelMap.remove(levelID);
     for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
