@@ -241,12 +241,12 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Lobby returnToLobby(String userName, int lobbyID) {
+  public Lobby returnToLobby(String token, int lobbyID) {
     LobbyExtended lobby = getLobbyFromMap(lobbyID);
     if (lobby == null) {
       throw new ProcessingException("Lobby not found");
     }
-    UserExtended player = getUserFromMap(userName);
+    UserExtended player = getUserFromTokenMap(getToken(token));
     if (player == null) {
       throw new ProcessingException("User not found");
     }
