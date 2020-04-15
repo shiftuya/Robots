@@ -1,6 +1,7 @@
 package ru.nsu.fit.markelov.simulator;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -45,10 +46,10 @@ public class SUMonitor extends Thread {
     }
   }
 
-  private void statusUpdate(SUStatistics stat) {
+  public int checkSU(String urlStr) {
     try {
-      URL testURL = new URL(stat.getUrl() + "/test");
-      URLConnection con = testURL.openConnection();
+      URL url = new URL(urlStr + "/test");
+      URLConnection con = url.openConnection();
       HttpURLConnection http = (HttpURLConnection) con;
       http.setConnectTimeout(3000);
       http.setRequestMethod("GET");
@@ -60,7 +61,15 @@ public class SUMonitor extends Thread {
       while ((text = br.readLine()) != null) {
         json_response.append(text);
       }
-      int tasks = JsonUtil.parseStatus(json_response.toString());
+      return JsonUtil.parseStatus(json_response.toString());
+    } catch (IOException ignore) {
+      return -1;
+    }
+  }
+
+  private void statusUpdate(SUStatistics stat) {
+    try {
+      int tasks = checkSU(stat.getUrl());
       if (tasks == -1) {
         stat.updateOffline(new Date());
         return;
@@ -71,7 +80,7 @@ public class SUMonitor extends Thread {
     }
   }
 
-  URL chooseSim() {
+  URL chooseSim(String path) {
     synchronized (statistics) {
       if (statistics.isEmpty()) {
         return null;
@@ -83,7 +92,7 @@ public class SUMonitor extends Thread {
       }
       URL result;
       try {
-        result = new URL(best.getUrl() + "/simulate");
+        result = new URL(best.getUrl() + path);
       } catch (MalformedURLException e) {
         return null;
       }

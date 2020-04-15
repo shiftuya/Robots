@@ -28,7 +28,6 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserSubmitHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
 import ru.nsu.fit.markelov.mainmanager.MainManagerWithDatabase;
-import ru.nsu.fit.markelov.managers_hardcoded.MainManagerHardcoded;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;

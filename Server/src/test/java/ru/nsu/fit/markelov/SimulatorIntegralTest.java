@@ -2,6 +2,7 @@ package ru.nsu.fit.markelov;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
@@ -70,12 +71,12 @@ public class SimulatorIntegralTest {
         HashMap<User, String> argMap = new HashMap<>();
         argMap.put(p1, correctSolution);
         argMap.put(p2, wrongSolution);
-        SimulationResult result = sm.runSimulation("simple_plane", 0, argMap);
+        SimulationResultExtended result = sm.runSimulation("simple_plane", 0, argMap);
         System.out.println(p1.getName() + ": " + result.isSuccessful(p1.getName()));
         System.out.println(p2.getName() + ": " + result.isSuccessful(p2.getName()));
         assertEquals(0, result.getId());
         if(!result.isSuccessful(p1.getName())){
-          System.err.println(((SimulationResultExtended)result).getLog(p1.getName()));
+          System.err.println(result.getLog(p1.getName()));
         }
         assertTrue(p1.getName() + " was wrong!", result.isSuccessful(p1.getName()));
         assertFalse(p2.getName() + " was correct!", result.isSuccessful(p2.getName()));
@@ -175,7 +176,11 @@ public class SimulatorIntegralTest {
       argMap.put(p2, wrongSolution);
       HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
       hsm.addSimulator("http://localhost:1337");
-      hsm.addSimulator("http://192.168.0.104:1337");
+      try {
+        hsm.addSimulator("http://192.168.0.104:1337");
+      } catch (ProcessingException ignore) {
+
+      }
       ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
       for (int i = 0; i < 50; i++) {
         executor.execute(new CorrectSim(hsm));
