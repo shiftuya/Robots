@@ -122,6 +122,11 @@ public class MainManagerWithDatabase implements MainManager {
     simulationResultMap = new HashMap<>();
     tokenUserMap = new HashMap<>();
 
+    if (databaseHandler.getUserByName("admin") == null) { // Temporary solution
+      UserExtended admin = new User1("/images/person-icon.png", "admin", UserType.Admin, "admin");
+      databaseHandler.saveUser(admin);
+    }
+
     simulators = new HashSet<>(databaseHandler.getSimulatorsUrls());
     for (String simulator : simulators) {
       simulatorManager.addSimulator(simulator);
@@ -144,7 +149,8 @@ public class MainManagerWithDatabase implements MainManager {
       }
     }
 
-    List<SimulationResultExtended> simulationResults = databaseHandler.getSimulationResults();
+
+    /*List<SimulationResultExtended> simulationResults = databaseHandler.getSimulationResults();
     for (SimulationResultExtended result : simulationResults) {
       if (result.getId() >= currentLobbyId) {
         currentLobbyId = result.getId() + 1; // setting correct lobbyId
@@ -161,7 +167,7 @@ public class MainManagerWithDatabase implements MainManager {
         List<SimulationResultExtended> list = simulationResultMap.get(user).get(level);
         list.add(result);
       }
-    }
+    }*/
   }
 
   @Override
@@ -298,6 +304,7 @@ public class MainManagerWithDatabase implements MainManager {
         simulationResult = simulatorManager.runSimulation(level.getName(),
             lobbyId, new HashMap<>(lobby.getSolutionsMap()));
       } catch (MissingSimulationUnits e) {
+        lobby.setReady(user, false);
         throw new ProcessingException(e.getMessage());
       }
 
