@@ -145,4 +145,9 @@ class Lobby1 implements LobbyExtended {
   public String getCode(UserExtended user) {
     return solutionsMap.get(user);
   }
+
+  @Override
+  public Map<UserExtended, String> getSolutionsMap() {
+    return solutionsMap;
+  }
 }
