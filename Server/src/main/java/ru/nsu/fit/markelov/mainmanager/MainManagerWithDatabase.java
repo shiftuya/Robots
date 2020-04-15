@@ -188,7 +188,7 @@ public class MainManagerWithDatabase implements MainManager {
     }
 
     if (lobby.getUsersWithoutPair().contains(user)) {
-      throw new ProcessingException("The lobby already contains the user");
+      return lobby;
     }
 
     if (lobby.getCurrentPlayersAmount() == lobby.getAcceptablePlayersAmount()) {
