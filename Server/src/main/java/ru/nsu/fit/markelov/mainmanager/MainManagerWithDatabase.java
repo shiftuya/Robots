@@ -512,9 +512,9 @@ public class MainManagerWithDatabase implements MainManager {
 
   @Override
   public void addSimulator(String token, String url) {
+    simulatorManager.addSimulator(url);
     databaseHandler.saveSimulatorUrl(url);
     simulators.add(url);
-    simulatorManager.addSimulator(url);
   }
 
   @Override
