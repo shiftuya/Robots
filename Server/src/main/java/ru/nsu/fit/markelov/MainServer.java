@@ -27,6 +27,7 @@ import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserDeleteHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserGetHandler;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.user.UserSubmitHandler;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.mainmanager.MainManagerWithDatabase;
 import ru.nsu.fit.markelov.managers_hardcoded.MainManagerHardcoded;
 
 import java.net.InetSocketAddress;
@@ -34,7 +35,7 @@ import java.util.concurrent.Executors;
 
 public class MainServer {
     public static void main(String[] args) throws Exception {
-        MainManager mainManager = new MainManagerHardcoded();
+        MainManager mainManager = new MainManagerWithDatabase();
 
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(5051), 0);
