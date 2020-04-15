@@ -140,6 +140,7 @@ public class MainManagerWithDatabase implements MainManager {
 
     List<Level> levels = databaseHandler.getLevels();
     for (Level level : levels) {
+      simulatorManager.addLevel(Integer.toString(level.getId()), level.getLanguage(), level.getCode(), new ArrayList<>()); // No resources for now
       levelMap.put(level.getId(), level);
       for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
         map.put(level, new ArrayList<>());
