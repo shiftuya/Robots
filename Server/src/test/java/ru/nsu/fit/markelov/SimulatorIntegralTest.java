@@ -5,6 +5,7 @@ import org.junit.Test;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
+import ru.nsu.fit.markelov.mainmanager.SimulationResultExtended;
 import ru.nsu.fit.markelov.simulator.HardcodedSimulatorManager;
 
 import java.io.BufferedReader;
@@ -74,7 +75,7 @@ public class SimulatorIntegralTest {
         System.out.println(p2.getName() + ": " + result.isSuccessful(p2.getName()));
         assertEquals(0, result.getId());
         if(!result.isSuccessful(p1.getName())){
-          System.err.println(result.getLog(p1.getName()));
+          System.err.println(((SimulationResultExtended)result).getLog(p1.getName()));
         }
         assertTrue(p1.getName() + " was wrong!", result.isSuccessful(p1.getName()));
         assertFalse(p2.getName() + " was correct!", result.isSuccessful(p2.getName()));

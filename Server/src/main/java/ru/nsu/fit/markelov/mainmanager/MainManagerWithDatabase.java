@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.mainmanager;
 
+import java.util.UUID;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
@@ -32,32 +33,62 @@ public class MainManagerWithDatabase implements MainManager {
 
   @Override
   public String getUserName(String token) {
-    return "null";
+    UserExtended user = getUserFromTokenMap(getToken(token));
+    if (user == null) {
+      throw new ProcessingException("User not found");
+    }
+    return user.getName();
   }
 
   @Override
   public UserType getUserType(String token) {
-    return null;
+    UserExtended user = getUserFromTokenMap(getToken(token));
+    if (user == null) {
+      throw new ProcessingException("User not found");
+    }
+    return user.getType();
   }
 
   @Override
-  public Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName, int levelId) {
-    return null;
+  public Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName) {
+    Map<Level, Iterable<SimulationResult>> solutions = new HashMap<>();
+    for (Level level : getLevels(token)) {
+      solutions.put(level, getUserSimulationResultsOnLevel(getToken(token), userName, level.getId()));
+    }
+    return solutions;
   }
 
   @Override
   public String login(String userName, String password) {
-    return "null";
+    UserExtended user = getUserFromMap(userName);
+    if (user == null) {
+      throw new ProcessingException("User not found");
+    }
+    if (!user.getPassword().equals(password)) {
+      throw new ProcessingException("Incorrect password");
+    }
+    UUID uuid = UUID.randomUUID();
+    tokenUserMap.put(uuid, user);
+    return uuid.toString();
   }
 
   @Override
   public void logout(String token) {
-
+    UUID id = getToken(token);
+    if (getUserFromTokenMap(id) == null) {
+      throw new ProcessingException("The user is not logged in");
+    }
+    tokenUserMap.remove(id);
   }
 
   @Override
   public String getLog(String token, String userName, int simulationResultId) {
-    return "null";
+    SimulationResultExtended result = simulationResultKeyMap.get(simulationResultId);
+    if (result == null) {
+      throw new ProcessingException("Simulation result not found");
+    }
+
+    return result.getLog(userName);
   }
 
   @Override
@@ -73,7 +104,7 @@ public class MainManagerWithDatabase implements MainManager {
   private Map<UserExtended, Map<Level, List<SimulationResultExtended>>> simulationResultMap;
   private Set<String> simulators;
   private Map<Integer, SimulationResultExtended> simulationResultKeyMap;
-
+  private Map<UUID, UserExtended> tokenUserMap;
   private int currentLobbyId;
 
   public MainManagerWithDatabase() {
@@ -85,6 +116,7 @@ public class MainManagerWithDatabase implements MainManager {
     levelMap = new HashMap<>();
     simulationResultKeyMap = new HashMap<>();
     simulationResultMap = new HashMap<>();
+    tokenUserMap = new HashMap<>();
 
     simulators = new HashSet<>(databaseHandler.getSimulatorsUrls());
 
@@ -123,7 +155,7 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Collection<Lobby> getLobbies(String token) { // ok
+  public Collection<Lobby> getLobbies(String token) {
     List<LobbyExtended> lobbies = new ArrayList<>(lobbyMap.values());
     lobbies.sort(Comparator.comparing(LobbyExtended::getCreationDate));
     Collections.reverse(lobbies);
@@ -131,13 +163,13 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Collection<Level> getLevels(String token) { // ok
+  public Collection<Level> getLevels(String token) {
     return levelMap.values();
   }
 
   @Override
-  public Lobby joinLobby(String userName, int lobbyID) { // ok TODO first arg is not userName!!!
-    UserExtended user = getUserFromMap(userName);
+  public Lobby joinLobby(String token, int lobbyID) {
+    UserExtended user = getUserFromTokenMap(getToken(token));
     if (user == null) {
       throw new ProcessingException("User not found");
     }
@@ -162,8 +194,8 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Lobby createLobby(String userName, int levelID, int playersAmount) { // ok TODO first arg is not userName!!!
-    UserExtended host = getUserFromMap(userName);
+  public Lobby createLobby(String token, int levelID, int playersAmount) {
+    UserExtended host = getUserFromTokenMap(getToken(token));
     if (host == null) {
       throw new ProcessingException("User not found");
     }
@@ -184,8 +216,8 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public void leaveLobby(String userName, int lobbyID) { // TODO first arg is not userName!!!
-    UserExtended user = getUserFromMap(userName);
+  public void leaveLobby(String token, int lobbyID) {
+    UserExtended user = getUserFromTokenMap(getToken(token));
     if (user == null) {
       throw new ProcessingException("User not found");
     }
@@ -201,18 +233,18 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Lobby returnToLobby(String userName, int lobbyID) { // TODO first arg is not userName!!!
+  public Lobby returnToLobby(String token, int lobbyID) {
     return null;
   }
 
   @Override
-  public CompileResult submit(String username, int lobbyId, String code) { // TODO first arg is not userName!!!
+  public CompileResult submit(String token, int lobbyId, String code) {
     LobbyExtended lobby = getLobbyFromMap(lobbyId);
     if (lobby == null) {
       throw new ProcessingException("Lobby not found");
     }
 
-    UserExtended user = getUserFromMap(username);
+    UserExtended user = getUserFromTokenMap(getToken(token));
     if (user == null) {
       throw new ProcessingException("User not found");
     }
@@ -246,6 +278,12 @@ public class MainManagerWithDatabase implements MainManager {
       simulationResultKeyMap.put(lobbyId, simulationResult);
       databaseHandler.addSimulationResult(simulationResult);
 
+      Map<String, UserExtended> usernameMap = new HashMap<>();
+      for (UserExtended player : lobby.getUsersWithoutPair()) {
+        usernameMap.put(player.getName(), player);
+      }
+      simulationResult.putUsersMap(usernameMap); // TODO kostyl for now
+
       for (UserExtended player : lobby.getUsersWithoutPair()) {
         List<SimulationResultExtended> list = simulationResultMap.get(player).get(level);
         if (list == null) continue;
@@ -257,8 +295,8 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public String editSubmittedCode(String username, int lobbyId) { // TODO first arg is not userName!!!
-    UserExtended user = getUserFromMap(username);
+  public String editSubmittedCode(String token, int lobbyId) {
+    UserExtended user = getUserFromTokenMap(getToken(token));
     if (user == null) {
       throw new ProcessingException("User not found");
     }
@@ -280,8 +318,8 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public SimulationResult getSimulationResult(String username, int lobbyId) { // TODO first arg is not userName!!!
-    UserExtended user = getUserFromMap(username);
+  public SimulationResult getSimulationResult(String token, int lobbyId) {
+    UserExtended user = getUserFromTokenMap(getToken(token));
     if (user == null) {
       throw new ProcessingException("User not found");
     }
@@ -289,8 +327,7 @@ public class MainManagerWithDatabase implements MainManager {
     return simulationResultKeyMap.get(lobbyId);
   }
 
-  @Override
-  public Collection<SimulationResult> getUserSimulationResultsOnLevel(String token, String username,
+  private List<SimulationResult> getUserSimulationResultsOnLevel(UUID token, String username,
       int levelId) {
     UserExtended user = getUserFromMap(username);
     if (user == null) {
@@ -308,15 +345,15 @@ public class MainManagerWithDatabase implements MainManager {
   }
 
   @Override
-  public Collection<User> getUsers(String userName) { // TODO first arg is not userName!!!
-    UserExtended reference = getUserFromMap(userName);
+  public Collection<User> getUsers(String token) {
+    UserExtended reference = getUserFromTokenMap(getToken(token));
 
     if (reference == null) {
       throw new ProcessingException("User not found");
     }
 
     if (reference.getType() == UserType.Student) {
-      throw new ProcessingException("User " + userName + " is a Student");
+      throw new ProcessingException("User is a Student");
     }
 
     List<UserExtended> list = new ArrayList<>(userMap.values());
@@ -390,7 +427,7 @@ public class MainManagerWithDatabase implements MainManager {
     databaseHandler.removeLevel(level);
 
     if (level == null) {
-      return; // TODO throw exception please
+      throw new ProcessingException("Level not found");
     }
 
     levelMap.remove(levelID);
@@ -428,6 +465,7 @@ public class MainManagerWithDatabase implements MainManager {
   @Override
   public void submitUser(String token, boolean create, String userName, String password, String type,
       Resource avatarResource) {
+
     UserType userType;
     try {
       userType = UserType.valueOf(type);
@@ -483,6 +521,17 @@ public class MainManagerWithDatabase implements MainManager {
   private void refreshActiveTime(UserExtended user) {
     user.refreshLastActive();
     databaseHandler.saveUser(user);
+  }
+
+  private UserExtended getUserFromTokenMap(UUID token) {
+    return tokenUserMap.get(token);
+  }
+
+  private UUID getToken(String token) {
+    if (token == null) {
+      throw new ProcessingException("Token is null");
+    }
+    return UUID.fromString(token);
   }
 }
 

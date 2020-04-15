@@ -41,7 +41,7 @@ public class MainManagerHardcoded implements MainManager {
     }
 
     @Override
-    public Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName, int levelId) {
+    public Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName) {
         return null;
     }
 
@@ -363,11 +363,6 @@ public class MainManagerHardcoded implements MainManager {
     @Override
     public String getScript(String token, String username, int simulationResultId) {
         return "class Clazz { }";
-    }
-
-    @Override
-    public List<SimulationResult> getUserSimulationResultsOnLevel(String token, String username, int levelId) {
-        return new ArrayList<>();
     }
 
     @Override

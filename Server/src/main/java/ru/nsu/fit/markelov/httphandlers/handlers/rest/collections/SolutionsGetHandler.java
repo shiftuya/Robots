@@ -24,12 +24,7 @@ public class SolutionsGetHandler extends RestHandler {
     @Override
     protected void respond(HttpExchange exchange, CookieHandler cookieHandler, Responder responder) throws IOException {
         String userName = mainManager.getUserName(cookieHandler.getCookie());
-
-        Map<Level, Iterable<SimulationResult>> solutions = new HashMap<>();
-        for (Level level : mainManager.getLevels(cookieHandler.getCookie())) {
-            solutions.put(level, mainManager.getUserSimulationResultsOnLevel(cookieHandler.getCookie(), userName, level.getId()));
-        }
-
-        responder.sendResponse(JsonPacker.packSolutions(userName, solutions));
+        
+        responder.sendResponse(JsonPacker.packSolutions(userName, mainManager.getSolutions(cookieHandler.getCookie(), userName)));
     }
 }

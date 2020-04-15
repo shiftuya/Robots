@@ -36,12 +36,7 @@ public class UserGetHandler extends RestHandler {
 
         JSONObject jsonUser = JsonPacker.packUser(mainManager.getUser(cookieHandler.getCookie(), userName));
 
-        Map<Level, Iterable<SimulationResult>> solutions = new HashMap<>();
-        for (Level level : mainManager.getLevels(cookieHandler.getCookie())) {
-            solutions.put(level, mainManager.getUserSimulationResultsOnLevel(cookieHandler.getCookie(), userName, level.getId()));
-        }
-
-        JSONArray jsonSolutions = JsonPacker.packSolutions(userName, solutions);
+        JSONArray jsonSolutions = JsonPacker.packSolutions(userName, mainManager.getSolutions(cookieHandler.getCookie(), userName));
 
         responder.sendResponse(JsonPacker.packUserInfo(jsonUser, jsonSolutions));
     }

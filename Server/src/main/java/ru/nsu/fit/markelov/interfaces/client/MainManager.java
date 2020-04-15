@@ -1,6 +1,7 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
 import java.util.Map;
+import java.util.UUID;
 
 public interface MainManager {
     /**
@@ -59,7 +60,7 @@ public interface MainManager {
      * @param levelId  unique level id.
      * @return map of the level to the collection of its simulation results.
      */
-    Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName, int levelId);
+    Map<Level, Iterable<SimulationResult>> getSolutions(String token, String userName);
 
     /**
      * Returns collection of required users.
@@ -209,16 +210,6 @@ public interface MainManager {
      * @return user script for his robot.
      */
     String getScript(String token, String userName, int simulationResultId);
-
-    /** TODO delete when getSolutions() is ready
-     * Returns all the user simulation results on specified level.
-     *
-     * @param token    unique user token.
-     * @param userName unique user name.
-     * @param levelId  unique level id.
-     * @return all the user simulation results on specified level.
-     */
-    Iterable<SimulationResult> getUserSimulationResultsOnLevel(String token, String userName, int levelId);
 
     /**
      * Returns a user gotten by specified 'userName'.
