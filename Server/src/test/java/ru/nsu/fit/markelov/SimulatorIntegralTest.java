@@ -71,11 +71,11 @@ public class SimulatorIntegralTest {
         HashMap<User, String> argMap = new HashMap<>();
         argMap.put(p1, correctSolution);
         argMap.put(p2, wrongSolution);
-        SimulationResultExtended result = sm.runSimulation("simple_plane", 0, argMap);
+        SimulationResultExtended result = sm.runSimulation("spl", 0, argMap);
         System.out.println(p1.getName() + ": " + result.isSuccessful(p1.getName()));
         System.out.println(p2.getName() + ": " + result.isSuccessful(p2.getName()));
         assertEquals(0, result.getId());
-        if(!result.isSuccessful(p1.getName())){
+        if (!result.isSuccessful(p1.getName())) {
           System.err.println(result.getLog(p1.getName()));
         }
         assertTrue(p1.getName() + " was wrong!", result.isSuccessful(p1.getName()));
@@ -87,9 +87,11 @@ public class SimulatorIntegralTest {
     }
   }
 
-  String correctSolution;
-  String wrongSolution;
-  boolean inited;
+  private String correctSolution;
+  private String wrongSolution;
+  private String levelSrc;
+  private SimulatorManager hsm;
+  private boolean inited;
 
   private String readFile(String filePath) {
     StringBuilder contentBuilder = new StringBuilder();
@@ -110,6 +112,15 @@ public class SimulatorIntegralTest {
     if (!inited) {
       correctSolution = readFile("src/test/resources/solution_spl.groovy");
       wrongSolution = readFile("src/test/resources/wrong_solution_spl.groovy");
+      levelSrc = readFile("src/test/resources/simple_plane_lvl.groovy");
+      hsm = new HardcodedSimulatorManager(true);
+      hsm.addSimulator("http://localhost:1337");
+      try {
+        hsm.removeLevel("spl", "groovy");
+      } catch (ProcessingException ignore) {
+      }
+      System.out.println("Adding level");
+      hsm.addLevel("spl", "groovy", levelSrc, null);
       inited = true;
     }
   }
@@ -131,9 +142,7 @@ public class SimulatorIntegralTest {
       HashMap<User, String> argMap = new HashMap<>();
       argMap.put(p1, correctSolution);
       argMap.put(p2, correctSolution);
-      HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
-      hsm.addSimulator("http://localhost:1337");
-      SimulationResult result = hsm.runSimulation("simple_plane", 0, argMap);
+      SimulationResult result = hsm.runSimulation("spl", 0, argMap);
       assertEquals(0, result.getId());
       assertTrue(result.isSuccessful(p1.getName()));
       assertTrue(result.isSuccessful(p2.getName()));
@@ -152,9 +161,7 @@ public class SimulatorIntegralTest {
       HashMap<User, String> argMap = new HashMap<>();
       argMap.put(p1, correctSolution);
       argMap.put(p2, wrongSolution);
-      HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
-      hsm.addSimulator("http://localhost:1337");
-      SimulationResult result = hsm.runSimulation("simple_plane", 0, argMap);
+      SimulationResult result = hsm.runSimulation("spl", 0, argMap);
       System.out.println(p1.getName() + ": " + result.isSuccessful(p1.getName()));
       System.out.println(p2.getName() + ": " + result.isSuccessful(p2.getName()));
       assertEquals(0, result.getId());
@@ -174,8 +181,6 @@ public class SimulatorIntegralTest {
       HashMap<User, String> argMap = new HashMap<>();
       argMap.put(p1, correctSolution);
       argMap.put(p2, wrongSolution);
-      HardcodedSimulatorManager hsm = new HardcodedSimulatorManager(true);
-      hsm.addSimulator("http://localhost:1337");
       try {
         hsm.addSimulator("http://192.168.0.104:1337");
       } catch (ProcessingException ignore) {
@@ -195,6 +200,28 @@ public class SimulatorIntegralTest {
     } else {
       System.err.println("SimulatorUnit on localhost:1337 wasn't available. Skipping test.");
       System.out.println("SimulatorUnit on localhost:1337 wasn't available. Skipping test.");
+    }
+  }
+
+  @Test
+  public void testRemove() {
+    if (hostAvailabilityCheck()) {
+      User p1 = new UserTest("Good Guy");
+      User p2 = new UserTest("Bad Guy");
+
+      HashMap<User, String> argMap = new HashMap<>();
+      argMap.put(p1, correctSolution);
+      argMap.put(p2, wrongSolution);
+      hsm.addLevel("spl1", "groovy", levelSrc, null);
+      SimulationResult result = hsm.runSimulation("spl1", 0, argMap);
+      hsm.removeLevel("spl1", "groovy");
+      System.out.println(p1.getName() + ": " + result.isSuccessful(p1.getName()));
+      System.out.println(p2.getName() + ": " + result.isSuccessful(p2.getName()));
+      assertEquals(0, result.getId());
+      assertTrue(p1.getName() + " was wrong!", result.isSuccessful(p1.getName()));
+      assertFalse(p2.getName() + " was correct!", result.isSuccessful(p2.getName()));
+    } else {
+      System.err.println("SimulatorUnit on localhost:1337 wasn't available. Skipping test.");
     }
   }
 }

@@ -66,7 +66,8 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   }
 
   @Override
-  public SimulationResultExtended runSimulation(String levelId, int lobbyId, Map<User, String> solutions) {
+  public SimulationResultExtended runSimulation(
+      String levelId, int lobbyId, Map<User, String> solutions) {
     ArrayList<Map.Entry<User, String>> entryList = new ArrayList<>(solutions.entrySet());
     ArrayList<String> sol = new ArrayList<>();
     for (Map.Entry<User, String> entry : entryList) {
@@ -124,6 +125,7 @@ public class HardcodedSimulatorManager implements SimulatorManager {
           }
         } catch (Exception e) {
           System.err.println(e.toString());
+          failed = true;
           errorMessage.append(urlStr).append(": EXCEPTION. ").append(e.toString()).append("\n");
         }
       }
