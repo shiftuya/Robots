@@ -301,7 +301,7 @@ public class MainManagerWithDatabase implements MainManager {
       compileResult = new CompileResult1(compileResult.getMessage(), true, true);
       SimulationResultExtended simulationResult;
       try {
-        simulationResult = simulatorManager.runSimulation(level.getName(),
+        simulationResult = simulatorManager.runSimulation(level.getId()+"",
             lobbyId, new HashMap<>(lobby.getSolutionsMap()));
       } catch (MissingSimulationUnits e) {
         lobby.setReady(user, false);
