@@ -540,19 +540,21 @@ function insertSimulationResultData(obj, contextManager) {
 
         tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
         tr.find(".username").text(item.username);
-        tr.find(".result").text(item.result);
+        tr.find(".result").text(item.result ? "Success" : "Failed");
 
         table.append(tr);
 
         tr.find(".log").on("click", function() {
             sendAjax("log.get?username=" + item.username + "&id=" + obj.response.id, function(result) {
-                alert(result);
+                var obj = JSON.parse(result);
+                alert(obj.response);
             });
         });
 
         tr.find(".script").on("click", function() {
             sendAjax("script.get?username=" + item.username + "&id=" + obj.response.id, function(result) {
-                alert(result);
+                var obj = JSON.parse(result);
+                alert(obj.response);
             });
         });
     });
