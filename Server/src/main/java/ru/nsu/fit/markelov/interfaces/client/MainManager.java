@@ -272,7 +272,7 @@ public interface MainManager {
      *
      * Access: any teacher and higher.
      *
-     * Id 'create' is true - a new level must be created;
+     * If 'create' is true - a new level must be created;
      *           otherwise - an existing level (gotten by specified 'levelId') must be edited.
      *
      * If level is being created:

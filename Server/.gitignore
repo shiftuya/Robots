@@ -4,6 +4,7 @@
 build/
 out/
 src/main/resources/js/libs/
+src/main/resources/database/
 
 *.kotlin_module
 

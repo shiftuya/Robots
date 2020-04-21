@@ -39,7 +39,7 @@ public class MainServer {
         MainManager mainManager = new MainManagerWithDatabase();
 
         HttpServer server = HttpServer.create();
-        server.bind(new InetSocketAddress(5051), 0);
+        server.bind(new InetSocketAddress(80), 0);
 
         server.createContext("/", new CommonHttpHandler(null));
 
