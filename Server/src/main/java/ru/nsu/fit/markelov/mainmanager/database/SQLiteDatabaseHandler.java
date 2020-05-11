@@ -14,7 +14,7 @@ import java.util.Map;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Level.LevelDifficulty;
-import ru.nsu.fit.markelov.interfaces.client.Playback;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.User.UserType;
 import ru.nsu.fit.markelov.interfaces.server.DatabaseHandler;
@@ -355,7 +355,7 @@ public class SQLiteDatabaseHandler implements DatabaseHandler {
         statement.setInt(1, result.getId());
         statement.setString(2, player);
         statement.setBoolean(3, result.isSuccessful(player));
-        statement.setObject(4, result.getPlayback(player)); // Temporary solution! (kostil)
+        statement.setObject(4, result.getPlayback()); // Temporary solution! (kostil)
         statement.setString(5, /*TODO result.getLog(player)*/"Sorry...");
         statement.setDate(6, new Date(result.getDate().getTime()));
         statement.setInt(7, result.getLevelId());

@@ -6,7 +6,7 @@ import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.interfaces.client.Playback;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.User;

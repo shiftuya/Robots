@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
+
 import java.util.Date;
 
 public interface SimulationResult {
@@ -37,8 +39,7 @@ public interface SimulationResult {
     /**
      * Returns simulation playback.
      *
-     * @param username unique user name.
      * @return simulation playback.
      */
-    Playback getPlayback(String username);
+    Playback getPlayback();
 }

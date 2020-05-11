@@ -1,12 +1,10 @@
 package ru.nsu.fit.markelov.mainmanager;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import ru.nsu.fit.markelov.interfaces.client.Level;
-import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.client.Playback;
+
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 
 import java.util.Date;
 import java.util.HashMap;
