@@ -8,8 +8,11 @@ import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.Pair;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.User;
+import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 public class JsonPacker {
@@ -233,5 +236,35 @@ public class JsonPacker {
             .put("id", simulationResult.getId())
             .put("date", new SimpleDateFormat(DATE_FORMAT).format(simulationResult.getDate()))
             .put("users", jsonSimulationResults);
+    }
+
+    public static JSONObject packPlayback(Playback playback) {
+        JSONArray jsonGameObjectsStates = new JSONArray();
+        for (List<GameObjectState> gameObjectStates : playback.getGameObjectStates()) {
+            JSONArray jsonGameObjectStates = new JSONArray();
+            for (GameObjectState gameObjectState : gameObjectStates) {
+                JSONObject jsonGameObjectState = new JSONObject();
+
+                jsonGameObjectState
+                    .put("startingFrame", gameObjectState.getStartingFrame())
+                    .put("endingFrame", gameObjectState.getEndingFrame())
+                    .put("position", new JSONArray()
+                        .put(gameObjectState.getPosition().getX())
+                        .put(gameObjectState.getPosition().getY())
+                        .put(gameObjectState.getPosition().getZ()))
+                    .put("dimension", new JSONArray()
+                        .put(gameObjectState.getDimension().getX())
+                        .put(gameObjectState.getDimension().getY())
+                        .put(gameObjectState.getDimension().getZ()))
+                    .put("color", gameObjectState.getColor());
+
+                jsonGameObjectStates.put(jsonGameObjectState);
+            }
+            jsonGameObjectsStates.put(jsonGameObjectStates);
+        }
+
+        return new JSONObject()
+            .put("framesCount", playback.getFramesCount())
+            .put("gameObjectsStates", jsonGameObjectsStates);
     }
 }
