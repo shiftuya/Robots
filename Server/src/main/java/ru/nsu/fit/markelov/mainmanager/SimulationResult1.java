@@ -84,7 +84,7 @@ public class SimulationResult1 implements SimulationResultExtended {
   }
 
   @Override
-  public Playback getPlayback(String username) {
+  public Playback getPlayback() {
     return null; // TODO
   }
 

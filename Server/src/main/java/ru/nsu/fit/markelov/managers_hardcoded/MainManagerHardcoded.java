@@ -310,7 +310,7 @@ public class MainManagerHardcoded implements MainManager {
             }
 
             @Override
-            public Playback getPlayback(String username) {
+            public Playback getPlayback() {
                 return null;
             }
         };

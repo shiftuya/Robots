@@ -45,7 +45,7 @@ public class SimulationResultHardcoded implements SimulationResult {
   }
 
   @Override
-  public Playback getPlayback(String username) {
+  public Playback getPlayback() {
     return null;
   }
 }
