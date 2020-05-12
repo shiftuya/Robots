@@ -1,4 +1,4 @@
-var scene, camera, renderer, mesh, controls;
+var scene, camera, renderer, controls;
 
 var currentFrame = 0;
 var framesCount;

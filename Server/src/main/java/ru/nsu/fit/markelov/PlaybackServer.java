@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-public class PlaybackServer {
+    public class PlaybackServer {
 
     public interface PlaybackFromSimulator {
         Playback getPlayback();
@@ -185,10 +185,73 @@ public class PlaybackServer {
                                 }
                             });
                         }
+                        List<GameObjectState> gameObjectStates_3 = new ArrayList<>();
+                        gameObjectStates_3.add(new GameObjectState() {
+                            @Override
+                            public int getStartingFrame() {
+                                return 0;
+                            }
+
+                            @Override
+                            public int getEndingFrame() {
+                                return 600;
+                            }
+
+                            @Override
+                            public Vector3 getPosition() {
+                                return new Vector3() {
+                                    @Override
+                                    public float getX() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public float getY() {
+                                        return 250;
+                                    }
+
+                                    @Override
+                                    public float getZ() {
+                                        return -200;
+                                    }
+                                };
+                            }
+
+                            @Override
+                            public Vector3 getDimension() {
+                                return new Vector3() {
+                                    @Override
+                                    public float getX() {
+                                        return 500;
+                                    }
+
+                                    @Override
+                                    public float getY() {
+                                        return 500;
+                                    }
+
+                                    @Override
+                                    public float getZ() {
+                                        return 10;
+                                    }
+                                };
+                            }
+
+                            @Override
+                            public Vector3 getRotation() {
+                                return null;
+                            }
+
+                            @Override
+                            public int getColor() {
+                                return 0xff0000;
+                            }
+                        });
 
                         List<List<GameObjectState>> gameObjectsStates = new ArrayList<>();
                         gameObjectsStates.add(gameObjectStates_1);
                         gameObjectsStates.add(gameObjectStates_2);
+                        gameObjectsStates.add(gameObjectStates_3);
 
                         return gameObjectsStates;
                     }

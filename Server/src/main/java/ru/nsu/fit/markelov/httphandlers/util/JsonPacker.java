@@ -235,7 +235,8 @@ public class JsonPacker {
         return new JSONObject()
             .put("id", simulationResult.getId())
             .put("date", new SimpleDateFormat(DATE_FORMAT).format(simulationResult.getDate()))
-            .put("users", jsonSimulationResults);
+            .put("users", jsonSimulationResults)
+            .put("playback", packPlayback(simulationResult.getPlayback()));
     }
 
     public static JSONObject packPlayback(Playback playback) {

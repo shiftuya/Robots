@@ -26,6 +26,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/groovy/groovy.min.js"></script>
         <!--<script src="js/libs/jquery/3.4.1/jquery.min.js"></script>-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!--        <script src="js/three.js"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+        <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="js/libs/cookie.js"></script>
         <script src="js/main.js"></script>
         <script src="js/context_manager.js"></script>
@@ -415,6 +419,7 @@
             </section>
             <section id="simulation-result-content" class="content">
                 <h1 class="content-header">Simulation Result</h1>
+                <input id="playback" type="button" value="Playback">
                 <table id="simulation-result-table" class="common-table simulation-result-table">
                     <tr>
                         <th>Player</th>

@@ -532,6 +532,20 @@ function insertCodeEditorData(obj, contextManager) {
 }
 
 function insertSimulationResultData(obj, contextManager) {
+    $("#playback").on("click", function() {
+        currentFrame = 0;
+        objects = [];
+        
+        var playback = obj.response.playback;
+        framesCount = playback.framesCount;
+        playback.gameObjectsStates.forEach(function(it) {
+            objects.push({states: it, i: 0, framesToSleep: 0});
+        });
+
+        init();
+        animate();
+    });
+    
     var table = $("#simulation-result-table");
     var skeleton = table.find("tr.skeleton");
     obj.response.users.forEach(function(item) {
