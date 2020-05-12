@@ -314,9 +314,6 @@ public class MainManagerHardcoded implements MainManager {
                 return true;
             }
 
-            public Playback getPlayback(String username) {
-                return null;
-            }
         };
     }
 

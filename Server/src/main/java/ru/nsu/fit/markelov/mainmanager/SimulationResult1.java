@@ -105,8 +105,6 @@ public class SimulationResult1 implements SimulationResultExtended {
       return "Error occurred while obtaining log";
     }
   }
-
-  @Override
   public Set<String> getUserNames() {
     return results.keySet();
   }
