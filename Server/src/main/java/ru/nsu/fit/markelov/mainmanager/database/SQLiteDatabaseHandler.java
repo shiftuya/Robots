@@ -394,7 +394,7 @@ public class SQLiteDatabaseHandler implements DatabaseHandler {
         }
 
         list.add(new SimulationResult1(key, successMap, resultSet.getDate(RESULTS_DATE),
-            privateLogs, playbackMap, resultSet.getInt(RESULTS_LEVEL)));
+            privateLogs, null, resultSet.getInt(RESULTS_LEVEL)));
       }
     } catch (SQLException e) {
       throw new ProcessingException("Exception while trying to get simulation results list");

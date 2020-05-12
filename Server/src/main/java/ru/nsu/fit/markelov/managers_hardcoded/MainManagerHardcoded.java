@@ -305,11 +305,15 @@ public class MainManagerHardcoded implements MainManager {
             }
 
             @Override
+            public Playback getPlayback() {
+                return null;
+            }
+
+            @Override
             public boolean isSuccessful(String username) {
                 return true;
             }
 
-            @Override
             public Playback getPlayback(String username) {
                 return null;
             }

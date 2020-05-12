@@ -3,6 +3,7 @@ package simulator
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
+import simulator.playback.PlaybackCreator
 
 class UnsecureTask implements Task {
 
@@ -41,7 +42,7 @@ class UnsecureTask implements Task {
     String run() {
         long startRunTime = System.currentTimeMillis()
         String result = ""
-        if(lvl==null){
+        if (lvl == null) {
             throw new RuntimeException("No level available")
         }
         boolean finished = false;
@@ -65,11 +66,11 @@ class UnsecureTask implements Task {
                 for (int i = 0; i < solutions.size(); i++) {
                     lvl.writeLog(i, "\nAll robots are broken, ending simulation\n")
                 }
-                return JsonOutput.toJson([timeout: false, broken: true, logs: getLogs()])
+                return JsonOutput.toJson([timeout: false, broken: true, logs: getLogs(), playback: lvl.getPlayback()])
             }
             start = System.currentTimeMillis()
             if (!lvl.simulateUntilRFT(robotId)) {
-                return JsonOutput.toJson([timeout: true, broken: false, logs: getLogs()])
+                return JsonOutput.toJson([timeout: true, broken: false, logs: getLogs(), playback: lvl.getPlayback()])
             }
             end = System.currentTimeMillis()
             lvlTime += end - start
@@ -106,7 +107,7 @@ class UnsecureTask implements Task {
                         lvl.writeLog(i, "Simulation result: FAIL.\n")
                     }
                 }
-                result = JsonOutput.toJson([timeout: false, broken: false, results: passed, logs: getLogs()]);
+                result = JsonOutput.toJson([timeout: false, broken: false, results: passed, logs: getLogs(), playback: lvl.getPlayback()]);
                 break
             }
 

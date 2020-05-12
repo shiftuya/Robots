@@ -26,6 +26,11 @@ public class SimulationResultHardcoded implements SimulationResult {
     return date;
   }
 
+  @Override
+  public Playback getPlayback() {
+    return null;
+  }
+
   public void setDate(Date date) {
     this.date = date;
   }
@@ -44,7 +49,6 @@ public class SimulationResultHardcoded implements SimulationResult {
     return null;
   }
 
-  @Override
   public Playback getPlayback(String username) {
     return null;
   }
