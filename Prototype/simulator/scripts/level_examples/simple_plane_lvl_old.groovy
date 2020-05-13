@@ -159,22 +159,22 @@ class simple_plane_lvl implements Level {
                 Robot r = robots[i]
                 switch (r.currentAction) {
                     case "up":
-                        r.y ++
+                        r.y += (int) (ft - virtualTime)
                         break
                     case "down":
-                        r.y --
+                        r.y -= (int) (ft - virtualTime)
                         break
                     case "left":
-                        r.x --
+                        r.x -= (int) (ft - virtualTime)
                         break
                     case "right":
-                        r.x ++
+                        r.x += (int) (ft - virtualTime)
                         break
                     default:
                         r.setBroken(true)
                 }
             }
-            virtualTime ++
+            virtualTime = ft
             pbc.setTime(virtualTime.intValue() * 10)
             for (int i = 0; i < robots.size(); i++) {
                 def r = robots[i]

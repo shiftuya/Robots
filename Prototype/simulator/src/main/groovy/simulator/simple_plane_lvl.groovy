@@ -64,15 +64,25 @@ class simple_plane_lvl implements Level {
         virtualTime = 0
         timeout = 120
         logger = new Logger(playerCount)
-        pbc = new PlaybackCreator(_playerCount, 1)
+        pbc = new PlaybackCreator(_playerCount, 4)
         for (int i = 0; i < _playerCount; i++) {
             pbc.updateColor(i, 0x00ff00)
-            pbc.updateDimension(i, new Vec3Proto(100f, 100f, 100f))
-            pbc.updatePosition(i, new Vec3Proto(robots[i].x, robots[i].y, 0.0f))
+            pbc.updateDimension(i, new Vec3Proto(10f, 10f, 10f))
+            pbc.updatePosition(i, new Vec3Proto(robots[i].x * 10, 0, robots[i].y * 10))
         }
-        pbc.updateColor(playerCount, 0x00ff00)
-        pbc.updateDimension(playerCount, new Vec3Proto(120f, 120f, 20f))
-        pbc.updatePosition(playerCount, new Vec3Proto(goal_x * 100, goal_y * 100, 0.0f))
+        pbc.updateColor(playerCount, 0xff00ff)
+        pbc.updateDimension(playerCount, new Vec3Proto(15f, 5f, 15f))
+        pbc.updatePosition(playerCount, new Vec3Proto(goal_x * 10, 0, goal_y * 10))
+
+        pbc.updateColor(playerCount + 1, 0xff0000)
+        pbc.updateDimension(playerCount + 1, new Vec3Proto(20f, 2f, 2f))
+        pbc.updatePosition(playerCount + 1, new Vec3Proto(0, 0, 0))
+        pbc.updateColor(playerCount + 2, 0x00ff00)
+        pbc.updateDimension(playerCount + 2, new Vec3Proto(2f, 20f, 2f))
+        pbc.updatePosition(playerCount + 2, new Vec3Proto(0, 0, 0.0f))
+        pbc.updateColor(playerCount + 3, 0x0000ff)
+        pbc.updateDimension(playerCount + 3, new Vec3Proto(2f, 2f, 20f))
+        pbc.updatePosition(playerCount + 3, new Vec3Proto(0, 0, 0))
     }
 
     @Override
@@ -149,26 +159,26 @@ class simple_plane_lvl implements Level {
                 Robot r = robots[i]
                 switch (r.currentAction) {
                     case "up":
-                        r.y += (int) (ft - virtualTime)
+                        r.y ++
                         break
                     case "down":
-                        r.y -= (int) (ft - virtualTime)
+                        r.y --
                         break
                     case "left":
-                        r.x -= (int) (ft - virtualTime)
+                        r.x --
                         break
                     case "right":
-                        r.x += (int) (ft - virtualTime)
+                        r.x ++
                         break
                     default:
                         r.setBroken(true)
                 }
             }
-            virtualTime = ft
-            pbc.setTime(virtualTime.intValue() * 60)
+            virtualTime ++
+            pbc.setTime(virtualTime.intValue() * 10)
             for (int i = 0; i < robots.size(); i++) {
                 def r = robots[i]
-                pbc.updatePosition(i, new Vec3Proto(r.x * 100, r.y * 100, 0))
+                pbc.updatePosition(i, new Vec3Proto(r.x * 10, 0, r.y * 10))
             }
         }
         return true
@@ -196,10 +206,10 @@ class simple_plane_lvl implements Level {
 
     @Override
     Playback getPlayback() {
-        pbc.setTime(virtualTime.intValue() * 60+60)
+        pbc.setTime(virtualTime.intValue() * 10 + 60)
         for (int i = 0; i < robots.size(); i++) {
             def r = robots[i]
-            pbc.updatePosition(i, new Vec3Proto(r.x * 100, r.y * 100, 0))
+            pbc.updatePosition(i, new Vec3Proto(r.x * 10, 0, r.y * 10))
         }
         return pbc.getPlayback()
     }
