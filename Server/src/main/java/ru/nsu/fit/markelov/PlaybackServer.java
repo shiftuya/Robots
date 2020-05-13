@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-    public class PlaybackServer {
+public class PlaybackServer {
 
     public interface PlaybackFromSimulator {
         Playback getPlayback();
