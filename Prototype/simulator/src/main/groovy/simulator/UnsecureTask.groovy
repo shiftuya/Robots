@@ -3,7 +3,6 @@ package simulator
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
-import simulator.playback.PlaybackCreator
 
 class UnsecureTask implements Task {
 
@@ -31,7 +30,9 @@ class UnsecureTask implements Task {
         String lvlName = jsonObject.level
         def levelClass = mng.getLevel(lvlName)
         if (levelClass != null)
-            lvl = (Level) levelClass.newInstance(solutions.size())
+            lvl = (Level) levelClass.newInstance(solutions.size(), "levels/" + lvlName + "/")
+
+        //lvl = (Level)  new labyrinth(solutions.size(),"levels/"+lvlName+"/")
         scripts = new ArrayList<>()
         loggers = new ArrayList<>()
         lvlTime = 0
@@ -84,6 +85,7 @@ class UnsecureTask implements Task {
                 def cmds = cmd.split()
                 action = cmds[0]
                 duration = cmds[1].toDouble()
+                println(lvl.getLog(0))
             } catch (Exception e) {
                 println("Broken script")
                 lvl.writeLog(robotId, "Script has broken:\n")
@@ -110,8 +112,6 @@ class UnsecureTask implements Task {
                 result = JsonOutput.toJson([timeout: false, broken: false, results: passed, logs: getLogs(), playback: lvl.getPlayback()]);
                 break
             }
-
-
         }
         return result
     }

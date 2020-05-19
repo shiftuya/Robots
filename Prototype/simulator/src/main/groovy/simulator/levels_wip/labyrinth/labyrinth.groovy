@@ -44,7 +44,7 @@ class labyrinth implements Level {
     float scale = 10
 
     ArrayList<ArrayList<Character>> map
-    HashMap<Pair<Integer, Integer>, Integer> pbId;
+    HashMap<Map.Entry<Integer, Integer>, Integer> pbId;
 
     labyrinth(int _playerCount, String path) {
         if (_playerCount != 1) {
@@ -70,11 +70,11 @@ class labyrinth implements Level {
                         if (c == ('C' as char)) {
                             coins++
                             objCount++
-                            pbId.put(new Pair<Integer, Integer>(i, map.size()), objCount)
+                            pbId.put(new AbstractMap.SimpleEntry<>(i, map.size()), objCount)
                         }
                         if (c == ('X' as char)) {
                             objCount++
-                            pbId.put(new Pair<Integer, Integer>(i, map.size()), objCount)
+                            pbId.put(new AbstractMap.SimpleEntry<>(i, map.size()), objCount)
                         }
                         row.add(c)
                     }
@@ -93,14 +93,14 @@ class labyrinth implements Level {
         for (int y = 0; y < map.size(); y++) {
             for (int x = 0; x < map.get(y).size(); x++) {
                 if (map[y][x] == 'C' as char) {
-                    pbc.updateDimension(pbId.get(new Pair<Integer, Integer>(x, y)), new Vec3Proto(0.5 * scale as float, 0.3 * scale as float, 0.5 * scale as float))
-                    pbc.updatePosition(pbId.get(new Pair<Integer, Integer>(x, y)), new Vec3Proto(x * scale as float, 0, y * scale as float))
-                    pbc.updateColor(pbId.get(new Pair<Integer, Integer>(x, y)), 0xebe528)
+                    pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), new Vec3Proto(0.5 * scale as float, 0.3 * scale as float, 0.5 * scale as float))
+                    pbc.updatePosition(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), new Vec3Proto(x * scale as float, 0, y * scale as float))
+                    pbc.updateColor(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), 0xebe528)
                 }
                 if (map[y][x] == 'X' as char) {
-                    pbc.updateDimension(pbId.get(new Pair<Integer, Integer>(x, y)), new Vec3Proto(1 * scale as float, 1 * scale as float, 1 * scale as float))
-                    pbc.updatePosition(pbId.get(new Pair<Integer, Integer>(x, y)), new Vec3Proto(x * scale as float, 0, y * scale as float))
-                    pbc.updateColor(pbId.get(new Pair<Integer, Integer>(x, y)), 0x625f8e)
+                    pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), new Vec3Proto(1 * scale as float, 1 * scale as float, 1 * scale as float))
+                    pbc.updatePosition(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), new Vec3Proto(x * scale as float, 0, y * scale as float))
+                    pbc.updateColor(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), 0x625f8e)
                 }
             }
         }
@@ -135,7 +135,7 @@ class labyrinth implements Level {
             result += "Coin "
         } else {
             result += "Wall "
-            pbc.updateColor(pbId.get(new Pair<Integer, Integer>(x, y)), 0x1f1e30)
+            pbc.updateColor(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), 0x1f1e30)
         }
         return result + String.valueOf(passed)
     }
@@ -194,7 +194,7 @@ class labyrinth implements Level {
         if (map[rb.y][rb.x] == 'C' as char) {
             rb.coinsLeft--
             map[rb.y][rb.x] = new Character('.' as char)
-            pbc.updateDimension(pbId.get(new Pair<Integer, Integer>(rb.x, rb.y)), new Vec3Proto(0, 0, 0))
+            pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<>(rb.x, rb.y)), new Vec3Proto(0, 0, 0))
             return true
         }
         if (map[rb.y][rb.x] == '.' as char) {
@@ -229,6 +229,8 @@ class labyrinth implements Level {
                     break
                 case "right":
                     r.x++
+                    break
+                case "sleep":
                     break
                 default:
                     r.setBroken(true)
