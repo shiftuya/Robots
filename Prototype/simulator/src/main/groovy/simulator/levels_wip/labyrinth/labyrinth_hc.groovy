@@ -70,7 +70,7 @@ void updateFromSensor(int dx, int dy, Memory memory) {
     int dist = tokens[1] as int
     int x = memory.x + dist * dx
     int y = memory.y + dist * dy
-    for (int i = 0; i < dist; i++) {
+    /*for (int i = 0; i < dist; i++) {
         memory.map.get(memory.y + dy * i).get(memory.x + dx * i) = 1
     }
     switch (tokens[0]) {
@@ -81,6 +81,7 @@ void updateFromSensor(int dx, int dy, Memory memory) {
             memory.map.get(y).get(x) = 3
             break
     }
+    */
 }
 
 int ray(int dx, int dy) {
