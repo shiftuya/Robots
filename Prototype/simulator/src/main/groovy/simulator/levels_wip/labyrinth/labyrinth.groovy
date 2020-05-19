@@ -6,6 +6,7 @@ import simulator.Logger
 import simulator.playback.Playback
 import simulator.playback.PlaybackCreator
 import simulator.playback.Vec3Proto
+import java.util.AbstractMap
 
 @CompileStatic
 class labyrinth implements Level {
@@ -68,11 +69,11 @@ class labyrinth implements Level {
                         if (c == ('C' as char)) {
                             coins++
                             objCount++
-                            pbId.put(new AbstractMap.SimpleEntry<>(i, map.size()), objCount)
+                            pbId.put(new AbstractMap.SimpleEntry<Integer, Integer>(i, map.size()), objCount)
                         }
                         if (c == ('X' as char)) {
                             objCount++
-                            pbId.put(new AbstractMap.SimpleEntry<>(i, map.size()), objCount)
+                            pbId.put(new AbstractMap.SimpleEntry<Integer, Integer>(i, map.size()), objCount)
                         }
                         row.add(c)
                     }
@@ -91,14 +92,14 @@ class labyrinth implements Level {
         for (int y = 0; y < map.size(); y++) {
             for (int x = 0; x < map.get(y).size(); x++) {
                 if (map[y][x] == 'C' as char) {
-                    pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), new Vec3Proto(0.5 * scale as float, 0.3 * scale as float, 0.5 * scale as float))
-                    pbc.updatePosition(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), new Vec3Proto(x * scale as float, 0, y * scale as float))
-                    pbc.updateColor(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), 0xebe528)
+                    pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(x, y)), new Vec3Proto(0.5 * scale as float, 0.3 * scale as float, 0.5 * scale as float))
+                    pbc.updatePosition(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(x, y)), new Vec3Proto(x * scale as float, 0, y * scale as float))
+                    pbc.updateColor(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(x, y)), 0xebe528)
                 }
                 if (map[y][x] == 'X' as char) {
-                    pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), new Vec3Proto(1 * scale as float, 1 * scale as float, 1 * scale as float))
-                    pbc.updatePosition(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), new Vec3Proto(x * scale as float, 0, y * scale as float))
-                    pbc.updateColor(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), 0x625f8e)
+                    pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(x, y)), new Vec3Proto(1 * scale as float, 1 * scale as float, 1 * scale as float))
+                    pbc.updatePosition(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(x, y)), new Vec3Proto(x * scale as float, 0, y * scale as float))
+                    pbc.updateColor(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(x, y)), 0x625f8e)
                 }
             }
         }
@@ -133,7 +134,7 @@ class labyrinth implements Level {
             result += "Coin "
         } else {
             result += "Wall "
-            pbc.updateColor(pbId.get(new AbstractMap.SimpleEntry<>(x, y)), 0x1f1e30)
+            pbc.updateColor(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(x, y)), 0x1f1e30)
         }
         return result + String.valueOf(passed)
     }
@@ -192,7 +193,7 @@ class labyrinth implements Level {
         if (map[rb.y][rb.x] == 'C' as char) {
             rb.coinsLeft--
             map[rb.y][rb.x] = new Character('.' as char)
-            pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<>(rb.x, rb.y)), new Vec3Proto(0, 0, 0))
+            pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(rb.x, rb.y)), new Vec3Proto(0, 0, 0))
             return true
         }
         if (map[rb.y][rb.x] == '.' as char) {
