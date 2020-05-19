@@ -3,11 +3,8 @@ package ru.nsu.fit.markelov;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import ru.nsu.fit.markelov.httphandlers.handlers.rest.collections.LobbiesGetHandler;
 import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
-import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
 import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
@@ -23,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PlaybackServer {
 
@@ -109,7 +107,22 @@ public class PlaybackServer {
 
                                 @Override
                                 public Vector3 getRotation() {
-                                    return null;
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return 0;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return 0;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return 0;
+                                        }
+                                    };
                                 }
 
                                 @Override
@@ -176,12 +189,27 @@ public class PlaybackServer {
 
                                 @Override
                                 public Vector3 getRotation() {
-                                    return null;
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return 45;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return 45;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return 45;
+                                        }
+                                    };
                                 }
 
                                 @Override
                                 public int getColor() {
-                                    return 0x0000ff;
+                                    return ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
                                 }
                             });
                         }
@@ -239,7 +267,22 @@ public class PlaybackServer {
 
                             @Override
                             public Vector3 getRotation() {
-                                return null;
+                                return new Vector3() {
+                                    @Override
+                                    public float getX() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public float getY() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public float getZ() {
+                                        return 0;
+                                    }
+                                };
                             }
 
                             @Override
