@@ -3,6 +3,7 @@ var scene, camera, renderer, controls;
 var currentFrame = 0;
 var framesCount;
 var objects = [];
+var toRadians = Math.PI / 180;
 
 $(document).ready(function() {
     $("#start").on("click", function() {
@@ -59,7 +60,7 @@ function init() {
     // export mesh
 
     objects.forEach(function(object) {
-        var geometry = new THREE.BoxBufferGeometry(object.states[0].dimension[0], object.states[0].dimension[1], object.states[0].dimension[2]);
+        var geometry = new THREE.BoxBufferGeometry(1, 1, 1/*object.states[0].dimension[0], object.states[0].dimension[1], object.states[0].dimension[2]*/);
         var material = new THREE.MeshPhongMaterial({color: object.states[0].color});
 
         object.mesh = new THREE.Mesh(geometry, material);
@@ -102,6 +103,16 @@ function animate() {
                 object.mesh.position.x = object.states[object.i].position[0];
                 object.mesh.position.y = object.states[object.i].position[1];
                 object.mesh.position.z = object.states[object.i].position[2];
+
+                object.mesh.scale.x = object.states[object.i].dimension[0];
+                object.mesh.scale.y = object.states[object.i].dimension[1];
+                object.mesh.scale.z = object.states[object.i].dimension[2];
+
+                object.mesh.rotation.x = object.states[object.i].rotation[0] * toRadians;
+                object.mesh.rotation.y = object.states[object.i].rotation[1] * toRadians;
+                object.mesh.rotation.z = object.states[object.i].rotation[2] * toRadians;
+                
+                object.mesh.material.color.setHex(object.states[object.i].color);
                 
                 object.framesToSleep = object.states[object.i].endingFrame - object.states[object.i].startingFrame - 1;
                 object.i++;

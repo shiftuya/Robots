@@ -257,6 +257,10 @@ public class JsonPacker {
                         .put(gameObjectState.getDimension().getX())
                         .put(gameObjectState.getDimension().getY())
                         .put(gameObjectState.getDimension().getZ()))
+                    .put("rotation", new JSONArray()
+                        .put(gameObjectState.getRotation().getX())
+                        .put(gameObjectState.getRotation().getY())
+                        .put(gameObjectState.getRotation().getZ()))
                     .put("color", gameObjectState.getColor());
 
                 jsonGameObjectStates.put(jsonGameObjectState);
