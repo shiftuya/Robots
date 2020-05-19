@@ -533,7 +533,9 @@ function insertCodeEditorData(obj, contextManager) {
 
 function insertSimulationResultData(obj, contextManager) {
     $("#playback").on("click", function() {
+        paused = true;
         currentFrame = 0;
+        framesCount = 0;
         objects = [];
         
         var playback = obj.response.playback;

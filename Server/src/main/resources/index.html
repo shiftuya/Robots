@@ -14,8 +14,9 @@
         <link rel="stylesheet" href="css/users.css">
         <link rel="stylesheet" href="css/user.css">
         <link rel="stylesheet" href="css/level_editor.css">
-		<link rel="stylesheet" href="css/lobby.css">
-		<link rel="stylesheet" href="css/simulation_results.css">
+        <link rel="stylesheet" href="css/lobby.css">
+        <link rel="stylesheet" href="css/simulation_results.css">
+        <link rel="stylesheet" href="css/playback.css">
         <link rel="stylesheet" href="css/code_editor.css">
         <!--<link rel="stylesheet" href="js/libs/codemirror-5.51.0/lib/codemirror.css">-->
         <!--<script src="js/libs/codemirror-5.51.0/lib/codemirror.js"></script>-->
@@ -450,6 +451,21 @@
                 <h1 class="content-header">404 Not Found</h1>
                 <img class="logo" src="images/logo.png" alt="Robotics Game Server Logotype">
             </section>
-		</div>
+        </div>
+        <div id="player" class="player">
+            <div id="player-close" class="player-icon player-close"></div>
+            <footer class="player-footer">
+                <div id="player-rewind-line" class="player-rewind-line">
+                    <div id="player-progress-current" class="player-progress player-progress-current"></div>
+                    <div id="player-progress-mouse" class="player-progress player-progress-mouse"></div>
+                </div>
+                <div class="player-nav">
+                    <div id="player-stop" class="player-icon player-stop"></div>
+                    <div id="player-rewind-left" class="player-icon player-rewind-left"></div>
+                    <div id="player-play-pause" class="player-icon player-play"></div>
+                    <div id="player-rewind-right" class="player-icon player-rewind-right"></div>
+                </div>
+            </footer>
+        </div>
 	</body>
 </html>

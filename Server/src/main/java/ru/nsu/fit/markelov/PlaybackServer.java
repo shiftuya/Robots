@@ -115,7 +115,7 @@ public class PlaybackServer {
 
                                         @Override
                                         public float getY() {
-                                            return 0;
+                                            return frame;
                                         }
 
                                         @Override
@@ -192,17 +192,17 @@ public class PlaybackServer {
                                     return new Vector3() {
                                         @Override
                                         public float getX() {
-                                            return 45;
+                                            return 0;
                                         }
 
                                         @Override
                                         public float getY() {
-                                            return 45;
+                                            return 0;
                                         }
 
                                         @Override
                                         public float getZ() {
-                                            return 45;
+                                            return 0;
                                         }
                                     };
                                 }

@@ -16,6 +16,14 @@
 
 /* HARDCODED - delete */
 
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
 header, .content {
 	display: none;
 }

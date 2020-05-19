@@ -219,6 +219,71 @@ function activateListeners(contextManager) {
             contextManager.changeContext("simulators");
         });
     });
+    
+    
+    
+    
+    
+    $("#player-close").on("click", function() {
+        $("#player").fadeOut("slow", function() {
+            $("#player").find("canvas").remove();
+            $("body").removeClass("overflow-hidden");
+        });
+    });
+
+    $("#player-rewind-line").on("mousemove", function(event) {
+        $("#player-progress-mouse").css("width", event.pageX - $(this).offset().left);
+    });
+
+    $("#player-rewind-line").on("mouseleave", function() {
+        $("#player-progress-mouse").css("width", 0);
+    });
+
+    $("#player-rewind-line").on("click", function(event) {
+        currentFrame = Math.floor(framesCount * (event.pageX - $(this).offset().left) / $(this).width());
+        if (currentFrame == framesCount) {
+            alert("currentFrame == framesCount !!!");
+        }
+
+        objects.forEach(function(object) {
+            for (var i = 0; i < object.states.length; i++) {
+                var state = object.states[i];
+                if (currentFrame >= state.startingFrame && currentFrame < state.endingFrame) {
+                    object.i = i;
+                    object.framesToSleep = state.endingFrame - 1 - currentFrame;
+
+                    update(object.mesh, object.states[i]);
+                    $("#player-progress-current").css("width", $("#player-rewind-line").width() * currentFrame / (framesCount - 1));
+
+                    break;
+                }
+            }
+        });
+    });
+
+    $("#player-play-pause").on("click", function() {
+        if (paused) {
+            paused = false;
+            $("#player-play-pause").removeClass("player-play").addClass("player-pause");
+        } else {
+            paused = true;
+            $("#player-play-pause").removeClass("player-pause").addClass("player-play");
+        }
+    });
+
+    $("#player-stop").on("click", function() {
+        if (!paused) {
+            $("#player-play-pause").click();
+        }
+        currentFrame = 0;
+        objects.forEach(function(object) {
+            object.i = 0;
+            object.framesToSleep = 0;
+            update(object.mesh, object.states[0]);
+        });
+
+        $("#player-progress-current").css("width", 0);
+    });
 }
 
 function sendAjax(ajaxQuery, handleResponseFunction, data, formData) {
@@ -286,7 +351,7 @@ function loadFile() {
 
 
 var scene, camera, renderer, controls;
-var currentFrame, framesCount, objects;
+var paused, currentFrame, framesCount, objects;
 var toRadians = Math.PI / 180;
 
 function init() {
@@ -325,11 +390,12 @@ function init() {
     // export mesh
 
     objects.forEach(function(object) {
-        //var geometry = new THREE.BoxBufferGeometry(object.states[0].dimension[0], object.states[0].dimension[1], object.states[0].dimension[2]);
         var geometry = new THREE.BoxBufferGeometry(1, 1, 1);
-        var material = new THREE.MeshPhongMaterial({color: object.states[0].color});
-
+        var material = new THREE.MeshPhongMaterial();
         object.mesh = new THREE.Mesh(geometry, material);
+
+        update(object.mesh, object.states[0]);
+
         //object.mesh.castShadow = true;
         scene.add(object.mesh);
     });
@@ -340,7 +406,10 @@ function init() {
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
-    document.body.appendChild( renderer.domElement );
+
+    $("#player").append(renderer.domElement);
+    $("body").addClass("overflow-hidden");
+    $("#player").fadeIn("slow");
 
     //
 
@@ -363,36 +432,38 @@ function onWindowResize() {
 function animate() {
     requestAnimationFrame(animate);
 
-    if (currentFrame < framesCount) {
+    if (!paused && currentFrame < framesCount) {
         objects.forEach(function(object) {
             if (object.framesToSleep == 0) {
-                object.mesh.position.x = object.states[object.i].position[0];
-                object.mesh.position.y = object.states[object.i].position[1];
-                object.mesh.position.z = object.states[object.i].position[2];
+                update(object.mesh, object.states[object.i]);
 
-                object.mesh.scale.x = object.states[object.i].dimension[0];
-                object.mesh.scale.y = object.states[object.i].dimension[1];
-                object.mesh.scale.z = object.states[object.i].dimension[2];
-
-                object.mesh.rotation.x = object.states[object.i].rotation[0] * toRadians;
-                object.mesh.rotation.y = object.states[object.i].rotation[1] * toRadians;
-                object.mesh.rotation.z = object.states[object.i].rotation[2] * toRadians;
-
-                object.mesh.material.color.setHex(object.states[object.i].color);
-
-                object.framesToSleep = object.states[object.i].endingFrame - object.states[object.i].startingFrame - 1;
+                object.framesToSleep = object.states[object.i].endingFrame - 1 - object.states[object.i].startingFrame;
                 object.i++;
             } else {
                 object.framesToSleep--;
             }
         });
 
+        $("#player-progress-current").css("width", $("#player-rewind-line").width() * currentFrame / (framesCount - 1));
         currentFrame++;
     }
 
-    //camera.position.x += 0.4;
-    //camera.position.z += 0.4;
-
     camera.lookAt(objects[0].mesh.position);
     renderer.render(scene, camera);
+}
+
+function update(mesh, state) {
+    mesh.position.x = state.position[0];
+    mesh.position.y = state.position[1];
+    mesh.position.z = state.position[2];
+
+    mesh.scale.x = state.dimension[0];
+    mesh.scale.y = state.dimension[1];
+    mesh.scale.z = state.dimension[2];
+
+    mesh.rotation.x = state.rotation[0] * toRadians;
+    mesh.rotation.y = state.rotation[1] * toRadians;
+    mesh.rotation.z = state.rotation[2] * toRadians;
+
+    mesh.material.color.setHex(state.color);
 }

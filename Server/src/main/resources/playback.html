@@ -14,7 +14,21 @@
     <body>
         <form class="navbar">
             <input id="start" type="button" value="Start">
-            <input id="stop" type="button" value="Stop">
         </form>
+        <div id="player" class="player">
+            <div id="player-close" class="player-icon player-close"></div>
+            <footer class="player-footer">
+                <div id="player-rewind-line" class="player-rewind-line">
+                    <div id="player-progress-current" class="player-progress player-progress-current"></div>
+                    <div id="player-progress-mouse" class="player-progress player-progress-mouse"></div>
+                </div>
+                <div class="player-nav">
+                    <div id="player-stop" class="player-icon player-stop"></div>
+                    <div id="player-rewind-left" class="player-icon player-rewind-left"></div>
+                    <div id="player-play-pause" class="player-icon player-play"></div>
+                    <div id="player-rewind-right" class="player-icon player-rewind-right"></div>
+                </div>
+            </footer>
+        </div>
     </body>
 </html>
