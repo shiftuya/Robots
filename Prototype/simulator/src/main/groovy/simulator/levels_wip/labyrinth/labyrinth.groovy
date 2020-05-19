@@ -1,10 +1,8 @@
 package simulator.levels_wip.labyrinth
 
 import groovy.transform.CompileStatic
-import javafx.util.Pair
 import simulator.Level
 import simulator.Logger
-import simulator.RobotSensors
 import simulator.playback.Playback
 import simulator.playback.PlaybackCreator
 import simulator.playback.Vec3Proto
