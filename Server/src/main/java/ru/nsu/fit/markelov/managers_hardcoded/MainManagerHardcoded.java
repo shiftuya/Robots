@@ -468,4 +468,9 @@ public class MainManagerHardcoded implements MainManager {
     public void removeUser(String token, String userName) {
 
     }
+
+    @Override
+    public Playback getPlayback(String token, int simulationResultId) {
+        return null;
+    }
 }

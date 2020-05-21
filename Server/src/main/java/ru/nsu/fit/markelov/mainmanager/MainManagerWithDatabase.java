@@ -11,6 +11,7 @@ import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.User.UserType;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.server.DatabaseHandler;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
 import ru.nsu.fit.markelov.mainmanager.database.SQLiteDatabaseHandler;
@@ -92,7 +93,12 @@ public class MainManagerWithDatabase implements MainManager {
 
   @Override
   public String getScript(String token, String userName, int simulationResultId) {
-    return "null";
+    return "null"; // TODO
+  }
+
+  @Override
+  public Playback getPlayback(String token, int simulationResultId) {
+    return null; // TODO
   }
 
   private DatabaseHandler databaseHandler;
