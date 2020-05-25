@@ -3,11 +3,11 @@ var paused, playerClosed, currentFrame, framesCount, objects, groundObj;
 var toRadians = Math.PI / 180;
 
 function init() {
-    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / (window.innerHeight - 90), 1, 10000 );
-    camera.position.set( 200, 100, 200 );
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 90), 1, 10000); // TODO
+    camera.position.set(200, 100, 200); // TODO
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xa0a0a0 );
+    scene.background = new THREE.Color( 0xa0a0a0 ); // TODO
     //scene.fog = new THREE.Fog( 0xa0a0a0, 200, 10000 );
     
     // lights
@@ -62,7 +62,7 @@ function init() {
 
     // controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.target.set(0, 5, 0);
+    controls.target.set(0, 5, 0); // TODO
     controls.enableKeys = false;
     controls.enableRotate = false;
     controls.enableZoom = false;
@@ -126,6 +126,11 @@ function update(mesh, state) {
 function dispose() {
     $("#player").find("canvas").remove();
     $("body").removeClass("overflow-hidden");
+    
+    $("#player-progress-current").css("width", 0);
+    if (!paused) {
+        $("#player-play-pause").click();
+    }
     
     scene.dispose();
     ground.geometry.dispose();
