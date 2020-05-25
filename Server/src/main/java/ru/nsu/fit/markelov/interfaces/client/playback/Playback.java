@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.interfaces.client.playback;
 
+import ru.nsu.fit.markelov.interfaces.client.Pair;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,13 +14,13 @@ public interface Playback {
     int getFramesCount();
 
     /**
-     * Returns a map <userName -> index in list of game objects>.
+     * Returns a collection of users with their indexes in list of game objects.
      *
-     * Used for centering the camera on a robot of the user.
+     * Used for binding users with game objects.
      *
-     * @return a map <userName -> index in list of game objects>.
+     * @return a collection of users with their indexes in list of game objects.
      */
-    Map<String, Integer> getRobots();
+    List<Pair<String, Integer>> getUserBindingWithObjects();
 
     /**
      * Returns a list of game object states.
@@ -26,6 +28,15 @@ public interface Playback {
      * @return a list of game object states.
      */
     List<List<GameObjectState>> getGameObjectStates();
+
+    /**
+     * Returns background color.
+     *
+     * @return background color.
+     */
+    default int getBackgroundColor() {
+        return 0xa0a0a0;
+    }
 
     /**
      * Returns ground.

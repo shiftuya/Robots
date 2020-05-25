@@ -1,5 +1,5 @@
 var scene, camera, renderer, controls, ground, grid;
-var paused, playerClosed, currentFrame, framesCount, objects, groundObj;
+var playback, paused, playerClosed, currentFrame, objects, currentObjectId;
 var toRadians = Math.PI / 180;
 
 function init() {
@@ -7,8 +7,7 @@ function init() {
     camera.position.set(200, 100, 200); // TODO
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xa0a0a0 ); // TODO
-    //scene.fog = new THREE.Fog( 0xa0a0a0, 200, 10000 );
+    scene.background = new THREE.Color(playback.backgroundColor);
     
     // lights
     var hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
@@ -26,15 +25,15 @@ function init() {
 
     // ground
     ground = new THREE.Mesh(
-        new THREE.PlaneBufferGeometry(groundObj.size, groundObj.size),
-        new THREE.MeshPhongMaterial({ color: groundObj.color, depthWrite: false })
+        new THREE.PlaneBufferGeometry(playback.ground.size, playback.ground.size),
+        new THREE.MeshPhongMaterial({ color: playback.ground.color, depthWrite: false })
     );
     ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    grid = new THREE.GridHelper(groundObj.size, groundObj.gridDivisions, groundObj.gridCenterLineColor, groundObj.gridColor);
-    grid.material.opacity = groundObj.opacity;
+    grid = new THREE.GridHelper(playback.ground.size, playback.ground.gridDivisions, playback.ground.gridCenterLineColor, playback.ground.gridColor);
+    grid.material.opacity = playback.ground.opacity;
     grid.material.transparent = true;
     scene.add(grid);
 
@@ -49,6 +48,7 @@ function init() {
 
         scene.add(object.mesh);
     });
+    updateSensors();
 
     // renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -87,7 +87,9 @@ function animate() {
 
     requestAnimationFrame(animate);
 
-    if (!paused && currentFrame < framesCount) {
+    if (!paused && currentFrame < playback.framesCount) {
+        updateSensors();
+        
         objects.forEach(function(object) {
             if (object.framesToSleep == 0) {
                 update(object.mesh, object.states[object.i]);
@@ -99,11 +101,12 @@ function animate() {
             }
         });
 
-        $("#player-progress-current").css("width", $("#player-rewind-line").width() * currentFrame / (framesCount - 1));
+        $("#player-progress-current").css("width", $("#player-rewind-line").width() * currentFrame / (playback.framesCount - 1));
+        
         currentFrame++;
     }
 
-    camera.lookAt(objects[0].mesh.position);
+    updateCameraDirection();
     renderer.render(scene, camera);
 }
 
@@ -123,10 +126,28 @@ function update(mesh, state) {
     mesh.material.color.setHex(state.color);
 }
 
+function updateSensors() {
+    var i = objects[currentObjectId].i;
+    if (i >= objects[currentObjectId].states.length) {
+        i = objects[currentObjectId].states.length - 1;
+    }
+    
+    var sensors = objects[currentObjectId].states[i].sensors;
+    $("#player-sensors").empty();
+    sensors.forEach(function(it) {
+        $("<p>" + it.sensor + ": " + it.value + "</p>").appendTo("#player-sensors");
+    });
+}
+
+function updateCameraDirection() {
+    camera.lookAt(objects[currentObjectId].mesh.position);
+}
+
 function dispose() {
     $("#player").find("canvas").remove();
     $("body").removeClass("overflow-hidden");
     
+    $("#player-users").empty();
     $("#player-progress-current").css("width", 0);
     if (!paused) {
         $("#player-play-pause").click();

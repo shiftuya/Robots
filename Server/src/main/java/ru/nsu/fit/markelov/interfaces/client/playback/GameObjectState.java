@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.interfaces.client.playback;
 
+import ru.nsu.fit.markelov.interfaces.client.Pair;
+
 public interface GameObjectState {
     /**
      * Returns the starting frame number of this state.
@@ -42,4 +44,13 @@ public interface GameObjectState {
      * @return the color of this object.
      */
     int getColor();
+
+    /**
+     * Returns a collection of sensors with their values.
+     *
+     * If an object has no sensors, a collection must be null.
+     *
+     * @return a collection of sensors with their values.
+     */
+    Iterable<Pair<String, String>> getSensorValues();
 }

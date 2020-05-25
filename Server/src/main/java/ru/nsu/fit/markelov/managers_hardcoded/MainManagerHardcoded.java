@@ -6,6 +6,7 @@ import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.Pair;
 import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
 import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
@@ -316,8 +317,32 @@ public class MainManagerHardcoded implements MainManager {
                     }
 
                     @Override
-                    public Map<String, Integer> getRobots() {
-                        return null;
+                    public List<Pair<String, Integer>> getUserBindingWithObjects() {
+                        List<Pair<String, Integer>> binding = new ArrayList<>();
+                        binding.add(new Pair<String, Integer>() {
+                            @Override
+                            public String getKey() {
+                                return "Oleg";
+                            }
+
+                            @Override
+                            public Integer getValue() {
+                                return 0;
+                            }
+                        });
+                        binding.add(new Pair<String, Integer>() {
+                            @Override
+                            public String getKey() {
+                                return "Simon";
+                            }
+
+                            @Override
+                            public Integer getValue() {
+                                return 1;
+                            }
+                        });
+
+                        return binding;
                     }
 
                     @Override
@@ -402,6 +427,35 @@ public class MainManagerHardcoded implements MainManager {
                                 public int getColor() {
                                     return 0x00ff00;
                                 }
+
+                                @Override
+                                public Iterable<Pair<String, String>> getSensorValues() {
+                                    List<Pair<String, String>> sensors = new ArrayList<>();
+                                    sensors.add(new Pair<String, String>() {
+                                        @Override
+                                        public String getKey() {
+                                            return "Sensor 1";
+                                        }
+
+                                        @Override
+                                        public String getValue() {
+                                            return posX+"";
+                                        }
+                                    });
+                                    sensors.add(new Pair<String, String>() {
+                                        @Override
+                                        public String getKey() {
+                                            return "Sensor 2";
+                                        }
+
+                                        @Override
+                                        public String getValue() {
+                                            return frame+"";
+                                        }
+                                    });
+
+                                    return sensors;
+                                }
                             });
                         }
                         List<GameObjectState> gameObjectStates_2 = new ArrayList<>();
@@ -484,6 +538,24 @@ public class MainManagerHardcoded implements MainManager {
                                 public int getColor() {
                                     return ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
                                 }
+
+                                @Override
+                                public Iterable<Pair<String, String>> getSensorValues() {
+                                    List<Pair<String, String>> sensors = new ArrayList<>();
+                                    sensors.add(new Pair<String, String>() {
+                                        @Override
+                                        public String getKey() {
+                                            return "U-la-la";
+                                        }
+
+                                        @Override
+                                        public String getValue() {
+                                            return frame+"";
+                                        }
+                                    });
+
+                                    return sensors;
+                                }
                             });
                         }
                         List<GameObjectState> gameObjectStates_3 = new ArrayList<>();
@@ -561,6 +633,11 @@ public class MainManagerHardcoded implements MainManager {
                             @Override
                             public int getColor() {
                                 return 0xff0000;
+                            }
+
+                            @Override
+                            public Iterable<Pair<String, String>> getSensorValues() {
+                                return new ArrayList<>();
                             }
                         });
 

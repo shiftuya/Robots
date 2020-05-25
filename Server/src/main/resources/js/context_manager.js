@@ -542,19 +542,32 @@ function insertCodeEditorData(obj, contextManager) {
 
 function insertSimulationResultData(obj, contextManager) {
     $("#playback").on("click", function() {
-        playerClosed = false;
         paused = true;
+        playerClosed = false;
         currentFrame = 0;
-        framesCount = 0;
         objects = [];
         
-        var playback = obj.response.playback;
-        framesCount = playback.framesCount;
+        playback = obj.response.playback;
         playback.gameObjectsStates.forEach(function(it) {
             objects.push({states: it, i: 0, framesToSleep: 0});
         });
-        groundObj = playback.ground;
 
+        playback.bindings.forEach(function(it) {
+            $("<div>" + it.user + "</div>").addClass("player-user").attr("data-id", it.id).appendTo("#player-users");
+        });
+        
+        var firstUser = $("#player-users").find(".player-user").first();
+        firstUser.addClass("player-user-selected");
+        currentObjectId = firstUser.attr("data-id");
+        
+        $("#player-users").find(".player-user").on("click", function() {
+            $("#player-users").find(".player-user").removeClass("player-user-selected");
+            $(this).addClass("player-user-selected");
+            currentObjectId = $(this).attr("data-id");
+            updateSensors();
+            updateCameraDirection();
+        });
+        
         init();
         animate();
     });

@@ -1,9 +1,18 @@
 package ru.nsu.fit.markelov.mainmanager;
 
+import ru.nsu.fit.markelov.interfaces.client.Pair;
 import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
 import ru.nsu.fit.markelov.interfaces.client.playback.Vector3;
 
+import java.util.ArrayList;
+
 public class GameObjectState1 implements GameObjectState {
+
+  @Override
+  public Iterable<Pair<String, String>> getSensorValues() { // TODO
+    return new ArrayList<>();
+  }
+
   private int color, startingFrame, endingFrame;
   private Vector3 position, rotation, dimension;
 

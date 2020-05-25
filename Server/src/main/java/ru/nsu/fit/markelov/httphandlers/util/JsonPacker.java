@@ -240,12 +240,31 @@ public class JsonPacker {
     }
 
     public static JSONObject packPlayback(Playback playback) {
+        JSONArray jsonBindings = new JSONArray();
+        for (Pair<String, Integer> pair : playback.getUserBindingWithObjects()) {
+            JSONObject jsonBinding = new JSONObject();
+            jsonBinding
+                .put("user", pair.getKey())
+                .put("id", pair.getValue());
+
+            jsonBindings.put(jsonBinding);
+        }
+
         JSONArray jsonGameObjectsStates = new JSONArray();
         for (List<GameObjectState> gameObjectStates : playback.getGameObjectStates()) {
             JSONArray jsonGameObjectStates = new JSONArray();
             for (GameObjectState gameObjectState : gameObjectStates) {
-                JSONObject jsonGameObjectState = new JSONObject();
+                JSONArray jsonSensors = new JSONArray();
+                for (Pair<String, String> pair : gameObjectState.getSensorValues()) {
+                    JSONObject jsonSensor = new JSONObject();
+                    jsonSensor
+                        .put("sensor", pair.getKey())
+                        .put("value", pair.getValue());
 
+                    jsonSensors.put(jsonSensor);
+                }
+
+                JSONObject jsonGameObjectState = new JSONObject();
                 jsonGameObjectState
                     .put("startingFrame", gameObjectState.getStartingFrame())
                     .put("endingFrame", gameObjectState.getEndingFrame())
@@ -261,7 +280,8 @@ public class JsonPacker {
                         .put(gameObjectState.getRotation().getX())
                         .put(gameObjectState.getRotation().getY())
                         .put(gameObjectState.getRotation().getZ()))
-                    .put("color", gameObjectState.getColor());
+                    .put("color", gameObjectState.getColor())
+                    .put("sensors", jsonSensors);
 
                 jsonGameObjectStates.put(jsonGameObjectState);
             }
@@ -279,7 +299,9 @@ public class JsonPacker {
 
         return new JSONObject()
             .put("framesCount", playback.getFramesCount())
+            .put("bindings", jsonBindings)
             .put("gameObjectsStates", jsonGameObjectsStates)
+            .put("backgroundColor", playback.getBackgroundColor())
             .put("ground", jsonGround);
     }
 }

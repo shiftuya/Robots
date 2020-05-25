@@ -230,9 +230,9 @@ function activateListeners(contextManager) {
     });
 
     $("#player-rewind-line").on("click", function(event) {
-        currentFrame = Math.floor(framesCount * (event.pageX - $(this).offset().left) / $(this).width());
-        if (currentFrame == framesCount) {
-            alert("currentFrame == framesCount !!!");
+        currentFrame = Math.floor(playback.framesCount * (event.pageX - $(this).offset().left) / $(this).width());
+        if (currentFrame == playback.framesCount) {
+            alert("currentFrame == playback.framesCount !!!");
         }
 
         objects.forEach(function(object) {
@@ -243,12 +243,13 @@ function activateListeners(contextManager) {
                     object.framesToSleep = state.endingFrame - 1 - currentFrame;
 
                     update(object.mesh, object.states[i]);
-                    $("#player-progress-current").css("width", $("#player-rewind-line").width() * currentFrame / (framesCount - 1));
+                    $("#player-progress-current").css("width", $("#player-rewind-line").width() * currentFrame / (playback.framesCount - 1));
 
                     break;
                 }
             }
         });
+        updateSensors();
     });
 
     $("#player-play-pause").on("click", function() {
@@ -271,6 +272,7 @@ function activateListeners(contextManager) {
             object.framesToSleep = 0;
             update(object.mesh, object.states[0]);
         });
+        updateSensors();
 
         $("#player-progress-current").css("width", 0);
     });
