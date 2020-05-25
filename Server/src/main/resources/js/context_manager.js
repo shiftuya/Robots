@@ -90,7 +90,15 @@ function insertLoginData(obj, contextManager) {
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
 
-    section.find(".login-submit-a").on("click", function() {
+    var submitButton = section.find(".login-submit-a");
+    
+    section.find("input").on("keypress", function(e) {
+        if (e.which == 13) {
+            submitButton.click();
+        }
+    });
+
+    submitButton.on("click", function() {
         var username = section.find("input[name='name']").val();
         
         var form = $("#login-content").find(".login-shell:not('.skeleton')").find("form")
@@ -101,8 +109,9 @@ function insertLoginData(obj, contextManager) {
             contextManager.changeContext("list_of_lobbies");
         }, undefined, formData);
     });
-
+    
     $("#login-content").append(section);
+    section.find("input[name='name']").focus();
 }
 
 function insertListOfLobbiesData(obj, contextManager) {

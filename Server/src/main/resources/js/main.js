@@ -109,11 +109,6 @@ $(document).ready(function() {
                 contentUnit: "tr:not(':first-of-type')"
             }
         }],
-        ["options", {
-            title: "Options",
-            headerId: "header-main",
-            contentId: "options-content"
-        }],
         ["404", {
             title: "404 Not Found",
             headerId: "header-main",
