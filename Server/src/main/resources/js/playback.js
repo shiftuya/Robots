@@ -4,6 +4,7 @@ var paused;
 var currentFrame;
 var framesCount;
 var objects;
+var groundObj;
 var toRadians = Math.PI / 180;
 
 $(document).ready(function() {
@@ -18,6 +19,7 @@ $(document).ready(function() {
             obj.gameObjectsStates.forEach(function(it) {
                 objects.push({states: it, i: 0, framesToSleep: 0});
             });
+            groundObj = obj.ground;
             
             init();
             animate();
@@ -95,7 +97,7 @@ function init() {
     //scene.fog = new THREE.Fog( 0xa0a0a0, 200, 10000 );
 
     var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-    hemiLight.position.set( 0, 200, 0 );
+    hemiLight.position.set( 0, 20000, 0 );
     scene.add( hemiLight );
 
     var directionalLight = new THREE.DirectionalLight( 0xffffff );
@@ -109,15 +111,18 @@ function init() {
 
     // ground
 
-    var ground = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2000, 2000 ), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
-    ground.rotation.x = - Math.PI / 2;
+    var ground = new THREE.Mesh(
+        new THREE.PlaneBufferGeometry(groundObj.size, groundObj.size),
+        new THREE.MeshPhongMaterial({ color: groundObj.color, depthWrite: false })
+    );
+    ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
-    scene.add( ground );
+    scene.add(ground);
 
-    var grid = new THREE.GridHelper( 2000, 20, 0x000000, 0x000000 );
-    grid.material.opacity = 0.2;
+    var grid = new THREE.GridHelper(groundObj.size, groundObj.gridDivisions, groundObj.gridCenterLineColor, groundObj.gridColor);
+    grid.material.opacity = groundObj.opacity;
     grid.material.transparent = true;
-    scene.add( grid );
+    scene.add(grid);
 
     // export mesh
 
@@ -128,7 +133,7 @@ function init() {
         
         update(object.mesh, object.states[0]);
         
-        //object.mesh.castShadow = true;
+        object.mesh.castShadow = true;
         scene.add(object.mesh);
     });
 
@@ -147,6 +152,9 @@ function init() {
 
     controls = new THREE.OrbitControls( camera, renderer.domElement );
     controls.target.set( 0, 5, 0 );
+    controls.enableKeys = false;
+    controls.enableRotate = false;
+    controls.enableZoom = false;
     controls.update();
 
     //

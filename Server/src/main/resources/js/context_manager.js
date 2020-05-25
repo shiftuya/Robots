@@ -552,6 +552,7 @@ function insertSimulationResultData(obj, contextManager) {
         playback.gameObjectsStates.forEach(function(it) {
             objects.push({states: it, i: 0, framesToSleep: 0});
         });
+        groundObj = playback.ground;
 
         init();
         animate();

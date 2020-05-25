@@ -346,7 +346,7 @@ function loadFile() {
 
 
 var scene, camera, renderer, controls;
-var paused, currentFrame, framesCount, objects;
+var paused, currentFrame, framesCount, objects, groundObj;
 var toRadians = Math.PI / 180;
 
 function init() {
@@ -357,30 +357,33 @@ function init() {
     scene.background = new THREE.Color( 0xa0a0a0 );
     //scene.fog = new THREE.Fog( 0xa0a0a0, 200, 10000 );
 
-    var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-    hemiLight.position.set( 0, 200, 0 );
-    scene.add( hemiLight );
+    var hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+    hemiLight.position.set(0, 200, 0);
+    scene.add(hemiLight);
 
-    var directionalLight = new THREE.DirectionalLight( 0xffffff );
-    directionalLight.position.set( 0, 200, 100 );
+    var directionalLight = new THREE.DirectionalLight(0xffffff);
+    directionalLight.position.set(0, 200, 100);
     directionalLight.castShadow = true;
     directionalLight.shadow.camera.top = 180;
     directionalLight.shadow.camera.bottom = -100;
     directionalLight.shadow.camera.left = -120;
     directionalLight.shadow.camera.right = 120;
-    scene.add( directionalLight );
+    scene.add(directionalLight);
 
     // ground
 
-    var ground = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2000, 2000 ), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
-    ground.rotation.x = - Math.PI / 2;
+    var ground = new THREE.Mesh(
+        new THREE.PlaneBufferGeometry(groundObj.size, groundObj.size),
+        new THREE.MeshPhongMaterial({ color: groundObj.color, depthWrite: false })
+    );
+    ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
-    scene.add( ground );
+    scene.add(ground);
 
-    var grid = new THREE.GridHelper( 2000, 20, 0x000000, 0x000000 );
-    grid.material.opacity = 0.2;
+    var grid = new THREE.GridHelper(groundObj.size, groundObj.gridDivisions, groundObj.gridCenterLineColor, groundObj.gridColor);
+    grid.material.opacity = groundObj.opacity;
     grid.material.transparent = true;
-    scene.add( grid );
+    scene.add(grid);
 
     // export mesh
 
@@ -391,7 +394,6 @@ function init() {
 
         update(object.mesh, object.states[0]);
 
-        //object.mesh.castShadow = true;
         scene.add(object.mesh);
     });
 
@@ -408,13 +410,13 @@ function init() {
 
     //
 
-    controls = new THREE.OrbitControls( camera, renderer.domElement );
-    controls.target.set( 0, 5, 0 );
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 5, 0);
     controls.update();
 
     //
 
-    window.addEventListener( 'resize', onWindowResize, false );
+    window.addEventListener("resize", onWindowResize, false);
 }
 
 function onWindowResize() {

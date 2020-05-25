@@ -436,7 +436,7 @@ public class MainManagerWithDatabase implements MainManager {
       } catch (IllegalArgumentException e) {
         throw new ProcessingException("Illegal difficulty");
       }
-      Level level = new Level1(newLevelId, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
+      Level level = new Level1(newLevelId, "/images/labyrinth-icon.png"/*TODO*/, name, levelDifficulty, "Type"/*TODO*/, description, rules, goal,
           minPlayers, maxPlayers, language, code); // ???
 
 

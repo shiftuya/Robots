@@ -26,4 +26,13 @@ public interface Playback {
      * @return a list of game object states.
      */
     List<List<GameObjectState>> getGameObjectStates();
+
+    /**
+     * Returns ground.
+     *
+     * @return ground.
+     */
+    default Ground getGround() {
+        return new Ground() {};
+    }
 }

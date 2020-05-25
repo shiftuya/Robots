@@ -268,8 +268,18 @@ public class JsonPacker {
             jsonGameObjectsStates.put(jsonGameObjectStates);
         }
 
+        JSONObject jsonGround = new JSONObject();
+        jsonGround
+            .put("size", playback.getGround().getSize())
+            .put("color", playback.getGround().getColor())
+            .put("gridDivisions", playback.getGround().getGridDivisions())
+            .put("gridColor", playback.getGround().getGridColor())
+            .put("gridCenterLineColor", playback.getGround().getGridCenterLineColor())
+            .put("opacity", playback.getGround().getGridOpacity());
+
         return new JSONObject()
             .put("framesCount", playback.getFramesCount())
-            .put("gameObjectsStates", jsonGameObjectsStates);
+            .put("gameObjectsStates", jsonGameObjectsStates)
+            .put("ground", jsonGround);
     }
 }
