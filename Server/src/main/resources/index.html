@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="css/user.css">
         <link rel="stylesheet" href="css/level_editor.css">
         <link rel="stylesheet" href="css/lobby.css">
-        <link rel="stylesheet" href="css/simulation_results.css">
+        <link rel="stylesheet" href="css/simulation_result.css">
         <link rel="stylesheet" href="css/playback.css">
         <link rel="stylesheet" href="css/code_editor.css">
         <!--<link rel="stylesheet" href="js/libs/codemirror-5.51.0/lib/codemirror.css">-->
@@ -411,7 +411,7 @@
             </section>
             <section id="simulation-result-content" class="content">
                 <h1 class="content-header">Simulation Result</h1>
-                <input id="playback" type="button" value="Playback">
+                <span id="playback" class="a highlited-on-hover playback">Playback</span>
                 <table id="simulation-result-table" class="common-table simulation-result-table">
                     <tr>
                         <th>Player</th>
@@ -428,10 +428,10 @@
                             <span class="result"></span>
                         </td>
                         <td>
-                            <span class="log">Download</span>
+                            <span class="a highlited-on-hover log">Download</span>
                         </td>
                         <td>
-                            <span class="script">Download</span>
+                            <span class="a highlited-on-hover script">Download</span>
                         </td>
                     </tr>
                 </table>

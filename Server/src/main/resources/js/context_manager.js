@@ -144,7 +144,7 @@ function insertListOfLobbiesData(obj, contextManager) {
 function insertChooseLevelData(obj, contextManager) {
     var table = $("#levels-table");
     if (obj.response.length == 0) {
-        $("<tr><td colspan=\"100%\">No created levels.</td></tr>").appendTo(table);
+        $("<tr><td colspan=\"100%\">No created levels</td></tr>").appendTo(table);
     } else {
         var skeleton = table.find("tr.skeleton");
         obj.response.forEach(function(item) {
@@ -177,7 +177,7 @@ function insertChooseLevelData(obj, contextManager) {
 function insertSolutionsData(obj, contextManager, inbuiltTable) {
     var table = inbuiltTable || $("#solutions-table");
     if (obj.response.length == 0) {
-        $("<tbody><tr><td colspan=\"100%\">No created levels.</td></tr></tbody>").appendTo(table);
+        $("<tbody><tr><td colspan=\"100%\">No created levels</td></tr></tbody>").appendTo(table);
     } else {
         var skeleton = table.find("tbody.skeleton");
         obj.response.forEach(function(item) {
@@ -203,7 +203,7 @@ function insertSolutionsData(obj, contextManager, inbuiltTable) {
                 item.attempts.forEach(function(attemptItem) {
                     var result;
                     if (attemptItem.attempt_result) {
-                        result = "successed";
+                        result = "successful";
                         successed++;
                     } else {
                         result = "failed";
@@ -252,7 +252,7 @@ function insertSolutionsData(obj, contextManager, inbuiltTable) {
 function insertUsersData(obj, contextManager) {
     var table = $("#users-table");
     if (obj.response.length == 0) {
-        $("<tr><td colspan=\"100%\">No created users.</td></tr>").appendTo(table);
+        $("<tr><td colspan=\"100%\">No created users</td></tr>").appendTo(table);
     } else {
         var skeleton = table.find("tr.skeleton");
         obj.response.forEach(function(item) {
@@ -362,7 +362,7 @@ function insertUserEditorData(obj, contextManager) {
 function insertLevelsData(obj, contextManager) {
     var table = $("#teacher-levels-table");
     if (obj.response.length == 0) {
-        $("<tr><td colspan=\"100%\">No created levels.</td></tr>").appendTo(table);
+        $("<tr><td colspan=\"100%\">No created levels</td></tr>").appendTo(table);
     } else {
         var skeleton = table.find("tr.skeleton");
         obj.response.forEach(function(item) {
@@ -434,7 +434,7 @@ function insertLevelEditorData(obj, contextManager) {
 function insertSimulatorsData(obj, contextManager) {
     var table = $("#simulators-table");
     if (obj.response.length == 0) {
-        $("<tr><td colspan=\"100%\">No created simulators.</td></tr>").appendTo(table);
+        $("<tr><td colspan=\"100%\">No created simulators</td></tr>").appendTo(table);
     } else {
         var skeleton = table.find("tr.skeleton");
         obj.response.forEach(function(item, number) {
@@ -566,21 +566,23 @@ function insertSimulationResultData(obj, contextManager) {
         tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
         tr.find(".username").text(item.username);
         tr.find(".result").text(item.result ? "Success" : "Failed");
-
-        table.append(tr);
+        
+        var id = obj.response.id;
 
         tr.find(".log").on("click", function() {
-            sendAjax("log.get?username=" + item.username + "&id=" + obj.response.id, function(result) {
+            sendAjax("log.get?username=" + item.username + "&id=" + id, function(result) {
                 var obj = JSON.parse(result);
-                alert(obj.response);
+                downloadFile(obj.response, "log_" + id + "_" + item.username + ".txt", "plain/text");
             });
         });
 
         tr.find(".script").on("click", function() {
             sendAjax("script.get?username=" + item.username + "&id=" + obj.response.id, function(result) {
                 var obj = JSON.parse(result);
-                alert(obj.response);
+                downloadFile(obj.response, "script_" + id + "_" + item.username + ".groovy", "application/groovy");
             });
         });
+
+        table.append(tr);
     });
 }
