@@ -229,8 +229,8 @@ function insertSolutionsData(obj, contextManager, inbuiltTable) {
                 if (cnt > 1) attempts_number += "s";
 
                 var attempts_number_details = "";
-                if (successed && failed) attempts_number_details = "(" + successed + " successed, " + failed + " failed)";
-                if (successed && !failed) attempts_number_details = "(" + successed + " successed)";
+                if (successed && failed) attempts_number_details = "(" + successed + " successful, " + failed + " failed)";
+                if (successed && !failed) attempts_number_details = "(" + successed + " successful)";
                 if (!successed && failed) attempts_number_details = "(" + failed + " failed)";
 
                 tbody.find(".attempts-number").text(attempts_number);
@@ -542,6 +542,7 @@ function insertCodeEditorData(obj, contextManager) {
 
 function insertSimulationResultData(obj, contextManager) {
     $("#playback").on("click", function() {
+        playerClosed = false;
         paused = true;
         currentFrame = 0;
         framesCount = 0;
@@ -566,7 +567,7 @@ function insertSimulationResultData(obj, contextManager) {
 
         tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
         tr.find(".username").text(item.username);
-        tr.find(".result").text(item.result ? "Success" : "Failed");
+        tr.find(".result").text(item.result ? "Successful" : "Failed");
         
         var id = obj.response.id;
 

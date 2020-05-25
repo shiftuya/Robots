@@ -223,6 +223,7 @@ function activateListeners(contextManager) {
         $("#player").fadeOut("slow", function() {
             $("#player").find("canvas").remove();
             $("body").removeClass("overflow-hidden");
+            playerClosed = true;
         });
     });
 
@@ -345,8 +346,8 @@ function loadFile() {
 
 
 
-var scene, camera, renderer, controls;
-var paused, currentFrame, framesCount, objects, groundObj;
+var scene, camera, renderer, controls, ground, grid;
+var paused, playerClosed, currentFrame, framesCount, objects, groundObj;
 var toRadians = Math.PI / 180;
 
 function init() {
@@ -372,7 +373,7 @@ function init() {
 
     // ground
 
-    var ground = new THREE.Mesh(
+    ground = new THREE.Mesh(
         new THREE.PlaneBufferGeometry(groundObj.size, groundObj.size),
         new THREE.MeshPhongMaterial({ color: groundObj.color, depthWrite: false })
     );
@@ -380,7 +381,7 @@ function init() {
     ground.receiveShadow = true;
     scene.add(ground);
 
-    var grid = new THREE.GridHelper(groundObj.size, groundObj.gridDivisions, groundObj.gridCenterLineColor, groundObj.gridColor);
+    grid = new THREE.GridHelper(groundObj.size, groundObj.gridDivisions, groundObj.gridCenterLineColor, groundObj.gridColor);
     grid.material.opacity = groundObj.opacity;
     grid.material.transparent = true;
     scene.add(grid);
@@ -388,9 +389,10 @@ function init() {
     // export mesh
 
     objects.forEach(function(object) {
-        var geometry = new THREE.BoxBufferGeometry(1, 1, 1);
-        var material = new THREE.MeshPhongMaterial();
-        object.mesh = new THREE.Mesh(geometry, material);
+        object.mesh = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(1, 1, 1),
+            new THREE.MeshPhongMaterial()
+        );
 
         update(object.mesh, object.states[0]);
 
@@ -399,9 +401,9 @@ function init() {
 
     //
 
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight); ///////////////////////////////////////////////////
     renderer.shadowMap.enabled = true;
 
     $("#player").append(renderer.domElement);
@@ -412,6 +414,9 @@ function init() {
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 5, 0);
+    controls.enableKeys = false;
+    controls.enableRotate = false;
+    controls.enableZoom = false;
     controls.update();
 
     //
@@ -427,6 +432,11 @@ function onWindowResize() {
 }
 
 function animate() {
+    if (playerClosed) {
+        disposePlayback();
+        return;
+    }
+
     requestAnimationFrame(animate);
 
     if (!paused && currentFrame < framesCount) {
@@ -463,4 +473,18 @@ function update(mesh, state) {
     mesh.rotation.z = state.rotation[2] * toRadians;
 
     mesh.material.color.setHex(state.color);
+}
+
+function disposePlayback() {
+    scene.dispose();
+    ground.geometry.dispose();
+    ground.material.dispose();
+    grid.geometry.dispose();
+    grid.material.dispose();
+    objects.forEach(function(object) {
+        object.mesh.geometry.dispose();
+        object.mesh.material.dispose();
+    });
+    controls.dispose();
+    renderer.dispose();
 }

@@ -6,10 +6,12 @@ import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
 import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.User;
+import ru.nsu.fit.markelov.interfaces.client.playback.Vector3;
 import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MainManagerHardcoded implements MainManager {
 
@@ -306,7 +309,269 @@ public class MainManagerHardcoded implements MainManager {
 
             @Override
             public Playback getPlayback() {
-                return null;
+                return new Playback() {
+                    @Override
+                    public int getFramesCount() {
+                        return 600;
+                    }
+
+                    @Override
+                    public Map<String, Integer> getRobots() {
+                        return null;
+                    }
+
+                    @Override
+                    public List<List<GameObjectState>> getGameObjectStates() {
+                        List<GameObjectState> gameObjectStates_1 = new ArrayList<>();
+                        float x = 0;
+                        for (int i = 0; i < 600; i++, x += 0.5f) {
+                            final int frame = i;
+                            final float posX = x;
+                            gameObjectStates_1.add(new GameObjectState() {
+                                @Override
+                                public int getStartingFrame() {
+                                    return frame;
+                                }
+
+                                @Override
+                                public int getEndingFrame() {
+                                    return frame + 1;
+                                }
+
+                                @Override
+                                public Vector3 getPosition() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return posX;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return 25;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return 0;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public Vector3 getDimension() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return 100;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return 50;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return 75;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public Vector3 getRotation() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return 0;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return frame;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return 0;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public int getColor() {
+                                    return 0x00ff00;
+                                }
+                            });
+                        }
+                        List<GameObjectState> gameObjectStates_2 = new ArrayList<>();
+                        float z = 0;
+                        for (int i = 0; i < 600; i += 10, z += 5f) {
+                            final int frame = i;
+                            final float posZ = z;
+                            gameObjectStates_2.add(new GameObjectState() {
+                                @Override
+                                public int getStartingFrame() {
+                                    return frame;
+                                }
+
+                                @Override
+                                public int getEndingFrame() {
+                                    return frame + 10;
+                                }
+
+                                @Override
+                                public Vector3 getPosition() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return 0;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return 25;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return posZ;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public Vector3 getDimension() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return 50;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return 50;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return 50;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public Vector3 getRotation() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return 0;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return 0;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return 0;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public int getColor() {
+                                    return ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
+                                }
+                            });
+                        }
+                        List<GameObjectState> gameObjectStates_3 = new ArrayList<>();
+                        gameObjectStates_3.add(new GameObjectState() {
+                            @Override
+                            public int getStartingFrame() {
+                                return 0;
+                            }
+
+                            @Override
+                            public int getEndingFrame() {
+                                return 600;
+                            }
+
+                            @Override
+                            public Vector3 getPosition() {
+                                return new Vector3() {
+                                    @Override
+                                    public float getX() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public float getY() {
+                                        return 250;
+                                    }
+
+                                    @Override
+                                    public float getZ() {
+                                        return -200;
+                                    }
+                                };
+                            }
+
+                            @Override
+                            public Vector3 getDimension() {
+                                return new Vector3() {
+                                    @Override
+                                    public float getX() {
+                                        return 500;
+                                    }
+
+                                    @Override
+                                    public float getY() {
+                                        return 500;
+                                    }
+
+                                    @Override
+                                    public float getZ() {
+                                        return 10;
+                                    }
+                                };
+                            }
+
+                            @Override
+                            public Vector3 getRotation() {
+                                return new Vector3() {
+                                    @Override
+                                    public float getX() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public float getY() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public float getZ() {
+                                        return 0;
+                                    }
+                                };
+                            }
+
+                            @Override
+                            public int getColor() {
+                                return 0xff0000;
+                            }
+                        });
+
+                        List<List<GameObjectState>> gameObjectsStates = new ArrayList<>();
+                        gameObjectsStates.add(gameObjectStates_1);
+                        gameObjectsStates.add(gameObjectStates_2);
+                        gameObjectsStates.add(gameObjectStates_3);
+
+                        return gameObjectsStates;
+                    }
+                };
             }
 
             @Override
