@@ -3,8 +3,8 @@ var playback, paused, playerClosed, currentFrame, objects, currentObjectId;
 var toRadians = Math.PI / 180;
 
 function init() {
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 90), 1, 10000); // TODO
-    camera.position.set(200, 100, 200); // TODO
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 90), 1, playback.camera.renderDistance);
+    camera.position.set(playback.camera.position[0], playback.camera.position[1], playback.camera.position[2]);
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(playback.backgroundColor);
@@ -62,7 +62,6 @@ function init() {
 
     // controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.target.set(0, 5, 0); // TODO
     controls.enableKeys = false;
     controls.enableRotate = false;
     controls.enableZoom = false;

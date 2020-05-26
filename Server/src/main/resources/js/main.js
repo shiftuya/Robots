@@ -276,6 +276,11 @@ function activateListeners(contextManager) {
 
         $("#player-progress-current").css("width", 0);
     });
+
+    $("#player").on("wheel", function(event) {
+        camera.position.y += (event.originalEvent.deltaY > 0) ? playback.camera.scrollSpeed : -playback.camera.scrollSpeed;
+        camera.update();
+    });
 }
 
 function sendAjax(ajaxQuery, handleResponseFunction, data, formData) {

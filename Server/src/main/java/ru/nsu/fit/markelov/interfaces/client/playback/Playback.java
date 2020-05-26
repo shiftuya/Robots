@@ -30,6 +30,15 @@ public interface Playback {
     List<List<GameObjectState>> getGameObjectStates();
 
     /**
+     * Returns camera.
+     *
+     * @return camera.
+     */
+    default Camera getCamera() {
+        return new Camera() {};
+    }
+
+    /**
      * Returns background color.
      *
      * @return background color.

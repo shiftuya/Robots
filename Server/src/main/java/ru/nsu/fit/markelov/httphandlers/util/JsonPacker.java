@@ -288,6 +288,15 @@ public class JsonPacker {
             jsonGameObjectsStates.put(jsonGameObjectStates);
         }
 
+        JSONObject jsonCamera = new JSONObject();
+        jsonCamera
+            .put("position", new JSONArray()
+                .put(playback.getCamera().getPosition().getX())
+                .put(playback.getCamera().getPosition().getY())
+                .put(playback.getCamera().getPosition().getZ()))
+            .put("renderDistance", playback.getCamera().getRenderDistance())
+            .put("scrollSpeed", playback.getCamera().getScrollSpeed());
+
         JSONObject jsonGround = new JSONObject();
         jsonGround
             .put("size", playback.getGround().getSize())
@@ -301,6 +310,7 @@ public class JsonPacker {
             .put("framesCount", playback.getFramesCount())
             .put("bindings", jsonBindings)
             .put("gameObjectsStates", jsonGameObjectsStates)
+            .put("camera", jsonCamera)
             .put("backgroundColor", playback.getBackgroundColor())
             .put("ground", jsonGround);
     }
