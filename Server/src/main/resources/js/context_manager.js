@@ -548,8 +548,57 @@ function insertSimulationResultData(obj, contextManager) {
         objects = [];
         
         playback = obj.response.playback;
-        playback.gameObjectsStates.forEach(function(it) {
-            objects.push({states: it, i: 0, framesToSleep: 0});
+        playback.gameObjectsStates.forEach(function(states) {
+            var newStates = [];
+            for (var i = 0; i < states.length; i++) {
+                newStates.push(states[i]);
+                
+                if (i + 1 < states.length) {
+                    states[i].endingFrame = states[i].startingFrame + 1;
+                    
+                    var dFrames = states[i+1].startingFrame - states[i].startingFrame;
+
+                    var dPosX = (states[i+1].position[0] - states[i].position[0]) / dFrames;
+                    var dPosY = (states[i+1].position[1] - states[i].position[1]) / dFrames;
+                    var dPosZ = (states[i+1].position[2] - states[i].position[2]) / dFrames;
+
+                    var dDimX = (states[i+1].dimension[0] - states[i].dimension[0]) / dFrames;
+                    var dDimY = (states[i+1].dimension[1] - states[i].dimension[1]) / dFrames;
+                    var dDimZ = (states[i+1].dimension[2] - states[i].dimension[2]) / dFrames;
+
+                    var dRotX = (states[i+1].rotation[0] - states[i].rotation[0]) / dFrames;
+                    var dRotY = (states[i+1].rotation[1] - states[i].rotation[1]) / dFrames;
+                    var dRotZ = (states[i+1].rotation[2] - states[i].rotation[2]) / dFrames;
+                    
+                    for (var frame = 1; frame < dFrames; frame++) {
+                        var newState = {
+                            startingFrame: states[i].startingFrame + frame,
+                            endingFrame: states[i].startingFrame + frame + 1,
+                            position: [],
+                            dimension: [],
+                            rotation: [],
+                            color: states[i].color,
+                            sensors: states[i].sensors
+                        };
+
+                        newState.position.push(states[i].position[0] + frame * dPosX);
+                        newState.position.push(states[i].position[1] + frame * dPosY);
+                        newState.position.push(states[i].position[2] + frame * dPosZ);
+
+                        newState.dimension.push(states[i].dimension[0] + frame * dDimX);
+                        newState.dimension.push(states[i].dimension[1] + frame * dDimY);
+                        newState.dimension.push(states[i].dimension[2] + frame * dDimZ);
+
+                        newState.rotation.push(states[i].rotation[0] + frame * dRotX);
+                        newState.rotation.push(states[i].rotation[1] + frame * dRotY);
+                        newState.rotation.push(states[i].rotation[2] + frame * dRotZ);
+                        
+                        newStates.push(newState);
+                    }
+                }
+            }
+            
+            objects.push({states: newStates, i: 0, framesToSleep: 0});
         });
 
         playback.bindings.forEach(function(it) {
