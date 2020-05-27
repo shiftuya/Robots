@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -317,32 +318,12 @@ public class MainManagerHardcoded implements MainManager {
                     }
 
                     @Override
-                    public List<Pair<String, Integer>> getUserBindingWithObjects() {
-                        List<Pair<String, Integer>> binding = new ArrayList<>();
-                        binding.add(new Pair<String, Integer>() {
-                            @Override
-                            public String getKey() {
-                                return "Oleg";
-                            }
+                    public Map<String, Integer> getRobots() {
+                        Map<String, Integer> robots = new TreeMap<>();
+                        robots.put("Oleg", 0);
+                        robots.put("Simon", 1);
 
-                            @Override
-                            public Integer getValue() {
-                                return 0;
-                            }
-                        });
-                        binding.add(new Pair<String, Integer>() {
-                            @Override
-                            public String getKey() {
-                                return "Simon";
-                            }
-
-                            @Override
-                            public Integer getValue() {
-                                return 1;
-                            }
-                        });
-
-                        return binding;
+                        return robots;
                     }
 
                     @Override

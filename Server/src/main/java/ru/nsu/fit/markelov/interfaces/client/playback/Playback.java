@@ -1,7 +1,5 @@
 package ru.nsu.fit.markelov.interfaces.client.playback;
 
-import ru.nsu.fit.markelov.interfaces.client.Pair;
-
 import java.util.List;
 import java.util.Map;
 
@@ -14,13 +12,13 @@ public interface Playback {
     int getFramesCount();
 
     /**
-     * Returns a collection of users with their indexes in list of game objects.
+     * Returns a map <userName -> index in list of game objects>.
      *
      * Used for binding users with game objects.
      *
-     * @return a collection of users with their indexes in list of game objects.
+     * @return a map <userName -> index in list of game objects>.
      */
-    List<Pair<String, Integer>> getUserBindingWithObjects();
+    Map<String, Integer> getRobots();
 
     /**
      * Returns a list of game object states.

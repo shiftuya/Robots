@@ -241,11 +241,11 @@ public class JsonPacker {
 
     public static JSONObject packPlayback(Playback playback) {
         JSONArray jsonBindings = new JSONArray();
-        for (Pair<String, Integer> pair : playback.getUserBindingWithObjects()) {
+        for (Map.Entry<String, Integer> entry : playback.getRobots().entrySet()) {
             JSONObject jsonBinding = new JSONObject();
             jsonBinding
-                .put("user", pair.getKey())
-                .put("id", pair.getValue());
+                .put("user", entry.getKey())
+                .put("id", entry.getValue());
 
             jsonBindings.put(jsonBinding);
         }
