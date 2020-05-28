@@ -8,11 +8,6 @@ import java.util.ArrayList;
 
 public class GameObjectState1 implements GameObjectState {
 
-  @Override
-  public Iterable<Pair<String, String>> getSensorValues() { // TODO
-    return new ArrayList<>();
-  }
-
   private int color, startingFrame, endingFrame;
   private Vector3 position, rotation, dimension;
 

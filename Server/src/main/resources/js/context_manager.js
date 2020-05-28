@@ -546,69 +546,103 @@ function insertSimulationResultData(obj, contextManager) {
         playerClosed = false;
         currentFrame = 0;
         objects = [];
-        
-        playback = obj.response.playback;
+
+        playback = JSON.parse(JSON.stringify(obj.response.playback));
         playback.gameObjectsStates.forEach(function(states) {
             var newStates = [];
+
+            if (states[0].startingFrame != 0) {
+                var invisibleState = {
+                    startingFrame: 0,
+                    endingFrame: states[0].startingFrame,
+                    visible: false,
+                    position: [0, 0, 0]
+                };
+
+                newStates.push(invisibleState);
+            }
+
             for (var i = 0; i < states.length; i++) {
+                states[i].visible = true;
                 newStates.push(states[i]);
-                
-                if (i + 1 < states.length) {
-                    states[i].endingFrame = states[i].startingFrame + 1;
-                    
-                    var dFrames = states[i+1].startingFrame - states[i].startingFrame;
 
-                    var dPosX = (states[i+1].position[0] - states[i].position[0]) / dFrames;
-                    var dPosY = (states[i+1].position[1] - states[i].position[1]) / dFrames;
-                    var dPosZ = (states[i+1].position[2] - states[i].position[2]) / dFrames;
+                if (i < states.length - 1) {
+                    if (states[i].endingFrame == states[i+1].startingFrame) {
+                        states[i].endingFrame = states[i].startingFrame + 1;
 
-                    var dDimX = (states[i+1].dimension[0] - states[i].dimension[0]) / dFrames;
-                    var dDimY = (states[i+1].dimension[1] - states[i].dimension[1]) / dFrames;
-                    var dDimZ = (states[i+1].dimension[2] - states[i].dimension[2]) / dFrames;
+                        var dFrames = states[i+1].startingFrame - states[i].startingFrame;
 
-                    var dRotX = (states[i+1].rotation[0] - states[i].rotation[0]) / dFrames;
-                    var dRotY = (states[i+1].rotation[1] - states[i].rotation[1]) / dFrames;
-                    var dRotZ = (states[i+1].rotation[2] - states[i].rotation[2]) / dFrames;
-                    
-                    for (var frame = 1; frame < dFrames; frame++) {
-                        var newState = {
-                            startingFrame: states[i].startingFrame + frame,
-                            endingFrame: states[i].startingFrame + frame + 1,
-                            position: [],
-                            dimension: [],
-                            rotation: [],
-                            color: states[i].color,
-                            sensors: states[i].sensors
+                        var dPosX = (states[i+1].position[0] - states[i].position[0]) / dFrames;
+                        var dPosY = (states[i+1].position[1] - states[i].position[1]) / dFrames;
+                        var dPosZ = (states[i+1].position[2] - states[i].position[2]) / dFrames;
+
+                        var dDimX = (states[i+1].dimension[0] - states[i].dimension[0]) / dFrames;
+                        var dDimY = (states[i+1].dimension[1] - states[i].dimension[1]) / dFrames;
+                        var dDimZ = (states[i+1].dimension[2] - states[i].dimension[2]) / dFrames;
+
+                        var dRotX = (states[i+1].rotation[0] - states[i].rotation[0]) / dFrames;
+                        var dRotY = (states[i+1].rotation[1] - states[i].rotation[1]) / dFrames;
+                        var dRotZ = (states[i+1].rotation[2] - states[i].rotation[2]) / dFrames;
+
+                        for (var frame = 1; frame < dFrames; frame++) {
+                            var newState = {
+                                startingFrame: states[i].startingFrame + frame,
+                                endingFrame: states[i].startingFrame + frame + 1,
+                                visible: true,
+                                position: [],
+                                dimension: [],
+                                rotation: [],
+                                color: states[i].color,
+                                sensors: states[i].sensors
+                            };
+
+                            newState.position.push(states[i].position[0] + frame * dPosX);
+                            newState.position.push(states[i].position[1] + frame * dPosY);
+                            newState.position.push(states[i].position[2] + frame * dPosZ);
+
+                            newState.dimension.push(states[i].dimension[0] + frame * dDimX);
+                            newState.dimension.push(states[i].dimension[1] + frame * dDimY);
+                            newState.dimension.push(states[i].dimension[2] + frame * dDimZ);
+
+                            newState.rotation.push(states[i].rotation[0] + frame * dRotX);
+                            newState.rotation.push(states[i].rotation[1] + frame * dRotY);
+                            newState.rotation.push(states[i].rotation[2] + frame * dRotZ);
+
+                            newStates.push(newState);
+                        }
+                    } else {
+                        var invisibleState = {
+                            startingFrame: states[i].endingFrame,
+                            endingFrame: states[i+1].startingFrame,
+                            visible: false,
+                            position: [0, 0, 0]
                         };
 
-                        newState.position.push(states[i].position[0] + frame * dPosX);
-                        newState.position.push(states[i].position[1] + frame * dPosY);
-                        newState.position.push(states[i].position[2] + frame * dPosZ);
-
-                        newState.dimension.push(states[i].dimension[0] + frame * dDimX);
-                        newState.dimension.push(states[i].dimension[1] + frame * dDimY);
-                        newState.dimension.push(states[i].dimension[2] + frame * dDimZ);
-
-                        newState.rotation.push(states[i].rotation[0] + frame * dRotX);
-                        newState.rotation.push(states[i].rotation[1] + frame * dRotY);
-                        newState.rotation.push(states[i].rotation[2] + frame * dRotZ);
-                        
-                        newStates.push(newState);
+                        newStates.push(invisibleState);
                     }
+                } else if (states[i].endingFrame != playback.framesCount) {
+                    var invisibleState = {
+                        startingFrame: states[i].startingFrame,
+                        endingFrame: playback.framesCount,
+                        visible: false,
+                        position: [0, 0, 0]
+                    };
+
+                    newStates.push(invisibleState);
                 }
             }
-            
+
             objects.push({states: newStates, i: 0, framesToSleep: 0});
         });
 
         playback.bindings.forEach(function(it) {
             $("<div>" + it.user + "</div>").addClass("player-user").attr("data-id", it.id).appendTo("#player-users");
         });
-        
+
         var firstUser = $("#player-users").find(".player-user").first();
         firstUser.addClass("player-user-selected");
         currentObjectId = firstUser.attr("data-id");
-        
+
         $("#player-users").find(".player-user").on("click", function() {
             $("#player-users").find(".player-user").removeClass("player-user-selected");
             $(this).addClass("player-user-selected");
@@ -616,7 +650,7 @@ function insertSimulationResultData(obj, contextManager) {
             updateSensors();
             updateCameraDirection();
         });
-        
+
         init();
         animate();
     });
@@ -630,7 +664,7 @@ function insertSimulationResultData(obj, contextManager) {
         tr.find(".avatar-icon").css("background-image", "url(\".." + item.avatar + "\")");
         tr.find(".username").text(item.username);
         tr.find(".result").text(item.result ? "Successful" : "Failed");
-        
+
         var id = obj.response.id;
 
         tr.find(".log").on("click", function() {

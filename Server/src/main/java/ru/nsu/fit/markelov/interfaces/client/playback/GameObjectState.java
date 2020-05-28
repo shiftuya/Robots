@@ -1,6 +1,7 @@
 package ru.nsu.fit.markelov.interfaces.client.playback;
 
-import ru.nsu.fit.markelov.interfaces.client.Pair;
+import java.util.Map;
+import java.util.TreeMap;
 
 public interface GameObjectState {
     /**
@@ -22,35 +23,58 @@ public interface GameObjectState {
      *
      * @return the position of this object.
      */
-    Vector3 getPosition();
+    default Vector3 getPosition() {
+        return new Vector3() {};
+    }
 
     /**
      * Returns the dimension of this object.
      *
      * @return the dimension of this object.
      */
-    Vector3 getDimension();
+    default Vector3 getDimension() {
+        return new Vector3() {
+            @Override
+            public float getX() {
+                return 50;
+            }
+
+            @Override
+            public float getY() {
+                return 50;
+            }
+
+            @Override
+            public float getZ() {
+                return 50;
+            }
+        };
+    }
 
     /**
      * Returns the rotation of this object.
      *
      * @return the rotation of this object.
      */
-    Vector3 getRotation();
+    default Vector3 getRotation() {
+        return new Vector3() {};
+    }
 
     /**
      * Returns the color of this object.
      *
      * @return the color of this object.
      */
-    int getColor();
+    default int getColor() {
+        return 0x000000;
+    }
 
     /**
      * Returns a collection of sensors with their values.
      *
-     * If an object has no sensors, a collection must be null.
-     *
      * @return a collection of sensors with their values.
      */
-    Iterable<Pair<String, String>> getSensorValues();
+    default Map<String, String> getSensorValues() {
+        return new TreeMap<>();
+    }
 }

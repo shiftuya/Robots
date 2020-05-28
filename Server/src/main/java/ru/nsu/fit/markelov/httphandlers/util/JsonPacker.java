@@ -255,11 +255,11 @@ public class JsonPacker {
             JSONArray jsonGameObjectStates = new JSONArray();
             for (GameObjectState gameObjectState : gameObjectStates) {
                 JSONArray jsonSensors = new JSONArray();
-                for (Pair<String, String> pair : gameObjectState.getSensorValues()) {
+                for (Map.Entry<String, String> entry : gameObjectState.getSensorValues().entrySet()) {
                     JSONObject jsonSensor = new JSONObject();
                     jsonSensor
-                        .put("sensor", pair.getKey())
-                        .put("value", pair.getValue());
+                        .put("sensor", entry.getKey())
+                        .put("value", entry.getValue());
 
                     jsonSensors.put(jsonSensor);
                 }

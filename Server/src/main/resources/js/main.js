@@ -241,6 +241,9 @@ function activateListeners(contextManager) {
                 if (currentFrame >= state.startingFrame && currentFrame < state.endingFrame) {
                     object.i = i;
                     object.framesToSleep = state.endingFrame - 1 - currentFrame;
+                    if (object.framesToSleep > 0) {
+                        object.i++;
+                    }
 
                     update(object.mesh, object.states[i]);
                     $("#player-progress-current").css("width", $("#player-rewind-line").width() * currentFrame / (playback.framesCount - 1));

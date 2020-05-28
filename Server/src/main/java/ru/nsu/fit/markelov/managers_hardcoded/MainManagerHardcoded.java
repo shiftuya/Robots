@@ -6,12 +6,11 @@ import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.interfaces.client.Pair;
-import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
-import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.User;
+import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.client.playback.Vector3;
 import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
@@ -322,6 +321,7 @@ public class MainManagerHardcoded implements MainManager {
                         Map<String, Integer> robots = new TreeMap<>();
                         robots.put("Oleg", 0);
                         robots.put("Simon", 1);
+                        robots.put("Vasily", 3);
 
                         return robots;
                     }
@@ -356,11 +356,6 @@ public class MainManagerHardcoded implements MainManager {
                                         public float getY() {
                                             return 25;
                                         }
-
-                                        @Override
-                                        public float getZ() {
-                                            return 0;
-                                        }
                                     };
                                 }
 
@@ -388,18 +383,8 @@ public class MainManagerHardcoded implements MainManager {
                                 public Vector3 getRotation() {
                                     return new Vector3() {
                                         @Override
-                                        public float getX() {
-                                            return 0;
-                                        }
-
-                                        @Override
                                         public float getY() {
                                             return frame;
-                                        }
-
-                                        @Override
-                                        public float getZ() {
-                                            return 0;
                                         }
                                     };
                                 }
@@ -410,35 +395,16 @@ public class MainManagerHardcoded implements MainManager {
                                 }
 
                                 @Override
-                                public Iterable<Pair<String, String>> getSensorValues() {
-                                    List<Pair<String, String>> sensors = new ArrayList<>();
-                                    sensors.add(new Pair<String, String>() {
-                                        @Override
-                                        public String getKey() {
-                                            return "Sensor 1";
-                                        }
-
-                                        @Override
-                                        public String getValue() {
-                                            return posX+"";
-                                        }
-                                    });
-                                    sensors.add(new Pair<String, String>() {
-                                        @Override
-                                        public String getKey() {
-                                            return "Sensor 2";
-                                        }
-
-                                        @Override
-                                        public String getValue() {
-                                            return frame+"";
-                                        }
-                                    });
+                                public Map<String, String> getSensorValues() {
+                                    Map<String, String> sensors = new TreeMap<>();
+                                    sensors.put("Sensor 1", posX+"");
+                                    sensors.put("Sensor 2", frame+"");
 
                                     return sensors;
                                 }
                             });
                         }
+
                         List<GameObjectState> gameObjectStates_2 = new ArrayList<>();
                         float z = 0;
                         for (int i = 0; i < 600; i += 10, z += 5f) {
@@ -459,11 +425,6 @@ public class MainManagerHardcoded implements MainManager {
                                 public Vector3 getPosition() {
                                     return new Vector3() {
                                         @Override
-                                        public float getX() {
-                                            return 0;
-                                        }
-
-                                        @Override
                                         public float getY() {
                                             return 25;
                                         }
@@ -476,69 +437,20 @@ public class MainManagerHardcoded implements MainManager {
                                 }
 
                                 @Override
-                                public Vector3 getDimension() {
-                                    return new Vector3() {
-                                        @Override
-                                        public float getX() {
-                                            return 50;
-                                        }
-
-                                        @Override
-                                        public float getY() {
-                                            return 50;
-                                        }
-
-                                        @Override
-                                        public float getZ() {
-                                            return 50;
-                                        }
-                                    };
-                                }
-
-                                @Override
-                                public Vector3 getRotation() {
-                                    return new Vector3() {
-                                        @Override
-                                        public float getX() {
-                                            return 0;
-                                        }
-
-                                        @Override
-                                        public float getY() {
-                                            return 0;
-                                        }
-
-                                        @Override
-                                        public float getZ() {
-                                            return 0;
-                                        }
-                                    };
-                                }
-
-                                @Override
                                 public int getColor() {
                                     return ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
                                 }
 
                                 @Override
-                                public Iterable<Pair<String, String>> getSensorValues() {
-                                    List<Pair<String, String>> sensors = new ArrayList<>();
-                                    sensors.add(new Pair<String, String>() {
-                                        @Override
-                                        public String getKey() {
-                                            return "U-la-la";
-                                        }
-
-                                        @Override
-                                        public String getValue() {
-                                            return frame+"";
-                                        }
-                                    });
+                                public Map<String, String> getSensorValues() {
+                                    Map<String, String> sensors = new TreeMap<>();
+                                    sensors.put("Sensor 1", frame+"");
 
                                     return sensors;
                                 }
                             });
                         }
+
                         List<GameObjectState> gameObjectStates_3 = new ArrayList<>();
                         gameObjectStates_3.add(new GameObjectState() {
                             @Override
@@ -554,11 +466,6 @@ public class MainManagerHardcoded implements MainManager {
                             @Override
                             public Vector3 getPosition() {
                                 return new Vector3() {
-                                    @Override
-                                    public float getX() {
-                                        return 0;
-                                    }
-
                                     @Override
                                     public float getY() {
                                         return 250;
@@ -592,40 +499,91 @@ public class MainManagerHardcoded implements MainManager {
                             }
 
                             @Override
-                            public Vector3 getRotation() {
-                                return new Vector3() {
-                                    @Override
-                                    public float getX() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public float getY() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public float getZ() {
-                                        return 0;
-                                    }
-                                };
-                            }
-
-                            @Override
                             public int getColor() {
                                 return 0xff0000;
                             }
+                        });
+
+                        List<GameObjectState> gameObjectStates_4 = new ArrayList<>();
+                        int y = 0;
+                        for (int i = 100; i < 200; i++, y++) {
+                            final int frame = i;
+                            final int posY = y;
+                            gameObjectStates_4.add(new GameObjectState() {
+                                @Override
+                                public int getStartingFrame() {
+                                    return frame;
+                                }
+
+                                @Override
+                                public int getEndingFrame() {
+                                    return frame + 1;
+                                }
+
+                                @Override
+                                public Vector3 getPosition() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getY() {
+                                            return posY;
+                                        }
+                                    };
+                                }
+                            });
+                        }
+                        int finalY = y;
+                        gameObjectStates_4.add(new GameObjectState() {
+                            @Override
+                            public int getStartingFrame() {
+                                return 300;
+                            }
 
                             @Override
-                            public Iterable<Pair<String, String>> getSensorValues() {
-                                return new ArrayList<>();
+                            public int getEndingFrame() {
+                                return 400;
+                            }
+
+                            @Override
+                            public Vector3 getPosition() {
+                                return new Vector3() {
+                                    @Override
+                                    public float getY() {
+                                        return finalY - 1;
+                                    }
+                                };
                             }
                         });
+                        for (int i = 400; i < 500; i += 10, y += 10) {
+                            final int frame = i;
+                            final int posY = y;
+                            gameObjectStates_4.add(new GameObjectState() {
+                                @Override
+                                public int getStartingFrame() {
+                                    return frame;
+                                }
+
+                                @Override
+                                public int getEndingFrame() {
+                                    return frame + 10;
+                                }
+
+                                @Override
+                                public Vector3 getPosition() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getY() {
+                                            return posY;
+                                        }
+                                    };
+                                }
+                            });
+                        }
 
                         List<List<GameObjectState>> gameObjectsStates = new ArrayList<>();
                         gameObjectsStates.add(gameObjectStates_1);
                         gameObjectsStates.add(gameObjectStates_2);
                         gameObjectsStates.add(gameObjectStates_3);
+                        gameObjectsStates.add(gameObjectStates_4);
 
                         return gameObjectsStates;
                     }

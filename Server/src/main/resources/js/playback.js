@@ -68,7 +68,7 @@ function init() {
     controls.update();
 
     // resize
-    window.addEventListener("resize", onWindowResize, false);
+    window.addEventListener("resize", onWindowResize);
 }
 
 function onWindowResize() {
@@ -88,8 +88,12 @@ function animate() {
 
     if (!paused && currentFrame < playback.framesCount) {
         updateSensors();
-        
+
         objects.forEach(function(object) {
+            if (object.i >= object.states.length) {
+                return;
+            }
+            
             if (object.framesToSleep == 0) {
                 update(object.mesh, object.states[object.i]);
 
@@ -101,7 +105,7 @@ function animate() {
         });
 
         $("#player-progress-current").css("width", $("#player-rewind-line").width() * currentFrame / (playback.framesCount - 1));
-        
+
         currentFrame++;
     }
 
@@ -110,6 +114,12 @@ function animate() {
 }
 
 function update(mesh, state) {
+    mesh.visible = state.visible;
+    
+    if (!mesh.visible) {
+        return;
+    }
+
     mesh.position.x = state.position[0];
     mesh.position.y = state.position[1];
     mesh.position.z = state.position[2];
@@ -133,6 +143,11 @@ function updateSensors() {
     
     var sensors = objects[currentObjectId].states[i].sensors;
     $("#player-sensors").empty();
+
+    if (!objects[currentObjectId].states[i].visible) {
+        return;
+    }
+    
     sensors.forEach(function(it) {
         $("<p>" + it.sensor + ": " + it.value + "</p>").appendTo("#player-sensors");
     });
@@ -143,15 +158,17 @@ function updateCameraDirection() {
 }
 
 function dispose() {
+    window.removeEventListener("resize", onWindowResize);
+    
     $("#player").find("canvas").remove();
     $("body").removeClass("overflow-hidden");
-    
+
     $("#player-users").empty();
     $("#player-progress-current").css("width", 0);
     if (!paused) {
         $("#player-play-pause").click();
     }
-    
+
     scene.dispose();
     ground.geometry.dispose();
     ground.material.dispose();
@@ -163,4 +180,6 @@ function dispose() {
     });
     controls.dispose();
     renderer.dispose();
+
+    scene = camera = renderer = controls = ground = grid = playback = paused = playerClosed = currentFrame = objects = currentObjectId = null;
 }
