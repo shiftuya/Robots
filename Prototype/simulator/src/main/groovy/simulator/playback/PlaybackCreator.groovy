@@ -69,8 +69,18 @@ class PlaybackCreator {
         }
     }
 
+    public breakpoint(int id) {
+        GameObjectStateProto prev = entities.get(id).last()
+        prev.setEndingFrame(time)
+        GameObjectStateProto skip = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), prev.getDimension())
+        skip.endingFrame = time
+        entities.get(id).add(skip)
+        entities.get(id).add(new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), prev.getDimension()))
+    }
+
     public Playback getPlayback() {
         List<List<GameObjectStateProto>> list = entities.entrySet().stream().sorted({ e1, e2 -> (e1.key <=> e2.key) }).map({ e -> e.value }).collect(Collectors.toList())
         return new PlaybackProto(time, list)
     }
+
 }

@@ -124,7 +124,7 @@ class labyrinth implements Level {
 
     String sensorR(int x, int y, int dx, int dy) {
         int passed = 0;
-        while (map[y][x] != 'X' as char) {
+        while (map[y][x] == '.' as char) {
             y += dy
             x += dx
             passed++
@@ -193,6 +193,7 @@ class labyrinth implements Level {
         if (map[rb.y][rb.x] == 'C' as char) {
             rb.coinsLeft--
             map[rb.y][rb.x] = new Character('.' as char)
+            pbc.breakpoint(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(rb.x, rb.y)))
             pbc.updateDimension(pbId.get(new AbstractMap.SimpleEntry<Integer, Integer>(rb.x, rb.y)), new Vec3Proto(0, 0, 0))
             return true
         }
@@ -251,6 +252,7 @@ class labyrinth implements Level {
     @Override
     void breakRobot(int robotId) {
         robot.broken = true
+        logger.writeLog(robotId, "Robot was broken")
         pbc.updateColor(robotId, 0xff0000)
     }
 

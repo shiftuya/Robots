@@ -82,6 +82,7 @@ void updateFromSensor(int dx, int dy, MyMemory memory) {
             break
         case "Coin":
             memory.map[y][x] = 3
+            level.writeLog("See a coin at ${x}:${y}")
             memory.coinsKnown++
             break
     }
@@ -159,32 +160,37 @@ void recon(MyMemory memory) {
 }
 
 String turn(MyMemory memory) {
-    recon(memory)
-//    try {
-    Point target = bfs(memory)
-    if (memory.map[target.x][target.y] == 3) {
-        memory.map[target.x][target.y] = 1
+    if (memory.map[memory.y][memory.x] == 3) {
+        level.writeLog("Got a coin!")
         memory.coinsKnown--
     }
-    dx = target.x - memory.x
-    dy = target.y - memory.y
-    memory.x += dx
-    memory.y += dy
-    if (dx == 1) {
-        return "right 1"
+    memory.map[memory.y][memory.x] = 1
+
+    recon(memory)
+    try {
+        level.writeLog("Known coins: ${memory.coinsKnown}")
+        Point target = bfs(memory)
+
+        dx = target.x - memory.x
+        dy = target.y - memory.y
+        memory.x += dx
+        memory.y += dy
+        if (dx == 1) {
+            return "right 1"
+        }
+        if (dx == -1) {
+            return "left 1"
+        }
+        if (dy == -1) {
+            return "up 1"
+        }
+        if (dy == 1) {
+            return "down 1"
+        }
+        return "sleep 1"
+    } catch (Exception ignore) {
+        return "sleep 1"
     }
-    if (dx == -1) {
-        return "left 1"
-    }
-    if (dy == -1) {
-        return "up 1"
-    }
-    if (dy == 1) {
-        return "down 1"
-    }
-//        } catch (Exception ignore) {
-    return "sleep 1"
-//    }
 }
 
 
