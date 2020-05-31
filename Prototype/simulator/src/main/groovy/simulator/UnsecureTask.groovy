@@ -79,7 +79,7 @@ class UnsecureTask implements Task {
             double duration
             try {
                 start = System.currentTimeMillis()
-                String cmd = scripts.get(robotId).evaluate(solutions.get(robotId))
+                String cmd = scripts.get(robotId).run()
                 end = System.currentTimeMillis()
                 timeForScripts += end - start
                 def cmds = cmd.split()
@@ -88,8 +88,11 @@ class UnsecureTask implements Task {
                 println(lvl.getLog(0))
             } catch (Exception e) {
                 println("Broken script")
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
                 lvl.writeLog(robotId, "Script has broken:\n")
-                lvl.writeLog(robotId, e.toString())
+                lvl.writeLog(robotId, sw.toString())
                 lvl.breakRobot(robotId)
                 continue
             }
