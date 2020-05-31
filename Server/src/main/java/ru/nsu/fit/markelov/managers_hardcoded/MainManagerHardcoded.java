@@ -69,7 +69,7 @@ public class MainManagerHardcoded implements MainManager {
         // ----- players -----
 
         UserHardcoded player_1 = new UserHardcoded();
-        player_1.setAvatarAddress("/images/person-icon.png");
+        player_1.setAvatarAddress("/images/avatars/person-icon.png");
         player_1.setName("Vasily");
         player_1.setType(User.UserType.Admin);
         player_1.setBlocked(false);
@@ -77,7 +77,7 @@ public class MainManagerHardcoded implements MainManager {
         users.add(player_1);
 
         UserHardcoded player_2 = new UserHardcoded();
-        player_2.setAvatarAddress("/images/person-icon.png");
+        player_2.setAvatarAddress("/images/avatars/person-icon.png");
         player_2.setName("Simon");
         player_2.setType(User.UserType.Teacher);
         player_2.setBlocked(false);
@@ -85,7 +85,7 @@ public class MainManagerHardcoded implements MainManager {
         users.add(player_2);
 
         UserHardcoded player_3 = new UserHardcoded();
-        player_3.setAvatarAddress("/images/person-icon.png");
+        player_3.setAvatarAddress("/images/avatars/person-icon.png");
         player_3.setName("Ivan");
         player_3.setType(User.UserType.Student);
         player_3.setBlocked(true);
@@ -93,7 +93,7 @@ public class MainManagerHardcoded implements MainManager {
         users.add(player_3);
 
         UserHardcoded player_4 = new UserHardcoded();
-        player_4.setAvatarAddress("/images/person-icon.png");
+        player_4.setAvatarAddress("/images/avatars/person-icon.png");
         player_4.setName("Oleg");
         player_4.setType(User.UserType.Student);
         player_4.setBlocked(false);
@@ -104,7 +104,7 @@ public class MainManagerHardcoded implements MainManager {
 
         LevelHardcoded level_1 = new LevelHardcoded();
         level_1.setId(1);
-        level_1.setIconAddress("/images/labyrinth-icon.png");
+        level_1.setIconAddress("/images/level-icons/labyrinth-icon.png");
         level_1.setName("Labyrinth");
         level_1.setDifficulty(Level.LevelDifficulty.Easy);
         level_1.setType("Single");
@@ -118,7 +118,7 @@ public class MainManagerHardcoded implements MainManager {
 
         LevelHardcoded level_2 = new LevelHardcoded();
         level_2.setId(2);
-        level_2.setIconAddress("/images/vacuum-cleaner-icon.png");
+        level_2.setIconAddress("/images/level-icons/vacuum-cleaner-icon.png");
         level_2.setName("Vacuum Cleaner");
         level_2.setDifficulty(Level.LevelDifficulty.Medium);
         level_2.setType("Multiplayer (2-4)");
@@ -132,7 +132,7 @@ public class MainManagerHardcoded implements MainManager {
 
         LevelHardcoded level_3 = new LevelHardcoded();
         level_3.setId(3);
-        level_3.setIconAddress("/images/robot-wars-icon.png");
+        level_3.setIconAddress("/images/level-icons/robot-wars-icon.png");
         level_3.setName("Robot Wars");
         level_3.setDifficulty(Level.LevelDifficulty.Hard);
         level_3.setType("Multiplayer (2)");
