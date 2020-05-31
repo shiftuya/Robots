@@ -149,8 +149,7 @@ $(document).ready(function() {
     activateListeners(contextManager);
     contextManager.changeContext(initialContext);
 
-    var contextListeners = new ContextListeners(contextManager);
-    contextListeners.activateAll();
+    new ContextListeners(contextManager).activateAll();
 });
 
 function activateListeners(contextManager) {

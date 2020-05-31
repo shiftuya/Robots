@@ -88,14 +88,6 @@
 .player-stop {
     background: url("../images/player_stop.png");
 }
-/*
-.player-rewind-left {
-    background: url("../images/player_rewind_left.png");
-}
-
-.player-rewind-right {
-    background: url("../images/player_rewind_right.png");
-}*/
 
 .player-users {
     float: left;

@@ -126,7 +126,7 @@ public class MainManagerWithDatabase implements MainManager {
     tokenUserMap = new HashMap<>();
 
     if (databaseHandler.getUserByName("admin") == null) { // Temporary solution
-      UserExtended admin = new User1("/images/person-icon.png", "admin", UserType.Admin, "admin");
+      UserExtended admin = new User1("/images/avatars/person-icon.png", "admin", UserType.Admin, "admin");
       databaseHandler.saveUser(admin);
     }
 
@@ -436,7 +436,7 @@ public class MainManagerWithDatabase implements MainManager {
       } catch (IllegalArgumentException e) {
         throw new ProcessingException("Illegal difficulty");
       }
-      Level level = new Level1(newLevelId, "/images/labyrinth-icon.png"/*TODO*/, name, levelDifficulty, "Type"/*TODO*/, description, rules, goal,
+      Level level = new Level1(newLevelId, "/images/level-icons/labyrinth-icon.png"/*TODO*/, name, levelDifficulty, "Type"/*TODO*/, description, rules, goal,
           minPlayers, maxPlayers, language, code); // ???
 
 
@@ -467,7 +467,7 @@ public class MainManagerWithDatabase implements MainManager {
       } catch (IllegalArgumentException e) {
         throw new ProcessingException("Illegal difficulty");
       }
-      Level newLevel = new Level1(levelID, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
+      Level newLevel = new Level1(levelID, "/images/level-icons/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
           minPlayers, maxPlayers, language, code); // ???
 
       List<Resource> resources; // TODO change to database interaction
@@ -561,7 +561,7 @@ public class MainManagerWithDatabase implements MainManager {
         throw new ProcessingException("User already exists");
       }
 
-      UserExtended user = new User1("/images/person-icon.png", userName, userType, password);
+      UserExtended user = new User1("/images/avatars/person-icon.png", userName, userType, password);
 
       databaseHandler.saveUser(user);
 
