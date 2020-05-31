@@ -12,6 +12,8 @@ class ContextManager {
     }
 
     changeContext(contextName, ajaxQuery, obj) {
+        var onErrorContextName = (contextName == "login" || contextName == "list_of_lobbies") ? "login" : "list_of_lobbies";
+        
         var url = contextName;
         contextName = contextName.split("?")[0];
         
@@ -58,12 +60,12 @@ class ContextManager {
         this.removeCurrentData(deleteData);
 
         // get and insert new data
-        this.getAndInsertData(ajaxQuery, insertFunction, obj);
+        this.getAndInsertData(ajaxQuery, insertFunction, obj, onErrorContextName);
 
         this.currentContextName = contextName;
     }
 
-    getAndInsertData(ajaxQuery, insertFunction, obj) {
+    getAndInsertData(ajaxQuery, insertFunction, obj, onErrorContextName) {
         if (!insertFunction) {
             return;
         }
@@ -73,10 +75,9 @@ class ContextManager {
             return;
         }
 
-        var contextManager = this;
         sendAjax(ajaxQuery, function(result) {
-            insertFunction(result ? JSON.parse(result) : undefined, contextManager);
-        });
+            insertFunction(result ? JSON.parse(result) : undefined);
+        }, undefined, undefined, onErrorContextName);
     }
 
     removeCurrentData(deleteData) {
@@ -88,7 +89,7 @@ class ContextManager {
     }
 }
 
-function insertLoginData(obj, contextManager) {
+function insertLoginData(obj) {
     var skeleton = $("#login-content").find("section.skeleton");
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
@@ -117,7 +118,7 @@ function insertLoginData(obj, contextManager) {
     section.find("input[name='name']").focus();
 }
 
-function insertListOfLobbiesData(obj, contextManager) {
+function insertListOfLobbiesData(obj) {
     var table = $("#lobbies-table");
     if (obj.response.length == 0) {
         $("<tr><td colspan=\"100%\">No active lobbies</td></tr>").appendTo(table);
@@ -144,7 +145,7 @@ function insertListOfLobbiesData(obj, contextManager) {
     }
 }
 
-function insertChooseLevelData(obj, contextManager) {
+function insertChooseLevelData(obj) {
     var table = $("#levels-table");
     if (obj.response.length == 0) {
         $("<tr><td colspan=\"100%\">No created levels</td></tr>").appendTo(table);
@@ -177,7 +178,7 @@ function insertChooseLevelData(obj, contextManager) {
     }
 }
 
-function insertSolutionsData(obj, contextManager, inbuiltTable) {
+function insertSolutionsData(obj, inbuiltTable) {
     var table = inbuiltTable || $("#solutions-table");
     if (obj.response.length == 0) {
         $("<tbody><tr><td colspan=\"100%\">No created levels</td></tr></tbody>").appendTo(table);
@@ -252,7 +253,7 @@ function insertSolutionsData(obj, contextManager, inbuiltTable) {
     }
 }
 
-function insertUsersData(obj, contextManager) {
+function insertUsersData(obj) {
     var table = $("#users-table");
     if (obj.response.length == 0) {
         $("<tr><td colspan=\"100%\">No created users</td></tr>").appendTo(table);
@@ -280,7 +281,7 @@ function insertUsersData(obj, contextManager) {
     }
 }
 
-function insertUserData(obj, contextManager) {
+function insertUserData(obj) {
     var skeleton = $("#user-content").find("section.skeleton");
     var item = obj.response.info;
 
@@ -298,7 +299,7 @@ function insertUserData(obj, contextManager) {
     }
     
     var solutionsTable = $("#solutions-table").clone().removeAttr("id");
-    insertSolutionsData({response: obj.response.solutions}, contextManager, solutionsTable);
+    insertSolutionsData({response: obj.response.solutions}, solutionsTable);
     
     section.append(solutionsTable);
     $("#user-content").append(section);
@@ -324,7 +325,7 @@ function insertUserData(obj, contextManager) {
     });
 }
 
-function insertUserEditorData(obj, contextManager) {
+function insertUserEditorData(obj) {
     var skeleton = $("#user-editor-content").find("section.skeleton");
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
@@ -351,7 +352,6 @@ function insertUserEditorData(obj, contextManager) {
 
         var formData = new FormData(form[0]);
         sendAjax(ajaxQuery, function(result) {
-//            var obj = JSON.parse(result);
             alert(message);
             contextManager.changeContext("users");
         }, undefined, formData);
@@ -360,7 +360,7 @@ function insertUserEditorData(obj, contextManager) {
     $("#user-editor-content").append(section);
 }
 
-function insertLevelsData(obj, contextManager) {
+function insertLevelsData(obj) {
     var table = $("#teacher-levels-table");
     if (obj.response.length == 0) {
         $("<tr><td colspan=\"100%\">No created levels</td></tr>").appendTo(table);
@@ -395,7 +395,7 @@ function insertLevelsData(obj, contextManager) {
     }
 }
 
-function insertLevelEditorData(obj, contextManager) {
+function insertLevelEditorData(obj) {
     var skeleton = $("#level-editor-content").find("section.skeleton");
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
@@ -432,7 +432,7 @@ function insertLevelEditorData(obj, contextManager) {
     });
 }
 
-function insertSimulatorsData(obj, contextManager) {
+function insertSimulatorsData(obj) {
     var table = $("#simulators-table");
     if (obj.response.length == 0) {
         $("<tr><td colspan=\"100%\">No created simulators</td></tr>").appendTo(table);
@@ -456,7 +456,7 @@ function insertSimulatorsData(obj, contextManager) {
     }
 }
 
-function insertLobbyData(obj, contextManager) {
+function insertLobbyData(obj) {
     var lobbyContentSection = $("#lobby-content");
     if (obj.response == null) {
         $("<section class=\"lobby-shell\"><h1>Lobby is full</h1></section>").appendTo(lobbyContentSection);
@@ -522,7 +522,7 @@ function insertLobbyData(obj, contextManager) {
     }
 }
 
-function insertCodeEditorData(obj, contextManager) {
+function insertCodeEditorData(obj) {
     var skeleton = $("#code-editor-content").find("section.skeleton");
     var section = $(skeleton).clone();
 
@@ -542,7 +542,7 @@ function insertCodeEditorData(obj, contextManager) {
     });
 }
 
-function insertSimulationResultData(obj, contextManager) {
+function insertSimulationResultData(obj) {
     $("#playback").on("click", function() {
         paused = true;
         playerClosed = false;

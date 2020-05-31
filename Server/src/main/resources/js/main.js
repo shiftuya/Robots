@@ -1,9 +1,9 @@
-var codeMirror;
+var codeMirror, contextManager;
 
 class BracketsBugAvoiding_0{}
 
 $(document).ready(function() {
-    var contextManager = new ContextManager([
+    contextManager = new ContextManager([
         ["login", {
             title: "Login",
             contentId: "login-content",
@@ -146,13 +146,13 @@ $(document).ready(function() {
         }]
     ]);
     
-    activateListeners(contextManager);
+    activateListeners();
     contextManager.changeContext(initialContext, initialAjaxQuery);
 
-    new ContextListeners(contextManager).activateAll();
+    new ContextListeners().activateAll();
 });
 
-function activateListeners(contextManager) {
+function activateListeners() {
     $("#logout").on("click", function() {
         sendAjax("sign.logout", function(data) {
             contextManager.changeContext("login");
@@ -285,7 +285,7 @@ function activateListeners(contextManager) {
     });
 }
 
-function sendAjax(ajaxQuery, handleResponseFunction, data, formData) {
+function sendAjax(ajaxQuery, handleResponseFunction, data, formData, onErrorContextName) {
     $.ajax({
         url: "/api/method/" + ajaxQuery,
         type: formData || data ? "POST" : "GET",
@@ -299,6 +299,9 @@ function sendAjax(ajaxQuery, handleResponseFunction, data, formData) {
         error: function(xhr, status, error) {
             var obj = JSON.parse(xhr.responseText);
             alert("Server error: " + obj.error);
+            if (onErrorContextName) {
+                contextManager.changeContext(onErrorContextName);
+            }
         }
     });
 }
