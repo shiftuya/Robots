@@ -147,7 +147,7 @@ $(document).ready(function() {
     ]);
     
     activateListeners(contextManager);
-    contextManager.changeContext(initialContext);
+    contextManager.changeContext(initialContext, initialAjaxQuery);
 
     new ContextListeners(contextManager).activateAll();
 });
@@ -166,7 +166,7 @@ function activateListeners(contextManager) {
     });
 
     $("#header-code-editor").find(".back").on("click", function() {
-        contextManager.changeContext("lobby", "lobby.return?id=" + $(this).attr("data-lobby-id"));
+        contextManager.changeContext("lobby?id=" + $(this).attr("data-lobby-id"), "lobby.return?id=" + $(this).attr("data-lobby-id"));
     });
 
     $("#header-code-editor").find(".play").on("click", function() {
@@ -183,9 +183,9 @@ function activateListeners(contextManager) {
                 }
                 
                 if (obj.response.simulated) {
-                    contextManager.changeContext("simulation_result", "simulation_result.get?id=" + id);
+                    contextManager.changeContext("simulation_result?id=" + id, "simulation_result.get?id=" + id);
                 } else if (obj.response.compiled) {
-                    contextManager.changeContext("lobby", "lobby.return?id=" + id);
+                    contextManager.changeContext("lobby?id=" + id, "lobby.return?id=" + id);
                 } else {
                     alert("Debug: not compiled and not simulated!");
                 }
