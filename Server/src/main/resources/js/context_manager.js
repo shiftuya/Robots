@@ -543,7 +543,7 @@ function insertCodeEditorData(obj) {
 }
 
 function insertSimulationResultData(obj) {
-    $("#playback").on("click", function() {
+    $("#playback").off("click").on("click", function() {
         paused = true;
         playerClosed = false;
         currentFrame = 0;
