@@ -161,6 +161,7 @@ class labyrinth implements Level {
                 logger.writeLog(robotId, "null")
                 return null
         }
+        pbc.updateSensor(robotId, sensor, result)
         logger.writeLog(robotId, result);
         return result
     }
