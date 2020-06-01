@@ -31,6 +31,7 @@ class PlaybackCreator {
         } else {
             prev.setEndingFrame(time)
             GameObjectStateProto current = new GameObjectStateProto(time, newColor, prev.getPosition(), prev.getRotation(), prev.getDimension())
+            //current.setOldSensors(prev.sensors)
             entities.get(id).add(current)
         }
     }
@@ -42,6 +43,7 @@ class PlaybackCreator {
         } else {
             prev.setEndingFrame(time)
             GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), newPosition, prev.getRotation(), prev.getDimension())
+            //current.setOldSensors(prev.sensors)
             entities.get(id).add(current)
         }
     }
@@ -54,6 +56,7 @@ class PlaybackCreator {
         } else {
             prev.setEndingFrame(time)
             GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), newRotation, prev.getDimension())
+            //current.setOldSensors(prev.sensors)
             entities.get(id).add(current)
         }
     }
@@ -65,6 +68,20 @@ class PlaybackCreator {
         } else {
             prev.setEndingFrame(time)
             GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), newDimension)
+            //current.setOldSensors(prev.sensors)
+            entities.get(id).add(current)
+        }
+    }
+
+    public updateSensor(int id, String sensor, String value) {
+        GameObjectStateProto prev = entities.get(id).last()
+        if (prev.getStartingFrame() == time) {
+            prev.addSensorReading(sensor, value)
+        } else {
+            prev.setEndingFrame(time)
+            GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), prev.getDimension())
+            //current.setOldSensors(prev.sensors)
+            current.addSensorReading(sensor, value)
             entities.get(id).add(current)
         }
     }
@@ -75,7 +92,9 @@ class PlaybackCreator {
         GameObjectStateProto skip = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), prev.getDimension())
         skip.endingFrame = time
         entities.get(id).add(skip)
-        entities.get(id).add(new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), prev.getDimension()))
+        GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), prev.getDimension())
+        //current.setOldSensors(prev.sensors)
+        entities.get(id).add(current)
     }
 
     public Playback getPlayback() {

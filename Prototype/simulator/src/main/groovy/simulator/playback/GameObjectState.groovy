@@ -42,4 +42,6 @@ public interface GameObjectState {
      * @return the color of this object.
      */
     int getColor();
+
+    Map<String, String> getSensorReadings();
 }
