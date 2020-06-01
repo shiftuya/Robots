@@ -1,6 +1,5 @@
 package ru.nsu.fit.markelov.simulator;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
