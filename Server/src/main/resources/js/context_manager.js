@@ -12,6 +12,11 @@ class ContextManager {
     }
 
     changeContext(contextName, ajaxQuery, obj) {
+        var onErrorContextName = (contextName == "login" || contextName == "list_of_lobbies") ? "login" : "list_of_lobbies";
+        
+        var url = contextName;
+        contextName = contextName.split("?")[0];
+        
         var dependencies = this.contextMap.get(contextName);
         
         var title = dependencies.title;
@@ -25,7 +30,7 @@ class ContextManager {
             deleteData = this.contextMap.get(this.currentContextName).deleteData;
         }
 
-        window.history.pushState("", "", contextName);
+        window.history.pushState("", "", url);
         document.title = title + " | Robotics Game Server";
 
         // hide all headers, except the new one
@@ -55,12 +60,12 @@ class ContextManager {
         this.removeCurrentData(deleteData);
 
         // get and insert new data
-        this.getAndInsertData(contextName, ajaxQuery, insertFunction, obj);
+        this.getAndInsertData(ajaxQuery, insertFunction, obj, onErrorContextName);
 
         this.currentContextName = contextName;
     }
 
-    getAndInsertData(contextName, ajaxQuery, insertFunction, obj) {
+    getAndInsertData(ajaxQuery, insertFunction, obj, onErrorContextName) {
         if (!insertFunction) {
             return;
         }
@@ -70,10 +75,9 @@ class ContextManager {
             return;
         }
 
-        var contextManager = this;
         sendAjax(ajaxQuery, function(result) {
-            insertFunction(result ? JSON.parse(result) : undefined, contextManager);
-        });
+            insertFunction(result ? JSON.parse(result) : undefined);
+        }, undefined, undefined, onErrorContextName);
     }
 
     removeCurrentData(deleteData) {
@@ -85,7 +89,7 @@ class ContextManager {
     }
 }
 
-function insertLoginData(obj, contextManager) {
+function insertLoginData(obj) {
     var skeleton = $("#login-content").find("section.skeleton");
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
@@ -114,10 +118,10 @@ function insertLoginData(obj, contextManager) {
     section.find("input[name='name']").focus();
 }
 
-function insertListOfLobbiesData(obj, contextManager) {
+function insertListOfLobbiesData(obj) {
     var table = $("#lobbies-table");
     if (obj.response.length == 0) {
-        $("<tr><td colspan=\"100%\">No active lobbies.</td></tr>").appendTo(table);
+        $("<tr><td colspan=\"100%\">No active lobbies</td></tr>").appendTo(table);
     } else {
         var skeleton = table.find("tr.skeleton");
         obj.response.forEach(function(item) {
@@ -135,13 +139,13 @@ function insertListOfLobbiesData(obj, contextManager) {
             table.append(tr);
 
             tr.on("click", function() {
-                contextManager.changeContext("lobby", "lobby.join?id=" + item.lobby_id);
+                contextManager.changeContext("lobby?id=" + item.lobby_id, "lobby.join?id=" + item.lobby_id);
             });
         });
     }
 }
 
-function insertChooseLevelData(obj, contextManager) {
+function insertChooseLevelData(obj) {
     var table = $("#levels-table");
     if (obj.response.length == 0) {
         $("<tr><td colspan=\"100%\">No created levels</td></tr>").appendTo(table);
@@ -168,13 +172,13 @@ function insertChooseLevelData(obj, contextManager) {
             tr.find(".start-level-icon").on("click", function() {
                 var id = item.level_id;
                 var players_amount = tr.find(".level-players-number").val();
-                contextManager.changeContext("lobby", "lobby.create?id=" + id + "&players_amount=" + players_amount);
+                contextManager.changeContext("lobby?id=" + id, "lobby.create?id=" + id + "&players_amount=" + players_amount);
             });
         });
     }
 }
 
-function insertSolutionsData(obj, contextManager, inbuiltTable) {
+function insertSolutionsData(obj, inbuiltTable) {
     var table = inbuiltTable || $("#solutions-table");
     if (obj.response.length == 0) {
         $("<tbody><tr><td colspan=\"100%\">No created levels</td></tr></tbody>").appendTo(table);
@@ -218,7 +222,7 @@ function insertSolutionsData(obj, contextManager, inbuiltTable) {
                     li.attr("data-attempt-id", attemptItem.attempt_id);
 
                     li.on("click", function() {
-                        contextManager.changeContext("simulation_result", "simulation_result.get?id=" + attemptItem.attempt_id);
+                        contextManager.changeContext("simulation_result?id=" + attemptItem.attempt_id, "simulation_result.get?id=" + attemptItem.attempt_id);
                     });
 
                     tbody.find(".list-of-attempts").append(li);
@@ -249,7 +253,7 @@ function insertSolutionsData(obj, contextManager, inbuiltTable) {
     }
 }
 
-function insertUsersData(obj, contextManager) {
+function insertUsersData(obj) {
     var table = $("#users-table");
     if (obj.response.length == 0) {
         $("<tr><td colspan=\"100%\">No created users</td></tr>").appendTo(table);
@@ -271,13 +275,13 @@ function insertUsersData(obj, contextManager) {
             table.append(tr);
 
             tr.on("click", function() {
-                contextManager.changeContext("user", "user.get?username=" + item.name);
+                contextManager.changeContext("user?username=" + item.name, "user.get?username=" + item.name);
             });
         });
     }
 }
 
-function insertUserData(obj, contextManager) {
+function insertUserData(obj) {
     var skeleton = $("#user-content").find("section.skeleton");
     var item = obj.response.info;
 
@@ -295,7 +299,7 @@ function insertUserData(obj, contextManager) {
     }
     
     var solutionsTable = $("#solutions-table").clone().removeAttr("id");
-    insertSolutionsData({response: obj.response.solutions}, contextManager, solutionsTable);
+    insertSolutionsData({response: obj.response.solutions}, solutionsTable);
     
     section.append(solutionsTable);
     $("#user-content").append(section);
@@ -306,16 +310,14 @@ function insertUserData(obj, contextManager) {
 
     section.find(".user-block-a").on("click", function() {
         sendAjax("user.block?username=" + item.name + "&block=" + !item.is_blocked, function(result) {
-//            var obj = JSON.parse(result);
             alert("User is " + (item.is_blocked ? "unblocked" : "blocked"));
-            contextManager.changeContext("user", "user.get?username=" + item.name);
+            contextManager.changeContext("user?username=" + item.name, "user.get?username=" + item.name);
         });
     });
 
     section.find(".user-delete-a").on("click", function() {
         if (confirm("Are you sure you want to delete the user? This action cannot be undone.")) {
             sendAjax("user.delete?username=" + item.name, function(result) {
-//                var obj = JSON.parse(result);
                 alert("User is deleted");
                 contextManager.changeContext("users");
             });
@@ -323,7 +325,7 @@ function insertUserData(obj, contextManager) {
     });
 }
 
-function insertUserEditorData(obj, contextManager) {
+function insertUserEditorData(obj) {
     var skeleton = $("#user-editor-content").find("section.skeleton");
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
@@ -350,7 +352,6 @@ function insertUserEditorData(obj, contextManager) {
 
         var formData = new FormData(form[0]);
         sendAjax(ajaxQuery, function(result) {
-//            var obj = JSON.parse(result);
             alert(message);
             contextManager.changeContext("users");
         }, undefined, formData);
@@ -359,7 +360,7 @@ function insertUserEditorData(obj, contextManager) {
     $("#user-editor-content").append(section);
 }
 
-function insertLevelsData(obj, contextManager) {
+function insertLevelsData(obj) {
     var table = $("#teacher-levels-table");
     if (obj.response.length == 0) {
         $("<tr><td colspan=\"100%\">No created levels</td></tr>").appendTo(table);
@@ -380,7 +381,7 @@ function insertLevelsData(obj, contextManager) {
             table.append(tr);
 
             tr.find(".level-edit-a").on("click", function() {
-                contextManager.changeContext("level_editor", "level.get?id=" + item.level_id);
+                contextManager.changeContext("level_editor?id=" + item.level_id, "level.get?id=" + item.level_id);
             });
 
             tr.find(".level-delete-a").on("click", function() {
@@ -394,7 +395,7 @@ function insertLevelsData(obj, contextManager) {
     }
 }
 
-function insertLevelEditorData(obj, contextManager) {
+function insertLevelEditorData(obj) {
     var skeleton = $("#level-editor-content").find("section.skeleton");
     var section = $(skeleton).clone();
     section.removeClass("skeleton");
@@ -431,7 +432,7 @@ function insertLevelEditorData(obj, contextManager) {
     });
 }
 
-function insertSimulatorsData(obj, contextManager) {
+function insertSimulatorsData(obj) {
     var table = $("#simulators-table");
     if (obj.response.length == 0) {
         $("<tr><td colspan=\"100%\">No created simulators</td></tr>").appendTo(table);
@@ -455,13 +456,13 @@ function insertSimulatorsData(obj, contextManager) {
     }
 }
 
-function insertLobbyData(obj, contextManager) {
+function insertLobbyData(obj) {
     var lobbyContentSection = $("#lobby-content");
     if (obj.response == null) {
-        $("<section class=\"lobby-shell\"><h1>Lobby is full.</h1></section>").appendTo(lobbyContentSection);
+        $("<section class=\"lobby-shell\"><h1>Lobby is full</h1></section>").appendTo(lobbyContentSection);
     } else {
         if (obj.response.length == 0) {
-            $("<section class=\"lobby-shell\"><h1>Lobby was not created.</h1></section>").appendTo(lobbyContentSection);
+            $("<section class=\"lobby-shell\"><h1>Lobby was not created</h1></section>").appendTo(lobbyContentSection);
         } else {
             var skeleton = lobbyContentSection.find("section.skeleton");
             var item = obj.response;
@@ -496,8 +497,7 @@ function insertLobbyData(obj, contextManager) {
             }
 
             section.find("#edit-solution").on("click", function() {
-                $("#header-code-editor").find(".back, .play").attr("data-lobby-id", item.lobby_id);
-                contextManager.changeContext("code_editor", "code.edit?id=" + item.lobby_id);
+                contextManager.changeContext("code_editor?id=" + item.lobby_id, "code.edit?id=" + item.lobby_id);
             });
 
             section.find("#leave-lobby").on("click", function() {
@@ -510,7 +510,7 @@ function insertLobbyData(obj, contextManager) {
                 sendAjax("simulation_result.is_ready?id=" + item.lobby_id, function(data) {
                     var obj = JSON.parse(data);
                     if (obj.response.simulation_finished) {
-                        contextManager.changeContext("simulation_result", "simulation_result.get?id=" + item.lobby_id);
+                        contextManager.changeContext("simulation_result?id=" + item.lobby_id, "simulation_result.get?id=" + item.lobby_id);
                     } else {
                         alert("The simulation hasn't been processed yet. Try again later.");
                     }
@@ -522,11 +522,13 @@ function insertLobbyData(obj, contextManager) {
     }
 }
 
-function insertCodeEditorData(obj, contextManager) {
+function insertCodeEditorData(obj) {
     var skeleton = $("#code-editor-content").find("section.skeleton");
     var section = $(skeleton).clone();
-    
+
     section.removeClass("skeleton");
+
+    $("#header-code-editor").find(".back, .play").attr("data-lobby-id", obj.response.id);
     var code = obj.response.code; // new variable is needed to get exactly a string instead of object (strange, but still)
 
     $("#code-editor-content").append(section);
@@ -540,8 +542,8 @@ function insertCodeEditorData(obj, contextManager) {
     });
 }
 
-function insertSimulationResultData(obj, contextManager) {
-    $("#playback").on("click", function() {
+function insertSimulationResultData(obj) {
+    $("#playback").off("click").on("click", function() {
         paused = true;
         playerClosed = false;
         currentFrame = 0;

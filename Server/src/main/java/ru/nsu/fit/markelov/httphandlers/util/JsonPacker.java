@@ -203,9 +203,11 @@ public class JsonPacker {
         return jsonCompileResult;
     }
 
-    public static JSONObject packCode(String code) {
+    public static JSONObject packCode(int id, String code) {
         JSONObject jsonCode = new JSONObject();
-        jsonCode.put("code", (code != null) ? code : "");
+        jsonCode
+            .put("id", id)
+            .put("code", (code != null) ? code : "");
 
         return jsonCode;
     }

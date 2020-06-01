@@ -1,9 +1,9 @@
-var codeMirror;
+var codeMirror, contextManager;
 
 class BracketsBugAvoiding_0{}
 
 $(document).ready(function() {
-    var contextManager = new ContextManager([
+    contextManager = new ContextManager([
         ["login", {
             title: "Login",
             contentId: "login-content",
@@ -146,13 +146,13 @@ $(document).ready(function() {
         }]
     ]);
     
-    activateListeners(contextManager);
-    contextManager.changeContext(initialContext);
+    activateListeners();
+    contextManager.changeContext(initialContext, initialAjaxQuery);
 
-    new ContextListeners(contextManager).activateAll();
+    new ContextListeners().activateAll();
 });
 
-function activateListeners(contextManager) {
+function activateListeners() {
     $("#logout").on("click", function() {
         sendAjax("sign.logout", function(data) {
             contextManager.changeContext("login");
@@ -166,7 +166,7 @@ function activateListeners(contextManager) {
     });
 
     $("#header-code-editor").find(".back").on("click", function() {
-        contextManager.changeContext("lobby", "lobby.return?id=" + $(this).attr("data-lobby-id"));
+        contextManager.changeContext("lobby?id=" + $(this).attr("data-lobby-id"), "lobby.return?id=" + $(this).attr("data-lobby-id"));
     });
 
     $("#header-code-editor").find(".play").on("click", function() {
@@ -183,9 +183,9 @@ function activateListeners(contextManager) {
                 }
                 
                 if (obj.response.simulated) {
-                    contextManager.changeContext("simulation_result", "simulation_result.get?id=" + id);
+                    contextManager.changeContext("simulation_result?id=" + id, "simulation_result.get?id=" + id);
                 } else if (obj.response.compiled) {
-                    contextManager.changeContext("lobby", "lobby.return?id=" + id);
+                    contextManager.changeContext("lobby?id=" + id, "lobby.return?id=" + id);
                 } else {
                     alert("Debug: not compiled and not simulated!");
                 }
@@ -285,7 +285,7 @@ function activateListeners(contextManager) {
     });
 }
 
-function sendAjax(ajaxQuery, handleResponseFunction, data, formData) {
+function sendAjax(ajaxQuery, handleResponseFunction, data, formData, onErrorContextName) {
     $.ajax({
         url: "/api/method/" + ajaxQuery,
         type: formData || data ? "POST" : "GET",
@@ -299,6 +299,9 @@ function sendAjax(ajaxQuery, handleResponseFunction, data, formData) {
         error: function(xhr, status, error) {
             var obj = JSON.parse(xhr.responseText);
             alert("Server error: " + obj.error);
+            if (onErrorContextName) {
+                contextManager.changeContext(onErrorContextName);
+            }
         }
     });
 }

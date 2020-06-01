@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.mainmanager.database;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -100,6 +101,13 @@ public class SQLiteDatabaseHandler implements DatabaseHandler {
         LEVELS_TABLE, LEVELS_ID, LEVELS_CODE, LEVELS_NAME, LEVELS_DESCRIPTION,
         LEVELS_DIFFICULTY, LEVELS_GOAL, LEVELS_ICON, LEVELS_LANGUAGE,
         LEVELS_MIN_PLAYERS, LEVELS_MAX_PLAYERS, LEVELS_TYPE, LEVELS_RULES);
+
+
+    File dir = new File("src/main/resources/database/");
+    if (!dir.exists()) {
+      dir.mkdir();
+    }
+
 
     connect();
     try (Statement statement = connection.createStatement()) {

@@ -11,20 +11,26 @@ import java.util.Map;
 
 public class UriParametersParser {
 
-    private Map<String, List<String>> params;
+    private String params;
+    private Map<String, List<String>> paramsMap;
 
     public UriParametersParser(String uri) {
         try {
-            params = splitQuery(uri.split("\\?")[1]);
-        } catch (UnsupportedEncodingException e) {
-            System.out.println(e.getMessage());
+            params = uri.split("\\?")[1];
+            paramsMap = splitQuery();
+        } catch (UnsupportedEncodingException|ArrayIndexOutOfBoundsException e) {
+            System.out.println("debug: " + e.getClass().getSimpleName());
         } catch (Exception e) {
-            throw new ProcessingException(e.getClass().getSimpleName());
+            e.printStackTrace();
         }
     }
 
+    public String getParams() {
+        return params;
+    }
+
     public Integer getIntegerParameter(String parameterName) {
-        List<String> parameterList = params.get(parameterName);
+        List<String> parameterList = paramsMap.get(parameterName);
 
         try {
             if (parameterList.size() == 1) {
@@ -42,7 +48,7 @@ public class UriParametersParser {
 
     public String getStringParameter(String parameterName) {
         try {
-            List<String> parameterList = params.get(parameterName);
+            List<String> parameterList = paramsMap.get(parameterName);
 
             if (parameterList.size() == 1) {
                 return parameterList.get(0);
@@ -54,9 +60,9 @@ public class UriParametersParser {
         return null;
     }
 
-    public static Map<String, List<String>> splitQuery(String uri) throws UnsupportedEncodingException {
+    public Map<String, List<String>> splitQuery() throws UnsupportedEncodingException {
         final Map<String, List<String>> query_pairs = new LinkedHashMap<>();
-        final String[] pairs = uri.split("&");
+        final String[] pairs = params.split("&");
 
         for (String pair : pairs) {
             final int idx = pair.indexOf("=");

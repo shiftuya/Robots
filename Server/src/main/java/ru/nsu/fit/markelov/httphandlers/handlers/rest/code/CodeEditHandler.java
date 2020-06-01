@@ -28,6 +28,6 @@ public class CodeEditHandler extends RestHandler {
             throw new ProcessingException("Id is null.");
         }
 
-        responder.sendResponse(JsonPacker.packCode(mainManager.editSubmittedCode(cookieHandler.getCookie(), id)));
+        responder.sendResponse(JsonPacker.packCode(id, mainManager.editSubmittedCode(cookieHandler.getCookie(), id)));
     }
 }
