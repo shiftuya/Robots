@@ -167,15 +167,14 @@ select.readonly, input.readonly {
     margin-right: 5px;
 }
 
-.avatar-icon {
-    background-position: center;
-    background-repeat: no-repeat;
+.level-icon {
+    background-size: 32px 32px;
 }
 
-.level-icon {
+.avatar-icon, .level-icon {
     background-position: center;
+    background-size: contain;
     background-repeat: no-repeat;
-    background-size: 32px 32px;
 }
 
 .CodeMirror {

@@ -281,7 +281,6 @@ function activateListeners() {
 
     $("#player").on("wheel", function(event) {
         camera.position.y += (event.originalEvent.deltaY > 0) ? playback.camera.scrollSpeed : -playback.camera.scrollSpeed;
-        camera.update();
     });
 }
 

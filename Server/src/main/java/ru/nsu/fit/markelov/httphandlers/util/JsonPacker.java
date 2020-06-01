@@ -227,7 +227,7 @@ public class JsonPacker {
             JSONObject jsonSimulationResult = new JSONObject();
 
             jsonSimulationResult
-                .put("avatar-icon", user.getAvatarAddress())
+                .put("avatar", user.getAvatarAddress())
                 .put("username", user.getName())
                 .put("result", simulationResult.isSuccessful(user.getName()));
 
