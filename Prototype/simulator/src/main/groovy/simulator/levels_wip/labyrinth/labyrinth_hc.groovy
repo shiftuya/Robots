@@ -105,7 +105,7 @@ void addToQueue(MyMemory memory, HashSet<AbstractMap.SimpleEntry<Integer, Intege
     int x = current.key
     int y = current.value
     if (!scanned.contains(current) && memory.map[y][x] != 2) {
-        level.writeLog("Added ${x}:${y} ${cellToString(memory.map[y][x])}")
+        //level.writeLog("Added ${x}:${y} ${cellToString(memory.map[y][x])}")
         memory.queue.addLast(new Point(current.key, current.value, from.x, from.y, from.distance + 1))
         scanned.add(current)
     }
@@ -140,7 +140,7 @@ Point bfs(MyMemory memory) {
         }
     }
     while (target.fromX != memory.x || target.fromY != memory.y) {
-        level.writeLog("To go to ${target.x}:${target.y} I must go to ${target.fromX}:${target.fromY}")
+        //level.writeLog("To go to ${target.x}:${target.y} I must go to ${target.fromX}:${target.fromY}")
         target = passed.stream().filter({ p -> p.x == target.fromX && p.y == target.fromY }).findFirst().orElse(new Point(memory.x, memory.y, memory.x, memory.y, 0))
     }
     return target
