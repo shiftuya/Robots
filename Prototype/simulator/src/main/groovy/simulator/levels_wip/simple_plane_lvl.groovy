@@ -1,6 +1,8 @@
-package simulator
+package simulator.levels_wip
 
 import groovy.transform.CompileStatic
+import simulator.Level
+import simulator.Logger
 import simulator.playback.Playback
 import simulator.playback.PlaybackCreator
 import simulator.playback.Vec3Proto
@@ -42,7 +44,7 @@ class simple_plane_lvl implements Level {
     double virtualTime
     double timeout
 
-    simple_plane_lvl(int _playerCount) {
+    simple_plane_lvl(int _playerCount, String path) {
         playerCount = _playerCount
         robots = new ArrayList<>();
         Random rnd = new Random()
@@ -159,22 +161,22 @@ class simple_plane_lvl implements Level {
                 Robot r = robots[i]
                 switch (r.currentAction) {
                     case "up":
-                        r.y ++
+                        r.y++
                         break
                     case "down":
-                        r.y --
+                        r.y--
                         break
                     case "left":
-                        r.x --
+                        r.x--
                         break
                     case "right":
-                        r.x ++
+                        r.x++
                         break
                     default:
                         r.setBroken(true)
                 }
             }
-            virtualTime ++
+            virtualTime++
             pbc.setTime(virtualTime.intValue() * 10)
             for (int i = 0; i < robots.size(); i++) {
                 def r = robots[i]

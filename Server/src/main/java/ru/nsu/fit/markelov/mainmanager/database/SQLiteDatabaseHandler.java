@@ -1,5 +1,6 @@
 package ru.nsu.fit.markelov.mainmanager.database;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -14,7 +15,7 @@ import java.util.Map;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Level.LevelDifficulty;
-import ru.nsu.fit.markelov.interfaces.client.Playback;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.User.UserType;
 import ru.nsu.fit.markelov.interfaces.server.DatabaseHandler;
@@ -100,6 +101,13 @@ public class SQLiteDatabaseHandler implements DatabaseHandler {
         LEVELS_TABLE, LEVELS_ID, LEVELS_CODE, LEVELS_NAME, LEVELS_DESCRIPTION,
         LEVELS_DIFFICULTY, LEVELS_GOAL, LEVELS_ICON, LEVELS_LANGUAGE,
         LEVELS_MIN_PLAYERS, LEVELS_MAX_PLAYERS, LEVELS_TYPE, LEVELS_RULES);
+
+
+    File dir = new File("src/main/resources/database/");
+    if (!dir.exists()) {
+      dir.mkdir();
+    }
+
 
     connect();
     try (Statement statement = connection.createStatement()) {
@@ -355,7 +363,7 @@ public class SQLiteDatabaseHandler implements DatabaseHandler {
         statement.setInt(1, result.getId());
         statement.setString(2, player);
         statement.setBoolean(3, result.isSuccessful(player));
-        statement.setObject(4, result.getPlayback(player)); // Temporary solution! (kostil)
+        statement.setObject(4, result.getPlayback()); // Temporary solution! (kostil)
         statement.setString(5, /*TODO result.getLog(player)*/"Sorry...");
         statement.setDate(6, new Date(result.getDate().getTime()));
         statement.setInt(7, result.getLevelId());
@@ -394,7 +402,7 @@ public class SQLiteDatabaseHandler implements DatabaseHandler {
         }
 
         list.add(new SimulationResult1(key, successMap, resultSet.getDate(RESULTS_DATE),
-            privateLogs, playbackMap, resultSet.getInt(RESULTS_LEVEL)));
+            privateLogs, null, resultSet.getInt(RESULTS_LEVEL)));
       }
     } catch (SQLException e) {
       throw new ProcessingException("Exception while trying to get simulation results list");

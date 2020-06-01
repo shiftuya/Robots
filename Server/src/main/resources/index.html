@@ -14,8 +14,9 @@
         <link rel="stylesheet" href="css/users.css">
         <link rel="stylesheet" href="css/user.css">
         <link rel="stylesheet" href="css/level_editor.css">
-		<link rel="stylesheet" href="css/lobby.css">
-		<link rel="stylesheet" href="css/simulation_results.css">
+        <link rel="stylesheet" href="css/lobby.css">
+        <link rel="stylesheet" href="css/simulation_result.css">
+        <link rel="stylesheet" href="css/playback.css">
         <link rel="stylesheet" href="css/code_editor.css">
         <!--<link rel="stylesheet" href="js/libs/codemirror-5.51.0/lib/codemirror.css">-->
         <!--<script src="js/libs/codemirror-5.51.0/lib/codemirror.js"></script>-->
@@ -26,7 +27,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/groovy/groovy.min.js"></script>
         <!--<script src="js/libs/jquery/3.4.1/jquery.min.js"></script>-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="js/libs/cookie.js"></script>
+        <!--<script src="js/three.js"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+        <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+        <script src="js/playback.js"></script>
         <script src="js/main.js"></script>
         <script src="js/context_manager.js"></script>
         <script src="js/context_listeners.js"></script>
@@ -38,13 +42,6 @@
                 <section class="login-shell skeleton">
                     <form class="common-form login-form">
                         <input name="bugfix_for_form_data" type="text">
-                        <section class="form-section">
-                            <label for="server">Server:</label>
-                            <select name="server">
-                                <option value="NSU Robotics Club">NSU Robotics Club</option>
-                                <option value="Robotics Game Center">Robotics Game Center</option>
-                            </select>
-                        </section>
                         <section class="form-section">
                             <label for="name">Login:</label>
                             <input name="name" type="text">
@@ -66,10 +63,9 @@
                         <span id="my_solutions" class="a highlited-on-hover">My Solutions</span>
                         <span id="users" class="a highlited-on-hover">Users</span>
                         <span id="levels" class="a highlited-on-hover">Levels</span>
-                        <span id="simulators" class="a highlited-on-hover">Simulators</span>
 					</span>
-					<span class="nav-bar-right">
-                        <span id="options" class="a highlited-on-hover">Options</span>
+                    <span class="nav-bar-right">
+                        <span id="simulators" class="a highlited-on-hover">Simulators</span>
                         <span id="logout" class="a highlited-on-hover"></span>
 					</span>
 				</nav>
@@ -415,6 +411,7 @@
             </section>
             <section id="simulation-result-content" class="content">
                 <h1 class="content-header">Simulation Result</h1>
+                <span id="playback" class="a highlited-on-hover playback">Playback</span>
                 <table id="simulation-result-table" class="common-table simulation-result-table">
                     <tr>
                         <th>Player</th>
@@ -431,21 +428,33 @@
                             <span class="result"></span>
                         </td>
                         <td>
-                            <span class="log">Download</span>
+                            <span class="a highlited-on-hover log">Download</span>
                         </td>
                         <td>
-                            <span class="script">Download</span>
+                            <span class="a highlited-on-hover script">Download</span>
                         </td>
                     </tr>
                 </table>
 			</section>
-            <section id="options-content" class="content">
-                <h1 class="content-header">Do we still need it?</h1>
-            </section>
             <section id="404-content" class="content">
                 <h1 class="content-header">404 Not Found</h1>
                 <img class="logo" src="images/logo.png" alt="Robotics Game Server Logotype">
             </section>
-		</div>
+        </div>
+        <div id="player" class="player">
+            <div id="player-sensors" class="player-sensors"></div>
+            <div id="player-close" class="player-icon player-close"></div>
+            <footer class="player-footer">
+                <div id="player-rewind-line" class="player-rewind-line">
+                    <div id="player-progress-current" class="player-progress player-progress-current"></div>
+                    <div id="player-progress-mouse" class="player-progress player-progress-mouse"></div>
+                </div>
+                <div class="player-nav">
+                    <div id="player-stop" class="player-icon player-stop"></div>
+                    <div id="player-play-pause" class="player-icon player-play"></div>
+                    <div id="player-users" class="player-users"></div>
+                </div>
+            </footer>
+        </div>
 	</body>
 </html>

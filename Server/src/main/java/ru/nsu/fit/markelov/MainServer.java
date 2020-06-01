@@ -48,14 +48,15 @@ public class MainServer {
         server.createContext("/choose_level", new CommonHttpHandler("choose_level"));
         server.createContext("/my_solutions", new CommonHttpHandler("my_solutions"));
         server.createContext("/users", new CommonHttpHandler("users"));
-//        server.createContext("/user", new CommonHttpHandler("user"));
+        server.createContext("/user", new CommonHttpHandler("user", "user.get"));
+        server.createContext("/user_editor", new CommonHttpHandler("user_editor", "user.get"));
         server.createContext("/levels", new CommonHttpHandler("levels"));
-        server.createContext("/level_editor", new CommonHttpHandler("level_editor"));
+        server.createContext("/level_editor", new CommonHttpHandler("level_editor", "level.get"));
         server.createContext("/simulators", new CommonHttpHandler("simulators"));
         server.createContext("/options", new CommonHttpHandler("options"));
-//        server.createContext("/lobby", new CommonHttpHandler("lobby"));
-//        server.createContext("/code_editor", new CommonHttpHandler("code_editor"));
-//        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result"));
+        server.createContext("/lobby", new CommonHttpHandler("lobby", "lobby.return"));
+        server.createContext("/code_editor", new CommonHttpHandler("code_editor", "code.edit"));
+        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result", "simulation_result.get"));
 
         server.createContext("/api/method/sign.login", new LogInHandler(mainManager));
         server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));

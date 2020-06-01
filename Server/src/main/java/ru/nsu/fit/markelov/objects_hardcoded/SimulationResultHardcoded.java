@@ -1,7 +1,7 @@
 package ru.nsu.fit.markelov.objects_hardcoded;
 
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.client.Playback;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.client.User;
 
 import java.util.Date;
@@ -26,6 +26,11 @@ public class SimulationResultHardcoded implements SimulationResult {
     return date;
   }
 
+  @Override
+  public Playback getPlayback() {
+    return null;
+  }
+
   public void setDate(Date date) {
     this.date = date;
   }
@@ -44,7 +49,6 @@ public class SimulationResultHardcoded implements SimulationResult {
     return null;
   }
 
-  @Override
   public Playback getPlayback(String username) {
     return null;
   }

@@ -1,9 +1,9 @@
-var codeMirror;
+var codeMirror, contextManager;
 
 class BracketsBugAvoiding_0{}
 
 $(document).ready(function() {
-    var contextManager = new ContextManager([
+    contextManager = new ContextManager([
         ["login", {
             title: "Login",
             contentId: "login-content",
@@ -109,11 +109,6 @@ $(document).ready(function() {
                 contentUnit: "tr:not(':first-of-type')"
             }
         }],
-        ["options", {
-            title: "Options",
-            headerId: "header-main",
-            contentId: "options-content"
-        }],
         ["404", {
             title: "404 Not Found",
             headerId: "header-main",
@@ -151,14 +146,13 @@ $(document).ready(function() {
         }]
     ]);
     
-    activateListeners(contextManager);
-    contextManager.changeContext(initialContext);
+    activateListeners();
+    contextManager.changeContext(initialContext, initialAjaxQuery);
 
-    var contextListeners = new ContextListeners(contextManager);
-    contextListeners.activateAll();
+    new ContextListeners().activateAll();
 });
 
-function activateListeners(contextManager) {
+function activateListeners() {
     $("#logout").on("click", function() {
         sendAjax("sign.logout", function(data) {
             contextManager.changeContext("login");
@@ -172,7 +166,7 @@ function activateListeners(contextManager) {
     });
 
     $("#header-code-editor").find(".back").on("click", function() {
-        contextManager.changeContext("lobby", "lobby.return?id=" + $(this).attr("data-lobby-id"));
+        contextManager.changeContext("lobby?id=" + $(this).attr("data-lobby-id"), "lobby.return?id=" + $(this).attr("data-lobby-id"));
     });
 
     $("#header-code-editor").find(".play").on("click", function() {
@@ -189,9 +183,9 @@ function activateListeners(contextManager) {
                 }
                 
                 if (obj.response.simulated) {
-                    contextManager.changeContext("simulation_result", "simulation_result.get?id=" + id);
+                    contextManager.changeContext("simulation_result?id=" + id, "simulation_result.get?id=" + id);
                 } else if (obj.response.compiled) {
-                    contextManager.changeContext("lobby", "lobby.return?id=" + id);
+                    contextManager.changeContext("lobby?id=" + id, "lobby.return?id=" + id);
                 } else {
                     alert("Debug: not compiled and not simulated!");
                 }
@@ -219,9 +213,79 @@ function activateListeners(contextManager) {
             contextManager.changeContext("simulators");
         });
     });
+
+    $("#player-close").on("click", function() {
+        $("#player").fadeOut("slow", function() {
+            playerClosed = true;
+        });
+    });
+
+    $("#player-rewind-line").on("mousemove", function(event) {
+        $("#player-progress-mouse").css("width", event.pageX - $(this).offset().left);
+    });
+
+    $("#player-rewind-line").on("mouseleave", function() {
+        $("#player-progress-mouse").css("width", 0);
+    });
+
+    $("#player-rewind-line").on("click", function(event) {
+        currentFrame = Math.floor(playback.framesCount * (event.pageX - $(this).offset().left) / $(this).width());
+        if (currentFrame == playback.framesCount) {
+            alert("currentFrame == playback.framesCount !!!");
+        }
+
+        objects.forEach(function(object) {
+            for (var i = 0; i < object.states.length; i++) {
+                var state = object.states[i];
+                if (currentFrame >= state.startingFrame && currentFrame < state.endingFrame) {
+                    object.i = i;
+                    object.framesToSleep = state.endingFrame - 1 - currentFrame;
+                    if (object.framesToSleep > 0) {
+                        object.i++;
+                    }
+
+                    update(object.mesh, object.states[i]);
+                    $("#player-progress-current").css("width", $("#player-rewind-line").width() * currentFrame / (playback.framesCount - 1));
+
+                    break;
+                }
+            }
+        });
+        updateSensors();
+    });
+
+    $("#player-play-pause").on("click", function() {
+        if (paused) {
+            paused = false;
+            $("#player-play-pause").removeClass("player-play").addClass("player-pause");
+        } else {
+            paused = true;
+            $("#player-play-pause").removeClass("player-pause").addClass("player-play");
+        }
+    });
+
+    $("#player-stop").on("click", function() {
+        if (!paused) {
+            $("#player-play-pause").click();
+        }
+        currentFrame = 0;
+        objects.forEach(function(object) {
+            object.i = 0;
+            object.framesToSleep = 0;
+            update(object.mesh, object.states[0]);
+        });
+        updateSensors();
+
+        $("#player-progress-current").css("width", 0);
+    });
+
+    $("#player").on("wheel", function(event) {
+        camera.position.y += (event.originalEvent.deltaY > 0) ? playback.camera.scrollSpeed : -playback.camera.scrollSpeed;
+        camera.update();
+    });
 }
 
-function sendAjax(ajaxQuery, handleResponseFunction, data, formData) {
+function sendAjax(ajaxQuery, handleResponseFunction, data, formData, onErrorContextName) {
     $.ajax({
         url: "/api/method/" + ajaxQuery,
         type: formData || data ? "POST" : "GET",
@@ -235,6 +299,9 @@ function sendAjax(ajaxQuery, handleResponseFunction, data, formData) {
         error: function(xhr, status, error) {
             var obj = JSON.parse(xhr.responseText);
             alert("Server error: " + obj.error);
+            if (onErrorContextName) {
+                contextManager.changeContext(onErrorContextName);
+            }
         }
     });
 }

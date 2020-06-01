@@ -5,16 +5,15 @@
     background-color: darkred;
 }
 
-.playback-content {
-    display: none;
-}
-
-.log-content {
-    width: 100% !important;
-    padding-left: 0 !important;
-}
-
 /* HARDCODED - delete */
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
 
 header, .content {
 	display: none;

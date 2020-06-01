@@ -1,12 +1,10 @@
 package ru.nsu.fit.markelov.mainmanager;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import ru.nsu.fit.markelov.interfaces.client.Level;
-import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
-import ru.nsu.fit.markelov.interfaces.client.Playback;
+
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +26,7 @@ public class SimulationResult1 implements SimulationResultExtended {
   // Username to privateLog.
   private Map<String, String> privateLogs;
 
-  private Map<String, Playback> playbacks;
+  private Playback playback;
 
   private Map<String, UserExtended> usernameMap;
 
@@ -45,13 +43,31 @@ public class SimulationResult1 implements SimulationResultExtended {
     privateLogs = _privateLogs;
   }
 
-  public SimulationResult1(int id, Map<String, Boolean> results, Date date,
-      Map<String, String> privateLogs, Map<String, Playback> playbacks, int levelId) {
+  public SimulationResult1(
+      int simId,
+      HashMap<String, Boolean> simResults,
+      HashMap<String, String> _privateLogs,
+      Playback playback,
+      Date simDate) {
+    id = simId;
+    results = simResults;
+    date = simDate;
+    privateLogs = _privateLogs;
+    this.playback = playback;
+  }
+
+  public SimulationResult1(
+      int id,
+      Map<String, Boolean> results,
+      Date date,
+      Map<String, String> privateLogs,
+      Playback playback,
+      int levelId) {
     this.id = id;
     this.results = results;
     this.date = date;
     this.privateLogs = privateLogs;
-    this.playbacks = playbacks;
+    this.playback = playback;
     this.levelId = levelId;
   }
 
@@ -77,6 +93,11 @@ public class SimulationResult1 implements SimulationResultExtended {
   }
 
   @Override
+  public Playback getPlayback() {
+    return playback;
+  }
+
+  @Override
   public String getLog(String username) {
     try {
       return privateLogs.get(username);
@@ -84,13 +105,6 @@ public class SimulationResult1 implements SimulationResultExtended {
       return "Error occurred while obtaining log";
     }
   }
-
-  @Override
-  public Playback getPlayback(String username) {
-    return null; // TODO
-  }
-
-  @Override
   public Set<String> getUserNames() {
     return results.keySet();
   }

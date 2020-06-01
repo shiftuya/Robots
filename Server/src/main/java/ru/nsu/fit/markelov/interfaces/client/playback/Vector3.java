@@ -1,4 +1,4 @@
-package ru.nsu.fit.markelov.interfaces.client;
+package ru.nsu.fit.markelov.interfaces.client.playback;
 
 public interface Vector3 {
     /**
@@ -6,19 +6,25 @@ public interface Vector3 {
      *
      * @return x coordinate.
      */
-    float getX();
+    default float getX() {
+        return 0;
+    }
 
     /**
      * Returns y coordinate.
      *
      * @return y coordinate.
      */
-    float getY();
+    default float getY() {
+        return 0;
+    }
 
     /**
      * Returns z coordinate.
      *
      * @return z coordinate.
      */
-    float getZ();
+    default float getZ() {
+        return 0;
+    }
 }

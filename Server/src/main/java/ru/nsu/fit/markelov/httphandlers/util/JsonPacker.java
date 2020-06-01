@@ -8,8 +8,11 @@ import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.Pair;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.User;
+import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 public class JsonPacker {
@@ -200,9 +203,11 @@ public class JsonPacker {
         return jsonCompileResult;
     }
 
-    public static JSONObject packCode(String code) {
+    public static JSONObject packCode(int id, String code) {
         JSONObject jsonCode = new JSONObject();
-        jsonCode.put("code", (code != null) ? code : "");
+        jsonCode
+            .put("id", id)
+            .put("code", (code != null) ? code : "");
 
         return jsonCode;
     }
@@ -232,6 +237,83 @@ public class JsonPacker {
         return new JSONObject()
             .put("id", simulationResult.getId())
             .put("date", new SimpleDateFormat(DATE_FORMAT).format(simulationResult.getDate()))
-            .put("users", jsonSimulationResults);
+            .put("users", jsonSimulationResults)
+            .put("playback", packPlayback(simulationResult.getPlayback()));
+    }
+
+    public static JSONObject packPlayback(Playback playback) {
+        JSONArray jsonBindings = new JSONArray();
+        for (Map.Entry<String, Integer> entry : playback.getRobots().entrySet()) {
+            JSONObject jsonBinding = new JSONObject();
+            jsonBinding
+                .put("user", entry.getKey())
+                .put("id", entry.getValue());
+
+            jsonBindings.put(jsonBinding);
+        }
+
+        JSONArray jsonGameObjectsStates = new JSONArray();
+        for (List<GameObjectState> gameObjectStates : playback.getGameObjectStates()) {
+            JSONArray jsonGameObjectStates = new JSONArray();
+            for (GameObjectState gameObjectState : gameObjectStates) {
+                JSONArray jsonSensors = new JSONArray();
+                for (Map.Entry<String, String> entry : gameObjectState.getSensorValues().entrySet()) {
+                    JSONObject jsonSensor = new JSONObject();
+                    jsonSensor
+                        .put("sensor", entry.getKey())
+                        .put("value", entry.getValue());
+
+                    jsonSensors.put(jsonSensor);
+                }
+
+                JSONObject jsonGameObjectState = new JSONObject();
+                jsonGameObjectState
+                    .put("startingFrame", gameObjectState.getStartingFrame())
+                    .put("endingFrame", gameObjectState.getEndingFrame())
+                    .put("position", new JSONArray()
+                        .put(gameObjectState.getPosition().getX())
+                        .put(gameObjectState.getPosition().getY())
+                        .put(gameObjectState.getPosition().getZ()))
+                    .put("dimension", new JSONArray()
+                        .put(gameObjectState.getDimension().getX())
+                        .put(gameObjectState.getDimension().getY())
+                        .put(gameObjectState.getDimension().getZ()))
+                    .put("rotation", new JSONArray()
+                        .put(gameObjectState.getRotation().getX())
+                        .put(gameObjectState.getRotation().getY())
+                        .put(gameObjectState.getRotation().getZ()))
+                    .put("color", gameObjectState.getColor())
+                    .put("sensors", jsonSensors);
+
+                jsonGameObjectStates.put(jsonGameObjectState);
+            }
+            jsonGameObjectsStates.put(jsonGameObjectStates);
+        }
+
+        JSONObject jsonCamera = new JSONObject();
+        jsonCamera
+            .put("position", new JSONArray()
+                .put(playback.getCamera().getPosition().getX())
+                .put(playback.getCamera().getPosition().getY())
+                .put(playback.getCamera().getPosition().getZ()))
+            .put("renderDistance", playback.getCamera().getRenderDistance())
+            .put("scrollSpeed", playback.getCamera().getScrollSpeed());
+
+        JSONObject jsonGround = new JSONObject();
+        jsonGround
+            .put("size", playback.getGround().getSize())
+            .put("color", playback.getGround().getColor())
+            .put("gridDivisions", playback.getGround().getGridDivisions())
+            .put("gridColor", playback.getGround().getGridColor())
+            .put("gridCenterLineColor", playback.getGround().getGridCenterLineColor())
+            .put("opacity", playback.getGround().getGridOpacity());
+
+        return new JSONObject()
+            .put("framesCount", playback.getFramesCount())
+            .put("bindings", jsonBindings)
+            .put("gameObjectsStates", jsonGameObjectsStates)
+            .put("camera", jsonCamera)
+            .put("backgroundColor", playback.getBackgroundColor())
+            .put("ground", jsonGround);
     }
 }

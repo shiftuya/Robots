@@ -8,7 +8,6 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import groovy.transform.CompileStatic
 import groovy.transform.Synchronized
-import org.codehaus.groovy.control.CompilationFailedException
 
 import java.util.concurrent.Executors
 
@@ -51,9 +50,10 @@ class App {
                     http.responseBody.withWriter { out ->
                         out << result + "\n"
                     }
+                    //println(result)
                 } catch (Exception e) {
                     println "Exception when processing solution"
-                    println(e)
+                    e.printStackTrace()
                     http.sendResponseHeaders(200, 0)
                     sendError(http, e.getMessage())
                 }

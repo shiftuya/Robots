@@ -1,5 +1,7 @@
 package ru.nsu.fit.markelov.interfaces.client;
 
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
@@ -210,6 +212,17 @@ public interface MainManager {
      * @return user script for his robot.
      */
     String getScript(String token, String userName, int simulationResultId);
+
+    /**
+     * Returns simulation playback.
+     *
+     * Access: user who participated in simulation, any teacher and higher.
+     *
+     * @param token              unique user token.
+     * @param simulationResultId unique simulation result id.
+     * @return simulation playback.
+     */
+    Playback getPlayback(String token, int simulationResultId);
 
     /**
      * Returns a user gotten by specified 'userName'.

@@ -17,7 +17,7 @@ if (args.size() == 1) {
 }
 def start = System.currentTimeMillis()
 int count = args[0] as int
-String message = "{\"level\":\"simple_plane\", \"solutions\":" + JsonOutput.toJson(solutions) + "}"
+String message = "{\"level\":\"spl\", \"solutions\":" + JsonOutput.toJson(solutions) + "}"
 def makeReq = { int i ->
     def post = new URL("http://localhost:1337/simulate").openConnection();
     //println(message)

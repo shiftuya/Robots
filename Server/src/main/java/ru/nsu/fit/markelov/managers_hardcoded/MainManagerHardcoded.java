@@ -6,10 +6,12 @@ import ru.nsu.fit.markelov.interfaces.client.CompileResult;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.interfaces.client.Playback;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.User;
+import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
+import ru.nsu.fit.markelov.interfaces.client.playback.Vector3;
 import ru.nsu.fit.markelov.objects_hardcoded.LevelHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.LobbyHardcoded;
 import ru.nsu.fit.markelov.objects_hardcoded.SimulationResultHardcoded;
@@ -26,7 +28,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MainManagerHardcoded implements MainManager {
 
@@ -65,7 +69,7 @@ public class MainManagerHardcoded implements MainManager {
         // ----- players -----
 
         UserHardcoded player_1 = new UserHardcoded();
-        player_1.setAvatarAddress("/images/person-icon.png");
+        player_1.setAvatarAddress("/images/avatars/person-icon.png");
         player_1.setName("Vasily");
         player_1.setType(User.UserType.Admin);
         player_1.setBlocked(false);
@@ -73,7 +77,7 @@ public class MainManagerHardcoded implements MainManager {
         users.add(player_1);
 
         UserHardcoded player_2 = new UserHardcoded();
-        player_2.setAvatarAddress("/images/person-icon.png");
+        player_2.setAvatarAddress("/images/avatars/person-icon.png");
         player_2.setName("Simon");
         player_2.setType(User.UserType.Teacher);
         player_2.setBlocked(false);
@@ -81,7 +85,7 @@ public class MainManagerHardcoded implements MainManager {
         users.add(player_2);
 
         UserHardcoded player_3 = new UserHardcoded();
-        player_3.setAvatarAddress("/images/person-icon.png");
+        player_3.setAvatarAddress("/images/avatars/person-icon.png");
         player_3.setName("Ivan");
         player_3.setType(User.UserType.Student);
         player_3.setBlocked(true);
@@ -89,7 +93,7 @@ public class MainManagerHardcoded implements MainManager {
         users.add(player_3);
 
         UserHardcoded player_4 = new UserHardcoded();
-        player_4.setAvatarAddress("/images/person-icon.png");
+        player_4.setAvatarAddress("/images/avatars/person-icon.png");
         player_4.setName("Oleg");
         player_4.setType(User.UserType.Student);
         player_4.setBlocked(false);
@@ -100,7 +104,7 @@ public class MainManagerHardcoded implements MainManager {
 
         LevelHardcoded level_1 = new LevelHardcoded();
         level_1.setId(1);
-        level_1.setIconAddress("/images/labyrinth-icon.png");
+        level_1.setIconAddress("/images/level-icons/labyrinth-icon.png");
         level_1.setName("Labyrinth");
         level_1.setDifficulty(Level.LevelDifficulty.Easy);
         level_1.setType("Single");
@@ -114,7 +118,7 @@ public class MainManagerHardcoded implements MainManager {
 
         LevelHardcoded level_2 = new LevelHardcoded();
         level_2.setId(2);
-        level_2.setIconAddress("/images/vacuum-cleaner-icon.png");
+        level_2.setIconAddress("/images/level-icons/vacuum-cleaner-icon.png");
         level_2.setName("Vacuum Cleaner");
         level_2.setDifficulty(Level.LevelDifficulty.Medium);
         level_2.setType("Multiplayer (2-4)");
@@ -128,7 +132,7 @@ public class MainManagerHardcoded implements MainManager {
 
         LevelHardcoded level_3 = new LevelHardcoded();
         level_3.setId(3);
-        level_3.setIconAddress("/images/robot-wars-icon.png");
+        level_3.setIconAddress("/images/level-icons/robot-wars-icon.png");
         level_3.setName("Robot Wars");
         level_3.setDifficulty(Level.LevelDifficulty.Hard);
         level_3.setType("Multiplayer (2)");
@@ -305,14 +309,292 @@ public class MainManagerHardcoded implements MainManager {
             }
 
             @Override
+            public Playback getPlayback() {
+                return new Playback() {
+                    @Override
+                    public int getFramesCount() {
+                        return 600;
+                    }
+
+                    @Override
+                    public Map<String, Integer> getRobots() {
+                        Map<String, Integer> robots = new TreeMap<>();
+                        robots.put("Oleg", 0);
+                        robots.put("Simon", 1);
+                        robots.put("Vasily", 3);
+
+                        return robots;
+                    }
+
+                    @Override
+                    public List<List<GameObjectState>> getGameObjectStates() {
+                        List<GameObjectState> gameObjectStates_1 = new ArrayList<>();
+                        float x = 0;
+                        for (int i = 0; i < 600; i++, x += 0.5f) {
+                            final int frame = i;
+                            final float posX = x;
+                            gameObjectStates_1.add(new GameObjectState() {
+                                @Override
+                                public int getStartingFrame() {
+                                    return frame;
+                                }
+
+                                @Override
+                                public int getEndingFrame() {
+                                    return frame + 1;
+                                }
+
+                                @Override
+                                public Vector3 getPosition() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return posX;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return 25;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public Vector3 getDimension() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getX() {
+                                            return 100;
+                                        }
+
+                                        @Override
+                                        public float getY() {
+                                            return 50;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return 75;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public Vector3 getRotation() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getY() {
+                                            return frame;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public int getColor() {
+                                    return 0x00ff00;
+                                }
+
+                                @Override
+                                public Map<String, String> getSensorValues() {
+                                    Map<String, String> sensors = new TreeMap<>();
+                                    sensors.put("Sensor 1", posX+"");
+                                    sensors.put("Sensor 2", frame+"");
+
+                                    return sensors;
+                                }
+                            });
+                        }
+
+                        List<GameObjectState> gameObjectStates_2 = new ArrayList<>();
+                        float z = 0;
+                        for (int i = 0; i < 600; i += 10, z += 5f) {
+                            final int frame = i;
+                            final float posZ = z;
+                            gameObjectStates_2.add(new GameObjectState() {
+                                @Override
+                                public int getStartingFrame() {
+                                    return frame;
+                                }
+
+                                @Override
+                                public int getEndingFrame() {
+                                    return frame + 10;
+                                }
+
+                                @Override
+                                public Vector3 getPosition() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getY() {
+                                            return 25;
+                                        }
+
+                                        @Override
+                                        public float getZ() {
+                                            return posZ;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public int getColor() {
+                                    return ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
+                                }
+
+                                @Override
+                                public Map<String, String> getSensorValues() {
+                                    Map<String, String> sensors = new TreeMap<>();
+                                    sensors.put("Sensor 1", frame+"");
+
+                                    return sensors;
+                                }
+                            });
+                        }
+
+                        List<GameObjectState> gameObjectStates_3 = new ArrayList<>();
+                        gameObjectStates_3.add(new GameObjectState() {
+                            @Override
+                            public int getStartingFrame() {
+                                return 0;
+                            }
+
+                            @Override
+                            public int getEndingFrame() {
+                                return 600;
+                            }
+
+                            @Override
+                            public Vector3 getPosition() {
+                                return new Vector3() {
+                                    @Override
+                                    public float getY() {
+                                        return 250;
+                                    }
+
+                                    @Override
+                                    public float getZ() {
+                                        return -200;
+                                    }
+                                };
+                            }
+
+                            @Override
+                            public Vector3 getDimension() {
+                                return new Vector3() {
+                                    @Override
+                                    public float getX() {
+                                        return 500;
+                                    }
+
+                                    @Override
+                                    public float getY() {
+                                        return 500;
+                                    }
+
+                                    @Override
+                                    public float getZ() {
+                                        return 10;
+                                    }
+                                };
+                            }
+
+                            @Override
+                            public int getColor() {
+                                return 0xff0000;
+                            }
+                        });
+
+                        List<GameObjectState> gameObjectStates_4 = new ArrayList<>();
+                        int y = 0;
+                        for (int i = 100; i < 200; i++, y++) {
+                            final int frame = i;
+                            final int posY = y;
+                            gameObjectStates_4.add(new GameObjectState() {
+                                @Override
+                                public int getStartingFrame() {
+                                    return frame;
+                                }
+
+                                @Override
+                                public int getEndingFrame() {
+                                    return frame + 1;
+                                }
+
+                                @Override
+                                public Vector3 getPosition() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getY() {
+                                            return posY;
+                                        }
+                                    };
+                                }
+                            });
+                        }
+                        int finalY = y;
+                        gameObjectStates_4.add(new GameObjectState() {
+                            @Override
+                            public int getStartingFrame() {
+                                return 300;
+                            }
+
+                            @Override
+                            public int getEndingFrame() {
+                                return 400;
+                            }
+
+                            @Override
+                            public Vector3 getPosition() {
+                                return new Vector3() {
+                                    @Override
+                                    public float getY() {
+                                        return finalY - 1;
+                                    }
+                                };
+                            }
+                        });
+                        for (int i = 400; i < 500; i += 10, y += 10) {
+                            final int frame = i;
+                            final int posY = y;
+                            gameObjectStates_4.add(new GameObjectState() {
+                                @Override
+                                public int getStartingFrame() {
+                                    return frame;
+                                }
+
+                                @Override
+                                public int getEndingFrame() {
+                                    return frame + 10;
+                                }
+
+                                @Override
+                                public Vector3 getPosition() {
+                                    return new Vector3() {
+                                        @Override
+                                        public float getY() {
+                                            return posY;
+                                        }
+                                    };
+                                }
+                            });
+                        }
+
+                        List<List<GameObjectState>> gameObjectsStates = new ArrayList<>();
+                        gameObjectsStates.add(gameObjectStates_1);
+                        gameObjectsStates.add(gameObjectStates_2);
+                        gameObjectsStates.add(gameObjectStates_3);
+                        gameObjectsStates.add(gameObjectStates_4);
+
+                        return gameObjectsStates;
+                    }
+                };
+            }
+
+            @Override
             public boolean isSuccessful(String username) {
                 return true;
             }
 
-            @Override
-            public Playback getPlayback(String username) {
-                return null;
-            }
         };
     }
 
@@ -466,5 +748,10 @@ public class MainManagerHardcoded implements MainManager {
     @Override
     public void removeUser(String token, String userName) {
 
+    }
+
+    @Override
+    public Playback getPlayback(String token, int simulationResultId) {
+        return null;
     }
 }

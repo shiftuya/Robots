@@ -1,6 +1,8 @@
 package ru.nsu.fit.markelov.mainmanager;
 
-import java.sql.ResultSet;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.CompileResult;
@@ -8,11 +10,11 @@ import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Level.LevelDifficulty;
 import ru.nsu.fit.markelov.interfaces.client.Lobby;
 import ru.nsu.fit.markelov.interfaces.client.MainManager;
-import ru.nsu.fit.markelov.interfaces.client.Playback;
 import ru.nsu.fit.markelov.interfaces.client.Resource;
 import ru.nsu.fit.markelov.interfaces.client.SimulationResult;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.User.UserType;
+import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.server.DatabaseHandler;
 import ru.nsu.fit.markelov.interfaces.server.SimulatorManager;
 import ru.nsu.fit.markelov.mainmanager.database.SQLiteDatabaseHandler;
@@ -22,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -95,7 +96,12 @@ public class MainManagerWithDatabase implements MainManager {
 
   @Override
   public String getScript(String token, String userName, int simulationResultId) {
-    return "null";
+    return "null"; // TODO
+  }
+
+  @Override
+  public Playback getPlayback(String token, int simulationResultId) {
+    return null; // TODO
   }
 
   private DatabaseHandler databaseHandler;
@@ -123,7 +129,7 @@ public class MainManagerWithDatabase implements MainManager {
     tokenUserMap = new HashMap<>();
 
     if (databaseHandler.getUserByName("admin") == null) { // Temporary solution
-      UserExtended admin = new User1("/images/person-icon.png", "admin", UserType.Admin, "admin");
+      UserExtended admin = new User1("/images/avatars/kom64.png", "admin", UserType.Admin, "admin");
       databaseHandler.saveUser(admin);
     }
 
@@ -420,11 +426,19 @@ public class MainManagerWithDatabase implements MainManager {
     }
   }
 
+
   @Override
   public void submitLevel(String token, boolean create, Integer levelID, String name,
                           String difficulty, Integer minPlayers, Integer maxPlayers,
                           Resource iconResource, String description, String rules, String goal,
                           Collection<Resource> levelResources, String code, String language) {
+    String type;
+    if (maxPlayers == 1) {
+      type = "Single";
+    } else {
+      type = "Multiplayer (" + minPlayers + "-" + maxPlayers + ")";
+    }
+
     if (create) {
       int newLevelId = currentLevelId++;
       LevelDifficulty levelDifficulty;
@@ -433,8 +447,22 @@ public class MainManagerWithDatabase implements MainManager {
       } catch (IllegalArgumentException e) {
         throw new ProcessingException("Illegal difficulty");
       }
-      Level level = new Level1(newLevelId, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
-          minPlayers, maxPlayers, language, code); // ???
+
+      String iconPath;
+
+      if (iconResource == null) {
+        iconPath = "/images/level-icons/labyrinth-icon.png";
+      } else {
+        iconPath = "/images/level-icons/" + iconResource.getName();
+
+        try {
+          Files.write(Paths.get("src/main/resources" + iconPath), iconResource.getBytes());
+        } catch (IOException e) {
+          throw new ProcessingException("Illegal icon");
+        }
+      }
+      Level level = new Level1(newLevelId, iconPath, name, levelDifficulty, type, description, rules, goal,
+          minPlayers, maxPlayers, language, code);
 
 
       List<Resource> resources;
@@ -464,8 +492,22 @@ public class MainManagerWithDatabase implements MainManager {
       } catch (IllegalArgumentException e) {
         throw new ProcessingException("Illegal difficulty");
       }
-      Level newLevel = new Level1(levelID, "/images/labyrinth-icon.png", name, levelDifficulty, "Type", description, rules, goal,
-          minPlayers, maxPlayers, language, code); // ???
+
+      String iconPath;
+      if (iconResource == null) {
+        iconPath = level.getIconAddress();
+      } else {
+        iconPath = "/images/level-icons/" + iconResource.getName();
+
+        try {
+          Files.write(Paths.get("src/main/resources" + iconPath), iconResource.getBytes());
+        } catch (IOException e) {
+          throw new ProcessingException("Illegal icon");
+        }
+      }
+
+      Level newLevel = new Level1(levelID, iconPath, name, levelDifficulty, type, description, rules, goal,
+          minPlayers, maxPlayers, language, code);
 
       List<Resource> resources; // TODO change to database interaction
       if (levelResources == null) {
@@ -558,7 +600,21 @@ public class MainManagerWithDatabase implements MainManager {
         throw new ProcessingException("User already exists");
       }
 
-      UserExtended user = new User1("/images/person-icon.png", userName, userType, password);
+      String avatarPath;
+      if (avatarResource == null) {
+        avatarPath = "/images/avatars/person-icon.png/";
+      } else {
+        avatarPath = "/images/avatars/" + avatarResource.getName();
+
+        try {
+          Files.write(Paths.get("src/main/resources" + avatarPath), avatarResource.getBytes());
+        } catch (IOException e) {
+          throw new ProcessingException("Illegal icon");
+        }
+      }
+
+
+      UserExtended user = new User1(avatarPath, userName, userType, password);
 
       databaseHandler.saveUser(user);
 
@@ -579,6 +635,19 @@ public class MainManagerWithDatabase implements MainManager {
       throw new ProcessingException("User not found");
     }
 
+    String avatarPath;
+    if (avatarResource == null) {
+      avatarPath = user.getAvatarAddress();
+    } else {
+      avatarPath = "/images/avatars/" + avatarResource.getName();
+
+      try {
+        Files.write(Paths.get("src/main/resources" + avatarPath), avatarResource.getBytes());
+      } catch (IOException e) {
+        throw new ProcessingException("Illegal icon");
+      }
+    }
+    user.setAvatarAddress(avatarPath);
     user.setPassword(password);
     user.setType(userType);
 
