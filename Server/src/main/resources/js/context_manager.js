@@ -485,7 +485,7 @@ function insertLobbyData(obj) {
                 var tr = $(trSkeleton).clone();
                 tr.removeClass("skeleton");
 
-                tr.find(".players-table-icon").css("background-image", "url(\".." + playerItem.avatar + "\")");
+                tr.find(".avatar-icon").css("background-image", "url(\".." + playerItem.avatar + "\")");
                 tr.find(".username").text(playerItem.user_name);
                 tr.find(".solution-submitted").text(playerItem.submitted ? "Submitted" : "Not submitted");
 
