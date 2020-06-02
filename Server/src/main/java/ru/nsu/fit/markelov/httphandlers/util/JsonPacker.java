@@ -19,6 +19,13 @@ public class JsonPacker {
 
     public static final String DATE_FORMAT = "dd.MM.yyyy";
 
+    public static JSONObject packLogIn(String token, String userName, String userType) {
+        return new JSONObject()
+            .put("token", token)
+            .put("userName", userName)
+            .put("userType", userType);
+    }
+
     public static JSONArray packUsers(Iterable<User> users) {
         JSONArray jsonLevels = new JSONArray();
 

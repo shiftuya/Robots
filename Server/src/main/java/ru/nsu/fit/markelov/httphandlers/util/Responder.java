@@ -12,7 +12,7 @@ public class Responder {
     private static final String RESPONSE = "response";
     private static final String ERROR = "error";
     private static final int RESPONSE_CODE = 200;
-    private static final int ERROR_CODE = 404;
+    private static final int ERROR_CODE = 400;
 
     private HttpExchange exchange;
     private OutputStream oStream;
@@ -46,6 +46,6 @@ public class Responder {
         byte[] bytes = message.getBytes();
         exchange.sendResponseHeaders(rCode, bytes.length);
         oStream.write(bytes);
-        System.out.println("Response sent: " + new String(bytes));
+        //System.out.println("Response sent: " + new String(bytes));
     }
 }

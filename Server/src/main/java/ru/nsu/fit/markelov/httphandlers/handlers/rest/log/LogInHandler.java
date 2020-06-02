@@ -2,6 +2,7 @@ package ru.nsu.fit.markelov.httphandlers.handlers.rest.log;
 
 import com.sun.net.httpserver.HttpExchange;
 import ru.nsu.fit.markelov.httphandlers.handlers.rest.RestHandler;
+import ru.nsu.fit.markelov.httphandlers.util.JsonPacker;
 import ru.nsu.fit.markelov.httphandlers.util.Responder;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.FormDataHandler;
@@ -12,7 +13,7 @@ import java.io.IOException;
 
 public class LogInHandler extends RestHandler {
 
-    private MainManager mainManager;
+    private final MainManager mainManager;
 
     public LogInHandler(MainManager mainManager) {
         this.mainManager = mainManager;
@@ -30,9 +31,11 @@ public class LogInHandler extends RestHandler {
 
         String token = mainManager.login(userName, password);
 
-        cookieHandler.printCookieDEBUG();
+        //cookieHandler.printCookieDEBUG();
         cookieHandler.putCookie(token);
 
-        responder.sendResponse();
+        String userType = mainManager.getUserType(token).toString();
+
+        responder.sendResponse(JsonPacker.packLogIn(token, userName, userType));
     }
 }

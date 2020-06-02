@@ -12,8 +12,6 @@ class ContextManager {
     }
 
     changeContext(contextName, ajaxQuery, obj) {
-        var onErrorContextName = (contextName == "login" || contextName == "list_of_lobbies") ? "login" : "list_of_lobbies";
-        
         var url = contextName;
         contextName = contextName.split("?")[0];
         
@@ -60,12 +58,12 @@ class ContextManager {
         this.removeCurrentData(deleteData);
 
         // get and insert new data
-        this.getAndInsertData(ajaxQuery, insertFunction, obj, onErrorContextName);
+        this.getAndInsertData(ajaxQuery, insertFunction, obj);
 
         this.currentContextName = contextName;
     }
 
-    getAndInsertData(ajaxQuery, insertFunction, obj, onErrorContextName) {
+    getAndInsertData(ajaxQuery, insertFunction, obj) {
         if (!insertFunction) {
             return;
         }
@@ -77,7 +75,7 @@ class ContextManager {
 
         sendAjax(ajaxQuery, function(result) {
             insertFunction(result ? JSON.parse(result) : undefined);
-        }, undefined, undefined, onErrorContextName);
+        }, undefined, undefined, true);
     }
 
     removeCurrentData(deleteData) {
@@ -95,7 +93,7 @@ function insertLoginData(obj) {
     section.removeClass("skeleton");
 
     var submitButton = section.find(".login-submit-a");
-    
+
     section.find("input").on("keypress", function(e) {
         if (e.which == 13) {
             submitButton.click();
@@ -104,16 +102,19 @@ function insertLoginData(obj) {
 
     submitButton.on("click", function() {
         var username = section.find("input[name='name']").val();
-        
+
         var form = $("#login-content").find(".login-shell:not('.skeleton')").find("form")
 
         var formData = new FormData(form[0]);
         sendAjax("sign.login", function(result) {
-            $("#logout").text("Log Out (" + username + ")");
+            var obj = JSON.parse(result);
+            setCookie("ROBOTICS_USER", obj.response.token);
+
+            showHeaderLinks(obj.response.userName, obj.response.userType);
             contextManager.changeContext("list_of_lobbies");
         }, undefined, formData);
     });
-    
+
     $("#login-content").append(section);
     section.find("input[name='name']").focus();
 }

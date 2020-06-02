@@ -2,7 +2,11 @@ package ru.nsu.fit.markelov.httphandlers.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import ru.nsu.fit.markelov.httphandlers.util.parsers.CookieHandler;
 import ru.nsu.fit.markelov.httphandlers.util.parsers.UriParametersParser;
+import ru.nsu.fit.markelov.interfaces.ProcessingException;
+import ru.nsu.fit.markelov.interfaces.client.MainManager;
+import ru.nsu.fit.markelov.interfaces.client.User;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,38 +20,27 @@ public class CommonHttpHandler implements HttpHandler {
     private static final String RESOURCES_FOLDER = "src/main/resources/";
     private static final String HTML_PAGE = "index.html";
 
+    private final MainManager mainManager;
     private final String context;
     private final String ajaxQuery;
 
-    public CommonHttpHandler(String context) {
-        this(context, null);
+    public CommonHttpHandler(MainManager mainManager, String context) {
+        this(mainManager, context, null);
     }
 
-    public CommonHttpHandler(String context, String ajaxQuery) {
+    public CommonHttpHandler(MainManager mainManager, String context, String ajaxQuery) {
+        this.mainManager = mainManager;
         this.context = context;
         this.ajaxQuery = ajaxQuery;
     }
 
     @Override
     public void handle(HttpExchange exchange) {
-        String _context = context;
-        String _ajaxQuery = ajaxQuery;
-
         try (OutputStream oStream = exchange.getResponseBody()) {
             String uri = exchange.getRequestURI().toString();
 
-            if (_ajaxQuery != null) {
-                String params = new UriParametersParser(uri).getParams();
-                if (params == null) {
-                    _ajaxQuery = null;
-                } else {
-                    _context += "?" + params;
-                    _ajaxQuery += "?" + params;
-                }
-            }
-
-            String fileName = RESOURCES_FOLDER + uri;
             try {
+                String fileName = RESOURCES_FOLDER + uri;
                 Path path = Paths.get(fileName);
                 if (Files.isRegularFile(path)) {
                     byte[] bytes = Files.readAllBytes(path);
@@ -56,10 +49,35 @@ public class CommonHttpHandler implements HttpHandler {
 
                     return;
                 }
-            } catch (InvalidPathException e) {}
+            } catch (InvalidPathException ignored) {}
 
-            if (uri.equals("/")) {
-                _context = "login";
+            String context = this.context;
+            String ajaxQuery = this.ajaxQuery;
+            if (ajaxQuery != null) {
+                String params = new UriParametersParser(uri).getParams();
+                if (params == null) {
+                    ajaxQuery = null;
+                } else {
+                    context += "?" + params;
+                    ajaxQuery += "?" + params;
+                }
+            }
+
+            String userName;
+            String userType;
+            try {
+                CookieHandler cookieHandler = new CookieHandler(exchange);
+                //cookieHandler.printCookieDEBUG();
+                userName = mainManager.getUserName(cookieHandler.getCookie());
+                userType = mainManager.getUserType(cookieHandler.getCookie()).toString();
+            } catch (ProcessingException e) {
+                //System.out.println(e.getMessage());
+                userName = null;
+                userType = null;
+            }
+
+            if (uri.equals("/") || userName == null) {
+                context = "login";
                 uri = "/login";
             }
 
@@ -67,14 +85,17 @@ public class CommonHttpHandler implements HttpHandler {
             int pos = getPositionOfSecondEnclosingAngleBracketFromEnd(page);
 
             int responseCode = 200;
-            if (!uri.equals("/" + _context)) {
+            if (!uri.equals("/" + context) || !hasPermission(userType, context)) {
                 responseCode = 404;
-                _context = "404";
+                context = "404";
             }
 
-            String contextScript = "var initialContext = \"" + _context + "\";";
-            String ajaxQueryScript = "var initialAjaxQuery = " + (_ajaxQuery != null ? "\"" + _ajaxQuery + "\"" : "undefined") + ";";
-            String script = "    <script>" + contextScript + ajaxQueryScript + "</script>\n    </body>\n</html>\n";
+            String userNameScript = getScript("initialUserName", userName);
+            String userTypeScript = getScript("initialUserType", userType);
+            String contextScript = getScript("initialContext", context);
+            String ajaxQueryScript = getScript("initialAjaxQuery", ajaxQuery);
+
+            String script = "    <script>" + userNameScript + userTypeScript + contextScript + ajaxQueryScript + "</script>\n    </body>\n</html>\n";
 
             exchange.sendResponseHeaders(responseCode, pos + script.length());
             oStream.write(page, 0, pos);
@@ -82,6 +103,30 @@ public class CommonHttpHandler implements HttpHandler {
         } catch (IOException e) {
             System.out.println(e.toString());
         }
+    }
+
+    private boolean hasPermission(String userType, String context) {
+        if (userType == null) {
+            return true;
+        }
+
+        if (userType.equals(User.UserType.Teacher.toString())) {
+            return !context.startsWith("simulators");
+        } else if (userType.equals(User.UserType.Student.toString())) {
+            return
+                !context.startsWith("users") &&
+                !context.startsWith("user") &&
+                !context.startsWith("user_editor") &&
+                !context.startsWith("levels") &&
+                !context.startsWith("level_editor") &&
+                !context.startsWith("simulators");
+        }
+
+        return true;
+    }
+
+    private String getScript(String varName, String variable) {
+        return "var " + varName + " = " + (variable != null ? "\"" + variable + "\"" : "undefined") + ";";
     }
 
     private int getPositionOfSecondEnclosingAngleBracketFromEnd(byte[] bytes) {

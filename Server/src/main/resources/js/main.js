@@ -146,16 +146,44 @@ $(document).ready(function() {
         }]
     ]);
     
+    showHeaderLinks(initialUserName, initialUserType);
     activateListeners();
     contextManager.changeContext(initialContext, initialAjaxQuery);
 
     new ContextListeners().activateAll();
 });
 
+function showHeaderLinks(userName, userType) {
+    var headerLeft = $("#header-main").find(".nav-bar-left");
+    var headerRight = $("#header-main").find(".nav-bar-right");
+
+    if (userType == "Teacher" || userType == "Admin") {
+        $("#users").removeClass("inactive");
+        $("#levels").removeClass("inactive");
+    }
+
+    if (userType == "Admin") {
+        $("#simulators").removeClass("inactive");
+    }
+
+    if (userName) {
+        $("#logout").text("Log Out (" + userName + ")");
+    }
+}
+
+function hideHeaders() {
+    $("#users").addClass("inactive");
+    $("#levels").addClass("inactive");
+    $("#simulators").addClass("inactive");
+    $("#logout").text("");
+}
+
 function activateListeners() {
     $("#logout").on("click", function() {
         sendAjax("sign.logout", function(data) {
+            deleteCookie("ROBOTICS_USER");
             contextManager.changeContext("login");
+            hideHeaders();
         });
     });
 
@@ -284,7 +312,7 @@ function activateListeners() {
     });
 }
 
-function sendAjax(ajaxQuery, handleResponseFunction, data, formData, onErrorContextName) {
+function sendAjax(ajaxQuery, handleResponseFunction, data, formData, requestAfterPageLoading) {
     $.ajax({
         url: "/api/method/" + ajaxQuery,
         type: formData || data ? "POST" : "GET",
@@ -296,10 +324,11 @@ function sendAjax(ajaxQuery, handleResponseFunction, data, formData, onErrorCont
             handleResponseFunction(result);
         },
         error: function(xhr, status, error) {
-            var obj = JSON.parse(xhr.responseText);
-            alert("Server error: " + obj.error);
-            if (onErrorContextName) {
-                contextManager.changeContext(onErrorContextName);
+            if (requestAfterPageLoading) {
+                contextManager.changeContext("404");
+            } else {
+                var obj = JSON.parse(xhr.responseText);
+                alert("Server error: " + obj.error);
             }
         }
     });

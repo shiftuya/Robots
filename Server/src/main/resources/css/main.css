@@ -19,6 +19,10 @@ header, .content {
 	display: none;
 }
 
+.inactive {
+    display: none;
+}
+
 .active {
     display: block;
 }

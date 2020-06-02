@@ -41,22 +41,22 @@ public class MainServer {
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(80), 0);
 
-        server.createContext("/", new CommonHttpHandler(null));
+        server.createContext("/", new CommonHttpHandler(mainManager, null));
 
-        server.createContext("/login", new CommonHttpHandler("login"));
-        server.createContext("/list_of_lobbies", new CommonHttpHandler("list_of_lobbies"));
-        server.createContext("/choose_level", new CommonHttpHandler("choose_level"));
-        server.createContext("/my_solutions", new CommonHttpHandler("my_solutions"));
-        server.createContext("/users", new CommonHttpHandler("users"));
-        server.createContext("/user", new CommonHttpHandler("user", "user.get"));
-        server.createContext("/user_editor", new CommonHttpHandler("user_editor", "user.get"));
-        server.createContext("/levels", new CommonHttpHandler("levels"));
-        server.createContext("/level_editor", new CommonHttpHandler("level_editor", "level.get"));
-        server.createContext("/simulators", new CommonHttpHandler("simulators"));
-        server.createContext("/options", new CommonHttpHandler("options"));
-        server.createContext("/lobby", new CommonHttpHandler("lobby", "lobby.return"));
-        server.createContext("/code_editor", new CommonHttpHandler("code_editor", "code.edit"));
-        server.createContext("/simulation_result", new CommonHttpHandler("simulation_result", "simulation_result.get"));
+        server.createContext("/login", new CommonHttpHandler(mainManager, "login"));
+        server.createContext("/list_of_lobbies", new CommonHttpHandler(mainManager, "list_of_lobbies"));
+        server.createContext("/choose_level", new CommonHttpHandler(mainManager, "choose_level"));
+        server.createContext("/my_solutions", new CommonHttpHandler(mainManager, "my_solutions"));
+        server.createContext("/users", new CommonHttpHandler(mainManager, "users"));
+        server.createContext("/user", new CommonHttpHandler(mainManager, "user", "user.get"));
+        server.createContext("/user_editor", new CommonHttpHandler(mainManager, "user_editor", "user.get"));
+        server.createContext("/levels", new CommonHttpHandler(mainManager, "levels"));
+        server.createContext("/level_editor", new CommonHttpHandler(mainManager, "level_editor", "level.get"));
+        server.createContext("/simulators", new CommonHttpHandler(mainManager, "simulators"));
+        server.createContext("/options", new CommonHttpHandler(mainManager, "options"));
+        server.createContext("/lobby", new CommonHttpHandler(mainManager, "lobby", "lobby.return"));
+        server.createContext("/code_editor", new CommonHttpHandler(mainManager, "code_editor", "code.edit"));
+        server.createContext("/simulation_result", new CommonHttpHandler(mainManager, "simulation_result", "simulation_result.get"));
 
         server.createContext("/api/method/sign.login", new LogInHandler(mainManager));
         server.createContext("/api/method/sign.logout", new LogOutHandler(mainManager));

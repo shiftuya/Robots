@@ -15,7 +15,7 @@ public abstract class RestHandler implements HttpHandler {
     public void handle(HttpExchange exchange) {
         try (OutputStream oStream = exchange.getResponseBody()) {
             CookieHandler cookieHandler = new CookieHandler(exchange);
-            cookieHandler.printCookieDEBUG();
+            //cookieHandler.printCookieDEBUG();
 
             Responder responder = new Responder(exchange, oStream);
 

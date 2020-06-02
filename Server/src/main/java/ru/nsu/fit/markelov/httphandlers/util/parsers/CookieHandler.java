@@ -11,7 +11,7 @@ public class CookieHandler {
 
     public static final String COOKIE_NAME = "ROBOTICS_USER";
 
-    private HttpExchange exchange;
+    private final HttpExchange exchange;
     private String cookie;
 
     public CookieHandler(HttpExchange exchange) {
@@ -24,7 +24,11 @@ public class CookieHandler {
         }
 
         for (String cookie : cookies) {
-            List<HttpCookie> httpCookies = HttpCookie.parse(cookie);
+            List<HttpCookie> httpCookies = new ArrayList<>();
+            for (String singleCookie : cookie.split(";")) {
+                httpCookies.addAll(HttpCookie.parse(singleCookie));
+            }
+
             for (HttpCookie httpCookie : httpCookies) {
                 if (httpCookie.getName().endsWith(COOKIE_NAME)) {
                     if (httpCookie.getValue().equals("NULL")) {
@@ -44,7 +48,7 @@ public class CookieHandler {
 
     public void putCookie(String token) {
         List<String> values = new ArrayList<>();
-        values.add(COOKIE_NAME + "=" + token + ";");
+        values.add(COOKIE_NAME + "=" + token);
         exchange.getResponseHeaders().put("Set-Cookie", values);
     }
 
