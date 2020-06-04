@@ -2,6 +2,8 @@ class BracketsBugAvoiding_1{}
 
 class ContextManager {
     currentContextName;
+    timerId;
+    currentJson;
 
     constructor(dependenciesArray) {
         this.contextMap = new Map(dependenciesArray);
@@ -12,6 +14,11 @@ class ContextManager {
     }
 
     changeContext(contextName, ajaxQuery, obj) {
+        if (this.timerId) {
+            clearInterval(this.timerId);
+            this.timerId = null;
+        }
+        
         var url = contextName;
         contextName = contextName.split("?")[0];
         
@@ -22,6 +29,7 @@ class ContextManager {
         var content = $("#" + dependencies.contentId);
         ajaxQuery = ajaxQuery || dependencies.defaultAjaxQuery;
         var insertFunction = dependencies.insertFunction;
+        var timerDelay = dependencies.timerDelay;
         
         var deleteData;
         if (this.currentContextName) {
@@ -54,28 +62,40 @@ class ContextManager {
             content.addClass("active"); // alert("content added");
         }
 
-        // delete current data
-        this.removeCurrentData(deleteData);
-
-        // get and insert new data
-        this.getAndInsertData(ajaxQuery, insertFunction, obj);
+        // get new data -> remove old data -> insert new data
+        this.getRemoveInsertData(ajaxQuery, () => contextManager.removeCurrentData(deleteData), insertFunction, obj);
 
         this.currentContextName = contextName;
+        
+        deleteData = this.contextMap.get(this.currentContextName).deleteData;
+        if (ajaxQuery && ajaxQuery.startsWith("lobby.create")) {
+            /*var params = url.split("?")[1];
+            ajaxQuery = "lobby.return?" + params;// ajaxQuery.replace(/create/g, "return");
+            alert(ajaxQuery);*/
+            return;
+        }
+        if (timerDelay) {
+            this.timerId = setInterval(function() {
+                contextManager.getRemoveInsertData(ajaxQuery, () => contextManager.removeCurrentData(deleteData), insertFunction, obj);
+            }, timerDelay);
+        }
     }
 
-    getAndInsertData(ajaxQuery, insertFunction, obj) {
+    getRemoveInsertData(ajaxQuery, removeFunction, insertFunction, obj) {
         if (!insertFunction) {
+            removeFunction();
             return;
         }
         
         if (!ajaxQuery) {
+            removeFunction();
             insertFunction(obj, this);
             return;
         }
 
         sendAjax(ajaxQuery, function(result) {
             insertFunction(result ? JSON.parse(result) : undefined);
-        }, undefined, undefined, true);
+        }, undefined, undefined, true, removeFunction);
     }
 
     removeCurrentData(deleteData) {

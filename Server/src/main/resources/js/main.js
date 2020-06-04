@@ -22,7 +22,8 @@ $(document).ready(function() {
             deleteData: {
                 id: "lobbies-table",
                 contentUnit: "tr:not(':first-of-type')"
-            }
+            },
+            timerDelay: 1000
         }],
         ["choose_level", {
             title: "Choose a Level",
@@ -44,7 +45,8 @@ $(document).ready(function() {
             deleteData: {
                 id: "solutions-table",
                 contentUnit: "tbody:not(':first-of-type')"
-            }
+            },
+            timerDelay: 1000
         }],
         ["users", {
             title: "Users",
@@ -55,7 +57,8 @@ $(document).ready(function() {
             deleteData: {
                 id: "users-table",
                 contentUnit: "tr:not(':first-of-type')"
-            }
+            },
+            timerDelay: 1000
         }],
         ["user", {
             title: "User",
@@ -65,7 +68,8 @@ $(document).ready(function() {
             deleteData: {
                 id: "user-content",
                 contentUnit: ".user-shell"
-            }
+            },
+            timerDelay: 1000
         }],
         ["user_editor", {
             title: "User editor",
@@ -122,7 +126,8 @@ $(document).ready(function() {
             deleteData: {
                 id: "lobby-content",
                 contentUnit: ".lobby-shell"
-            }
+            },
+            timerDelay: 1000
         }],
         ["code_editor", {
             title: "Code Editor",
@@ -315,7 +320,7 @@ function activateListeners() {
     });
 }
 
-function sendAjax(ajaxQuery, handleResponseFunction, data, formData, requestAfterPageLoading) {
+function sendAjax(ajaxQuery, handleResponseFunction, data, formData, requestAfterPageLoading, removeFunction) {
     $.ajax({
         url: "/api/method/" + ajaxQuery,
         type: formData || data ? "POST" : "GET",
@@ -324,10 +329,17 @@ function sendAjax(ajaxQuery, handleResponseFunction, data, formData, requestAfte
         contentType: false,
         cache: false,
         success: function(result, status, xhr) {
-            handleResponseFunction(result);
+            if (contextManager.currentJson != result) {
+                if (removeFunction) {
+                    removeFunction();
+                }
+                handleResponseFunction(result);
+                contextManager.currentJson = result;
+            }
         },
         error: function(xhr, status, error) {
             if (requestAfterPageLoading) {
+                removeFunction();
                 contextManager.changeContext("404");
             } else {
                 var obj = JSON.parse(xhr.responseText);
