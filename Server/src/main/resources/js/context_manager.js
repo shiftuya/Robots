@@ -18,19 +18,35 @@ class ContextManager {
             clearInterval(this.timerId);
             this.timerId = null;
         }
-        
+
+        if (contextName.startsWith("lobby")) {
+            var idParamStr = contextName.split("?")[1];
+            sendAjax("simulation_result.is_ready?" + idParamStr, function(data) {
+                var obj = JSON.parse(data);
+                if (obj.response.simulation_finished) {
+                    contextManager.changeContext("simulation_result?" + idParamStr, "simulation_result.get?" + idParamStr);
+                } else {
+                    contextManager._changeContext(contextName, ajaxQuery, obj);
+                }
+            });
+        } else {
+            this._changeContext(contextName, ajaxQuery, obj);
+        }
+    }
+
+    _changeContext(contextName, ajaxQuery, obj) {
         var url = contextName;
         contextName = contextName.split("?")[0];
-        
+
         var dependencies = this.contextMap.get(contextName);
-        
+
         var title = dependencies.title;
         var header = $("#" + dependencies.headerId);
         var content = $("#" + dependencies.contentId);
         ajaxQuery = ajaxQuery || dependencies.defaultAjaxQuery;
         var insertFunction = dependencies.insertFunction;
         var timerDelay = dependencies.timerDelay;
-        
+
         var deleteData;
         if (this.currentContextName) {
             deleteData = this.contextMap.get(this.currentContextName).deleteData;
@@ -66,17 +82,23 @@ class ContextManager {
         this.getRemoveInsertData(ajaxQuery, () => contextManager.removeCurrentData(deleteData), insertFunction, obj);
 
         this.currentContextName = contextName;
-        
+
         deleteData = this.contextMap.get(this.currentContextName).deleteData;
-        if (ajaxQuery && ajaxQuery.startsWith("lobby.create")) {
-            /*var params = url.split("?")[1];
-            ajaxQuery = "lobby.return?" + params;// ajaxQuery.replace(/create/g, "return");
-            alert(ajaxQuery);*/
-            return;
-        }
         if (timerDelay) {
             this.timerId = setInterval(function() {
-                contextManager.getRemoveInsertData(ajaxQuery, () => contextManager.removeCurrentData(deleteData), insertFunction, obj);
+                if (contextName == "lobby") {
+                    var idParamStr = url.split("?")[1];
+                    sendAjax("simulation_result.is_ready?" + idParamStr, function(data) {
+                        var obj = JSON.parse(data);
+                        if (obj.response.simulation_finished) {
+                            contextManager.changeContext("simulation_result?" + idParamStr, "simulation_result.get?" + idParamStr);
+                        } else {
+                            contextManager.getRemoveInsertData(ajaxQuery, () => contextManager.removeCurrentData(deleteData), insertFunction, obj);
+                        }
+                    });
+                } else {
+                    contextManager.getRemoveInsertData(ajaxQuery, () => contextManager.removeCurrentData(deleteData), insertFunction, obj);
+                }
             }, timerDelay);
         }
     }
@@ -193,7 +215,10 @@ function insertChooseLevelData(obj) {
             tr.find(".start-level-icon").on("click", function() {
                 var id = item.level_id;
                 var players_amount = tr.find(".level-players-number").val();
-                contextManager.changeContext("lobby?id=" + id, "lobby.create?id=" + id + "&players_amount=" + players_amount);
+                sendAjax("lobby.create?id=" + id + "&players_amount=" + players_amount, function(result) {
+                    var id = JSON.parse(result).response;
+                    contextManager.changeContext("lobby?id=" + id, "lobby.join?id=" + id);
+                });
             });
         });
     }

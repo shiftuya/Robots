@@ -33,6 +33,6 @@ public class LobbyCreateHandler extends RestHandler {
             throw new ProcessingException("Players amount is null.");
         }
 
-        responder.sendResponse(JsonPacker.packLobby(mainManager.createLobby(cookieHandler.getCookie(), id, playersAmount)));
+        responder.sendResponse(mainManager.createLobby(cookieHandler.getCookie(), id, playersAmount).getId() + "");
     }
 }

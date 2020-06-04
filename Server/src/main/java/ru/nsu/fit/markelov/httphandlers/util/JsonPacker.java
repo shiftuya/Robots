@@ -170,6 +170,10 @@ public class JsonPacker {
 
     // у этого лобби другая схема json - его нельзя использовать в packLobbies
     public static JSONObject packLobby(Lobby lobby) {
+        if (lobby == null) {
+            return (JSONObject) JSONObject.NULL;
+        }
+
         JSONArray jsonPlayers = new JSONArray();
 
         for (Pair<User, Boolean> user : lobby.getUsers()) {

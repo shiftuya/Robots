@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class LobbyJoinHandler extends RestHandler {
 
-    private MainManager mainManager;
+    private final MainManager mainManager;
 
     public LobbyJoinHandler(MainManager mainManager) {
         this.mainManager = mainManager;
@@ -30,7 +30,6 @@ public class LobbyJoinHandler extends RestHandler {
             throw new ProcessingException("Id is null.");
         }
 
-        Lobby lobby = mainManager.joinLobby(cookieHandler.getCookie(), id);
-        responder.sendResponse(lobby == null ? ((JSONObject) JSONObject.NULL) : JsonPacker.packLobby(lobby));
+        responder.sendResponse(JsonPacker.packLobby(mainManager.joinLobby(cookieHandler.getCookie(), id)));
     }
 }
