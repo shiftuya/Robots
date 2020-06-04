@@ -156,18 +156,21 @@ $(document).ready(function() {
 function showHeaderLinks(userName, userType) {
     var headerLeft = $("#header-main").find(".nav-bar-left");
     var headerRight = $("#header-main").find(".nav-bar-right");
+    var userClassName = "user-student";
 
     if (userType == "Teacher" || userType == "Admin") {
         $("#users").removeClass("inactive");
         $("#levels").removeClass("inactive");
+        userClassName = "user-teacher";
     }
 
     if (userType == "Admin") {
         $("#simulators").removeClass("inactive");
+        userClassName = "user-admin";
     }
 
     if (userName) {
-        $("#logout").text("Log Out (" + userName + ")");
+        $("#logout-user").text(userName).addClass(userClassName);
     }
 }
 
@@ -175,7 +178,7 @@ function hideHeaders() {
     $("#users").addClass("inactive");
     $("#levels").addClass("inactive");
     $("#simulators").addClass("inactive");
-    $("#logout").text("");
+    $("#logout-user").text("").removeClass();
 }
 
 function activateListeners() {

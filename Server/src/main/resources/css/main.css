@@ -41,9 +41,6 @@ body {
 .a {
     color: black;
     text-decoration: underline;
-}
-
-.a:hover {
     cursor: pointer;
 }
 
@@ -55,8 +52,20 @@ tr.highlited-on-hover:hover {
     background: rgba(0, 0, 0, 0.1);
 }
 
-.a.highlited-on-hover:hover:not(.inactive-link) {
+.a.highlited-on-hover:hover:not(.inactive-link), .a.highlited-on-hover:hover:not(.inactive-link) > span {
     color: darkgreen;
+}
+
+.user-admin, .user-teacher, .user-student {
+    font-weight: bold;
+}
+
+.user-admin {
+    color: maroon;
+}
+
+.user-teacher {
+    color: royalblue;
 }
 
 .pointer {
