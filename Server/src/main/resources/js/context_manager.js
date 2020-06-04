@@ -83,7 +83,6 @@ class ContextManager {
 
         this.currentContextName = contextName;
 
-        deleteData = this.contextMap.get(this.currentContextName).deleteData;
         if (timerDelay) {
             this.timerId = setInterval(function() {
                 if (contextName == "lobby") {
@@ -93,6 +92,7 @@ class ContextManager {
                         if (obj.response.simulation_finished) {
                             contextManager.changeContext("simulation_result?" + idParamStr, "simulation_result.get?" + idParamStr);
                         } else {
+                            var deleteData = contextManager.contextMap.get(contextManager.currentContextName).deleteData;
                             contextManager.getRemoveInsertData(ajaxQuery, () => contextManager.removeCurrentData(deleteData), insertFunction, obj);
                         }
                     });
@@ -124,7 +124,7 @@ class ContextManager {
         if (!deleteData) {
             return;
         }
-        
+
         $("#" + deleteData.id).find(deleteData.contentUnit + ":not('.skeleton')").remove();
     }
 }
