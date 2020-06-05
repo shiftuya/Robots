@@ -151,7 +151,7 @@ public class MainManagerWithDatabase implements MainManager {
       for (Map<Level, List<SimulationResultExtended>> map : simulationResultMap.values()) {
         map.put(level, new ArrayList<>());
       }
-      if (level.getId() > currentLevelId) {
+      if (level.getId() >= currentLevelId) {
         currentLevelId = level.getId() + 1;
       }
     }
