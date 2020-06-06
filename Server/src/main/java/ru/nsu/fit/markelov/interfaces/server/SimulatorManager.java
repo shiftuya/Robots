@@ -9,11 +9,18 @@ import java.util.Map;
 /** Simulator manager is used to control available simulator units and run tasks on them. */
 public interface SimulatorManager {
   /**
-   * Add new simulator unit in simulator pool.
+   * Add new simulator unit in simulator pool. Checks if url is correct and if simulator is online.
    *
    * @param url location of new simulator unit.
    */
   void addSimulator(String url);
+
+  /**
+   * Add new simulator unit in simulator pool. Performs no checks.
+   *
+   * @param url
+   */
+  void addSimulatorFromDB(String url);
 
   /**
    * Remove simulator unit from the simulator pool.
@@ -50,6 +57,18 @@ public interface SimulatorManager {
    * @param resources list of resources to be stored along.
    */
   void addLevel(String name, String language, String levelSrc, List<Resource> resources);
+
+  /**
+   * Add a new level. If a level with same name and language exists then does nothing.
+   *
+   * @param name name of level to be referred.
+   * @param language language of the level.
+   * @param levelSrc code of the level.
+   * @param resources list of resources to be stored along.
+   * @param url url of the simulator
+   */
+  void addLevelOnSimulator(
+      String name, String language, String levelSrc, List<Resource> resources, String url);
 
   /**
    * Remove a level.

@@ -53,6 +53,15 @@ public class HardcodedSimulatorManager implements SimulatorManager {
   }
 
   @Override
+  public void addSimulatorFromDB(String url) {
+    synchronized (urls) {
+      if (urls.contains(url)) throw new ProcessingException("Same simulator unit already exists.");
+      monitor.addSU(url);
+      urls.add(url);
+    }
+  }
+
+  @Override
   public void removeSimulator(String url) {
     synchronized (urls) {
       monitor.removeSU(url);
@@ -128,6 +137,45 @@ public class HardcodedSimulatorManager implements SimulatorManager {
           failed = true;
           errorMessage.append(urlStr).append(": EXCEPTION. ").append(e.toString()).append("\n");
         }
+      }
+    }
+    if (failed) {
+      throw new ProcessingException(errorMessage.toString());
+    }
+  }
+
+  @Override
+  public void addLevelOnSimulator(
+      String name, String language, String levelSrc, List<Resource> resources, String url) {
+    StringBuilder errorMessage = new StringBuilder();
+    boolean failed = false;
+    synchronized (urls) {
+      try {
+        String res = sendPOST(url + "/addLevel/" + name, levelSrc.getBytes());
+        boolean uploaded = JsonUtil.parseRequestStatus(res);
+        errorMessage.append(url).append(" adding level: ");
+        if (!uploaded) {
+          throw new ProcessingException("Failed to upload a level");
+        }
+        if (resources != null) {
+          for (Resource resource : resources) {
+            res =
+                sendPOST(
+                    url + "/addResource/" + name + "/" + resource.getName(), resource.getBytes());
+            uploaded = JsonUtil.parseRequestStatus(res);
+            errorMessage.append(url).append(" adding ").append(resource.getName()).append(": ");
+            if (uploaded) {
+              errorMessage.append("SUCCESS\n");
+            } else {
+              errorMessage.append("FAIL\n");
+              failed = true;
+            }
+          }
+        }
+      } catch (Exception e) {
+        System.err.println(e.toString());
+        failed = true;
+        errorMessage.append(url).append(": EXCEPTION. ").append(e.toString()).append("\n");
       }
     }
     if (failed) {
