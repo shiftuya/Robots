@@ -135,7 +135,7 @@ public class MainManagerWithDatabase implements MainManager {
 
     simulators = new HashSet<>(databaseHandler.getSimulatorsUrls());
     for (String simulator : simulators) {
-      simulatorManager.addSimulator(simulator);
+      simulatorManager.addSimulatorFromDB(simulator);
     }
 
     List<UserExtended> users = databaseHandler.getUsers();
@@ -564,6 +564,9 @@ public class MainManagerWithDatabase implements MainManager {
   @Override
   public void addSimulator(String token, String url) {
     simulatorManager.addSimulator(url);
+    for (Level level : levelMap.values()) {
+      simulatorManager.addLevelOnSimulator(level.getName(), level.getLanguage(), level.getCode(), new ArrayList<>(), url); // TODO resources
+    }
     databaseHandler.saveSimulatorUrl(url);
     simulators.add(url);
   }
