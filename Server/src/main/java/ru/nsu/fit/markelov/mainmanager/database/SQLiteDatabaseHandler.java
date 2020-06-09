@@ -15,11 +15,13 @@ import java.util.Map;
 import ru.nsu.fit.markelov.interfaces.ProcessingException;
 import ru.nsu.fit.markelov.interfaces.client.Level;
 import ru.nsu.fit.markelov.interfaces.client.Level.LevelDifficulty;
+import ru.nsu.fit.markelov.interfaces.client.playback.GameObjectState;
 import ru.nsu.fit.markelov.interfaces.client.playback.Playback;
 import ru.nsu.fit.markelov.interfaces.client.User;
 import ru.nsu.fit.markelov.interfaces.client.User.UserType;
 import ru.nsu.fit.markelov.interfaces.server.DatabaseHandler;
 import ru.nsu.fit.markelov.mainmanager.Level1;
+import ru.nsu.fit.markelov.mainmanager.Playback1;
 import ru.nsu.fit.markelov.mainmanager.SimulationResult1;
 import ru.nsu.fit.markelov.mainmanager.SimulationResultExtended;
 import ru.nsu.fit.markelov.mainmanager.User1;
@@ -364,7 +366,7 @@ public class SQLiteDatabaseHandler implements DatabaseHandler {
         statement.setString(2, player);
         statement.setBoolean(3, result.isSuccessful(player));
         statement.setObject(4, result.getPlayback()); // Temporary solution! (kostil)
-        statement.setString(5, /*TODO result.getLog(player)*/"Sorry...");
+        statement.setString(5, /*TODO result.getLog(player)*/result.getLog(player));
         statement.setDate(6, new Date(result.getDate().getTime()));
         statement.setInt(7, result.getLevelId());
         statement.execute();
@@ -394,17 +396,35 @@ public class SQLiteDatabaseHandler implements DatabaseHandler {
         Map<String, Boolean> successMap = new HashMap<>();
         Map<String, String> privateLogs = new HashMap<>();
         Map<String, Playback> playbackMap = new HashMap<>();
+        int resultLevel = resultSet.getInt(RESULTS_LEVEL);
+        Date date = resultSet.getDate(RESULTS_DATE);
         while (resultSet.next()) {
           String player = resultSet.getString(RESULTS_PLAYER);
           successMap.put(player, resultSet.getBoolean(RESULTS_SUCCESS));
           privateLogs.put(player, resultSet.getString(RESULTS_LOG));
-          playbackMap.put(player, (Playback) resultSet.getObject(RESULTS_PLAYBACK));
+         // playbackMap.put(player, (Playback) resultSet.getObject(RESULTS_PLAYBACK));
         }
 
-        list.add(new SimulationResult1(key, successMap, resultSet.getDate(RESULTS_DATE),
-            privateLogs, null, resultSet.getInt(RESULTS_LEVEL)));
+        list.add(new SimulationResult1(key, successMap, /*resultSet.getDate(RESULTS_DATE)*/ date,
+            privateLogs, new Playback() {
+          @Override
+          public int getFramesCount() {
+            return 1;
+          }
+
+          @Override
+          public Map<String, Integer> getRobots() {
+            return new HashMap<>();
+          }
+
+          @Override
+          public List<List<GameObjectState>> getGameObjectStates() {
+            return new ArrayList<>();
+          }
+        }, /*resultSet.getInt(RESULTS_LEVEL)*/ resultLevel));
       }
     } catch (SQLException e) {
+      System.out.println(e.getErrorCode());
       throw new ProcessingException("Exception while trying to get simulation results list");
     } finally {
       disconnect();

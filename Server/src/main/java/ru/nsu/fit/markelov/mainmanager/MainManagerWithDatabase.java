@@ -192,7 +192,7 @@ public class MainManagerWithDatabase implements MainManager {
     }
 
 
-    /*List<SimulationResultExtended> simulationResults = databaseHandler.getSimulationResults();
+    List<SimulationResultExtended> simulationResults = databaseHandler.getSimulationResults();
     for (SimulationResultExtended result : simulationResults) {
       if (result.getId() >= currentLobbyId) {
         currentLobbyId = result.getId() + 1; // setting correct lobbyId
@@ -203,13 +203,18 @@ public class MainManagerWithDatabase implements MainManager {
       Level level = getLevelFromMap(result.getLevelId());
       if (level == null) continue;
 
+      Map<String, UserExtended> simResultUserMap = new HashMap<>();
+
       for (String username : result.getUserNames()) {
         UserExtended user = getUserFromMap(username);
         if (user == null) continue;
         List<SimulationResultExtended> list = simulationResultMap.get(user).get(level);
         list.add(result);
+
+        simResultUserMap.put(username, user);
       }
-    }*/
+      result.putUsersMap(simResultUserMap);
+    }
   }
 
   @Override
