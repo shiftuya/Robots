@@ -31,7 +31,7 @@ class PlaybackCreator {
         } else {
             prev.setEndingFrame(time)
             GameObjectStateProto current = new GameObjectStateProto(time, newColor, prev.getPosition(), prev.getRotation(), prev.getDimension())
-            //current.setOldSensors(prev.sensors)
+            current.setOldSensors(prev.sensors)
             entities.get(id).add(current)
         }
     }
@@ -43,7 +43,7 @@ class PlaybackCreator {
         } else {
             prev.setEndingFrame(time)
             GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), newPosition, prev.getRotation(), prev.getDimension())
-            //current.setOldSensors(prev.sensors)
+            current.setOldSensors(prev.sensors)
             entities.get(id).add(current)
         }
     }
@@ -56,7 +56,7 @@ class PlaybackCreator {
         } else {
             prev.setEndingFrame(time)
             GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), newRotation, prev.getDimension())
-            //current.setOldSensors(prev.sensors)
+            current.setOldSensors(prev.sensors)
             entities.get(id).add(current)
         }
     }
@@ -68,7 +68,7 @@ class PlaybackCreator {
         } else {
             prev.setEndingFrame(time)
             GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), newDimension)
-            //current.setOldSensors(prev.sensors)
+            current.setOldSensors(prev.sensors)
             entities.get(id).add(current)
         }
     }
@@ -80,7 +80,7 @@ class PlaybackCreator {
         } else {
             prev.setEndingFrame(time)
             GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), prev.getDimension())
-            //current.setOldSensors(prev.sensors)
+            current.setOldSensors(prev.sensors)
             current.addSensorReading(sensor, value)
             entities.get(id).add(current)
         }
@@ -93,7 +93,7 @@ class PlaybackCreator {
         skip.endingFrame = time
         entities.get(id).add(skip)
         GameObjectStateProto current = new GameObjectStateProto(time, prev.getColor(), prev.getPosition(), prev.getRotation(), prev.getDimension())
-        //current.setOldSensors(prev.sensors)
+        current.setOldSensors(prev.sensors)
         entities.get(id).add(current)
     }
 

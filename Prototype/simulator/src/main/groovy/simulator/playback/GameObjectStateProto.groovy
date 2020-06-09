@@ -28,9 +28,7 @@ class GameObjectStateProto {
             this.sensors = new HashMap<>()
         }
         for (def entry : sensors.entrySet()) {
-            if (entry.key.endsWith("(Old)")) {
-                this.sensors.put(entry.key, entry.value)
-            } else this.sensors.put(entry.key + "(Old)", entry.value)
+            this.sensors.put(entry.key, " - ")
         }
     }
 }
