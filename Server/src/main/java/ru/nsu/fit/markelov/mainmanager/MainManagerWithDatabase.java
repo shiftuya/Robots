@@ -72,6 +72,7 @@ public class MainManagerWithDatabase implements MainManager {
     }
     UUID uuid = UUID.randomUUID();
     tokenUserMap.put(uuid, user);
+    refreshActiveTime(user);
     return uuid.toString();
   }
 
@@ -81,28 +82,59 @@ public class MainManagerWithDatabase implements MainManager {
     if (getUserFromTokenMap(id) == null) {
       throw new ProcessingException("The user is not logged in");
     }
+    refreshActiveTime(getUserFromTokenMap(id));
     tokenUserMap.remove(id);
   }
 
   @Override
   public String getLog(String token, String userName, int simulationResultId) {
-    SimulationResultExtended result = simulationResultKeyMap.get(simulationResultId);
-    if (result == null) {
-      throw new ProcessingException("Simulation result not found");
+    UserExtended player = getUserFromMap(userName);
+    if (player == null) {
+      throw new ProcessingException("Player not found");
+    }
+    UserExtended user = getUserFromTokenMap(getToken(token));
+    if (user == null) {
+      throw new ProcessingException("User not found");
     }
 
-    return result.getLog(userName);
+    refreshActiveTime(user);
+
+    if (user == player || user.getType() == UserType.Teacher || user.getType() == UserType.Admin) {
+
+      SimulationResultExtended result = simulationResultKeyMap.get(simulationResultId);
+      if (result == null) {
+        throw new ProcessingException("Simulation result not found");
+      }
+
+      return result.getLog(userName);
+    }
+    throw new ProcessingException("Access denied");
   }
 
   @Override
   public String getScript(String token, String userName, int simulationResultId) {
-    return "null"; // TODO
+    UserExtended player = getUserFromMap(userName);
+    if (player == null) {
+      throw new ProcessingException("User " + userName + " not found");
+    }
+    UserExtended user = getUserFromTokenMap(getToken(token));
+    if (user == null) {
+      throw new ProcessingException("User with this token not found");
+    }
+
+    refreshActiveTime(user);
+    if (player == user || user.getType() == UserType.Teacher || user.getType() == UserType.Admin) {
+      return scriptMap.get(player).get(simulationResultId);
+    }
+    throw new ProcessingException("Access denied");
   }
 
   @Override
   public Playback getPlayback(String token, int simulationResultId) {
-    return null; // TODO
+    return null;
   }
+
+  private Map<UserExtended, Map<Integer, String>> scriptMap;
 
   private DatabaseHandler databaseHandler;
   private SimulatorManager simulatorManager;
@@ -128,6 +160,8 @@ public class MainManagerWithDatabase implements MainManager {
     simulationResultMap = new HashMap<>();
     tokenUserMap = new HashMap<>();
 
+    scriptMap = new HashMap<>();
+
     if (databaseHandler.getUserByName("admin") == null) { // Temporary solution
       UserExtended admin = new User1("/images/avatars/kom64.png", "admin", UserType.Admin, "admin");
       databaseHandler.saveUser(admin);
@@ -142,6 +176,7 @@ public class MainManagerWithDatabase implements MainManager {
     for (UserExtended user : users) {
       userMap.put(user.getName(), user);
       simulationResultMap.put(user, new HashMap<>());
+      scriptMap.put(user, new HashMap<>());
     }
 
     List<Level> levels = databaseHandler.getLevels();
@@ -179,14 +214,24 @@ public class MainManagerWithDatabase implements MainManager {
 
   @Override
   public Collection<Lobby> getLobbies(String token) {
+    UserExtended user = getUserFromTokenMap(getToken(token));
+    if (user == null) {
+      throw new ProcessingException("Access denied");
+    }
     List<LobbyExtended> lobbies = new ArrayList<>(lobbyMap.values());
     lobbies.sort(Comparator.comparing(LobbyExtended::getCreationDate));
     Collections.reverse(lobbies);
+    refreshActiveTime(user);
     return new ArrayList<>(lobbies);
   }
 
   @Override
   public Collection<Level> getLevels(String token) {
+    UserExtended user = getUserFromTokenMap(getToken(token));
+    if (user == null) {
+      throw new ProcessingException("Access denied");
+    }
+    refreshActiveTime(user);
     return levelMap.values();
   }
 
@@ -272,6 +317,7 @@ public class MainManagerWithDatabase implements MainManager {
     if (lobby.getCode(player) != null) {
       lobby.setReady(player, true);
     }
+    refreshActiveTime(player);
     return lobby;
   }
 
@@ -327,6 +373,8 @@ public class MainManagerWithDatabase implements MainManager {
         List<SimulationResultExtended> list = simulationResultMap.get(player).get(level);
         if (list == null) continue;
         list.add(simulationResult);
+
+        scriptMap.get(player).put(simulationResult.getId(), lobby.getCode(player));
       }
 
       removeLobby(lobbyId);
@@ -363,7 +411,7 @@ public class MainManagerWithDatabase implements MainManager {
     if (user == null) {
       throw new ProcessingException("User not found");
     }
-
+    refreshActiveTime(user);
     return simulationResultKeyMap.get(lobbyId);
   }
 
@@ -398,12 +446,14 @@ public class MainManagerWithDatabase implements MainManager {
 
     List<UserExtended> list = new ArrayList<>(userMap.values());
 
-    if (reference.getType() == UserType.Admin) {
+    refreshActiveTime(reference);
+
+    if (reference.getType() == UserType.Admin || reference.getType() == UserType.Teacher) {
       list.sort(Comparator.comparing(User::getName));
       return new ArrayList<>(list);
     }
     return list.stream().filter(u -> u.getType() == UserType.Student).collect(
-        Collectors.toList());
+        Collectors.toList()); // this should not run
   }
 
   @Override
@@ -628,6 +678,8 @@ public class MainManagerWithDatabase implements MainManager {
         map.put(level, new ArrayList<>());
       }
       simulationResultMap.put(user, map);
+
+      scriptMap.put(user, new HashMap<>());
 
       return;
     }
