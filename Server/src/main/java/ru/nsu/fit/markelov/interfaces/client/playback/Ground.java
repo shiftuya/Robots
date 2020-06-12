@@ -7,7 +7,7 @@ public interface Ground {
      * @return ground width and depth.
      */
     default int getSize() {
-        return 1000;
+        return 2500;
     }
 
     /**

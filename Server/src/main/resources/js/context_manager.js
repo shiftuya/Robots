@@ -353,7 +353,7 @@ function insertUserEditorData(obj) {
 
         var formData = new FormData(form[0]);
         sendAjax(ajaxQuery, function(result) {
-            alert(message);
+            //alert(message);
             contextManager.changeContext("users");
         }, undefined, formData);
     });
